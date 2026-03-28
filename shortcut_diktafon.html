@@ -14,6 +14,7 @@ h1{font-size:20px;margin-bottom:16px}
 .d{color:#5f6368;font-size:13px;margin-top:4px}
 .u{background:#1a1a2e;color:#e0e0e0;border-radius:8px;padding:10px;font-family:monospace;font-size:10.5px;word-break:break-all;margin:8px 0;line-height:1.5}
 .w{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px;font-size:13px;margin:8px 0}
+.ok{background:#e6f4ea;border:1px solid #1e8e3e;border-radius:8px;padding:10px;font-size:13px;margin:8px 0}
 .f{text-align:center;color:#5f6368;font-size:11px;margin-top:16px}
 b{color:#1a73e8}
 </style>
@@ -29,29 +30,29 @@ b{color:#1a73e8}
 </div>
 
 <div class="s">
-<h2><span class="n">2</span> Pridej 3 akce</h2>
+<h2><span class="n">2</span> Pridej 3 akce (presne v tomto poradi!)</h2>
 
-<p><b>Akce 1:</b> Vyhledej <b>Ziskat podrobnosti o souboru</b></p>
-<p class="d">Vstup: Vstup zkratky · Ziskat: <b>Nazev</b></p>
+<p><b>Akce 1: Kodovat v Base64</b></p>
+<div class="ok">✅ Vstup nechej jak je — automaticky pouzije nahravku z Diktafonu</div>
 
-<p style="margin-top:10px"><b>Akce 2:</b> Vyhledej <b>Kodovat v Base64</b></p>
-<p class="d">Vstup: <b>Vstup zkratky</b> (ne Podrobnosti!)</p>
+<p style="margin-top:12px"><b>Akce 2: Ziskat podrobnosti o souboru</b></p>
+<p class="d">Ziskat: <b>Nazev</b></p>
+<div class="w">⚠️ Klikni na vstup a rucne zmen na <b>Vstup zkratky</b> (ne na "Base64"!)</div>
 
-<p style="margin-top:10px"><b>Akce 3:</b> Vyhledej <b>Ziskat obsah z URL</b></p>
-<p class="d">URL vloz cele na jeden radek:</p>
+<p style="margin-top:12px"><b>Akce 3: Ziskat obsah z URL</b></p>
+<p class="d">URL (cele na jeden radek):</p>
 <div class="u">https://script.google.com/macros/s/AKfycbwT8K_ZaoNDHNxe1LkYfuKW6XMcn8a7gD9KRG8nxrMCMGsFdS6PWJHOnfgD9RY9zkmX/exec?type=diktafon</div>
-<p class="d">Metoda: <b>POST</b> · Telo: <b>Soubor</b> (File) → vyber <b>Vysledek Base64</b></p>
-
-<div class="w">⚠️ Na konec URL pripoj <b>&amp;name=</b> a klikni na promennou <b>Podrobnosti o souboru</b> z Akce 1</div>
+<p class="d">Metoda: <b>POST</b> · Telo: <b>Soubor</b> (File) → vyber <b>Vysledek Base64</b> (z Akce 1)</p>
+<div class="w">⚠️ Na konec URL pripoj <b>&amp;name=</b> a klikni na promennou <b>Podrobnosti o souboru</b> (z Akce 2)</div>
 </div>
 
 <div class="s">
 <h2><span class="n">3</span> Hotovo</h2>
 <p>Diktafon → vyber nahravku → Sdilet → <b>Uloz na Drive</b></p>
-<p class="d">Na Drive se ulozi jako: 2026-03-28 - Nazev zaznamu.m4a</p>
+<p class="d">Ulozi se jako: 2026-03-28 - Nazev zaznamu.m4a</p>
 </div>
 
-<div class="f">Pitland · Diktafon → Drive · v2</div>
+<div class="f">Pitland · Diktafon → Drive · v3</div>
 
 </body>
 </html>
