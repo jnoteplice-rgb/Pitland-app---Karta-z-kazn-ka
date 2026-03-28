@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diktafon → Drive – Návod</title>
+<style>
+:root{--blue:#1a73e8;--green:#1e8e3e;--bg:#f8f9fa;--card:#fff;--border:#dadce0;--text:#202124;--sub:#5f6368}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);padding:16px;max-width:540px;margin:0 auto}
+h1{font-size:22px;margin-bottom:4px}
+.subtitle{color:var(--sub);font-size:14px;margin-bottom:20px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:14px}
+.card h2{font-size:17px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.step-num{background:var(--blue);color:#fff;width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.substep{background:var(--bg);border-radius:8px;padding:12px;margin-bottom:8px}
+.substep:last-child{margin-bottom:0}
+.substep p{margin-bottom:4px}
+.substep p:last-child{margin-bottom:0}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:12px;font-weight:600;margin-right:4px}
+.tag-blue{background:#e8f0fe;color:var(--blue)}
+.tag-green{background:#e6f4ea;color:var(--green)}
+.detail{color:var(--sub);font-size:13px}
+.url-box{background:#1a1a2e;color:#e0e0e0;border-radius:8px;padding:12px;font-family:"SF Mono",Menlo,monospace;font-size:11px;word-break:break-all;margin:8px 0;line-height:1.5}
+.url-box .param{color:#7ecfff}
+.url-box .val{color:#98d982}
+.highlight{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:12px;margin:10px 0;font-size:13px}
+.footer{text-align:center;color:var(--sub);font-size:12px;margin-top:20px;padding:10px}
+</style>
+</head>
+<body>
+
+<h1>Diktafon → Google Drive</h1>
+<p class="subtitle">Osobni zkratka pro ukladani nahravek z&nbsp;Diktafonu na&nbsp;Drive</p>
+
+<!-- KROK 1 -->
+<div class="card">
+  <h2><span class="step-num">1</span> Vytvor novou zkratku</h2>
+  <div class="substep">
+    <p>Otevri aplikaci <strong>Zkratky</strong> (Shortcuts)</p>
+    <p>Klikni <strong>+</strong> vpravo nahore</p>
+    <p>Pojmenuj ji napr. <strong>Uloz na Drive</strong></p>
+  </div>
+  <div class="substep">
+    <p><span class="tag tag-green">Dulezite</span> Nastav <strong>prijimani vstupu</strong>:</p>
+    <p>Klikni nahore na <strong>i</strong> (info) → zapni <strong>Zobrazit v listu sdileni</strong></p>
+    <p class="detail">Typy vstupu: zaškrtni aspoň <em>Soubory</em>, <em>Media</em></p>
+  </div>
+</div>
+
+<!-- KROK 2 -->
+<div class="card">
+  <h2><span class="step-num">2</span> Zjisti nazev nahravky</h2>
+  <div class="substep">
+    <p><span class="tag tag-blue">2a</span> Klikni <strong>Pridat akci</strong></p>
+    <p>Vyhledej: <strong>Ziskat podrobnosti o souboru</strong></p>
+    <p class="detail">Anglicky: Get Details of Files</p>
+  </div>
+  <div class="substep">
+    <p><span class="tag tag-blue">2b</span> U „Ziskat“ vyber <strong>Nazev</strong> (Name)</p>
+    <p>Vstup: <strong>Vstup zkratky</strong> (Shortcut Input)</p>
+    <p class="detail">Tato akce vytahne puvodni nazev z Diktafonu</p>
+  </div>
+</div>
+
+<!-- KROK 3 -->
+<div class="card">
+  <h2><span class="step-num">3</span> Zakoduj nahravku do Base64</h2>
+  <div class="substep">
+    <p><span class="tag tag-blue">3a</span> Pridej dalsi akci: <strong>Kodovat v Base64</strong></p>
+    <p class="detail">Anglicky: Base64 Encode</p>
+  </div>
+  <div class="substep">
+    <p><span class="tag tag-blue">3b</span> Jako vstup vyber <strong>Vstup zkratky</strong> (Shortcut Input)</p>
+    <p class="detail">Rezim: Kodovat (Encode) – to je vychozi</p>
+  </div>
+  <div class="highlight">
+    ⚠️ Vstup pro Base64 musi byt <strong>Vstup zkratky</strong> (puvodni soubor), NE vysledek z kroku 2.
+  </div>
+</div>
+
+<!-- KROK 4 -->
+<div class="card">
+  <h2><span class="step-num">4</span> Odesli na server</h2>
+  <div class="substep">
+    <p><span class="tag tag-blue">4a</span> Pridej akci: <strong>Ziskat obsah z URL</strong></p>
+    <p class="detail">Anglicky: Get Contents of URL</p>
+  </div>
+  <div class="substep">
+    <p><span class="tag tag-blue">4b</span> Do pole URL vloz (cele na jeden radek):</p>
+    <div class="url-box">
+      https://script.google.com/macros/s/AKfycbwT8K_ZaoNDHNxe1LkYfuKW6XMcn8a7gD9KRG8nxrMCMGsFdS6PWJHOnfgD9RY9zkmX/exec?<span class="param">type</span>=<span class="val">diktafon</span>
+    </div>
+    <p class="detail">Toto je zakladni URL bez nazvu – nazev pridame v dalsim kroku</p>
+  </div>
+  <div class="substep">
+    <p><span class="tag tag-blue">4c</span> Metoda: <strong>POST</strong></p>
+  </div>
+  <div class="substep">
+    <p><span class="tag tag-blue">4d</span> Telo pozadavku (Request Body): <strong>Soubor</strong> (File)</p>
+  </div>
+  <div class="substep">
+    <p><span class="tag tag-blue">4e</span> U pole File klikni a vyber <strong>Vysledek kodovani Base64</strong></p>
+    <p class="detail">= vystup z kroku 3 (NE Vstup zkratky)</p>
+  </div>
+</div>
+
+<!-- KROK 5 -->
+<div class="card">
+  <h2><span class="step-num">5</span> Pridej nazev do URL</h2>
+  <div class="highlight">
+    ⚠️ Tohle je klicovy krok – diky nemu se soubor ulozi s&nbsp;puvodnim nazvem z&nbsp;Diktafonu.
+  </div>
+  <div class="substep">
+    <p><span class="tag tag-blue">5a</span> Klikni na URL v akci „Ziskat obsah z URL“</p>
+    <p>Na konec URL <strong>pripoj</strong>:</p>
+    <div class="url-box">
+      &amp;<span class="param">name</span>=<span class="val">[Podrobnosti o souboru]</span>
+    </div>
+    <p class="detail">Klikni za „diktafon“, napis <strong>&amp;name=</strong> a pak klikni na magickou promennou <strong>Podrobnosti o souboru</strong> (File Details) z kroku 2</p>
+  </div>
+  <div class="substep">
+    <p><span class="tag tag-green">Vysledek</span> Cele URL bude vypadat takto:</p>
+    <div class="url-box">
+      https://script.google.com/...exec?<span class="param">type</span>=<span class="val">diktafon</span>&amp;<span class="param">name</span>=<span class="val">Muj zaznam</span>
+    </div>
+  </div>
+</div>
+
+<!-- KROK 6 -->
+<div class="card">
+  <h2><span class="step-num">6</span> Hotovo – testuj!</h2>
+  <div class="substep">
+    <p>1. Otevri <strong>Diktafon</strong> (Voice Memos)</p>
+    <p>2. Vyber nahravku → <strong>Sdilet</strong> (Share)</p>
+    <p>3. Zvol zkratku <strong>Uloz na Drive</strong></p>
+    <p>4. Zkontroluj soubor na Google Drive</p>
+  </div>
+  <div class="substep">
+    <p><span class="tag tag-green">Format souboru</span></p>
+    <p>Na Drive se ulozi jako: <strong>2026-03-28 - Nazev zaznamu.m4a</strong></p>
+    <p class="detail">Datum se doplni automaticky na serveru</p>
+  </div>
+</div>
+
+<!-- SHRNUTI -->
+<div class="card" style="background:#e8f0fe;border-color:#c2d7f5">
+  <h2 style="font-size:15px;">Shrnuti – poradi akci ve zkratce</h2>
+  <p style="font-size:14px; line-height:1.8">
+    <strong>1.</strong> Ziskat podrobnosti o souboru → Nazev<br>
+    <strong>2.</strong> Kodovat v Base64 (vstup = Vstup zkratky)<br>
+    <strong>3.</strong> Ziskat obsah z URL (POST, File = Base64 vysledek, URL s&nbsp;&amp;name=Podrobnosti)
+  </p>
+</div>
+
+<div class="footer">
+  Pitland · Osobni diktafon → Drive · v1
+</div>
+
+</body>
+</html>
