@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Briefing – Upload</title>
+<style>
+  :root { --blue: #1a73e8; --green: #34a853; --red: #ea4335; --bg: #f8f9fa; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg); color: #202124; min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 20px 16px;
+  }
+  .container { max-width: 420px; width: 100%; }
+  h1 { font-size: 1.5rem; text-align: center; margin-bottom: 4px; }
+  .subtitle { text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 24px; }
+  .card {
+    background: white; border-radius: 16px; padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 16px;
+  }
+  label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.95rem; }
+  .sender-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .sender-btn {
+    padding: 14px; border: 2px solid #dadce0; border-radius: 12px;
+    background: white; font-size: 1rem; font-weight: 500; cursor: pointer;
+    transition: all 0.2s; text-align: center;
+  }
+  .sender-btn.active { border-color: var(--blue); background: #e8f0fe; color: var(--blue); }
+  .sender-btn:active { transform: scale(0.97); }
+  .file-area {
+    border: 2px dashed #dadce0; border-radius: 12px; padding: 32px 16px;
+    text-align: center; cursor: pointer; transition: all 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .file-area.has-file { border-color: var(--green); background: #e6f4ea; }
+  .file-area input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .file-icon { font-size: 2.5rem; margin-bottom: 8px; }
+  .file-label { color: #666; font-size: 0.9rem; }
+  .file-name { font-weight: 600; color: var(--green); margin-top: 8px; word-break: break-all; }
+  .file-size { color: #888; font-size: 0.85rem; }
+  .send-btn {
+    width: 100%; padding: 16px; border: none; border-radius: 12px;
+    background: var(--blue); color: white; font-size: 1.1rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; margin-top: 8px;
+  }
+  .send-btn:disabled { background: #dadce0; color: #999; cursor: not-allowed; }
+  .send-btn:not(:disabled):active { transform: scale(0.98); background: #1557b0; }
+  .send-btn.sending { background: #f9ab00; }
+  .send-btn.success { background: var(--green); }
+  .send-btn.error { background: var(--red); }
+  .progress {
+    height: 4px; background: #dadce0; border-radius: 2px;
+    margin-top: 12px; overflow: hidden; display: none;
+  }
+  .progress.active { display: block; }
+  .progress-bar {
+    height: 100%; background: var(--blue); border-radius: 2px;
+    transition: width 0.3s; width: 0%;
+  }
+  .status { text-align: center; margin-top: 12px; font-size: 0.9rem; color: #666; min-height: 1.3em; }
+  .status.error { color: var(--red); }
+  .status.success { color: var(--green); }
+  .history { margin-top: 8px; }
+  .history-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.85rem;
+  }
+  .history-item:last-child { border-bottom: none; }
+  .history-name { font-weight: 500; }
+  .history-time { color: #888; }
+  footer { text-align: center; color: #aaa; font-size: 0.75rem; margin-top: 24px; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Briefing Upload</h1>
+  <p class="subtitle">Pitland Leaders</p>
+
+  <div class="card">
+    <label>Kdo jsi?</label>
+    <div class="sender-grid" id="senderGrid">
+      <button class="sender-btn" data-name="Patrik" onclick="selectSender(this)">Patrik</button>
+      <button class="sender-btn" data-name="Tomas" onclick="selectSender(this)">Tomas</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <label>Nahravka</label>
+    <div class="file-area" id="fileArea" onclick="document.getElementById('fileInput').click()">
+      <div class="file-icon" id="fileIcon">🎤</div>
+      <div class="file-label" id="fileLabel">Klikni a vyber nahravku z Diktafonu</div>
+      <div class="file-name" id="fileName"></div>
+      <div class="file-size" id="fileSize"></div>
+      <input type="file" id="fileInput" accept="audio/*" onchange="handleFile(this)">
+    </div>
+  </div>
+
+  <button class="send-btn" id="sendBtn" disabled onclick="sendBriefing()">
+    Odeslat briefing
+  </button>
+
+  <div class="progress" id="progress">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div class="card history" id="historyCard" style="display:none">
+    <label>Odeslane dnes</label>
+    <div id="historyList"></div>
+  </div>
+</div>
+
+<footer>Pitland Briefing System v1.0</footer>
+
+<script>
+const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwT8K_ZaoNDHNxe1LkYfuKW6XMcn8a7gD9KRG8nxrMCMGsFdS6PWJHOnfgD9RY9zkmX/exec";
+
+let selectedSender = null;
+let selectedFile = null;
+
+function selectSender(btn) {
+  document.querySelectorAll('.sender-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  selectedSender = btn.dataset.name;
+  updateSendButton();
+}
+
+function handleFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  selectedFile = file;
+  document.getElementById('fileArea').classList.add('has-file');
+  document.getElementById('fileIcon').textContent = '✅';
+  document.getElementById('fileLabel').textContent = '';
+  document.getElementById('fileName').textContent = file.name;
+  document.getElementById('fileSize').textContent = (file.size / (1024 * 1024)).toFixed(1) + ' MB';
+  updateSendButton();
+}
+
+function updateSendButton() {
+  document.getElementById('sendBtn').disabled = !(selectedSender && selectedFile);
+}
+
+function setStatus(text, type) {
+  var el = document.getElementById('status');
+  el.textContent = text;
+  el.className = 'status' + (type ? ' ' + type : '');
+}
+
+function addToHistory(name) {
+  document.getElementById('historyCard').style.display = 'block';
+  var list = document.getElementById('historyList');
+  var now = new Date();
+  var time = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+  var item = document.createElement('div');
+  item.className = 'history-item';
+  item.innerHTML = '<span class="history-name">' + name + '</span><span class="history-time">' + time + '</span>';
+  list.insertBefore(item, list.firstChild);
+}
+
+async function sendBriefing() {
+  if (!selectedSender || !selectedFile) return;
+  var btn = document.getElementById('sendBtn');
+  var progress = document.getElementById('progress');
+  var progressBar = document.getElementById('progressBar');
+  btn.disabled = true;
+  btn.className = 'send-btn sending';
+  btn.textContent = 'Odesilam...';
+  progress.classList.add('active');
+  progressBar.style.width = '10%';
+  setStatus('Pripravuji nahravku...', '');
+  try {
+    progressBar.style.width = '30%';
+    setStatus('Koduji audio...', '');
+    var base64 = await fileToBase64(selectedFile);
+    var ext = selectedFile.name.split('.').pop() || 'm4a';
+    progressBar.style.width = '50%';
+    setStatus('Odesilam na server...', '');
+    var payload = JSON.stringify({ sender: selectedSender, audio: base64, extension: ext });
+    progressBar.style.width = '70%';
+    var response = await fetch(WEBHOOK_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, redirect: 'follow' });
+    progressBar.style.width = '90%';
+    var result = await response.json();
+    if (result.status === 200) {
+      progressBar.style.width = '100%';
+      btn.className = 'send-btn success';
+      btn.textContent = '✓ Odeslano!';
+      var fname = result.data ? result.data.fileName : 'briefing';
+      setStatus('Ulozeno jako: ' + fname, 'success');
+      addToHistory(fname);
+      setTimeout(function() {
+        btn.className = 'send-btn'; btn.textContent = 'Odeslat briefing'; btn.disabled = true;
+        progress.classList.remove('active'); progressBar.style.width = '0%';
+        selectedFile = null; document.getElementById('fileInput').value = '';
+        document.getElementById('fileArea').classList.remove('has-file');
+        document.getElementById('fileIcon').textContent = '🎤';
+        document.getElementById('fileLabel').textContent = 'Klikni a vyber nahravku z Diktafonu';
+        document.getElementById('fileName').textContent = '';
+        document.getElementById('fileSize').textContent = '';
+        setStatus('');
+      }, 3000);
+    } else { throw new Error(result.message || 'Chyba serveru'); }
+  } catch (error) {
+    progressBar.style.width = '100%';
+    btn.className = 'send-btn error';
+    btn.textContent = 'Chyba – zkus znovu';
+    setStatus(error.message, 'error');
+    setTimeout(function() {
+      btn.className = 'send-btn'; btn.textContent = 'Odeslat briefing'; btn.disabled = false;
+      progress.classList.remove('active'); progressBar.style.width = '0%';
+    }, 4000);
+  }
+}
+
+function fileToBase64(file) {
+  return new Promise(function(resolve, reject) {
+    var reader = new FileReader();
+    reader.onload = function() { resolve(reader.result.split(',')[1]); };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+</script>
+
+</body>
+</html>
