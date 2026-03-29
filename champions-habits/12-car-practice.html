@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>12 — Cvičení v autě (Car Practice) | Champions Habits CZ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f0eb; color: #333; line-height: 1.7; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .module-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 3px solid #cf3339; }
+    .module-header h1 { color: #1a1a2e; font-size: 2em; margin-bottom: 12px; }
+    .nav-sections { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .nav-sections a { display: inline-block; padding: 8px 16px; background: #2d2d5e; color: #ffd700; text-decoration: none; border-radius: 6px; font-weight: 600; transition: background 0.2s; }
+    .nav-sections a:hover { background: #cf3339; color: white; }
+    .section { margin-bottom: 40px; padding-top: 20px; }
+    .section h2 { margin-bottom: 12px; color: #1a1a2e; font-size: 1.5em; }
+    .video-frame { width: 100%; height: 500px; border: 2px solid #e0e0e0; border-radius: 8px 8px 0 0; display: block; }
+    .subtitle-bar { background: #1a1a2e; color: #fff; padding: 18px 24px; min-height: 70px; font-size: 1.1em; text-align: center; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+    .subtitle-bar .cs { color: #ffd700; font-weight: 600; font-size: 1.2em; }
+    .subtitle-bar .en { color: #999; font-size: 0.8em; }
+    .controls { background: #2d2d5e; padding: 12px 24px 14px; border-radius: 0 0 8px 8px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .controls-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .controls button { background: #cf3339; color: white; border: none; padding: 8px 20px; border-radius: 6px; font-size: 0.95em; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .controls button:hover { background: #e85d5d; }
+    .controls button.active { background: #43a047; }
+    .controls button.active:hover { background: #66bb6a; }
+    .controls button.reset-btn { background: #555; }
+    .controls button.reset-btn:hover { background: #777; }
+    .controls .timer { color: #ffd700; font-family: monospace; font-size: 1.1em; min-width: 60px; text-align: center; }
+    .controls .adjust { background: #444; padding: 6px 12px; font-size: 0.85em; border-radius: 4px; }
+    .controls .adjust:hover { background: #666; }
+    .slider-row { display: flex; align-items: center; gap: 8px; padding: 0 2px; }
+    .slider-row label { color: #aaa; font-size: 0.75em; font-family: monospace; }
+    .time-slider { flex: 1; -webkit-appearance: none; appearance: none; height: 5px; border-radius: 3px; background: #444; outline: none; cursor: pointer; }
+    .time-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; }
+    .time-slider::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; border: none; }
+    .info { background: #fff3e0; border-left: 4px solid #ff9800; padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0; font-size: 0.9em; }
+    .info strong { color: #e65100; }
+    .info ol { margin: 8px 0 0 20px; }
+    .info li { margin-bottom: 4px; }
+    .summary-box { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 16px; margin: 20px 0; border-radius: 0 8px 8px 0; font-size: 0.95em; }
+    .summary-box strong { color: #1565c0; display: block; margin-bottom: 8px; font-size: 1.05em; }
+    .summary-box ul { margin: 0 0 0 20px; list-style: disc; }
+    .summary-box li { margin-bottom: 6px; line-height: 1.5; }
+    .module-nav { margin-top: 40px; padding: 20px; background: #2d2d5e; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .module-nav a { color: #ffd700; text-decoration: none; font-weight: 600; font-size: 1.1em; padding: 10px 24px; background: #cf3339; border-radius: 6px; transition: background 0.2s; }
+    .module-nav a:hover { background: #e85d5d; }
+    .graduation { background: linear-gradient(135deg, #1a1a2e, #2d2d5e); color: white; padding: 30px; border-radius: 12px; text-align: center; margin: 30px 0; }
+    .graduation h2 { color: #ffd700; margin-bottom: 12px; }
+    .graduation p { color: #ccc; font-size: 1.1em; line-height: 1.6; }
+    @media (max-width: 700px) { .video-frame { height: 350px; } .subtitle-bar { padding: 14px 16px; } .subtitle-bar .cs { font-size: 1em; } .controls { gap: 8px; padding: 10px 16px; } .controls button { padding: 6px 14px; font-size: 0.85em; } .nav-sections { flex-direction: column; } .nav-sections a { width: 100%; text-align: center; } .module-nav { flex-direction: column; text-align: center; } .module-nav a { width: 100%; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="module-header">
+    <h1>12 &#8212; Cvi&#269;en&#237; v aut&#283; (Car Practice) + Wrap Up | Champions Habits CZ</h1>
+    <p style="color: #666; margin-top: 8px;">&#268;ty&#345;i video sekce &#8212; jak pou&#382;&#237;t auto jako cvi&#269;nou motorku a z&#225;v&#283;re&#269;n&#233; slovo kurzu</p>
+  </div>
+
+  <div class="nav-sections">
+    <a href="#sec1">Sekce 1 &#8212; Uk&#225;zka na trati</a>
+    <a href="#sec2">Sekce 2 &#8212; Tipy a provoz</a>
+    <a href="#sec3">Sekce 3 &#8212; Shrnut&#237;</a>
+    <a href="#sec4">Sekce 4 &#8212; Wrap Up</a>
+  </div>
+
+  <div class="info">
+    <strong>Jak pou&#382;&#237;vat &#269;esk&#233; titulky:</strong>
+    <ol>
+      <li>Spus&#357;te video kliknut&#237;m na play p&#345;&#237;mo ve videu</li>
+      <li>Klikn&#283;te na <b>&#9654; Start</b> ve chv&#237;li, kdy video za&#269;ne p&#345;ehr&#225;vat</li>
+      <li>Pomoc&#237; tla&#269;&#237;tek &#177;1s / &#177;3s dola&#271;te synchronizaci</li>
+      <li>Posuvn&#237;kem m&#367;&#382;ete p&#345;esko&#269;it na libovoln&#233; m&#237;sto</li>
+    </ol>
+  </div>
+
+
+  <div class="section" id="sec1">
+    <h2>Sekce 1 &#8212; &#268;ty&#345;kolov&#225; cvi&#269;n&#225; motorka: uk&#225;zka na trati (6:04)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/car-practice-section-1/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs1">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en1"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(1)" id="btn1">&#9654; Start</button>
+        <span class="timer" id="time1">0:00</span>
+        <button class="adjust" onclick="adjustTime(1,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(1,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(1,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(1,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(1)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider1" min="0" max="364" value="0" step="1"
+               oninput="onSliderInput(1)" onmousedown="state[1].sliderDragging=true" onmouseup="state[1].sliderDragging=false"
+               ontouchstart="state[1].sliderDragging=true" ontouchend="state[1].sliderDragging=false">
+        <label>6:04</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Kl&#237;&#269;ov&#233; body &#8212; Uk&#225;zka na trati</strong>
+      <ul>
+      <li>Auto je &#269;ty&#345;kolov&#225; cvi&#269;n&#225; motorka &#8212; &#250;hel volantu = &#250;hel n&#225;klonu</li>
+      <li>Brzdy a plyn v aut&#283; funguj&#237; stejn&#283; jako na motorce &#8212; brzd&#283;n&#237; do zat&#225;&#269;ky, plynulost</li>
+      <li>100 bod&#367; p&#345;ilnavosti plat&#237; i v aut&#283; &#8212; vym&#283;&#328;ujte brzdov&#233; body za body volantu</li>
+      <li>Prvn&#237;ch 5 % a posledn&#237;ch 5 % ka&#382;d&#233;ho vstupu &#8212; plynulost je kl&#237;&#269;ov&#225;</li>
+      <li>O&#269;i: d&#237;vejte se dop&#345;edu a skenujte zp&#283;t &#8212; dva kroky dop&#345;edu, jeden zp&#283;t</li>
+      <li>M&#367;&#382;ete cvi&#269;it celou zimu v aut&#283; a na ja&#345;e budete p&#345;ipraveni</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section" id="sec2">
+    <h2>Sekce 2 &#8212; Tipy pro ka&#382;dodenn&#237; j&#237;zdu (5:00)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/car-practice-section-2/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs2">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en2"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(2)" id="btn2">&#9654; Start</button>
+        <span class="timer" id="time2">0:00</span>
+        <button class="adjust" onclick="adjustTime(2,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(2,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(2,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(2,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(2)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider2" min="0" max="300" value="0" step="1"
+               oninput="onSliderInput(2)" onmousedown="state[2].sliderDragging=true" onmouseup="state[2].sliderDragging=false"
+               ontouchstart="state[2].sliderDragging=true" ontouchend="state[2].sliderDragging=false">
+        <label>5:00</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Kl&#237;&#269;ov&#233; body &#8212; Tipy pro ka&#382;dodenn&#237; j&#237;zdu</strong>
+      <ul>
+      <li>Cvi&#269;te plynulost v aut&#283; &#8212; ka&#382;d&#233; prudk&#233; brz&#271;en&#237; by v&#225;s na motorce zranilo</li>
+      <li>Bu&#271;te na sebe p&#345;&#237;sn&#237;: chyby v aut&#283; = chyby na motorce</li>
+      <li>V provozu jezd&#283;te jako na motorce &#8212; p&#345;edv&#237;dejte, co ud&#283;laj&#237; ostatn&#237;</li>
+      <li>Cvi&#269;te brzd&#283;n&#237; do zat&#225;&#269;ky: brzdy → neutr&#225;ln&#237; plyn → zrychlen&#237; p&#345;i odvin&#283;t&#237; volantu</li>
+      <li>Skenov&#225;n&#237; o&#269;&#237;: neskenujte zrcátka p&#345;i p&#345;ibli&#382;ov&#225;n&#237; k nebezpe&#269;n&#233; situaci</li>
+      <li>Jezd&#283;te tak, jak pl&#225;nujete jezdit na motorce &#8212; n&#225;vyky se p&#345;en&#225;&#353;ej&#237;</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section" id="sec3">
+    <h2>Sekce 3 &#8212; Shrnut&#237; cvi&#269;en&#237; v aut&#283; (1:10)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/car-practice-section-3/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs3">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en3"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(3)" id="btn3">&#9654; Start</button>
+        <span class="timer" id="time3">0:00</span>
+        <button class="adjust" onclick="adjustTime(3,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(3,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(3,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(3,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(3)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider3" min="0" max="70" value="0" step="1"
+               oninput="onSliderInput(3)" onmousedown="state[3].sliderDragging=true" onmouseup="state[3].sliderDragging=false"
+               ontouchstart="state[3].sliderDragging=true" ontouchend="state[3].sliderDragging=false">
+        <label>1:10</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Kl&#237;&#269;ov&#233; body &#8212; Shrnut&#237;</strong>
+      <ul>
+      <li>Jak &#345;&#237;d&#237;te auto, tak budete jezdit na motorce</li>
+      <li>Volant = &#250;hel n&#225;klonu, brzdy a plyn &#8212; v&#353;e se p&#345;en&#225;&#353;&#237;</li>
+      <li>Cvi&#269;te pl&#225;nov&#225;n&#237;, skenov&#225;n&#237; o&#269;&#237; a plynulost ka&#382;d&#253; den v aut&#283;</li>
+      <li>Auto je n&#237;zkorizi kov&#233; m&#237;sto pro cvi&#269;en&#237; &#8212; vyu&#382;ijte ho</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section" id="sec4">
+    <h2>Sekce 4 &#8212; Wrap Up: Gratulace k absolvov&#225;n&#237;! (2:43)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/wrap-up/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs4">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en4"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(4)" id="btn4">&#9654; Start</button>
+        <span class="timer" id="time4">0:00</span>
+        <button class="adjust" onclick="adjustTime(4,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(4,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(4,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(4,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(4)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider4" min="0" max="163" value="0" step="1"
+               oninput="onSliderInput(4)" onmousedown="state[4].sliderDragging=true" onmouseup="state[4].sliderDragging=false"
+               ontouchstart="state[4].sliderDragging=true" ontouchend="state[4].sliderDragging=false">
+        <label>2:43</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="graduation">
+    <h2>&#127942; Gratulujeme k absolvov&#225;n&#237; kurzu Champions Habits! &#127942;</h2>
+    <p>Pr&#225;v&#283; jste dokon&#269;ili cel&#253; kurz Champions Habits: The Core Curriculum.<br>
+    Te&#271; je &#269;as vz&#237;t v&#353;echny tyto n&#225;vyky a za&#269;&#237;t je praktikovat &#8212; na motorce i v aut&#283;.<br>
+    Jezd&#283;te bezpe&#269;n&#283; a u&#382;&#237;vejte si ka&#382;dou zat&#225;&#269;ku!</p>
+  </div>
+
+  <div class="module-nav">
+    <a href="11-rear-brake.html">&#8592; Modul 11: Zadn&#237; brzda</a>
+    <a href="01-mental-approach.html">Zp&#283;t na za&#269;&#225;tek &#8594;</a>
+  </div>
+</div>
+<script>
+var subs1=[{t:3.5,cs:"Chceš být skvělý jezdec?",en:"So you want to be an awesome rider?"},
+{t:5.2,cs:"Chceš trénovat pořád?",en:"You want to practice all the time?"},
+{t:6.5,cs:"Chceš najít bezpečné místo na trénink?",en:"You want to find a low risk place of practice?"},
+{t:9.1,cs:"Je to na tvé příjezdové cestě.",en:"It's out in your driveway."},
+{t:11.2,cs:"Tvoje auto nebo náklaďák je čtyřkolová cvičná motorka.",en:"Your car or truck is a four wheel practice motorcycle."},
+{t:17.8,cs:"Ahoj, vítej na naší čtyřkolové cvičné motorce.",en:"Hey, welcome to our four-wheel practice motorcycle."},
+{t:20.6,cs:"Je to auto, je to náklaďák, je to dodávka.",en:"It's a car, it's a truck, it's a van."},
+{t:22.3,cs:"Je to pojízdná třída",en:"It's a mobile classroom"},
+{t:23.4,cs:"pro jezdce, kteří se dívají.",en:"for the riders that are watching this."},
+{t:26.1,cs:"Úhel volantu se rovná úhlu náklonu.",en:"Steering wheel angle is lean angle."},
+{t:28,cs:"Takže když si hraješ s úhlem volantu,",en:"So as you play with the steering wheel angle,"},
+{t:29.7,cs:"hraješ si se brzdami a plynem,",en:"you're playing with the brakes and the throttle,"},
+{t:31.1,cs:"cvičíš brzdění do zatáčky,",en:"your trail breaking in,"},
+{t:32.1,cs:"jak zvyšuješ úhel náklonu, úhel volantu.",en:"as you add lead angle, steering wheel angle."},
+{t:34.1,cs:"Když chceš zrychlit,",en:"As you want to accelerate,"},
+{t:35.6,cs:"musíš být schopný snížit úhel volantu.",en:"you got to be able to take away steering wheel angle."},
+{t:37.9,cs:"Můžeme si cvičit oči.",en:"We can practice our eyes."},
+{t:39.3,cs:"Můžeme si cvičit umístění auta a dopravu.",en:"We can practice our car placement and traffic."},
+{t:41.5,cs:"Můžeme si cvičit všechno, co musíme.",en:"We can practice everything we've got to do."},
+{t:43,cs:"Naši plynulost, všechno, co děláme na motorce,",en:"Our smoothness, everything we do on a motorcycle,"},
+{t:45.1,cs:"můžeme si cvičit na naší čtyřkolové praxi",en:"we can practice in our four wheel practice"},
+{t:47.1,cs:"na motorách, které tady máme.",en:"motorcycles we have here."},
+{t:48.5,cs:"Krásná věc je v tom,",en:"The beautiful thing is"},
+{t:50.4,cs:"že možná nemůžeš jezdit celou zimu,",en:"you may not be able to ride all winter,"},
+{t:52,cs:"ale jezdíš své auto,",en:"but you drive your car,"},
+{t:53.4,cs:"náklaďák, dodávku celou zimu",en:"truck, van all winter"},
+{t:54.4,cs:"a můžeš si cvičit, a když přijde jaro,",en:"and you can practice by the time Spring comes,"},
+{t:56.3,cs:"jsi připravený a máš formu.",en:"you are ready to go and on point."},
+{t:58.5,cs:"Tak co, zkusíme to?",en:"So should we try it?"},
+{t:59.4,cs:"Zkusíme naši čtyřkolovou cvičnou motorku?",en:"Should we try our four wheel practice motorcycle?"},
+{t:61.4,cs:"Pojďme to vyzkoušet.",en:"Let's give it a try."},
+{t:67.8,cs:"Rozpočty.",en:"Budgets."},
+{t:76.5,cs:"Vítej na naší čtyřkolové cvičné motorce.",en:"Welcome to our four wheeled practice motorcycle."},
+{t:79.2,cs:"Můžeme si udělat všechno,",en:"We can get everything done"},
+{t:80.7,cs:"co děláme na motorce, v autě.",en:"that we do on a motorcycle, in a car."},
+{t:82.6,cs:"Máme plyn, máme brzdy",en:"We've got our throttle, we've got our break"},
+{t:84.6,cs:"a vyměňujeme si úhel volantu za úhel náklonu.",en:"and we trade off steering wheel for lean angle."},
+{t:88.7,cs:"Takže když jsme na naší čtyřkolové cvičné motorce,",en:"Okay, so when we're in our four wheel practice motorcycle,"},
+{t:91.3,cs:"věc, kterou někteří lidé říkají autem,",en:"the thing that some people call cars,"},
+{t:93.7,cs:"opravdu přemýšlíme o prudkosti, víš,",en:"we're really thinking about our abruptness and you know,"},
+{t:96.6,cs:"každý vstup, který dáme do motorky,",en:"every input that we put into the motorcycle,"},
+{t:98.5,cs:"chceme, aby to bylo prvních 5% a posledních 5% všeho, co děláme,",en:"we want to be the first 5% last 5% of everything we do,"},
+{t:103.3,cs:"s plynulostí.",en:"having the smoothness."},
+{t:104.9,cs:"Zatěžujeme pneumatiku, než ji pracujeme,",en:"We load the tire before we work the tire,"},
+{t:106.9,cs:"můžeme dělat totéž v našem autě.",en:"we can do the same thing in our car."},
+{t:108.9,cs:"Takže když ostře brzdíme",en:"So if we're stabbing the brakes"},
+{t:111,cs:"a jsme příliš prudcí,",en:"and we're getting too abrupt,"},
+{t:112.5,cs:"když ostře stiskneme brzdy v našem autě, je šance,",en:"as we snap those brakes on in our car, chances are,"},
+{t:115.2,cs:"že to pro motorku nebude dobrá věc.",en:"that's not gonna be a good thing for a motorcycle."},
+{t:118.3,cs:"Zjišťujeme, že mnoho studentů jezdí tak, jak jezdí.",en:"We find that a lot of students drive the way they ride."},
+{t:121.8,cs:"Dělají věci velmi podobně mezi oběma vozidly.",en:"They do things very similarly between the two vehicles."},
+{t:126,cs:"Přidávám úhel volantu do této zatáčky",en:"I'm adding steering wheel into this corner"},
+{t:128,cs:"lineárním způsobem,",en:"in a linear fashion,"},
+{t:129.2,cs:"protože nechci šokovat pneumatiky.",en:"because I don't want to shock the tires."},
+{t:131.7,cs:"Máme sto bodů přilnavosti v autě,",en:"We have a hundred points of grip in a car,"},
+{t:133.3,cs:"stejně jako na motorce.",en:"just like we do in a motorcycle."},
+{t:135.3,cs:"Takže chci si vyměňovat body brzdění",en:"So I want to trade off those break points"},
+{t:138.1,cs:"za body volantu,",en:"for steering wheel points,"},
+{t:140.2,cs:"stejně jako si vyměňujeme body náklonu v autě.",en:"the same way we do for lean angle points in a car."},
+{t:142.6,cs:"Takže vycházím z desáté zatáčky",en:"Okay, so I'm coming out of turn six"},
+{t:145,cs:"a mířím do jedenácté.",en:"and I'm heading towards turn seven."},
+{t:146.5,cs:"Bude to trochu rychlejší nájezd,",en:"It's gonna be a little bit of a faster turn in,"},
+{t:148.6,cs:"takže moje rychlost nájezdu bude rychlejší,",en:"so my turn in rate is going to be quicker,"},
+{t:150.7,cs:"ale pořád bude lineární.",en:"but it's still going to be linear."},
+{t:151.8,cs:"Používám brzdy až do nejpomalejšího bodu,",en:"I'm using the brakes down to the slowest point,"},
+{t:154.5,cs:"nejpomalejší bod.",en:"slowest point."},
+{t:155.5,cs:"A pak můžu zrychlit",en:"And then I can accelerate"},
+{t:156.7,cs:"jenom když si mohu vrátit úhel volantu,",en:"only when I can unwind the steering wheel,"},
+{t:159.3,cs:"stejně jako když si bereme body náklonu.",en:"the same as taking away lean angle points."},
+{t:163.6,cs:"Trochu brzdění na vrcholu kopce tady v osmi,",en:"Little bit of brakes for the top of the hill here in eight,"},
+{t:165.7,cs:"jen pro geometrii na motorce, jen zpomalujeme auto,",en:"just for geometry on a motorcycle, just slowing the car,"},
+{t:169.4,cs:"zpomalujeme dodávku, abychom se dostali do apexu.",en:"slowing the van to make sure we get our apex."},
+{t:175.1,cs:"Teď se blížíme do dvanácté zatáčky.",en:"Now we're coming down into turn 12 here."},
+{t:177.5,cs:"Takže půjdu ven",en:"So I'm going to get to the outside"},
+{t:179.8,cs:"k vchodu do zatáčky, abych si mohl otevřít poloměr.",en:"for the entry of the corner so I can open up the radius."},
+{t:182.8,cs:"A je to mnohem pomalejší nájezd.",en:"And this is a much slower turn in."},
+{t:184.6,cs:"Takže iniciuji každý bod náklonu",en:"So I'm initiating each lean angle point"},
+{t:187,cs:"nebo bod volantu,",en:"or steering wheel point,"},
+{t:188.6,cs:"mnohem pomaleji a strhávám brzdy",en:"much slower and trailing off the brakes"},
+{t:190.9,cs:"a déle do tohoto dlouhého nájezdu.",en:"and longer down into this long entry."},
+{t:194.8,cs:"Teď se blížíme do čtrnácté zatáčky,",en:"Now we're heading into turn 14,"},
+{t:196.4,cs:"která má mnohem větší poloměr",en:"which is a much longer radius"},
+{t:198.1,cs:"než některé jiné zatáčky na tomto závodním okruhu.",en:"than some other corners on this racetrack."},
+{t:200.7,cs:"Když házím náhyb do dodávky,",en:"When I throw lean angle at the van,"},
+{t:203.4,cs:"když házím úhel volantu,",en:"when I throw steering wheel at it,"},
+{t:205,cs:"věci se stanou opravdu prudkými",en:"things get really abrupt"},
+{t:206.9,cs:"a my budeme muset být opravdu dobrí ve strhávání brzdění,",en:"and we better be really good at trailing off the brakes,"},
+{t:209.3,cs:"když budeme házet náhyb tak rychle.",en:"if we're gonna throw lean angle in that quick of a manner."},
+{t:212.4,cs:"Jsme opravdu prudcí s prvních 5%",en:"We're, we're really abrupt with the first 5%"},
+{t:215.8,cs:"jakéhokoli vstupu, který dáme do dodávky.",en:"of an input we put into the van."},
+{t:218.3,cs:"Teď bude čas",en:"Now there is going to be a time"},
+{t:220.2,cs:"a místo pro ty rychlé vstupy,",en:"and place for those quick inputs,"},
+{t:222.5,cs:"a je to na místě jako šikana tady u",en:"and it's in a place like a chicane here at"},
+{t:224.5,cs:"Indie Motorsports Ranch,",en:"Indie Motorsports Ranch,"},
+{t:225.5,cs:"kde se dostáváme do dvacáté a dvacáté první.",en:"where we come into turns 20 and 21."},
+{t:228.8,cs:"Musíme si pohnout rukama docela rychle.",en:"We need to move our hands pretty quick."},
+{t:231.3,cs:"Odbočujeme tady doprava",en:"We turn in here into the right"},
+{t:233.9,cs:"a provádíme hladký přechod,",en:"and we make a transition smoothly,"},
+{t:236.2,cs:"ale rychle doleva, abychom navigovali tu šikanu.",en:"but quickly to the left to navigate that chicane."},
+{t:241,cs:"Takže s našima očima, vždycky začínáme myslet,",en:"So with our eyes, we're always starting to think,"},
+{t:243.1,cs:"chci vypadat dříve a skenovat zpět.",en:"I want to look sooner and scan back."},
+{t:246.1,cs:"To, co se snažíme dělat, je",en:"What we're essentially trying to do is"},
+{t:248,cs:"nakrmit náš mozek co nejvíce informacemi",en:"feed our brain as much information as we can"},
+{t:251.1,cs:"tím, že si vezmeme, co vidíme.",en:"by taking in what we're seeing."},
+{t:252.8,cs:"Takže když zůstaneme tak zaměřeni na jednu věc,",en:"So if we just stay so laser fixated on one thing,"},
+{t:257.3,cs:"trochu ztratíme vnímání toho, kde jsme.",en:"we kind of lose perception of where we are."},
+{t:259.7,cs:"Někdo, víš, všichni jsme slyšeli,",en:"Some, you know, we've all heard,"},
+{t:261.7,cs:"dívej se, podívej se dvě sekundy dopředu,",en:"look, look, two seconds ahead,"},
+{t:263.7,cs:"podívej se o deset, podívej se tak daleko dopředu, jak jen můžeš,",en:"look 10, look as far ahead as you possibly can,"},
+{t:266.6,cs:"ale je to ta myšlenka skenování zpět",en:"but it's this idea of scanning back"},
+{t:268.4,cs:"která zapojuje naše vnímání hloubky.",en:"that engages our depth perception."},
+{t:270.3,cs:"Věci, které jsme trochu řešili v",en:"Things that we kinda talked about in the,"},
+{t:272.6,cs:"cvičeních brzdění byla to",en:"in the breaking drills earlier is"},
+{t:274.8,cs:"chceme se dívat do té budoucnosti,",en:"we want to look out to that future,"},
+{t:276.8,cs:"ale chceme si skenovat zpět",en:"but we want to scan back"},
+{t:278,cs:"tam, kde jsme v tu chvíli",en:"to where we are in that moment"},
+{t:279.4,cs:"abychom si mohli provést tyto úpravy.",en:"so we can make these adjustments."},
+{t:281,cs:"Takže vždycky si pohneme oči vpřed,",en:"So always kinda getting our eyes moving forward,"},
+{t:283.8,cs:"skenovat zpět, dívat se dříve.",en:"scanning back, looking sooner."},
+{t:285.8,cs:"Myslíme dva kroky vpřed, jeden krok zpět.",en:"We think two steps forward, one step back."},
+{t:288.5,cs:"Vždycky se snažíme spojit",en:"We're always trying to tie together"},
+{t:290,cs:"tuto myšlenku s našima očima, abychom si vzali co nejvíce",en:"this idea with our eyes of taking in as much"},
+{t:292.3,cs:"informací, jak jen můžeme.",en:"information as we can."},
+{t:293.9,cs:"Když mluvíme o jízdě na ulici,",en:"When we're talking about street riding,"},
+{t:297.6,cs:"skoro jako trochu",en:"almost thinking a little bit,"},
+{t:299.6,cs:"širokozobrazný obrázek, že?",en:"kind of a widescreen picture, right?"},
+{t:301.8,cs:"Snažíme se vzít si průsečík.",en:"We're trying to take in the intersection."},
+{t:303.5,cs:"Kdo se blíží, ahoj,",en:"Who's approaching, hey,"},
+{t:305.4,cs:"jezdec nebo auto, které přijíždějí opačně,",en:"the rider or car coming the other way,"},
+{t:307.9,cs:"oni možná vysílají na svém telefonu.",en:"they might be on their phone texting."},
+{t:309.7,cs:"Snažíme se vzít si všechny tyto velké myšlenky.",en:"We're trying to take in all these, these big picture ideas."},
+{t:313.8,cs:"A zaměřujeme se zpět na menší kabel.",en:"And we're focusing back to the, that smaller of cable."},
+{t:317.7,cs:"Tam, kam jsem se vlastně chci dostat.",en:"There's where I actually want to go."},
+{t:319.1,cs:"Motorka bude vždycky jezdit tam, kde se díváme.",en:"The bike's always gonna go where we're looking."},
+{t:321,cs:"Chceme si to jenom spojit.",en:"We want to just tie that, that together."},
+{t:322.9,cs:"Takže když jsme na našich motorách",en:"So as we're on our motorcycles"},
+{t:325.7,cs:"a jezdi na ulici,",en:"and we're riding on the street,"},
+{t:327.3,cs:"část tohoto skenování se dívá do budoucnosti,",en:"part of this scanning is looking out into the future,"},
+{t:329.7,cs:"ale skenuje zpět do našich zrcátek.",en:"but scanning back to our mirrors."},
+{t:331.6,cs:"Měli bychom vidět, co se děje za námi.",en:"We should be seeing what's going on behind us."},
+{t:334.3,cs:"Víš, zvlášť když jsme zastaveni,",en:"You know, especially as we're stopped,"},
+{t:335.6,cs:"a ujisti se, že se lidé zpomalují zpět",en:"and make sure people are slowing back"},
+{t:337,cs:"za námi každých pět sekund,",en:"behind us every five seconds,"},
+{t:339,cs:"sedm sekund skenování tam.",en:"seven seconds scanning back there."},
+{t:340.9,cs:"Skenování zpět na naše měřidla,",en:"Scanning back down to our gauges,"},
+{t:342.9,cs:"vidět, jak si vedeme s naší rychlostí, víš,",en:"see how we're doing with our speed, you know,"},
+{t:345.3,cs:"přehřívá se motorka, všechny tyto různé věci",en:"is the bike overheating, all these different things"},
+{t:347.5,cs:"které by mohly být problém.",en:"that could be an issue."},
+{t:348.7,cs:"Takže se snažíme podívat tam.",en:"So we're trying to look out there."},
+{t:350.4,cs:"Část skenování zpět",en:"Part of the scan back"},
+{t:351.5,cs:"je skenování zpět na měřidla, zrcátka,",en:"is scanning back to gauges, mirrors,"},
+{t:354.3,cs:"věci, které už se dějí v tu chvíli,",en:"things that are already kinda happening in the moment,"},
+{t:356.8,cs:"nebo možná za námi.",en:"or maybe behind us."}];
+var subs2=[{t:6.2,cs:"Takže tenhle nápad si cvičit",en:"So this idea of practicing"},
+{t:7.8,cs:"v autě, v kamionu, v dodávce,",en:"in your car, your truck, your van,"},
+{t:9.4,cs:"mít možnost si cvičit všechny tyhle věci",en:"getting a chance to practice all these things"},
+{t:12.7,cs:"přes zimu.",en:"over the winter time."},
+{t:13.5,cs:"Mnozí z nás v zimě nejezdíme,",en:"A lot of us don't get to ride in the wintertime,"},
+{t:14.9,cs:"ale vozíme auta, kamionu a dodávky",en:"but we're driving our cars and trucks and vans"},
+{t:16.9,cs:"a můžeme si začít uvědomovat tenhle nápad.",en:"and you can start to get this whole idea."},
+{t:19.3,cs:"Sto bodů přilnavosti, poloměr se rovná mil za hodinu,",en:"A hundred points of grip, radius is mile an hour,"},
+{t:22.2,cs:"krmíme náš mozek.",en:"feeding your brain."},
+{t:23.9,cs:"Zbavujeme se tady prudkosti, kterou děláme ve všem.",en:"Getting rid of this abruptness with everything you do."},
+{t:26.7,cs:"Myslím, je to prostě, bude vás to hrozně bolet na motorce",en:"I mean, it's just, it will hurt you so badly on a bike"},
+{t:30.2,cs:"A co začnete dělat.",en:"And what you'll start to do."},
+{t:33.3,cs:"Začnete se sami kritizovat za chyby.",en:"You'll start to berate yourself from mistakes."},
+{t:34.8,cs:"Začnete být nespokojení s chybami.",en:"You'll start to not be happy with mistakes."},
+{t:36.4,cs:"Když si jdu koukat dál,",en:"If I'm cruising along,"},
+{t:37.6,cs:"a položím si dvě kola na zvukové proužky,",en:"and I put two wheels up on the rumble strips,"},
+{t:39.7,cs:"trrr na zvukových proužcích,",en:"a da-da-da-da on the rebel steps,"},
+{t:40.6,cs:"jsem na to, víte.",en:"I'm like, oh you know."},
+{t:42,cs:"Jdu si koukat dál,",en:"I'm cruising along,"},
+{t:42.8,cs:"položím si dvě kola vedle na konci trávy.",en:"I put two wheels off here on the end of the grass."},
+{t:45.1,cs:"Jsem trrrrr.",en:"I'm like da-da-da-da-da-da."},
+{t:46.1,cs:"Řeknu si, jé, vole.",en:"I'm like, ah, man, come on."},
+{t:47.3,cs:"Co děláš? Co děláš?",en:"What are you doing? What are you doing?"},
+{t:48.8,cs:"Když jsem prudce zašlápnul brzdy,",en:"If I stabbed the brakes,"},
+{t:50.1,cs:"jé, vole.",en:"ah, come on, man."},
+{t:51.3,cs:"Co děláš?",en:"What are you doing?"},
+{t:52.1,cs:"Protože vám to bude bolet na motorce.",en:"Because that'll hurt you on a motorcycle."},
+{t:54.3,cs:"Bude vám to bolet v dešti. Bude vám to bolet na štěrkové silnici.",en:"It'll hurt you in the rain. It'll hurt you on a gravel road."},
+{t:56.4,cs:"Bude vám to bolet na rychlejší motorce.",en:"It'll hurt you on a faster bike."},
+{t:58.2,cs:"Takže stále si s tím hrajeme.",en:"So we are just always messing with this stuff."},
+{t:60.5,cs:"A je to proto, že tady",en:"And it's why these"},
+{t:62.8,cs:"světoví šampioni motocyklových závodů, kteří skáčou do aut",en:"world Campion motorcycle racers jumping cars"},
+{t:65.5,cs:"jsou v autech tak úžasní.",en:"that are so amazing in cars."},
+{t:67.4,cs:"Myslím, Kenny Roberts, Freddie Spencer, Eddie Lawson,",en:"I mean, Kenny Roberts, Freddie Spencer, Eddie Lawson,"},
+{t:70.4,cs:"Scott Russell, jenom abych jmenoval pár,",en:"Scott Russell, just to name a few,"},
+{t:72.5,cs:"skočili do aut a byli jsme hned vpředu",en:"jumped in cars and we're right at the front right away"},
+{t:74.5,cs:"protože je to všechno stejné",en:"because it's all the same"},
+{t:76.5,cs:"a my na to jenom myslíme.",en:"and we're just thinking about that."},
+{t:77.7,cs:"Takže buďte na sebe přísní, trénujte se.",en:"So be tough on yourself, coach yourself."},
+{t:79.8,cs:"A pak poslední myšlenka s tímhle autem,",en:"And then the last thought with this whole car driving thing,"},
+{t:84.8,cs:"začněte si jezdit v provozu,",en:"start to drive in traffic,"},
+{t:86.8,cs:"v provozu jako na motorce.",en:"in traffic as if you're on a motorcycle."},
+{t:88.4,cs:"Takže si předstíráme, že jsme v provozu.",en:"So we'll pretend we're in traffic."},
+{t:90.3,cs:"Začněte předvídat, hrajte si hru se sebou.",en:"Start to predict, play a game with yourself."},
+{t:92.8,cs:"Hrajte si hru na předvídání, takže",en:"Play a game of predicting, okay,"},
+{t:94.8,cs:"co bude dělat toto auto, které právě jede na dálnici,",en:"what will this car, that's coming on the freeway right now,"},
+{t:97.2,cs:"co bude toto auto dělat, když se zapojí",en:"what will this car do when it merges on"},
+{t:99.5,cs:"do zbytku provozu přede mnou.",en:"to the rest of the traffic ahead of me."},
+{t:101,cs:"Když se blížíte k křižovatce, co bych měl dělat",en:"As you approach an intersection, what am I gonna do"},
+{t:103.2,cs:"pokud se provoz, pokud se to světlo změní na oranžovou",en:"if the traffic, if that light turns orange"},
+{t:105.3,cs:"a to auto čeká na zatočení?",en:"and that car is waiting to turn?"},
+{t:107.1,cs:"Pokud se světlo změní na oranžovou",en:"If the light turns orange"},
+{t:108.8,cs:"a to auto se začne otáčet přede mnou, co budu dělat?",en:"and that car starts to turn in front of me, what will I do?"},
+{t:111.5,cs:"No samozřejmě, že si připravujete brzdu,",en:"Well, of course you're covering the brake lever,"},
+{t:113,cs:"jste na to připravení.",en:"you're ready for these things."},
+{t:114.2,cs:"Začněte si jezdit v provozu",en:"Start to drive your car in traffic"},
+{t:116.6,cs:"jako na motorce",en:"as if you're on a motorcycle"},
+{t:118,cs:"Buďte extrémně paranoidní. Čekejte, že se stane nejhorší.",en:"Be extremely paranoid. Expect the worst to happen."},
+{t:120.7,cs:"Umístěte se do pozice, kdy vám neublíží",en:"Place yourself in a position to not be hurt"},
+{t:123.5,cs:"když se stane chyba, protože se stane.",en:"when the mistakes happen, because they will happen."},
+{t:126.3,cs:"Toto je naše čtyřkolová cvičná motorka",en:"This is our four-wheel practiced motorcycle"},
+{t:128.9,cs:"a je to jakékoliv auto, jakékoliv auto.",en:"and it is any car, any car."},
+{t:131.4,cs:"Dokonce i minivan, co říkáš Chrise?",en:"Even a minivan, huh Chris?"},
+{t:132.8,cs:"Dokonce i minivan.",en:"Even a minivan."},
+{t:133.8,cs:"Je to prostě úžasné, jak dobře to funguje.",en:"It's just amazing how well it works."},
+{t:136.2,cs:"Je to úžasné, jak to dobře funguje, když je to správné.",en:"It's amazing how well it works when it right."},
+{t:138.7,cs:"Takže když jdeme dolů do téhle zatáčky,",en:"So as we go down in this corner,"},
+{t:140.7,cs:"jdu brzdit, když jsem nervózní.",en:"I'm gonna go to the brakes when I'm nervous."},
+{t:142.4,cs:"Budu zatáčet se brzdami",en:"I'm gonna tip in the corner with the brakes"},
+{t:143.5,cs:"dokud nejsem spokojený se svou rychlostí a směrem.",en:"until I'm happy with my speed and direction."},
+{t:145.1,cs:"Když jsem spokojený s tím, přejdu na neutrální plyn.",en:"When I'm happy that there, I'm gonna go to neutral throttle."},
+{t:147.5,cs:"Budu si udržovat rychlost na neutrálním plynu",en:"I'm gonna hold my speed at neutral throttle"},
+{t:150.3,cs:"dokud nevidím výjezd",en:"until I see the exit"},
+{t:151.6,cs:"a mohu si ubrat úhel volantu,",en:"and I can take away steering wheel angle,"},
+{t:153.3,cs:"a pak budu zrychlovat",en:"and then I will accelerate"},
+{t:155.1,cs:"mou čtyřkolovou cvičnou motorkou.",en:"my four wheel practice motorcycle."},
+{t:157,cs:"V příští zatáčce, když budu nervózní,",en:"In the next corner, when I get nervous,"},
+{t:159.1,cs:"jdu brzdit.",en:"I'm gonna go to the brakes."},
+{t:160.6,cs:"Zatáčím se brzdami",en:"I'm gonna turn in with the brakes"},
+{t:163.9,cs:"Jdu na neutrální plyn.",en:"I'm gonna go to neutral throttle."},
+{t:165.8,cs:"Budu si udržovat rychlost a směr, dokud nevidím,",en:"I'm gonna hold my speed and direction until I see,"},
+{t:168.3,cs:"jé ne, musím to zpomalit, protože se to rozostří.",en:"oh no, I got to slow it cause it tightens."},
+{t:169.9,cs:"Jdu zpátky na brzdy, rozostří se.",en:"I go back to the brakes, it tightens."},
+{t:171.5,cs:"Zpátky na neutrál.",en:"Back to neutral."},
+{t:172.5,cs:"Neutrální a zrychlovat, když si můžete vzít úhel náklonu.",en:"Neutral and accelerate when you can take away lean angle."},
+{t:175.5,cs:"Stanete se úžasným jezdcem na motorce",en:"You become an amazing motorcycle rider"},
+{t:177.1,cs:"protože si jezděte autem na trénink.",en:"because you drive your car for practice."},
+{t:180.8,cs:"Takže ještě jednou něco o našich očích.",en:"So one more thing about our eyes."},
+{t:182.5,cs:"Víte, mluvíme o tomhle nápadu skenování,",en:"You know, we talk about this idea of kinda scanning,"},
+{t:185.2,cs:"neustále si udržujeme film,",en:"always constantly keeping the movie,"},
+{t:187.1,cs:"snažíme se nasytit mozek co nejvíce informací, kterou můžeme.",en:"trying to feed in our brain as much information as we can."},
+{t:190.8,cs:"Ale víte,",en:"But you know,"},
+{t:191.7,cs:"když je tady časování pro polohu těla",en:"as much as there's a timing idea to body position"},
+{t:195.5,cs:"a tlak na brzdě a všechny ty ostatní věci,",en:"and brake pressure and all these other things,"},
+{t:197.4,cs:"je tu časování, kdy skenujeme oči zpátky",en:"there's a timing to when we're scanning our eyes back"},
+{t:200.4,cs:"a tam.",en:"and forth."},
+{t:201.5,cs:"Někteří veteráni letušů často mluví,",en:"Some veteran fighter pilots often talk about,"},
+{t:206.4,cs:"někteří z novějších bojových pilotů,",en:"some of the newer combat pilots,"},
+{t:209.7,cs:"skenují si a dívají se na přístroje,",en:"they scan away and they're looking at their gauges,"},
+{t:211.8,cs:"možná v nesprávný čas,",en:"maybe at the wrong time,"},
+{t:212.9,cs:"a nejsou zaměření na nepřítele,",en:"and they're not focused on the enemy,"},
+{t:215.6,cs:"bez ohledu na to, jaké to jsou situace.",en:"whatever these situations are."},
+{t:217.9,cs:"Skenují si zpátky a nezískávají časování.",en:"They're scanning back and not getting the timing aspect."},
+{t:221,cs:"Možná si jedete po venkovské silnici.",en:"You might be riding down a back country road."},
+{t:223.8,cs:"Skenujete si zpátky v zrcadlech",en:"You're scanning back at your mirrors"},
+{t:226.4,cs:"nebo co se děje za vámi",en:"or what's going on behind you"},
+{t:227.9,cs:"když se blížíte zatáčce,",en:"as you're approaching the corner,"},
+{t:229.4,cs:"když auto jede z druhého pruhu v provozu.",en:"as the car is coming the other lane in traffic."},
+{t:232.7,cs:"To není místo nebezpečí.",en:"That's not where the hazard is."},
+{t:234.5,cs:"To není místo, kde se v tu chvíli musíme dívat.",en:"That's not where we need to be scanning to at that moment."},
+{t:237.3,cs:"Takže si začínáme ujasňovat, kdy bychom měli začít skenovat,",en:"So we get this idea going of when we should start scanning,"},
+{t:241,cs:"naše oči by měly být, když se neobjevují nebezpečí",en:"our eyes should be when there's not hazards coming up"},
+{t:244.5,cs:"nebo věci, kterým se snažíme vyhnout.",en:"or things in front of us that we're trying to avoid."},
+{t:246.9,cs:"Abychom byli jasní, nebudeme se koukat na přístroje",en:"To be clear, we just are not gonna look at our gauges"},
+{t:250.4,cs:"nebo zpátky v zrcadlech",en:"or back in our mirrors"},
+{t:251.7,cs:"když se blížíme nebezpečným situacím.",en:"as we're approaching dangerous situations."},
+{t:254.1,cs:"Jako přiblížení se ke křižovatce,",en:"Such as approaching a intersection,"},
+{t:257.2,cs:"klikatá část silnice, cokoliv to může být.",en:"a twisty section of road, whatever it might be."},
+{t:260.9,cs:"Naše zaměření musí být na tom, co se děje vpředu",en:"Our focus needs to be on what's going on in front"},
+{t:263.5,cs:"v tom okamžiku.",en:"of us at that moment."},
+{t:265.2,cs:"To je přesně správně, Chrise.",en:"That's exactly right, Chris."},
+{t:266.3,cs:"Takže jsme v našich autech a trénujeme techniky",en:"So, we're in our cars and we're practicing the techniques"},
+{t:270,cs:"a zvyky, které vybudou obrovský rozdíl",en:"and habits that are going to make a huge difference"},
+{t:273,cs:"když jsme na motorce.",en:"when we're on a motorcycle."},
+{t:274.5,cs:"Chceme jezdit, jako bychom chtěli jezdit na motorce",en:"We wanna drive like we plan to ride our motorcycles"},
+{t:277.6,cs:"aby když to opravdu záleží",en:"so that when things really count"},
+{t:279.6,cs:"a jsme na hranici přilnavosti",en:"and we're on the edge of grip"},
+{t:281.3,cs:"a jedeme na tuhle zatáčku mimo kamera",en:"and we're heading into this off-camera corner"},
+{t:283.1,cs:"protože během naší jízdy domů začalo pršet",en:"because it started raining on our ride home"},
+{t:285.2,cs:"a musíme se bezpečně dostat domů, máme zvyky na místě.",en:"and we need to get home safely, we have the habits in place."},
+{t:289,cs:"Prvních 5 % a posledních 5 % všeho, co děláte",en:"The first 5% and last 5% of everything you do"},
+{t:292.8,cs:"když jste v pohybujícím se vozidle, záleží.",en:"when you're in a moving vehicle counts."}];
+var subs3=[{t:0,cs:"(dramatická hudba)",en:"(dramatic music)"},
+{t:10.5,cs:"Takže pojďme, řidiči.",en:"All right, riders."},
+{t:11.3,cs:"Pojďme si chvíli vzít",en:"Let's just take a moment"},
+{t:12.2,cs:"a zpracovat to, co slyšíme.",en:"and digest what we're hearing."},
+{t:15,cs:"Jak se to týká nás v reálném světě?",en:"How does this apply to us in the real world?"},
+{t:17.5,cs:"Hej, zde je fakt,",en:"Hey, here's a fact,"},
+{t:19,cs:"jak se řídíte autem, tak budete jezdit na motorce.",en:"how you drive your car, will be how you ride a motorcycle."},
+{t:22.8,cs:"Tak si vezměte čas ve svém autě,",en:"So, take the time in your car,"},
+{t:24.1,cs:"když jedete do práce, při všech věcech, které děláte",en:"driving to work, all the things you're doing"},
+{t:25.8,cs:"a vezměte si čas přemýšlet",en:"and take the time to think about"},
+{t:27.2,cs:"toto je úhel náklonu,",en:"this is lean angle,"},
+{t:28.2,cs:"volant je úhel náklonu, brzdy a plyn,",en:"steering wheel is lean angle, brakes and throttle,"},
+{t:30.2,cs:"plynulost na brzdách a plynu v autě",en:"smoothness on brakes and throttle in the car"},
+{t:32.8,cs:"bude plynulost na vaší motorce,",en:"will be smoothness on your motorcycle,"},
+{t:34.9,cs:"a víte, co dalšího si můžete nacvičit?",en:"and guess what else you can practice?"},
+{t:36.5,cs:"Můžete si nacvičit plánování, skákání pohledu,",en:"You can practice having a plan, jumping your eyes,"},
+{t:39.7,cs:"rozhlížení se do zrcátek,",en:"scanning to your mirrors,"},
+{t:42.1,cs:"vidět velký obrázek, vrátit se k zaměření.",en:"getting a big picture, coming back to focus."},
+{t:44.3,cs:"Všechny tyto věci, cvičit si je v autě.",en:"All these things, practicing in your car."},
+{t:47.8,cs:"Takže k tomu je auto,",en:"So, that's what a car is for"},
+{t:49.5,cs:"cvičit si jízdu na motorce,",en:"to practice your motorcycle riding,"},
+{t:50.8,cs:"úhly volantu, úhel náklonu,",en:"steering wheel angles, lean angle,"},
+{t:52.3,cs:"brzdy a plyn.",en:"brakes and throttle."},
+{t:53.2,cs:"Všechno si to zkoušíte stále,",en:"You're playing with it all the time,"},
+{t:54.6,cs:"bezpečné místo pro cvičení.",en:"low risk place to practice."},
+{t:56.9,cs:"Řiďte své auto",en:"Drive your car"},
+{t:59,cs:"abyste si cvičili jízdu na motorce.",en:"to practice your motorcycle riding."},
+{t:60.7,cs:"Až příště si vezmu motorku, budu lepší.",en:"Next time you touch your bike, you'll be better."}];
+var subs4=[{t:5.3,cs:"Zajímám se, jak dlouho bude těmhle kluci trvat, než skončí kurz. Amen.",en:"So I wonder how long it's gonna take these guys to finish this course. Amen God,"},
+{t:8.2,cs:"Víte, jsou tady někteří starší kluci. Prostě",en:"you know, there are some old guys. They just"},
+{t:11.6,cs:"trvá jim to věčně. Musí jim totiž docházet energie v puse. Jen si čtou slova.",en:"take forever. Well, they have to their lips get tired. They're sounding out the words."},
+{t:14.2,cs:"Zřejmě. Ah, natáčíme.",en:"Apparently. Oh we're rolling."},
+{t:21.3,cs:"a gratuluji",en:"and congratulations"},
+{t:22.5,cs:"k absolvování ChampU. Gratulace od Nicki Notch",en:"on graduating from Camp you congratulations from Nicki notch"},
+{t:25.6,cs:"která měla šanci se objevit na kameře, a od Alex Hatfielda",en:"who got a chance to appear on camera and Alex Hatfield"},
+{t:28.6,cs:"který ChampU vede a stará se o něj",en:"who is Champ you runs it"},
+{t:31.1,cs:"stará se o vás. Ano, mohli jste dostat",en:"takes care of it takes care of you. Yeah, you guys may have"},
+{t:34.2,cs:"e-maily ode mě na všech fórech. Pokud jste ještě nenavštívili",en:"received emails from me all over the forums. If you haven't checked out"},
+{t:37.2,cs:"fóra, prosím, podívejte se. Pokud máte jakékoli otázky k obsahu kurzu",en:"a forums, please do if you have any questions about the curriculum"},
+{t:40.5,cs:"vlastně celý tento segment pocházel z návrhu na fóru",en:"this actually this whole segment came from a forum suggestion"},
+{t:43.4,cs:"že jsme opravdu potřebovali lepší outro a",en:"that really we needed a better outro and"},
+{t:46.2,cs:"tak tady jsme to dělali. Pokud se vám líbilo, co",en:"so here we are doing it. If you liked what"},
+{t:49.4,cs:"jste viděli, pokud se vám kurz líbil, prosím, řekněte to někomu. Přidejte",en:"you've seen if you enjoyed this course, please tell someone like"},
+{t:52.7,cs:"to je ta největší věc, kterou můžeme udělat, abychom opravdu rozvinuli",en:"that's the biggest thing we can do to really grow"},
+{t:55.3,cs:"tento sport, pokud jde o bezpečnější jezdce",en:"this sport in terms of making safer Riders"},
+{t:58.4,cs:"prostě o tom povídejte více lidem. Samozřejmě, můžeme",en:"is telling more people about it. Sure we can"},
+{t:61.3,cs:"říct, že ChampU je skvělý. Ale to zní jako reklama pro někoho",en:"say Champion is great. But that sounds like advertising for someone"},
+{t:64.3,cs:"kdo za to zaplatil a absolvoval to. Vy všichni byste říkali lidem",en:"who paid for it graduated from it. You'd all tell people"},
+{t:67.1,cs:"to by bylo skvělé, protože jsme ChampU začali, protože potřebujeme",en:"that would be great because we started champ you because we"},
+{t:70.3,cs:"dosáhnout do vašeho domova nebo do práce, kdekoliv jste, a dát vám",en:"need to reach into your home or work wherever you are and give you"},
+{t:73.3,cs:"tuto zprávu. Zprávu, která nám podle našeho přesvědčení funguje a provázaně funguje",en:"this message the message that we believe works that provably works"},
+{t:76.4,cs:"aby zčásti vyvážila věci, které jste třeba slyšeli na jiných místech od",en:"to offset some of the things you may have heard and other places from"},
+{t:79.7,cs:"jiných lidí. Děkuji, že jste součástí řešení.",en:"other people. Thanks for being a part of the solution."},
+{t:82.6,cs:"Vůči průmyslu motocyklismu a děkuji",en:"To the riding industry and thanks for"},
+{t:85.1,cs:"za to, že nám svěřujete vaši jízdu. Gratulace k absolvování. Trvalo",en:"trusting us with your writing. Congratulations on graduating. I"},
+{t:88.5,cs:"nějakou dobu projít celým programem. Děkuji, že jste v tom vytrvali.",en:"take some time to get through the whole program. Thanks for sticking with it."},
+{t:91.1,cs:"Pokud jste v životě nikdy z ničeho negraduovali, jako Chris Paris,",en:"If you've never graduated from anything in your life like Chris Paris,"},
+{t:94.4,cs:"toto je skvělý okamžik. Výborně.",en:"this is a great moment way to go."},
+{t:148.5,cs:"Jsi stále tady.",en:"You're still here."},
+{t:151.5,cs:"Jsme hotovi.",en:"We're done."},
+{t:153.5,cs:"Vypni počítač.",en:"Turn off your computer."},
+{t:155.2,cs:"Jdi jezdit",en:"go riding"},
+{t:159.1,cs:"Pohyb.",en:"go on."}];
+
+var state={};
+for(var s=1;s<=4;s++)state[s]={running:false,baseTime:0,startWall:0,lastIdx:-1,rafId:null,sliderDragging:false};
+var sections={1:{subs:subs1,duration:364},2:{subs:subs2,duration:300},3:{subs:subs3,duration:70},4:{subs:subs4,duration:163}};
+
+function formatTime(s){var m=Math.floor(s/60);var sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec;}
+function getCurrentTime(s){if(!state[s].running)return state[s].baseTime;return state[s].baseTime+(Date.now()-state[s].startWall)/1000;}
+function findSubtitle(subs,t){var idx=-1;for(var i=0;i<subs.length;i++){if(subs[i].t<=t)idx=i;else break;}return idx;}
+function updateDisplay(s){var t=getCurrentTime(s);var sec=sections[s];var idx=findSubtitle(sec.subs,t);if(idx!==state[s].lastIdx){state[s].lastIdx=idx;var csEl=document.getElementById('cs'+s);var enEl=document.getElementById('en'+s);if(idx>=0&&idx<sec.subs.length){csEl.textContent=sec.subs[idx].cs;enEl.textContent=sec.subs[idx].en;}else{csEl.textContent='';enEl.textContent='';}}document.getElementById('time'+s).textContent=formatTime(t);if(!state[s].sliderDragging){document.getElementById('slider'+s).value=Math.floor(t);}}
+function tick(s){updateDisplay(s);if(state[s].running)state[s].rafId=requestAnimationFrame(function(){tick(s);});}
+function startSync(s){state[s].startWall=Date.now();state[s].running=true;state[s].rafId=requestAnimationFrame(function(){tick(s);});document.getElementById('btn'+s).textContent='\u23f8 Pauza';document.getElementById('btn'+s).classList.add('active');}
+function pauseSync(s){state[s].baseTime=getCurrentTime(s);state[s].running=false;if(state[s].rafId)cancelAnimationFrame(state[s].rafId);document.getElementById('btn'+s).textContent='\u25b6 Pokra\u010dovat';document.getElementById('btn'+s).classList.remove('active');}
+function toggleSync(s){if(state[s].running)pauseSync(s);else startSync(s);}
+function resetSync(s){pauseSync(s);state[s].baseTime=0;state[s].lastIdx=-1;updateDisplay(s);document.getElementById('btn'+s).textContent='\u25b6 Start';document.getElementById('cs'+s).textContent='\u25b6 Spus\u0165te video a klikn\u011bte Start';document.getElementById('en'+s).textContent='';}
+function setTime(s,t){var wasRunning=state[s].running;if(wasRunning)pauseSync(s);state[s].baseTime=t;state[s].lastIdx=-1;updateDisplay(s);if(wasRunning)startSync(s);}
+function adjustTime(s,delta){setTime(s,Math.max(0,getCurrentTime(s)+delta));}
+function onSliderInput(s){state[s].sliderDragging=true;setTime(s,parseFloat(document.getElementById('slider'+s).value));state[s].sliderDragging=false;}
+</script>
+</body>
+</html>

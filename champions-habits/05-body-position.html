@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>05 — Pozice těla (Body Position) | Champions Habits CZ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f0eb; color: #333; line-height: 1.7; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .module-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 3px solid #cf3339; }
+    .module-header h1 { color: #1a1a2e; font-size: 2em; margin-bottom: 12px; }
+    .nav-sections { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .nav-sections a { display: inline-block; padding: 8px 16px; background: #2d2d5e; color: #ffd700; text-decoration: none; border-radius: 6px; font-weight: 600; transition: background 0.2s; }
+    .nav-sections a:hover { background: #cf3339; color: white; }
+    .section { margin-bottom: 40px; padding-top: 20px; }
+    .section h2 { margin-bottom: 12px; color: #1a1a2e; font-size: 1.5em; }
+    .video-frame { width: 100%; height: 500px; border: 2px solid #e0e0e0; border-radius: 8px 8px 0 0; display: block; }
+    .subtitle-bar { background: #1a1a2e; color: #fff; padding: 18px 24px; min-height: 70px; font-size: 1.1em; text-align: center; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+    .subtitle-bar .cs { color: #ffd700; font-weight: 600; font-size: 1.2em; }
+    .subtitle-bar .en { color: #999; font-size: 0.8em; }
+    .controls { background: #2d2d5e; padding: 12px 24px 14px; border-radius: 0 0 8px 8px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .controls-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .controls button { background: #cf3339; color: white; border: none; padding: 8px 20px; border-radius: 6px; font-size: 0.95em; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .controls button:hover { background: #e85d5d; }
+    .controls button.active { background: #43a047; }
+    .controls button.active:hover { background: #66bb6a; }
+    .controls button.reset-btn { background: #555; }
+    .controls button.reset-btn:hover { background: #777; }
+    .controls .timer { color: #ffd700; font-family: monospace; font-size: 1.1em; min-width: 60px; text-align: center; }
+    .controls .adjust { background: #444; padding: 6px 12px; font-size: 0.85em; border-radius: 4px; }
+    .controls .adjust:hover { background: #666; }
+    .slider-row { display: flex; align-items: center; gap: 8px; padding: 0 2px; }
+    .slider-row label { color: #aaa; font-size: 0.75em; font-family: monospace; }
+    .time-slider { flex: 1; -webkit-appearance: none; appearance: none; height: 5px; border-radius: 3px; background: #444; outline: none; cursor: pointer; }
+    .time-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; }
+    .time-slider::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; border: none; }
+    .info { background: #fff3e0; border-left: 4px solid #ff9800; padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0; font-size: 0.9em; }
+    .info strong { color: #e65100; }
+    .info ol { margin: 8px 0 0 20px; }
+    .info li { margin-bottom: 4px; }
+    .summary-box { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 16px; margin: 20px 0; border-radius: 0 8px 8px 0; font-size: 0.95em; }
+    .summary-box strong { color: #1565c0; display: block; margin-bottom: 8px; font-size: 1.05em; }
+    .summary-box ul { margin: 0 0 0 20px; list-style: disc; }
+    .summary-box li { margin-bottom: 6px; line-height: 1.5; }
+    .module-nav { margin-top: 40px; padding: 20px; background: #2d2d5e; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .module-nav a { color: #ffd700; text-decoration: none; font-weight: 600; font-size: 1.1em; padding: 10px 24px; background: #cf3339; border-radius: 6px; transition: background 0.2s; }
+    .module-nav a:hover { background: #e85d5d; }
+    @media (max-width: 700px) { .video-frame { height: 350px; } .subtitle-bar { padding: 14px 16px; } .subtitle-bar .cs { font-size: 1em; } .controls { gap: 8px; padding: 10px 16px; } .controls button { padding: 6px 14px; font-size: 0.85em; } .nav-sections { flex-direction: column; } .nav-sections a { width: 100%; text-align: center; } .module-nav { flex-direction: column; text-align: center; } .module-nav a { width: 100%; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="module-header">
+    <h1>05 &#8212; Pozice t&#283;la (Body Position) | Champions Habits CZ</h1>
+    <p style="color: #666; margin-top: 8px;">P&#283;t video sekc&#237; o spr&#225;vn&#233; pozici t&#283;la na motorce &#8212; chodidla, kolena, trup, ruce a hlava</p>
+  </div>
+
+  <div class="nav-sections">
+    <a href="#sec1">Sekce 1 &#8212; &#218;vod</a>
+    <a href="#sec2">Sekce 2 &#8212; Chodidla</a>
+    <a href="#sec3">Sekce 3 &#8212; Horn&#237; t&#283;lo</a>
+    <a href="#sec4">Sekce 4 &#8212; Detailn&#237; techniky</a>
+    <a href="#sec5">Sekce 5 &#8212; Cvi&#269;en&#237;</a>
+  </div>
+
+  <div class="info">
+    <strong>Jak pou&#382;&#237;vat &#269;esk&#233; titulky:</strong>
+    <ol>
+      <li>Spus&#357;te video kliknut&#237;m na play p&#345;&#237;mo ve videu</li>
+      <li>Klikn&#283;te na <b>&#9654; Start</b> ve chv&#237;li, kdy video za&#269;ne p&#345;ehr&#225;vat</li>
+      <li>Pomoc&#237; tla&#269;&#237;tek &#177;1s / &#177;3s dola&#271;te synchronizaci</li>
+      <li>Posuvn&#237;kem m&#367;&#382;ete p&#345;esko&#269;it na libovoln&#233; m&#237;sto</li>
+    </ol>
+  </div>
+
+
+  <!-- SECTION 1 -->
+  <div class="section" id="sec1">
+    <h2>Sekce 1 &#8212; Úvod do pozice těla (4:46)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/body-position-section-1/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs1">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en1"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(1)" id="btn1">&#9654; Start</button>
+        <span class="timer" id="time1">0:00</span>
+        <button class="adjust" onclick="adjustTime(1,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(1,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(1,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(1,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(1)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider1" min="0" max="286" value="0" step="1"
+               oninput="onSliderInput(1)" onmousedown="state[1].sliderDragging=true" onmouseup="state[1].sliderDragging=false"
+               ontouchstart="state[1].sliderDragging=true" ontouchend="state[1].sliderDragging=false">
+        <label>4:46</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Úvod do pozice těla</strong>
+      <ul>
+      <li>Pozice těla je 5. základní návyk šampionů — jak sedíme na motorce ovlivňuje vše ostatní</li>
+      <li>Správná pozice těla umožňuje lépe ovládat motorku s menší námahou</li>
+      <li>Pozice těla není jen o závodním stylu — platí stejně pro silnici i okruh</li>
+      <li>Tělo je náš primární kontaktní bod s motorkou — přenáší vstupy na řízení, stupadla a sedlo</li>
+      <li>Špatná pozice těla = větší únava, horší kontrola, pomalejší reakce</li>
+      <li>Správná základní pozice: uvolněný, ale připravený — žádné napětí v rukou a ramenou</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section" id="sec2">
+    <h2>Sekce 2 &#8212; Chodidla a spodní část těla (4:03)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/body-position-section-2/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs2">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en2"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(2)" id="btn2">&#9654; Start</button>
+        <span class="timer" id="time2">0:00</span>
+        <button class="adjust" onclick="adjustTime(2,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(2,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(2,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(2,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(2)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider2" min="0" max="243" value="0" step="1"
+               oninput="onSliderInput(2)" onmousedown="state[2].sliderDragging=true" onmouseup="state[2].sliderDragging=false"
+               ontouchstart="state[2].sliderDragging=true" ontouchend="state[2].sliderDragging=false">
+        <label>4:03</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Chodidla a spodní část těla</strong>
+      <ul>
+      <li>Chodidla na stupadlech = základ stability. Přední část chodidla (bříška prstů) na stupadlech</li>
+      <li>Kolena svírají nádrž — tzv. "tank grip" drží tělo bez nutnosti držet se řidítek</li>
+      <li>Stehna a kolena aktivně pracují — ne jen pasivně sedět</li>
+      <li>Spodní část těla nese většinu váhy — ruce by měly být lehké na řidítkách</li>
+      <li>Správná pozice nohou umožňuje rychlé a přesné ovládání řadicí páky a zadní brzdy</li>
+      <li>Poloha chodidel ovlivňuje celkové držení těla na motorce</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section" id="sec3">
+    <h2>Sekce 3 &#8212; Horní část těla a pozice hlavy (7:37)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/body-position-section-3/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs3">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en3"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(3)" id="btn3">&#9654; Start</button>
+        <span class="timer" id="time3">0:00</span>
+        <button class="adjust" onclick="adjustTime(3,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(3,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(3,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(3,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(3)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider3" min="0" max="457" value="0" step="1"
+               oninput="onSliderInput(3)" onmousedown="state[3].sliderDragging=true" onmouseup="state[3].sliderDragging=false"
+               ontouchstart="state[3].sliderDragging=true" ontouchend="state[3].sliderDragging=false">
+        <label>7:37</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Horní část těla a pozice hlavy</strong>
+      <ul>
+      <li>Lehký úchop řidítek — "dva prsty" pravidlo, žádné křečovité držení</li>
+      <li>Lokty mírně ohnuté a uvolněné — umožňují motorce přirozeně řídit</li>
+      <li>Ramena dolů a dozadu — ne nahrbená k uším</li>
+      <li>Hlava vzpřímená a otočená směrem jízdy — kam se díváte, tam jedete</li>
+      <li>Horní část těla se naklání dovnitř zatáčky — přesun těžiště pomáhá motorce zatočit</li>
+      <li>Uvolněný trup umožňuje motorce pracovat pod vámi bez odporu</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section" id="sec4">
+    <h2>Sekce 4 &#8212; Detailní techniky (7:14)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/body-position-section-4/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs4">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en4"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(4)" id="btn4">&#9654; Start</button>
+        <span class="timer" id="time4">0:00</span>
+        <button class="adjust" onclick="adjustTime(4,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(4,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(4,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(4,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(4)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider4" min="0" max="434" value="0" step="1"
+               oninput="onSliderInput(4)" onmousedown="state[4].sliderDragging=true" onmouseup="state[4].sliderDragging=false"
+               ontouchstart="state[4].sliderDragging=true" ontouchend="state[4].sliderDragging=false">
+        <label>7:14</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Detailní techniky pozice těla</strong>
+      <ul>
+      <li>Technika "kiss the mirror" — naklonění hlavy směrem k zrcátku v zatáčce</li>
+      <li>Vnější noha tlačí do stupadla — stabilizuje tělo a pomáhá s přesunem váhy</li>
+      <li>Vnitřní koleno směřuje ven — otevírá boky a umožňuje lepší náklon</li>
+      <li>Pozice na sedle: posun směrem dopředu v zatáčkách pro lepší kontrolu</li>
+      <li>Brzdění a pozice těla spolupracují — správná pozice umožňuje tvrdší brzdění</li>
+      <li>Každý typ motorky vyžaduje mírně odlišnou pozici — přizpůsobte se své motorce</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section" id="sec5">
+    <h2>Sekce 5 &#8212; Cvičení a shrnutí (7:56)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/body-position-section-5/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs5">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en5"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(5)" id="btn5">&#9654; Start</button>
+        <span class="timer" id="time5">0:00</span>
+        <button class="adjust" onclick="adjustTime(5,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(5,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(5,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(5,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(5)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider5" min="0" max="476" value="0" step="1"
+               oninput="onSliderInput(5)" onmousedown="state[5].sliderDragging=true" onmouseup="state[5].sliderDragging=false"
+               ontouchstart="state[5].sliderDragging=true" ontouchend="state[5].sliderDragging=false">
+        <label>7:56</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Cvičení a shrnutí</strong>
+      <ul>
+      <li>Cvičení v autě: vědomě pracujte s pozicí těla — držení volantu, pozice nohou</li>
+      <li>Cvičení na motorce: zaměřte se na jednu část těla při každé jízdě</li>
+      <li>Postupný trénink: nejdřív nohy a kolena, pak ruce a ramena, nakonec celkovou koordinaci</li>
+      <li>Pravidelná kontrola: při každém zastavení zkontrolujte svou pozici</li>
+      <li>Pět základních návyků šampionů zatím: Mentální přístup, 100 bodů přilnavosti, R=MPH, Deštník směru, Pozice těla</li>
+      <li>Správná pozice těla je základem pro všechny ostatní dovednosti na motorce</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <a href="04-umbrella-of-direction.html">&#8592; Modul 04: De&#353;tn&#237;k sm&#283;ru</a>
+    <a href="06-braking-practice.html">Modul 06: Brzdná praxe &#8594;</a>
+  </div>
+
+</div>
+
+<script>
+var subs1=[{t:3.8,cs:"Takže, pozice těla je na řadě.",en:"All right, body position is up next."},
+{t:6.7,cs:"Spoustu názorů.",en:"Lots of opinions."},
+{t:8.5,cs:"Pojďme se na to podívat",en:"Let's take a look at it"},
+{t:9.4,cs:"z pohledu mistrů.",en:"from the perspective of the champions."},
+{t:12,cs:"Chris, rozjed nás.",en:"Chris, start us off."},
+{t:13.2,cs:"Jezdíš na sportovní motorce, track days, závodní motorka.",en:"You're on a sport bike, track days, race bike."},
+{t:16,cs:"Popoviž nám o svých představách ohledně pozice těla.",en:"Talk about your ideas behind body position here."},
+{t:19.1,cs:"Ano, myšlenka je taková, na jaké motorce to je,",en:"Yeah, the idea is, it doesn't matter what the bike is,"},
+{t:22.1,cs:"chci jezdit s menším náklonem, protože náklon je riziko.",en:"I wanna run less lean angle, 'cause lean angle is risks."},
+{t:25.9,cs:"Takže se snažíme to co nejvíce zmírnit.",en:"So we're trying to mitigate that as much as we possibly can."},
+{t:28.8,cs:"Budeme se snažit přesunout tělo dovnitř",en:"We're gonna try to move our bodies to the inside"},
+{t:31.3,cs:"kterýmkoliv směrem jedeme,",en:"of whichever direction we're going,"},
+{t:33.3,cs:"abychom měli menší náklon.",en:"so we run less lean angle."},
+{t:35.1,cs:"Silniční motorky, kde jsi ty, Marku?",en:"Street bikes, where are you, Mark?"},
+{t:36.4,cs:"Pořád budu používat tělo.",en:"Well, I'm still gonna use some body."},
+{t:38.4,cs:"Chci motorce signalizovat, že zatáčím,",en:"I still wanna give the bike the signal that I'm cornering,"},
+{t:41.1,cs:"ale stupeň aplikace bude menší, protože",en:"but my degree of application is gonna be less because"},
+{t:44.1,cs:"nechci dělat plný Grand Prix a skončit v nemocnici.",en:"I don't wanna go full body and end up getting arrested."},
+{t:48,cs:"Plný Grand Prix na silnici, přesun těla,",en:"Full Grand Prix on the street, hanging off,"},
+{t:49.7,cs:"snaha dotknout se kolena.",en:"trying to touch your knee."},
+{t:51,cs:"Když se koleno dotane,",en:"By the time you knee touches,"},
+{t:52.1,cs:"vozíš tolik náklonu, tolik rychlosti.",en:"you're carrying so much lean angle, so much speed."},
+{t:54.9,cs:"Když auto vyjedete z výhledu,",en:"When the car pulls out of the overlook,"},
+{t:56.9,cs:"přímo do něj. Je to dost těžké.",en:"you're right into them. It's pretty tough."},
+{t:58.7,cs:"Policisté ti nebudou mít rádi,",en:"Police officers aren't gonna like you"},
+{t:59.9,cs:"když se budeš snažit dřít kolenem a podobně.",en:"trying to drag your knee, et cetera."},
+{t:61.9,cs:"Nemají na to smysl pro humor.",en:"They don't have a sense of humor about it."},
+{t:63.5,cs:"Vůbec.",en:"They do not."},
+{t:64.4,cs:"Je jedno místo, kde můžeš dřít kolenem.",en:"There is a place to drag your knee."},
+{t:66.3,cs:"Pojď na to, děťátko.",en:"Come on, baby."},
+{t:67.4,cs:"Závodní okruh.",en:"The racetrack."},
+{t:68.3,cs:"Ano, takže můžeme se spoustu naučit o pozici těla",en:"Yeah, So we can learn an awful lot about body position"},
+{t:70.7,cs:"doma. Pojďme to zkusit.",en:"there at home. Let's let's try this."},
+{t:72.4,cs:"Skočte si ze svých motorek.",en:"You guys jump off your bikes."},
+{t:74,cs:"Všichni doma, vstav si, vstav si.",en:"Everybody at home, stand up, stand up."},
+{t:75.4,cs:"Pojďme si to rozdat.",en:"Let's get things going."},
+{t:78.2,cs:"Slez z motorky!",en:"Get off your bikes!"},
+{t:79.1,cs:"Fajn. Ano. Vstav si!",en:"Cool. Yeah.↵Stand up!"},
+{t:80.9,cs:"Dobře, pojďme na to.",en:"All right, here we go."},
+{t:82,cs:"Teď, společně, pojďme na to.",en:"Now, together here, let's do this."},
+{t:85,cs:"Vidíš mě, Chrisi? Pojďme na to.",en:"Can you see Chris? Let's do this."},
+{t:86.7,cs:"Postav nohy do šířky ramen.",en:"Put your feet, shoulder width apart."},
+{t:90.2,cs:"Nebudou tak široké jako moje, ale...",en:"They won't be as wide as mine, but..."},
+{t:91.8,cs:"(muži se smějí)",en:"(men laugh)"},
+{t:93.5,cs:"Teď bez pohybu hlavy v prostoru,",en:"Now, without moving your head in space,"},
+{t:95.2,cs:"nech hlavu kde je, zkus naložit váhu na jednu nohu.",en:"leave your head where it is, try to put weight on one foot."},
+{t:97.1,cs:"Zkus naložit váhu na levou nohu.",en:"Try to put weight on your left foot."},
+{t:99.3,cs:"Jak se ti daří, Marku?",en:"How's it going, Mark?"},
+{t:100.1,cs:"Vůbec ne. Ano, je to těžké.",en:"Not well.↵Yeah, tough to do."},
+{t:102.1,cs:"Snaha naložit váhu na levou nohu",en:"Trying to put weight on that left foot"},
+{t:103.1,cs:"bez pohybu hlavy.",en:"without moving your head."},
+{t:103.9,cs:"Teď",en:"Now,"},
+{t:105,cs:"posuň hlavu doleva.",en:"move that head to the left."},
+{t:106.6,cs:"Posuň hlavu doleva.",en:"Move that head to the left."},
+{t:107.5,cs:"Pozoruj, jak se váha přesouvá na tu nohu.",en:"Watch how weight goes on to that foot."},
+{t:108.9,cs:"Pozoruj, jak se váha přesouvá na tu nohu.",en:"Watch how weight goes onto that foot."},
+{t:110.6,cs:"Zastavme se a vrátíme Chrise a Marka",en:"Let's stop there and put Chris and Mark"},
+{t:113.3,cs:"na jejich motorky.",en:"on their motorcycles."},
+{t:116.2,cs:"Vyzkoušej si, jak stíhat na motorce",en:"You guys start off with trying to steer their motorcycle"},
+{t:118.8,cs:"bez pohybu hlavy.",en:"without moving their heads."},
+{t:119.7,cs:"A, zejména Chrisi na okruhu,",en:"And, especially Chris on the track,"},
+{t:120.9,cs:"budeš pohybovat zadkem.",en:"you'll be moving your butt."},
+{t:121.9,cs:"Ano.",en:"Yeah."},
+{t:122.7,cs:"Ale budeš zkroucený. Ano.",en:"But you'll be twisted up.↵Yeah."},
+{t:124.8,cs:"Když pohybujeme jen dolní tělo,",en:"Just if we only move the lower body,"},
+{t:127.4,cs:"váha se nikam neposune.",en:"weight doesn't really go anywhere."},
+{t:128.5,cs:"Nemáme tu představu o naložení váhy",en:"We're not getting that idea of putting a load down"},
+{t:131.1,cs:"na stupačku.",en:"on that foot peg."},
+{t:132.1,cs:"Takže musíme dát nohy do správné polohy.",en:"So we got to get our feet in position."},
+{t:133.5,cs:"Takže, mysli na to, abys ukazoval vnitřní palec 45 stupňů.",en:"So, think about pointing that inside toe out 45 degrees."},
+{t:137.8,cs:"Dobře.",en:"Okay."},
+{t:138.6,cs:"Opravdu si myslíme, že nebudeme",en:"We're really thinking we're not going to be"},
+{t:139.8,cs:"na stupačce, budeme si posuňme nohu přes.",en:"on top of that foot peg, we're going to scoot our foot over."},
+{t:142.3,cs:"Teď mi to umožňuje otevřít ten ohybač kyčle.",en:"Now this allows me to open up that hip flexor."},
+{t:144.7,cs:"Tomu říkáme náš trojúhelník světla.",en:"We call this our triangle of light."},
+{t:146.4,cs:"Teď máme tu základnu pod naším tělem.",en:"Now we have that foundation below our body."},
+{t:148.4,cs:"Takže teď doma, posuň horní tělo na jednu stranu,",en:"So now at home, move your upper body over that one side,"},
+{t:151.8,cs:"na tu nohu.",en:"over that leg."},
+{t:152.8,cs:"Teď máme kam dát tu váhu.",en:"Now we have somewhere to put that load."},
+{t:154.7,cs:"Ta základna je pod mnou.",en:"That foundation is underneath me."},
+{t:156.7,cs:"A pak najednou,",en:"Now, all of a sudden,"},
+{t:157.6,cs:"nemusím mít všechnu váhu v rukou",en:"I don't have to have all that weight in my hands"},
+{t:159,cs:"protože mám kam dát tu váhu.",en:"'cause I have somewhere to put that weight."},
+{t:160.6,cs:"Takže posuň hlavu znovu",en:"So move that head again"},
+{t:162.3,cs:"vidím, jak váha padá dolů.",en:"I see that weight come down."},
+{t:164,cs:"Takže, Marku, na silnici, jaký je tvůj přístup?",en:"So, Mark, on the street, what's your approach?"},
+{t:167,cs:"Víš, nechci používat plný Grand Prix pozici.",en:"Well, you know, I don't want to use all Grand Prix body."},
+{t:170.4,cs:"Nemůžu to dělat jako Chris.",en:"I can't do it like Chris."},
+{t:171.5,cs:"Nechci jezdit tak rychle jako Chris na silnici.",en:"I don't wanna go as fast as Chris on the street."},
+{t:174,cs:"Musím se držet v těch parametrech",en:"I gotta stay within those parameters"},
+{t:175.7,cs:"pro bezpečnost a přežití.",en:"for safety and survival."},
+{t:178.7,cs:"Ale pořád chci motorce dát signál",en:"But I still want to give my motorcycle a signal"},
+{t:181,cs:"a mohu přesunout horní tělo.",en:"and I can move my upper body."},
+{t:182.7,cs:"Mohu se dostat z střední čáry, aby se posunul horní tělo",en:"I can get off a center line so I can move my upper body"},
+{t:186.4,cs:"a dát jí ten signál naložením stupačky.",en:"and give it that signal loading the peg."},
+{t:188.9,cs:"To se mi líbí. Takže, Chrisi, vraťme se na začátek,",en:"I like that. So, Chris, let's go back to where we started,"},
+{t:192.3,cs:"kdy jsme si stali.",en:"when we stood up."},
+{t:193.8,cs:"Hlava, bez pohybu, převez sedadlo,",en:"Head, not moving, go across the seat,"},
+{t:196.1,cs:"dělej všemožné bláznivé věci.",en:"do all sorts of crazy things."},
+{t:197.9,cs:"Motorka se neotáčí.",en:"Bike's not steering."},
+{t:198.9,cs:"A říkáš si,",en:"And you think to yourself,"},
+{t:199.7,cs:"dobře, neotáčí se, protože je na středním stojanu.",en:"okay, it's not steering 'cause it's on the center stand."},
+{t:201.4,cs:"Pojďme na to.",en:"So let's do this."},
+{t:202.4,cs:"A pokud máš bočníci, kterému věříš doma,",en:"And if you have a side stand that you trust at home,"},
+{t:205.6,cs:"zkus to.",en:"try this."},
+{t:206.4,cs:"Teď je suneme ze středního stojanu,",en:"Now let's take them off the center stand,"},
+{t:209.4,cs:"dáme je na jeho boční stojan",en:"put them on his side stand"},
+{t:210.8,cs:"a Chrisi jdi přes sedadlo, zkroucený.",en:"and Chris go across the seat, twisted up."},
+{t:212.8,cs:"Pohybuje tělem.",en:"He's moving his body."},
+{t:213.8,cs:"Pohybuje jím, dokonce se snaží dřít kolenem.",en:"He's moving it by might even trying to drag his knee."},
+{t:215.9,cs:"Ale podívej se na motorku, neotáčí se.",en:"But look at the bike it's not steering."},
+{t:217,cs:"Teď pozoruj, když začne pohybovat hlavou,",en:"Now watch, when he starts to move his head,"},
+{t:219.3,cs:"pozoruj, jak se mění váha.",en:"watch how the weight changes."},
+{t:221.5,cs:"Zkus to znovu. Jak pohybuje hlavou, váha se mění.",en:"Try it again. As he moves his head, the weight changes."},
+{t:225.6,cs:"Protože váha jde do stupačky.",en:"'Cause the weight goes into your foot peg."},
+{t:227.9,cs:"A každý pokud říkáme stupačka kontaktní plocha,",en:"And every time we say foot peg CP,"},
+{t:230.3,cs:"nebudeme opravdu myslet na stupačku.",en:"we're not really thinking about the foot peg."},
+{t:231.9,cs:"Jak o tom budeme přemýšlet?",en:"How do we think about this?"},
+{t:232.9,cs:"Ne, myslíme na to jako na osu gyroskopu.",en:"No, we're thinking it's the axis of the gyro."},
+{t:235.2,cs:"Pokud si myslíš, že se tvá kola točí, motor se točí,",en:"If you think your wheels are spinning, motor spinning,"},
+{t:237.2,cs:"všechno říká motorce jít rovně,",en:"everything's telling that bike to go straight,"},
+{t:239.1,cs:"musíme převést tu energii naložením horní masy",en:"we need to detour that energy by putting our upper mass"},
+{t:242.7,cs:"dolů do stupačky, aby se motorka otáčela.",en:"down into that foot peg to let that bike steer."},
+{t:244.9,cs:"A když ses to zkusil bez pohybu hlavy,",en:"And when you tried it without moving your head,"},
+{t:246.3,cs:"neotáčela se.",en:"it didn't steer."},
+{t:247.5,cs:"Motorka prostě nemá signál.",en:"Bike just doesn't have a signal."},
+{t:248.6,cs:"Ano. Neříkáme, že se nedostanem",en:"Yeah. We're not saying you won't make it"},
+{t:250.3,cs:"po tvé oblíbené cestě.",en:"down your favorite road."},
+{t:251.5,cs:"Říkáme, že se motorka neotáčí tak dobře.",en:"We're saying the bike won't steer as well."},
+{t:253,cs:"Takže, Marku, sedíš-li nahoře na motorce, motorky,",en:"So, Mark, sitting up on top of the bike, the bikes,"},
+{t:255.7,cs:"ji nepozná, co jí říkáš.",en:"it doesn't recognize what you're telling it."},
+{t:257.4,cs:"To je správně.",en:"That's right."},
+{t:258.2,cs:"Myslí, že chci jezdit rovně celou dobu.",en:"It thinks I want to go straight all the time."},
+{t:259.9,cs:"Takže naložením stupačky jak o tom Chris a Nick mluví",en:"So by loading that peg like Chris and Nick are talking about"},
+{t:263.2,cs:"mohu jí poslat signál, který jí řekne",en:"I get to send it that signal that tells it"},
+{t:265.4,cs:"kterým směrem ji žádám, aby se otáčela.",en:"which direction I'm asking it to go."},
+{t:267.7,cs:"Dříve než se posuneme dál, abychom se podívali na Chrisův postoj nohy,",en:"Before we move on to look at Chris's foot placement,"},
+{t:270.4,cs:"přesný postoj nohy, můžeme to dělat na cruiserech?",en:"exact foot placement, can we do this on cruisers?"},
+{t:273.7,cs:"Absolutně.",en:"Absolutely."},
+{t:274.6,cs:"Na adventure bikech?",en:"Adventure bikes?"},
+{t:275.4,cs:"Sto procent",en:"Hundred percent"},
+{t:276.3,cs:"Zuma Scooter?",en:"Zuma Scooter?"},
+{t:277.1,cs:"Ano. Ano.",en:"Yes.↵Yeah."},
+{t:278,cs:"Pojďme si podívat na nohy.",en:"Let's look at some feet."}];
+var subs2=[{t:5.9,cs:"Tak jo.",en:"Alright."},
+{t:6.7,cs:"Máme se tu předklánět u stupačky, osa gyroskopu.",en:"We're crouched down here by the foot peg, axis of the gyro."},
+{t:9.8,cs:"Vidíme lidi, kteří si zařadí a neresetují si nohu.",en:"We'll see people make a shift and not reset their foot."},
+{t:12.8,cs:"A najednou si zjistí,",en:"And all of a sudden they find themselves"},
+{t:14.4,cs:"že mají stupačku uprostřed chodidla,",en:"with a foot peg in the middle of the foot,"},
+{t:16.3,cs:"a Chrise, co je na tom špatně?",en:"and Chris, what, what's the problem with this?"},
+{t:18.2,cs:"Vole, nemáš kam dát tuhle,",en:"Man, just have nowhere to put that,"},
+{t:19.9,cs:"tuhle dráhu zatížení do stupačky.",en:"that load path down into that foot peg."},
+{t:22.1,cs:"Takže budeme myslet, možná chytíme to řazení.",en:"So we're gonna think, we may catch that shift."},
+{t:24.7,cs:"Posuneme nohu zpátky",en:"We're gonna slide our foot back"},
+{t:26,cs:"a vlastně si dáme",en:"and we're actually gonna put"},
+{t:27.5,cs:"bříško nohy na hranu stupačky,",en:"the ball of our foot into the edge of that foot peg,"},
+{t:30.4,cs:"trochu jako trsátko.",en:"a little bit more like a pick."},
+{t:32.1,cs:"Když mám špičku dopředu, mám i koleno dopředu.",en:"When my toe is forward, my knee is also pointed forward."},
+{t:35.2,cs:"Tak chci si myslet, chci tu špičku namířit dolů.",en:"So, I want to think, I want to point that toe down."},
+{t:38.4,cs:"To otevře ten ohybač kyčle.",en:"That opens up this hip flexor."},
+{t:40.1,cs:"A to, co vlastně hledáme,",en:"And what we're really trying to look for,"},
+{t:41.7,cs:"tomu říkáme trojúhelník světla.",en:"we call this the triangle of light."},
+{t:43.7,cs:"Chceme vidět světlo mezi nohama",en:"We want to see light between your leg"},
+{t:46.4,cs:"a rámem motocyklu.",en:"and the frame in the motorcycle."},
+{t:48.2,cs:"Teď máme kam dát tu dráhu zatížení.",en:"Now we have somewhere to put that load path down into."},
+{t:51.7,cs:"Spousta našich tipů na pozici těla",en:"So many of our champions habits on body position"},
+{t:54.3,cs:"se točí okolo jízdy na trati, protože Mark prostě,",en:"revolve around track riding, because Mark just,"},
+{t:57,cs:"se tolik nehýbe.",en:"isn't going to move that much."},
+{t:58.2,cs:"Přesune váhu na vnitřek.",en:"He's gonna get weight to the inside."},
+{t:60,cs:"Bude zatěžovat tu stupačku,",en:"He's gonna weight that foot peg,"},
+{t:61.4,cs:"protiřídí trochu víc, ale my,",en:"counter share a little bit more, but we,"},
+{t:63.2,cs:"fakt si musíme myslet na,",en:"we really have to think about on the,"},
+{t:65.1,cs:"na trati, tvůj první jezdecký den,",en:"on the track, your first track day,"},
+{t:66.6,cs:"nebo možná příští, Chrise, je tam,",en:"or maybe your next track day, Chris, there's a,"},
+{t:69.1,cs:"je tam idea, že v brzdné zóně,",en:"there's an idea that we, under the, in the brake zone,"},
+{t:71.4,cs:"svíráme palivovou nádrž, protože chyba",en:"we pinched the fuel tank because the mistake"},
+{t:73.9,cs:"je nikdy nedávat váhu do řídítek.",en:"is never put weight into the bars."},
+{t:76.5,cs:"Jo, to je stoprocentně špatně, ne?",en:"Yeah, that's a hundred percent wrong, right?"},
+{t:78.5,cs:"Nikdy nebudeme svírat palivovou nádrž.",en:"We're never gonna pinch off that fuel tank."},
+{t:80.6,cs:"Vlastně se vrátíme od palivové nádrže.",en:"We're actually gonna get back off that fuel tank."},
+{t:82.8,cs:"Spousta lidí chce být proti ní,",en:"A lot of people want to be right up against it,"},
+{t:84.6,cs:"ale vrátíme se o pěst, dvanáct centimetrů, nebo",en:"but we're gonna get back fist distance, six inches or,"},
+{t:87.8,cs:"nebo víc, pokud jsi trošku vyšší.",en:"or even more, if you're a little bit taller."},
+{t:89.8,cs:"Vrátíme se od palivové nádrže.",en:"We'll get back off that fuel tank."},
+{t:91.7,cs:"A protože nejsem proti ní,",en:"And because I'm not up against it,"},
+{t:94.1,cs:"jde dráha zatížení dolů do dlaně.",en:"that load path goes down into your palm."},
+{t:96.4,cs:"Takže se cítíš jako",en:"So you're actually feeling like"},
+{t:98.1,cs:"když vcházíš do zatáčky,",en:"as you're coming in to the corner,"},
+{t:100.5,cs:"jako bys dělal malý klick.",en:"like you're doing a small pushup."},
+{t:102.2,cs:"Veškerá váha jde do dlaní.",en:"All the weight goes into the palms of those hands."},
+{t:104.7,cs:"Ale jakmile se naklání do zatáčky,",en:"But once I tip into the corner,"},
+{t:106.4,cs:"ta váha vyjde z ruky.",en:"then that weight comes out of the hand."},
+{t:107.8,cs:"Takže nesvíráme palivovou nádrž.",en:"So we're not actually pinching the tank."},
+{t:109.6,cs:"Sleduj všechny dobré motocyklisty Grand Prix,",en:"Watch all the good Grand Prix guys,"},
+{t:111.5,cs:"vejdou do zatáčky s nohama viset.",en:"they're entering the corner with their leg dangling off."},
+{t:114.4,cs:"Nejsou sevření proti palivové nádrži.",en:"They're not pinched up against that fuel tank."},
+{t:116.3,cs:"Takže se vrací od palivové nádrže,",en:"So they're getting back off"},
+{t:117.9,cs:"aby mohli umístit tu zátěž.",en:"so they can put that load in there."},
+{t:119.5,cs:"Takže Marku, vezmeš svůj streetbike na jezdecký den",en:"So Mark you take your street bike to a track day"},
+{t:121.5,cs:"jako všichni,",en:"like we all do,"},
+{t:122.7,cs:"tvůj první den.",en:"your first track day."},
+{t:123.9,cs:"Je okay zatěžovat paže během brzdění?",en:"Is it okay to load your arms under braking?"},
+{t:125.7,cs:"Ano nebo ne.",en:"Yes or no."},
+{t:126.5,cs:"Absolutně. Ano.",en:"Absolutely. Yes."},
+{t:127.3,cs:"Úplně.",en:"Absolutely."},
+{t:128.3,cs:"Nebudeme si zamykavat lokty",en:"We're not going to lock those elbows out"},
+{t:129.6,cs:"a neboj se, i když nemáš velké paže jako já,",en:"and don't worry if you don't have big arms like mine,"},
+{t:132,cs:"pořád to tam můžeš dát.",en:"you can still put that load in."},
+{t:133.5,cs:"To nepotřebuješ, to nepotřebuješ.",en:"You don't need these, you don't need these."},
+{t:135.1,cs:"Tady je jen na pohled.",en:"These are just for show."},
+{t:136.3,cs:"Na vstupu do zatáčky je pozice těla trošku",en:"At corner entry, body position is a little bit"},
+{t:138.9,cs:"důležitější, než by sis myslel.",en:"more important than you might think."},
+{t:141.6,cs:"Existuje správný postup",en:"There is a correct process"},
+{t:143.5,cs:"a postup, který tě bude bolet.",en:"and there's a process that will hurt you pretty badly."},
+{t:148,cs:"Takže Chrise Parisi, co se stane na vstupu do zatáčky?",en:"So Chris Paris, what comes first at corner entry?"},
+{t:151.3,cs:"Brzdy, tělo, downshift?",en:"Breaks, body, downshifting?"},
+{t:154.6,cs:"Co se děje?",en:"What happens?"},
+{t:155.5,cs:"Tělo bude první, ne?",en:"Body's gonna be first, right?"},
+{t:157.2,cs:"Chceme si myslet, že chceme",en:"We like to think we want to get"},
+{t:158.4,cs:"udělat co nejvíc předtím, než se přiblížíme ke zatáčce,",en:"as much done before we approach the corner,"},
+{t:160.8,cs:"protože vstup do zatáčky je šílenství.",en:"cause corner entry is crazy."},
+{t:161.9,cs:"Děje se tam spoustu věcí.",en:"There's a lot of stuff going on."},
+{t:163.2,cs:"Takže když vejdu do levotočivé zatáčky,",en:"So if I'm gonna be getting into a left-hander,"},
+{t:165.9,cs:"možná jsem na rovince.",en:"I might be coming down the straightaway."},
+{t:167.6,cs:"První, co udělám, je přesunutí jednoho zadku",en:"The first thing I'm gonna do is scoot one butt cheek"},
+{t:169.9,cs:"předtím, než se dostanu k té zatáčce.",en:"off before I get to that corner."},
+{t:171.9,cs:"Takže si myslím,",en:"So I like to think about it is,"},
+{t:173.4,cs:"že nikdy nevejdu do zatáčky ze středu sedla.",en:"I'm never gonna enter a corner in the center of the seat."},
+{t:176.2,cs:"Nikdy nevejdu do brzdné zóny ze středu sedla.",en:"Never enter a braking zone in the center of the seat."},
+{t:178.8,cs:"Takže zadek pryč.",en:"So butts off."},
+{t:180.4,cs:"Teď si můžu sednout na brzdy, downshift,",en:"Now I could sit up on the brakes, downshift,"},
+{t:182.7,cs:"downshift, dám si tělo, dolní tělo do pozice.",en:"downshift, get my body, lower body in position."},
+{t:185.4,cs:"Začnu snižovat hlavu,",en:"Start dropping that head,"},
+{t:186.9,cs:"zatížení jde do stupačky.",en:"load goes down into that foot peg."},
+{t:189,cs:"Tak se podíváme na něco.",en:"So let's take a look at something."},
+{t:189.9,cs:"Tak, předpokládejme, že Mark si vezme",en:"Let's, let's pretend Mark's going to"},
+{t:190.9,cs:"svůj první jezdecký den.",en:"his very first track date."},
+{t:192.1,cs:"Schovaný na rovince.",en:"Tucking down the straightaway."},
+{t:193.4,cs:"Jsi schovaný na rovince.",en:"You're tucked in on the straightaway."},
+{t:194.5,cs:"Takže všichni za tebou vědí, že akceleruješ.",en:"So everybody behind you knows you're accelerating."},
+{t:197.4,cs:"To je velká část pozice těla.",en:"It's a big part of body position."},
+{t:198.7,cs:"Sedneme si na brzdy,",en:"You sit up on the brakes,"},
+{t:200.3,cs:"on si zařadí dolů",en:"he downshifts"},
+{t:202.2,cs:"pak přesune tělo.",en:"then moves his body."},
+{t:204.1,cs:"To je špatně.",en:"That's wrong."},
+{t:205.4,cs:"Víme, že to je špatně, protože nejlepší jezdci to nedělají.",en:"We know it's wrong because the best riders don't do that."},
+{t:208.2,cs:"Jejich pozice těla, jejich zadek jde první,",en:"Their body position, their butt comes over first,"},
+{t:209.8,cs:"tak pojďme Marka opravit.",en:"set's lets fix Mark."},
+{t:210.8,cs:"Pojďme opravit tvůj první jezdecký den nebo příští.",en:"Let's fix your first track day or your next track date."},
+{t:213.3,cs:"Jdeš dolů po rovince.",en:"You're coming down the straightaway."},
+{t:214.4,cs:"Jsi schovaný.",en:"You're tucked in."},
+{t:215.2,cs:"Dobře.",en:"Good."},
+{t:216,cs:"Tvůj zadek se přesune první.",en:"Your butt moves first."},
+{t:216.9,cs:"Teď si sedneme na brzdy.",en:"Now you sit up on the brakes."},
+{t:218.1,cs:"Všichni za tebou vědí, že brzdíš.",en:"Everybody behind you knows you're braking."},
+{t:219.8,cs:"Teď jsi v pozici,",en:"Now you're in a position"},
+{t:221,cs:"kterou můžeš jen přesunout hlavu.",en:"to just move the head."},
+{t:222.3,cs:"A Markovi to bude super.",en:"And Mark's gonna do okay."},
+{t:224.1,cs:"Mark to bude dělat pěkně.",en:"Mark will do pretty good."},
+{t:225,cs:"Jeho první den bude zábava,",en:"His first track will be fun"},
+{t:226.7,cs:"protože co se stane,",en:"because what happens is"},
+{t:227.7,cs:"čím rychleji jdeš,",en:"the faster you go,"},
+{t:229.6,cs:"když máš tělo uprostřed sedla,",en:"when your body's in the middle of the seat,"},
+{t:230.8,cs:"tím víc energie vstoupí,",en:"the more energy you have going in,"},
+{t:232.4,cs:"a pak se přesunete,",en:"and then you move,"},
+{t:233.9,cs:"stává se to pěkně těžké.",en:"it gets pretty tough."},
+{t:234.9,cs:"Přijdeš pozdě.",en:"You become late."},
+{t:235.8,cs:"Přijdeš pozdě,",en:"You become late,"},
+{t:236.6,cs:"přijdeš pozdě.",en:"you come late."}];
+var subs3=[{t:5.6,cs:"Přidáme ještě jednu malou věc.",en:"Let's add one more little thing here."},
+{t:8.8,cs:"Chceme přesunout naše tělo hladce, lineárně,",en:"We want to move our body in a smooth, linear,"},
+{t:12,cs:"postupně a přirozeně.",en:"progressive fashion."},
+{t:13,cs:"Stejně jako jste se naučili ovládat plyn,",en:"Just like you've learned to operate your throttle,"},
+{t:15.2,cs:"brzdy a řízení na Champ University.",en:"and your brakes, and your steering at Champ University."},
+{t:18.1,cs:"Podívejte se, jak Chris skáče sem a tam přes sedlo,",en:"So watch Chris jump back and forth across the seat,"},
+{t:21,cs:"a motor úplně rozčiluje, všechno se",en:"and getting the thing all upset, the thing's"},
+{t:22.5,cs:"hýbe ze strany na stranu.",en:"just moving all over the place."},
+{t:23.9,cs:"Musíme to vyhladit—",en:"We've got to smooth that stuff--"},
+{t:24.9,cs:"To je wheelie.",en:"It's a wheelie."},
+{t:27.7,cs:"Musíme to vyhladit.",en:"Got to smooth that stuff out."},
+{t:28.9,cs:"Teď, Chris, vyhlaď to, vidíš zátěž,",en:"Now, Chris smooth it out, you see the load coming"},
+{t:30.2,cs:"jak přichází do motoru daleko hladši.",en:"into the bikes a little bit more smoothly."},
+{t:32.8,cs:"Když sedíme uprostřed sedla?",en:"When we sit in the middle of the seat?"},
+{t:34.6,cs:"Nikdy. Nikdy.",en:"Never.↵Never."},
+{t:35.4,cs:"Nikdy, pokud je to tvůj první track den,",en:"Never, if it's your first track day,"},
+{t:37.1,cs:"nauč se jet dolů řídítky s zadkem",en:"learn to go down to steering wheel with your butt"},
+{t:38.9,cs:"připravený na další zatáčku.",en:"ready for the next corner."},
+{t:40.7,cs:"Teď máme kombinovanou zatáčku, vlevo vpravo.",en:"Now we've got a combination corner, left to right."},
+{t:44,cs:"Chybně to dělají, jdou vlevo,",en:"Incorrectly do this guys, go left side,"},
+{t:46.9,cs:"jdou doprostřed a teď jdou vpravo.",en:"go to the middle, and now go to the right side."},
+{t:50.1,cs:"Špatně.",en:"Wrong."},
+{t:51.1,cs:"Nejlepší jezdci to nedělají.",en:"The best riders don't do that."},
+{t:52.1,cs:"Jdou z levé osy gyroskopů,",en:"They go from the left axis to the gyro,"},
+{t:54.4,cs:"nahoru a přes sedlo na pravou osu gyroskopů.",en:"up and over across the seat onto the right axis of the gyro."},
+{t:57.9,cs:"Nezastavují se uprostřed.",en:"They don't stop in the middle."},
+{t:59.4,cs:"Zastavujeme se uprostřed mezi levou",en:"Do we stop in the middle between a left"},
+{t:61.3,cs:"a pravou zatáčkou?",en:"and the right-hand corner?"},
+{t:62.2,cs:"Ne. Ne.",en:"Negative.↵No."},
+{t:63.4,cs:"Ne.",en:"No."},
+{t:64.2,cs:"Krásné na tom je, že si můžete prohlédnout nejlepší na světě",en:"Beautiful thing is, you can watch the best in the world"},
+{t:66,cs:"napodobovat tyto akce svojí pozicí těla.",en:"mimic those actions with your body position."},
+{t:69.3,cs:"(motor řev)",en:"(motorcycle revving)"},
+{t:88.6,cs:"Tak si pomyslíš, „okay, když budu mít můj první track,",en:"So you think to yourself, \"okay when I do my first track,"},
+{t:89.9,cs:"příští track den budu napodobovat",en:"they are my next track day, I will mimic"},
+{t:91.4,cs:"nejlepší jezdce na světě. Své hrdiny.\"",en:"the best riders in the world. My heroes.\""},
+{t:94.2,cs:"Teď jeďme po silnici, teď jeďme po silnici.",en:"We're street riding now, we're street riding now."},
+{t:96,cs:"Takže to, co řekl Mark, je že musíš srovnat",en:"So what mark said is you got to line up"},
+{t:99,cs:"střed tvého motocyklu, jo Mark?",en:"the middle of your motorcycle, right, Mark?"},
+{t:100.7,cs:"Jo.",en:"Yep."},
+{t:101.5,cs:"A kde chceš být?",en:"And where do you want to be?"},
+{t:102.9,cs:"Chci být na vnitřní straně té svislé čáry,",en:"I want to be on the inside of that vertical line,"},
+{t:104.7,cs:"chci aby se tato horní hmota přesunula dovnitř.",en:"I want this upper mass to move over to the inside."},
+{t:107.3,cs:"Dobře, co na to řít v pravé zatáčce?",en:"Okay, what about in a right-hander?"},
+{t:108.7,cs:"Budu se posouvat doprava.",en:"I'm going to move toward the right."},
+{t:110.4,cs:"Všichni jsou rádi, že víte, o čem mluvím?",en:"Everybody good on that idea?"},
+{t:111.6,cs:"Takže důvod, proč jsme na vás naléhali aby jste se posouvali,",en:"So the reason that we push our students so hard to do what"},
+{t:116.6,cs:"co Chris dělá na motocyklu, je jeden den, Mark,",en:"Chris is doing on the motorcycle is one day, mark,"},
+{t:119.1,cs:"a mohlo by to být příští neděle.",en:"and it could be this next Sunday."},
+{t:121.1,cs:"Přijdeš okolo své oblíbené levé zatáčky,",en:"You come around your favorite left-hand corner,"},
+{t:123.4,cs:"jsi na vnitřní straně.",en:"you're off to the inside."},
+{t:124.6,cs:"Používáš brzdy, díváš se skrz zatáčku",en:"You're using your breaks, you're looking through the corner"},
+{t:126.3,cs:"a vidíš štěrk,",en:"and you see gravel,"},
+{t:128.2,cs:"a musíš projet stejným poloměrem s menším náklinem.",en:"and you've got to run less lean angle at the same radius."},
+{t:131.3,cs:"Co uděláš?",en:"What do you do?"},
+{t:132.7,cs:"Budu spouštět hlavu více,",en:"I'm going to drop my head more,"},
+{t:133.5,cs:"budu schopen vzít tuto hmotu a posunout ji dolů, abych",en:"I'm going to be able to take this mass and move it down so I"},
+{t:136.2,cs:"mohla ubrat náklon.",en:"can take that lean angle out."},
+{t:141,cs:"Zdá se, že můžeme havarovat motocykly různými",en:"We seem to be able to crash motorcycles in a variety of"},
+{t:143.2,cs:"způsoby.",en:"ways."},
+{t:144,cs:"Máme sedm důvodů, proč havarujeme motocykl.",en:"We have seven reasons we crash a motorcycle."},
+{t:146,cs:"Chris, který vidíme tady?",en:"Chris, which one are we looking at here?"},
+{t:148,cs:"Vidíme jezdce,",en:"We're looking at a rider"},
+{t:149,cs:"který se prostě neadaptoval na změnu.",en:"that just didn't adjust to change."},
+{t:150.9,cs:"Dostal 700 CC motocykl,",en:"They got on the 700 CC motorcycle,"},
+{t:153.3,cs:"mnohem rychlejší než 250, který jezdil,",en:"much quicker than the 250 they were riding,"},
+{t:155.5,cs:"a prostě nezachází s jejich",en:"and they just didn't account for their"},
+{t:157.2,cs:"jízdními změnami, které se musely stát.",en:"riding change that needed to happen."},
+{t:159.9,cs:"Jezdec je v pořádku, jezdil znovu, ne na tomhle motoru.",en:"The rider's just fine, he rode again, not this bike."},
+{t:163.5,cs:"Ale sedmý důvod, proč havarujeme motocykl",en:"But the seventh reason we crashed a motorcycle"},
+{t:165.4,cs:"je neadaptace na změnu.",en:"is not adjusting the change."},
+{t:166.7,cs:"Něco se změní, ať je to nové brzdové destičky,",en:"Something changes, whether it's new brake pads,"},
+{t:168.8,cs:"plná nádrž paliva, nová silnice,",en:"a full tank of fuel, a brand new road,"},
+{t:172.1,cs:"nový motocykl.",en:"a brand new motorcycle."},
+{t:173.6,cs:"Rychlejší, těžší motocykl, kde musí věci být",en:"A faster, heavier motorcycle where things need to happen"},
+{t:177.3,cs:"dříve.",en:"earlier."},
+{t:178.2,cs:"Brzdy dříve, nájezd dříve, oči dříve.",en:"Earlier breaks, earlier turn in, earlier eyes."},
+{t:180.6,cs:"Sedmý důvod havarování, neadaptace na změnu.",en:"Seventh reason we crash, not adjusting to change."},
+{t:189.1,cs:"Jaký je hlavní důvod pohybu těla, CP?",en:"What's the main reason for moving our body, CP?"},
+{t:191.1,cs:"Nižší náklon.",en:"Carry less lean angle."},
+{t:192.6,cs:"Takže všichni, právě proto jsme vás tak tlačili",en:"So everybody, this is why we pushed you so hard"},
+{t:194.5,cs:"aby jste se pohybovali na motocyklu.",en:"to get moving on that motorcycle."},
+{t:196.3,cs:"Svlékaš se do své oblíbené zatáčky,",en:"You run down into your favorite corner,"},
+{t:198.1,cs:"čekaš celý týden na tu oblíbenou zatáčku.",en:"you wait all week for the favorite corner."},
+{t:199.8,cs:"Neděle ráno, nemohu se dočkat té zatáčky,",en:"Sunday morning, I can't wait for that one corner,"},
+{t:201.3,cs:"vjedou tam",en:"you run it off in there"},
+{t:202.1,cs:"a je tam štěrk napříč jízdním pruhem, a musíš",en:"and there's gravel all across the lane, and you have to run"},
+{t:205.6,cs:"projet stejný poloměr s menším náklinem.",en:"the same radius at less lean angle."},
+{t:208.4,cs:"Jak to uděláme?",en:"How do we do that?"},
+{t:209.7,cs:"Samozřejmě, brzdění v zatáčce, což doufám",en:"Certainly, trail breaking, which I'm hoping"},
+{t:211.5,cs:"studujete, ale nižší náklon skrz více těla.",en:"you're studying that, but less lean angle through more body."},
+{t:215.2,cs:"A právě proto, Mark, budete trénovat",en:"And that's why mark, you will practice"},
+{t:217,cs:"být (nejasné), i když je možné, že je nebudete",en:"being (indistinct), even though you may not use"},
+{t:219.1,cs:"používat každý den.",en:"it day to day."},
+{t:219.9,cs:"Jo, nikdy nevím, kdy bych to mohl potřebovat.",en:"Yeah, I never know when I might need to use that."},
+{t:222.5,cs:"Tak chci být připravený.",en:"So I want to be ready and prepared."},
+{t:224.1,cs:"Jedna z věcí, kterou děláme v Champs School je",en:"One of the things we do at Champs School is"},
+{t:225.6,cs:"natáčíme vás každé kolo, natáčíme všechny naše studenty,",en:"we film you every lap, we film all our students,"},
+{t:228.3,cs:"děláme video přehlídku tady na Champ University,",en:"we'll be doing video review here at Champ University,"},
+{t:230.7,cs:"aby vám to pomohlo.",en:"as well, to help you."},
+{t:232.1,cs:"Ale máme pár bodů, s nimiž se můžete poradit,",en:"But we've got a couple touch points that you can go with,"},
+{t:234.3,cs:"aby vám pomohly coachovat sám sebe na začátku.",en:"and to help you coach yourself to begin."},
+{t:236.4,cs:"Mark, máme studenta, který řekne,",en:"Mark, we'll have a student say,"},
+{t:238.6,cs:"\"Wow, miluju levé zatáčky,",en:"\"Boy, I love being on my left hand corners,"},
+{t:241.7,cs:"ale ne v pravých zatáčkách se mi příliš nehýbe.\"",en:"but I'm not moving very well to my right-hand corners.\""},
+{t:244.1,cs:"A někdy jde o konkrétní problém.",en:"And sometimes it comes down to a specific issue."},
+{t:246.3,cs:"Co to je?",en:"What is it?"},
+{t:247.2,cs:"Jde jen o to, jak si položím ruce",en:"It's as simple as the way I put my hands"},
+{t:249.5,cs:"na řídítka, mohou být sevřené.",en:"to the handlebars, they could be locked up."},
+{t:252.6,cs:"Takže pokud si představíme, že ukazujeme prstem,",en:"So if we think about pointing our finger,"},
+{t:255.7,cs:"náš ukazovací prst k vnější straně zatáčky a to",en:"our pointer finger toward the outside of the corner and it"},
+{t:258.9,cs:"narovnává můj zápěstí.",en:"straightens my wrist."},
+{t:260.8,cs:"Pokud držím úchop velmi doslova,",en:"If I hold the grip very literally,"},
+{t:261.9,cs:"mohu mít spoustu napětí tady v mé ruce.",en:"I can have a lot of tension right here in my hand."},
+{t:263.9,cs:"Vidíte bílé kloubky na vnitřní straně, tam?",en:"Can you see the white knuckles on the inside, right there?"},
+{t:266.7,cs:"To není to, co chceme.",en:"That's what we don't want."},
+{t:268.2,cs:"Co chceme je ukazovací prst",en:"What we want is the pointer finger"},
+{t:269.8,cs:"ukazující na vnější stranu zatáčky.",en:"pointed to the outside of the corner."},
+{t:271.4,cs:"Teď vidíte uvolněnou ruku?",en:"Now, can you see the relaxed hand?"},
+{t:272.9,cs:"To je skvělý tip pro coachování sebe.",en:"This is a great coach point for yourself."},
+{t:275,cs:"Pokud se dostaneš na vnější stranu zatáčky,",en:"If you get to the outside of the corner,"},
+{t:276.8,cs:"a tvůj ukazovací prst ukazuje, kam chceš jít,",en:"and your pointer finger is now pointed where you want to go,"},
+{t:278.8,cs:"měl bys cítit velmi uvolněný v rukách.",en:"you should feel very relaxed in your hands."},
+{t:280.7,cs:"A teď se podívej na celý motor.",en:"And now look at the full bike."},
+{t:281.7,cs:"Podívej, jak to je hladké.",en:"Look how smooth that is."},
+{t:283,cs:"Ano, velmi uvolněně.",en:"Yes, very relaxed."},
+{t:284,cs:"Chci se dotknout pár věcí, které jsme mluvili",en:"I want to hit a couple things that we've talked about"},
+{t:286.6,cs:"a byli jsme na nich ticho, jak řídit ruce.",en:"and have kind of been quiet on is how we manage our hands."},
+{t:289.7,cs:"Teď jsme mluvili o tom, že všechno přichází s motorem.",en:"Now, we talked before about everything is coming with the bike."},
+{t:292.2,cs:"Tvá hlava přichází s motorem, tvoje horní tělo,",en:"Your head comes with the bike your upper body,"},
+{t:293.7,cs:"tvoje nohy přichází s motorem.",en:"your legs come with the bike."},
+{t:295.2,cs:"Teď bereme ruce.",en:"Now, we take the hands."},
+{t:296.4,cs:"Nenajdeš mě táhnout na vnitřních řídítkách.",en:"You're not gonna find me pulling on the inside handlebar."},
+{t:299.9,cs:"Nenajdeš mě tlačit na vnitřních řídítkách.",en:"You're not gonna find me pushing on the inside handlebar."},
+{t:302.5,cs:"Ale vnější ruka nebo alespoň vnější předloktí je",en:"But the outside hand or at least the outside forearm is"},
+{t:305.7,cs:"mimo okraj sedla.",en:"off the edge of the seat."},
+{t:307.5,cs:"Sedáme na brzdách, právě teď zátěž",en:"We sit up on the brakes, right now the load"},
+{t:309.9,cs:"přichází do mé ruky, přímka nahoru a dolů.",en:"is coming down into my hand, straight up and down."},
+{t:312.4,cs:"Ale v okamžiku, kdy začneme naklánět se do zatáčky, v okamžiku",en:"But the moment we start tipping into the corner, the moment"},
+{t:314.6,cs:"když začnu pohybovat hlavou, zátěž se přenáší",en:"I start moving my head the load transfers"},
+{t:316.9,cs:"do vnitřních řídítek na chvíli.",en:"into that inside handlebar for a second."},
+{t:318.7,cs:"To vlastně začíná protiřízením.",en:"That kind of starts to counter steering."},
+{t:320.6,cs:"Ale myšlenka je, že chceme zbavit váhu téhle vnitřní",en:"But the idea is we want to get the weight off of that inside"},
+{t:323.9,cs:"ruky, aby hlava řídítka mohla začít",en:"hand so the steering head could start"},
+{t:325.9,cs:"vracet se doprostřed zatáčky.",en:"coming back in the middle of the corner."},
+{t:327.3,cs:"Takže zatížení rukou na brzdách,",en:"So loading the hands on the brakes,"},
+{t:329.4,cs:"ale když se nakloníme, vnitřní paže se uvolní,",en:"but as we tip in, inside arm relaxes,"},
+{t:331.9,cs:"rád myslím, že dobrým bodem je vnější paže",en:"I like to think a good touch point is that outside arm"},
+{t:334.6,cs:"procházející přes horní část palivové nádrže na roadracingový motor.",en:"coming across the top of that fuel tank on a road race bike."},
+{t:338,cs:"To je to, jak víme, že dostáváme větší část našeho těla",en:"That's how we know we're getting the majority of our body"},
+{t:340.7,cs:"dolů dovnitř.",en:"down to the inside."},
+{t:341.8,cs:"Téměř si myslím, že ukazuješ této vnější",en:"Almost thinking like you're going to point this outside"},
+{t:344.5,cs:"rameno směrem k zatáčce.",en:"shoulder in towards the corner."},
+{t:347.2,cs:"Pokud bys měl ukazatel vycházející z vašeho sterna,",en:"If you had a pointer sticking out of your sternum,"},
+{t:350.1,cs:"ukazuješ to směrem dovnitř zatáčky.",en:"you're pointing that towards the inside of the corner."},
+{t:352.3,cs:"A chceme, aby se to rameno",en:"And we want to get that shoulder"},
+{t:355.4,cs:"téměř dostalo dovnitř.",en:"to almost get to the inside."},
+{t:356.8,cs:"Dostať se dovnitř.",en:"Get down to the inside."},
+{t:358,cs:"Spouštíš to rameno dolů.",en:"You're pointing that shoulder down."},
+{t:359.7,cs:"Takže pár bodů, co pronásledujeme,",en:"So a couple touch points that we're chasing,"},
+{t:362.8,cs:"chceme vnější paži",en:"we want the outside arm"},
+{t:365.1,cs:"přes palivovou nádrž.",en:"across the fuel tank."},
+{t:367.1,cs:"A rád bych měl vnitřní nohu uvolněnou.",en:"And I'd like that inside leg relaxed."},
+{t:369.3,cs:"Takže vnitřní noha uvolněná.",en:"So the inside leg relaxed."},
+{t:370.2,cs:"Teď vezmu tento motor",en:"Now let me take this bike"},
+{t:371.2,cs:"ven z zatáčky",en:"out of the corner"},
+{t:373.5,cs:"a ukážu vám pár důležitých pohybů.",en:"and show you a couple important movements."},
+{t:376.4,cs:"Okay, takže vidíme, jak Chris stoupá na brzdě.",en:"Okay, so we see Chris come down on the brake."},
+{t:378.5,cs:"stojí a tlačí své tělo",en:"he's standing up and pushing his body"},
+{t:380.7,cs:"úplně dolů a dovnitř.",en:"all the way down and to the inside."},
+{t:383.3,cs:"Jeho vnější noha je nahoru a ven.",en:"His outside leg is up and off."},
+{t:385.8,cs:"Jeho vnitřní noha je uvolněná.",en:"His inside leg is relaxed."},
+{t:387.4,cs:"A máme velmi uvolněné ruce.",en:"And we've got our hands very relaxed."},
+{t:390.3,cs:"A sedíš dost daleko vzadu.",en:"And you're sitting pretty far back."},
+{t:391.2,cs:"Tvoje horní tělo je",en:"Your upper body is"},
+{t:393.4,cs:"daleko dolů na motoru a nech naše ruce být velmi uvolněné.",en:"way down on the motorcycle and make our hands be very relaxed."},
+{t:397.2,cs:"A na roadracingový motoru,",en:"And on the road race bike,"},
+{t:398.3,cs:"myslím, že budu tahat s vnější nohou,",en:"I'm thinking I'm going to pull in with that outside leg,"},
+{t:400.3,cs:"do té palivové nádrže.",en:"into that fuel tank."},
+{t:401.2,cs:"Takže, když pohybuji tělem, když stisknu s tou",en:"So as I'm moving my body if I squeeze in with that"},
+{t:404.4,cs:"vnější nohou, mohu aktivovat svůj jádro.",en:"outside leg, actually can engage my core."},
+{t:406.8,cs:"Téměř to cítíš jako by se vzduch vysál z tvého",en:"You'll feel almost like the air gets sucked out of your"},
+{t:408.6,cs:"plic, když se stáhneš.",en:"lungs as you pull in."},
+{t:410.1,cs:"Ale to je to, co mi dává lehkost na rukách a",en:"But that's what gives me the lightness on my hands and the"},
+{t:412.5,cs:"zručnost mých prstů.",en:"dexterity for my fingers."},
+{t:414.4,cs:"Zkusme to, vstań znova.",en:"Let's try that, stand up again."},
+{t:416.8,cs:"Začali jsme stavět se, pojďme se podívat na věci tady.",en:"We started standing up let's look at some things here."},
+{t:419.2,cs:"Vstáníte a stáhněte si pravou nohu a tlačte",en:"Stand up again and just take your right foot off and push"},
+{t:423.8,cs:"vaší pravé koleno proti své ruce a cit",en:"your right knee against your hand and feel"},
+{t:427.7,cs:"jak se vaše jádro napíná, uděláte to znova.",en:"how your core tightens, do it again."},
+{t:429.2,cs:"Tlačte to pravé koleno proti své ruce.",en:"Push that right knee against your hand."},
+{t:430.6,cs:"Cítíš, jak se tvoje jádro napíná?",en:"Feel how your core tightens?"},
+{t:432.2,cs:"Spustíš své jádro a, Chris,",en:"You'll fire your core and, Chris,"},
+{t:433.3,cs:"to je to, co pronásleduješ, že?",en:"that's what you're chasing, isn't it."},
+{t:434.3,cs:"Chceš být udržován na místě bez",en:"You want to be held in place without"},
+{t:436.1,cs:"hodně váhy na paží.",en:"a lot of weight on the arms."},
+{t:436.9,cs:"Jo, myslím na velké svalové skupiny.",en:"Yeah, I'm thinking of big muscle groups."},
+{t:438.3,cs:"Pokud mohu používat své jádro, záda, nohy, všechny velké svalové skupiny",en:"If I can use my core, back, legs, all big muscle groups"},
+{t:443.1,cs:"nemusím se tolik spoléhat na to, aby tam byla všechna váha v mých",en:"I don't have to rely so much on all the weight being in my"}];
+var subs4=[{t:4.5,cs:"Další věc, kterou si máš myslet na pozici těla.",en:"Another thing to think about for body position."},
+{t:7.0,cs:"Marku, ty a Chris máte stejný čas na kolo,",en:"Mark, you and Chris run the same lap time,"},
+{t:9.7,cs:"stejná úroveň rizika, stejné pneumatiky, stejné kolo, všechno stejné.",en:"same risk level, same tire, same bike, same same same."},
+{t:12.8,cs:"Kdo musí být hladší a proč?",en:"Who has to be smoother and why?"},
+{t:15.3,cs:"No, kdybych mohl mít stejný čas na kolo-",en:"Well I wish could run the same lap time-"},
+{t:16.8,cs:"Ano.\nAle řekněme, že bych mohl,",en:"Yeah.\nBut let's say I could,"},
+{t:20.8,cs:"musím být hladší jezdec.",en:"I have to be a smoother rider."},
+{t:22.6,cs:"Mám o třicet liber více než Chris.",en:"I've got thirty pounds on Chris."},
+{t:24.9,cs:"Takže to můžu pohybovat tak snadno",en:"So I can move this thing so easy"},
+{t:27.2,cs:"protože mám všechnu tu hmotu tady nahoře k práci.",en:"'cause I've got all this mass up here to work with."},
+{t:29.6,cs:"Musím být hladší jezdec.",en:"I have to be the smoother rider."},
+{t:31.0,cs:"Je to důležité.",en:"It's a big deal."},
+{t:31.8,cs:"Jezdci, větší jezdci, musí být hladší,",en:"Riders, bigger riders, gotta be smoother,"},
+{t:33.5,cs:"musí přejít přes to sedlo hladčeji.",en:"gotta go across that seat more smoothly."},
+{t:35.8,cs:"Stejně jako ovládáme plyn, brzdy, řízení,",en:"Just like we operate the throttle, the brakes, the steering,"},
+{t:38.0,cs:"je to ta hladkost, ten lineární progresivní pohyb.",en:"it's that smoothness, that linear progressive motion."},
+{t:40.9,cs:"A pak CP, na tomto pohybu těla,",en:"And then CP, on this body movement,"},
+{t:43.5,cs:"všichni mluví o pozici těla.",en:"everybody talks about body position."},
+{t:45.0,cs:"Ano.",en:"Yeah."},
+{t:45.8,cs:"Mám si vzít obrázek mé pozice těla,",en:"Get a picture of my body position,"},
+{t:46.7,cs:"ale je na tom aspekt, který je téměř stejně důležitý.",en:"but there's an aspect of this that is almost as important."},
+{t:50.4,cs:"Ano, je to načasování",en:"Yeah, it's the timing of"},
+{t:51.8,cs:"kdy se ta váha dostane na vnitřní osu gyra.",en:"when that weight arrives on the inside axis of the gyro."},
+{t:55.6,cs:"Takže způsob, jakým pohybuju horní částí těla,",en:"So the way in which I move my upper body,"},
+{t:58.2,cs:"když se pohybuju opravdu rychle,",en:"if I move really quickly,"},
+{t:59.6,cs:"zátěž se velmi rychle dostane na stupačku.",en:"the load gets put into the foot peg very quickly."},
+{t:61.8,cs:"Takže v rychlé sekvenci zatáček,",en:"So, in a quick sequence of corners,"},
+{t:63.7,cs:"budeš se pohybovat mnohem rychleji",en:"you're gonna move much more quickly"},
+{t:65.0,cs:"než při dlouhém nájezdu do zatáčky.",en:"than sitting up a big long entry."},
+{t:67.5,cs:"Budeš pohybovat svým tělem tak, aby váha",en:"You're gonna move your body so that weight"},
+{t:69.5,cs:"přišla na tu stupačku trochu pomaleji,",en:"arrives on that foot peg a little bit more slowly,"},
+{t:71.7,cs:"což je to, co Mark sleduje jako větší jezdec",en:"which is what Mark's chasing as a bigger rider"},
+{t:74.7,cs:"aby malinko vyhladil ten proces.",en:"to kind of smooth that process out."},
+{t:77.0,cs:"Je fér říci, z naší zkušenosti,",en:"Fair to say, in our experience,"},
+{t:79.7,cs:"většina jezdců se pohybuje příliš rychle.",en:"most riders move too quickly."},
+{t:81.3,cs:"Pohybují se příliš rychle.",en:"They move too quickly."},
+{t:82.7,cs:"Běžně zjišťujeme, že když lidé zatáčejí pozdě,",en:"We generally find that when people move late,"},
+{t:85.7,cs:"musí se pohybovat opravdu rychle.",en:"they have to move really quickly."},
+{t:86.7,cs:"Takže vzpomni si na těch nula pět procent",en:"So think back to the zero five percent"},
+{t:89.3,cs:"počátečního plynu a počátečních brzd",en:"of initial throttle and initial brakes"},
+{t:90.8,cs:"kterými tolik mluvíme.",en:"that we talk so much about."},
+{t:91.8,cs:"Jak řídíš své kolo, těch nula pět procent.",en:"How you steer your motorcycle, that zero five percent."},
+{t:94.6,cs:"Mark bude odpálovat svaly",en:"Mark is gonna fire his muscles"},
+{t:96.2,cs:"aby přešel z levé osy gyra, stupačky, na pravou",en:"to go from the left axis of the gyro, foot peg, to the right"},
+{t:99.9,cs:"v nula až pět, nula až pět.",en:"in zero to five, zero to five."},
+{t:101.8,cs:"Teď přeskoč a bum, kolo se pohybuje příliš rychle.",en:"Now jump across and boom, the bike moves too quickly."},
+{t:104.7,cs:"Takže způsob, jakým Mark a Chris a ty odpálíte ty svaly",en:"So how Mark and Chris and you fire those muscles"},
+{t:109.0,cs:"aby byla ta nula až pět procent hladší.",en:"make that zero to five percent smoother."},
+{t:112.0,cs:"A těch pět zpět na nulu hladší",en:"And that five back down to zero smoother"},
+{t:114.0,cs:"jakmile se objevíš na té druhé stupačce.",en:"as you appear on that other foot peg."},
+{t:117.0,cs:"Naši studenti, kteří se pohybují prudce",en:"Our students that move abruptly"},
+{t:119.3,cs:"téměř vždy zatáčejí příliš pozdě.",en:"are almost always moving too late."},
+{t:121.6,cs:"Vležte si to do hlavy.",en:"Put that in your brain."},
+{t:123.0,cs:"Pohybují se prudce, protože zatáčejí příliš pozdě.",en:"You're moving abruptly 'cause you're moving too late."},
+{t:124.8,cs:"Kolo se musí zatáčet, přeskoči přes něj, viklá se.",en:"The bikes gotta turn, you jump across, it wiggles."},
+{t:127.7,cs:"A řeknu ti, důvod, proč děláme tuto školku",en:"And I'll tell ya, the reason we do this school"},
+{t:129.9,cs:"tím způsobem, jak ji děláme",en:"the way we do this school"},
+{t:131.2,cs:"je to, že tvé kolo se může viklat, když jezdíš pomalu",en:"is your bike might wiggle when you're going slow"},
+{t:133.8,cs:"a jenom se to stabilizuje za třicet metrů.",en:"and only take thirty feet to gather up."},
+{t:137.4,cs:"Viklá se takhle, když jezdíš rychle",en:"It wiggles like that when you're going fast"},
+{t:139.2,cs:"a jsi mimo závodní trať.",en:"and you're off the race track."},
+{t:140.4,cs:"Jsi přes svůj jízdní pruh.",en:"You're across your lane."},
+{t:141.8,cs:"Jsi na parkovišti.",en:"You're into the parking lot."},
+{t:143.2,cs:"Takže to je to, co honujeme tak tvrdě.",en:"So this is what we chase so hard."},
+{t:144.9,cs:"Nula až pět procent odpálení svalů na pohyb těla.",en:"Zero to five percent of muscle firing to move your body."},
+{t:148.2,cs:"Stejně jako u plynu a brzd",en:"Same way with the throttle and brakes"},
+{t:149.5,cs:"o kterých jsme mluvili.",en:"that we've talked about."},
+{t:150.6,cs:"Takže když se pouštíme do pozice těla hodně hluboko,",en:"So as we get into this body position pretty heavily,"},
+{t:153.0,cs:"vidíš, že je to tady opravdu důležité.",en:"you can see it's a pretty big deal here."},
+{t:155.9,cs:"Začínáme myslet na to, jak se tvé kolo zatáčí do zatáčky",en:"We start to think about how your bike steers into the corner"},
+{t:158.6,cs:"protože všichni myslí na bod zatáčení, ne?",en:"because everybody thinks about turning point, don't they?"},
+{t:160.4,cs:"Hej, kde se zatáčím do zatáčky, ne?",en:"Hey, where do I turn into the corner, right?"},
+{t:161.8,cs:"Zatáčím se do zatáčky u značky Dairy Queen",en:"Turn in to the corner by the Dairy Queen sign"},
+{t:164.3,cs:"nebo u červeného obrubníku.",en:"or by the red curbing."},
+{t:166.2,cs:"A místo abychom mysleli jenom na zatáčení a bod,",en:"And rather than think turn and point only,"},
+{t:169.7,cs:"máme na to jiný způsob myšlení.",en:"we got another way to think about this."},
+{t:170.8,cs:"Na co myslíme?",en:"What are we thinking?"},
+{t:171.7,cs:"Myslím na svoji rychlost zatáčení.",en:"I'm thinking about my turn in rate."},
+{t:173.6,cs:"Jak rychle vložím náklon?",en:"How quickly do I put the lead angle in?"},
+{t:176.3,cs:"Bude to mít vliv na můj poloměr.",en:"It'll make a difference on what my radius is."},
+{t:179.1,cs:"To se mi líbí.",en:"I like that."},
+{t:179.9,cs:"A jak měníme svoji rychlost zatáčení, Chrisi?",en:"And how do we change our turn in rate, Chris?"},
+{t:181.7,cs:"Naše rychlost zatáčení je zcela ovlivněna",en:"Our turn in rate is totally affected by"},
+{t:183.9,cs:"tím, jak rychle pohybujeme horní částí těla",en:"the rate in which we move that upper body"},
+{t:186.3,cs:"a váha přichází na tu stupačku.",en:"and the weight arriving in that foot peg."},
+{t:188.0,cs:"Takže je rychlost zatáčení velmi nastavitelná.",en:"So, turn in rate is very adjustable."},
+{t:190.1,cs:"Pokud chceš zatáčet pomaleji,",en:"If you want to turn it in slower,"},
+{t:192.1,cs:"pohybuješ horní část těla pomaleji.",en:"you move the upper body slower."},
+{t:193.7,cs:"Pokud je to rychlé, pohybuješ ji docela rychle.",en:"If it's quick, you move it fairly quickly."},
+{t:196.4,cs:"Ale jak se tempu přidá,",en:"But as the pace comes up,"},
+{t:198.8,cs:"všechno se musí stát dříve.",en:"everything has to happen earlier."},
+{t:200.3,cs:"Začínáme zatáčet do zatáčky dříve",en:"We start steering into the corner earlier"},
+{t:202.1,cs:"a máme-li na výběr mezi",en:"and given the choice between"},
+{t:203.9,cs:"zatáčením příliš pozdě a příliš brzy,",en:"turning in too late and too early,"},
+{t:206.2,cs:"pokud zatáčím příliš brzy, to je nastavitelné.",en:"if I turn in too early, that is adjustable."},
+{t:208.3,cs:"Mohu pozastavit své tělo, ne oh jsem zatáčela,",en:"I can pause my body, not oh I've turned in,"},
+{t:211.2,cs:"mám to, jsem uváznutá v tomto náklonu nebo cokoliv.",en:"I've got it, I'm stuck with this lean angle or whatever."},
+{t:214.8,cs:"Jen si uvědom, dobra jsem mohla pozastavit své tělo,",en:"Just realize, okay I can pause my body,"},
+{t:217.3,cs:"ale když zatáčím pozdě,",en:"but when I turn in late,"},
+{t:219.0,cs:"budeme muset přeskoči přes kolo",en:"we're gonna have to jump across the bike"},
+{t:220.4,cs:"a to nás začíná dostávat do potíží.",en:"and that starts getting us into some issues."},
+{t:222.6,cs:"Líbí se mi to.",en:"I like it."},
+{t:223.5,cs:"Protože, Marku, je snadné si myslet",en:"Because Mark, it's easy to think"},
+{t:224.8,cs:"že jsou dvě pozice těla.",en:"there is two body positions."},
+{t:226.6,cs:"Jsi buď zatažený dovnitř, vzpřímený,",en:"You're either tucked in, upright,"},
+{t:229.9,cs:"nebo tři, udělejme z toho tři,",en:"or three, let's make it three,"},
+{t:231.0,cs:"dolů v zatáčce.",en:"down in the corner."},
+{t:232.3,cs:"Kolik je tam pozic těla?",en:"How many body positions are there?"},
+{t:233.6,cs:"Tisíc.\nKolik?",en:"A thousand.\nHow many?"},
+{t:234.7,cs:"Tisíc.\nMůžeš nám to ukázat?",en:"A thousand.\nCan you show us?"},
+{t:235.9,cs:"Ano, jsou tu všechny.",en:"Yeah, there's all these."},
+{t:236.9,cs:"Jedna, dva, tři, čtyři, pět, šest, sedm, osm",en:"One, two, three, four, five, six, seven, eight"},
+{t:238.1,cs:"9, 10, 11, 12,",en:"9, 10, 11, 12,"},
+{t:239.5,cs:"997, 999, 1000.",en:"997, 999, 1,000."},
+{t:244.4,cs:"A Chris se obává jezdců, kteří mají dvě.",en:"And Chris is worried about the riders who have two."},
+{t:246.7,cs:"Jdou nahoru a dolů.",en:"They go up and down."},
+{t:248.8,cs:"Nahoru a dolů.",en:"Up and down."},
+{t:249.8,cs:"A Chrisi, pozastavujeme to v bodě zatáčení.",en:"And Chris, we're pausing that at the turn in rate."},
+{t:252.3,cs:"Pohybujeme svými těly",en:"We're moving our bodies"},
+{t:253.2,cs:"aby se změnila rychlost, se kterou se naše kolo zatáčí.",en:"to change the rate at which our bike steers."},
+{t:255.7,cs:"A hodně lidí na to dostatečně nemyslelo.",en:"And a lot of people haven't thought enough about that."},
+{t:257.8,cs:"Takže půjdeš na svůj první den na závodní trati",en:"So you're gonna go to your first track day"},
+{t:259.2,cs:"a budeš tlouci svým loktem.",en:"and you're gonna drag your elbow."},
+{t:260.5,cs:"To je plán, budeš tlouci loktem.",en:"That's the plan, you're gonna drag your elbow."},
+{t:262.9,cs:"Ale Christi, ve skutečnosti,",en:"But Chris, in fact,"},
+{t:265.1,cs:"je čas, kdy jsi v maximální pozici těla.",en:"there's a time at which you're at maximum body position."},
+{t:268.7,cs:"Mluvit o tom.",en:"Talk about that."},
+{t:269.7,cs:"Ano, vždy si myslíme",en:"Yeah, we're always thinking"},
+{t:271.9,cs:"že horní část těla bude nejníž při výjezdu ze zatáčky.",en:"we're gonna have upper body lowest on corner exit."},
+{t:275.2,cs:"Takže se to vrací k té ideji sto bodů griffu.",en:"So it comes back to that hundred points of grip idea."},
+{t:278.1,cs:"Když visíme všichni na straně od kola",en:"When we're all the way hung off the bike"},
+{t:279.9,cs:"a chceme zrychlovat",en:"and we want to accelerate"},
+{t:281.0,cs:"a jsme na 99 bodech náklonu,",en:"and we're at 99 points of lean angle,"},
+{t:282.7,cs:"musíme to kolo postavit, aby se zrychlovalo.",en:"we need to stand that bike up to accelerate."},
+{t:285.2,cs:"Takže snížíme tu horní část těla,",en:"So we drop that upper body,"},
+{t:286.7,cs:"bude nejníž",en:"it's gonna get the lowest"},
+{t:288.2,cs:"jakmile začneme zrychlovat z výjezdu zatáčky.",en:"as we start to accelerate off the corner."},
+{t:290.3,cs:"Takže kde je naše hlava nejníž?",en:"So where's our head the lowest?"},
+{t:291.9,cs:"Poté, co projdeme plynkem na výjezdu zatáčky.",en:"After we go through the throttle on the corner exit."},
+{t:294.8,cs:"Dokonale.",en:"Perfect."},
+{t:295.6,cs:"Takže si to všichni představte,",en:"So think about this everybody,"},
+{t:296.5,cs:"jako si vezmeš jeden bod plynu jeden bod dopředu,",en:"as you pick up that one point of throttle one point ahead,"},
+{t:298.6,cs:"jeden jeden jeden jeden jeden,",en:"one one one one one,"},
+{t:299.9,cs:"hlava je nejníž na výjezdu.",en:"head's lowest on the exit."},
+{t:301.1,cs:"Toto je dokonalá situace",en:"This is a perfect situation"},
+{t:304.0,cs:"kde někteří naši studenti přijdou",en:"where some of our students come in"},
+{t:305.3,cs:"a dostanou se do středu zatáčky",en:"and they get into the middle of the corner"},
+{t:306.4,cs:"a visí úplně mimo, zcela.",en:"and they're all the way hung off completely."},
+{t:307.7,cs:"Nemají nic dalšího co dát.",en:"They have nothing left to give."},
+{t:309.0,cs:"Nemají to, čemu říkáme tah, tah.",en:"They don't have what we call the move, the move."},
+{t:311.3,cs:"Podívej se na Pedrosa, Danny Pedrosa, jak snižuje tu hlavu.",en:"Watch Pedrosa, Danny Pedrosa, how he drops that head."},
+{t:314.1,cs:"Snížit tu hlavu a zvednout plyn.",en:"Drop that head and pick the throttle up."},
+{t:315.5,cs:"Měl ten tah jít",en:"He had that move going"},
+{t:316.9,cs:"protože jede s menším náklonem.",en:"because he is running less lean angle."},
+{t:318.3,cs:"Má si ten pokles hlavy zbylý.",en:"He's got that head drop leftover."},
+{t:320.6,cs:"Dobré?",en:"Good?"},
+{t:321.6,cs:"Druhá věc, na kterou myslíš,",en:"Second thing you're thinking,"},
+{t:322.9,cs:"musím si dát koleno na zem.",en:"I gotta get my knee on the ground."},
+{t:324.2,cs:"Musím tlouci kolem.",en:"I gotta drag my knee."},
+{t:325.0,cs:"A ne pro silničního jezdce.",en:"And not for the street rider."},
+{t:326.2,cs:"Pokud tloukáš kolem-",en:"If you're dragging your knee-"},
+{t:327.6,cs:"Věci se dějí příliš rychle.",en:"Things happen too quickly."},
+{t:328.9,cs:"Bude to obtížné.",en:"It's gonna be tough."},
+{t:329.7,cs:"Pokud jezdíš se skupinou",en:"If you're riding with a group"},
+{t:330.9,cs:"která má jezdce, kteří chtějí tlouci kolem na silnici,",en:"that have riders that wanna drag their knee on the street,"},
+{t:334.3,cs:"přestane s nimi jezdit",en:"quit riding with them"},
+{t:335.1,cs:"protože půjdeš do nemocnice",en:"'cause you're gonna be going to the hospital"},
+{t:336.3,cs:"s jejich rodinou, aby je viděl.",en:"with their family to see them."},
+{t:337.4,cs:"Protože tak to funguje.",en:"Because that's the way it works."},
+{t:338.3,cs:"Prostě není dost času na to se vypořádat",en:"There is just not enough time to deal with"},
+{t:340.1,cs:"se špatnými vozy v Americe.",en:"the poor driving in America."},
+{t:341.4,cs:"Takže pokud chceš tlouci kolem,",en:"So, if you wanna drag your knee,"},
+{t:343.1,cs:"jdi na závodní trať.",en:"get to the race track."},
+{t:344.0,cs:"A Christi, jsi zkroucený nahoře.",en:"And Chris, you're twisted up on top."},
+{t:346.1,cs:"Podívej se, jak daleko má své tělo odsunuté,",en:"Watch how far he's got his body off,"},
+{t:347.4,cs:"ale podívej, nemůže si dát koleno ven.",en:"but look, he can't get his knee out."},
+{t:349.7,cs:"Christi, co musíš udělat",en:"Chris, what have you gotta do"},
+{t:350.9,cs:"aby se to koleno dostalo na zem?",en:"to get that knee on the ground?"},
+{t:352.0,cs:"Potřebuješ náklon.",en:"You need lean angle."},
+{t:353.4,cs:"Co ještě potřebuješ?",en:"What else do you need?"},
+{t:354.3,cs:"Musím se opravdu otočit směrem k té zatáčce,",en:"I need to kind of really open up towards that corner,"},
+{t:356.4,cs:"dostat tu nohu vystrčenou, to koleno otočené otevřené.",en:"get that toe pointed out, that knee rotated open."},
+{t:359.5,cs:"Teď mám ten měřák.",en:"Now I have that gauge."},
+{t:361.0,cs:"Pokud jsi zkroucená proti kolu,",en:"If you're twisted in against the bike,"},
+{t:363.2,cs:"vidíš, že to koleno je na fairing skoro na něm.",en:"you see the knee is pretty much almost on the fairing."},
+{t:365.3,cs:"Takže malinko ztratíš ten pocit, kde jsi",en:"So you kind of lose that feel of where you are"},
+{t:368.4,cs:"protože jsi tak vysoko na tom kole",en:"'cause you're so high up on that bike"},
+{t:370.0,cs:"když jsi zkroucená.",en:"when you're twisted in."},
+{t:371.9,cs:"A důvod, proč se jezdíme k tloukání kolem v pozici těla,",en:"And the reason we bring up knee dragging in body position,"},
+{t:374.8,cs:"protože se ptáš sám sebe,",en:"because you wonder yourself,"},
+{t:376.4,cs:"můžu jít kolem závodní tratě rychleji?",en:"can I go around the race track quicker?"},
+{t:378.3,cs:"Mohu projít zatáčkou rychleji na závodní trati?",en:"Can I go through the corner faster on the race track?"},
+{t:381.0,cs:"A dříve jsme říkali, ah možná se sem potichu podívej,",en:"And we used to say, ah maybe sneak up on it,"},
+{t:383.3,cs:"maličko v čase.",en:"little bit of the time."},
+{t:384.7,cs:"Zkus to maličko lépe pokaždé.",en:"Try it a little bit better every time."},
+{t:386.2,cs:"Teď říkáme, pokud vaše pozice těla vypadá skvěle,",en:"Now we say, if your body position looks fantastic,"},
+{t:389.8,cs:"vypadáš jako hrdina.",en:"you look like you're heroes."},
+{t:390.8,cs:"Vypadáš jako hrdina",en:"You look like you're heroes of"},
+{t:391.9,cs:"MotoAmerica, Grand Prix, World Superbike.",en:"MotoAmerica, Grand Prix, World Superbike."},
+{t:393.7,cs:"Vaše pozice těla je dobrá.",en:"Your body position is good."},
+{t:396.2,cs:"Vaše pneumatiky jsou teplé.",en:"Your tires are warm."},
+{t:398.0,cs:"Vaše koleno se dotkne, než spadneš.",en:"Your knee'll touch before you fall down."},
+{t:399.5,cs:"Zaručeno.",en:"Guaranteed."},
+{t:400.3,cs:"Pokud je vaše pozice těla dobrá,",en:"If your body position is good,"},
+{t:401.8,cs:"vaše pneumatiky jsou teplé,",en:"your tires are warm,"},
+{t:403.0,cs:"vaše koleno se dotkne, než spadneš.",en:"your knee'll touch before you fall down."},
+{t:404.5,cs:"A tak CP, najednou když my, a Marku,",en:"And so CP, all of a sudden when we, and Mark,"},
+{t:407.2,cs:"když tlačíme na pozici těla s našimi studenty,",en:"when we push this body position with our students,"},
+{t:409.1,cs:"najednou když dostanou tělo,",en:"all of a sudden when they get the body,"},
+{t:410.6,cs:"pak si uvědomí, že mám dostupný měřák náklonu",en:"then they realize I've got a lean angle gauge available"},
+{t:413.6,cs:"aby měřil mou rychlost.",en:"to gauge my speed."},
+{t:415.8,cs:"Pozice těla.",en:"Body position."},
+{t:417.4,cs:"Hodně názorů venku.",en:"Lots of opinions out there."},
+{t:419.0,cs:"Pojďme dělat, co dělají nejlepší na světě.",en:"Let's do what the best in the world do."},
+{t:420.5,cs:"Pojďme pohybovat naším tělem, aby se běžel menší náklon.",en:"Let's move our body to run less lean angle."},
+{t:422.6,cs:"Menší náklon umožňuje více bodů plynu,",en:"Less lean angle allows more throttle points,"},
+{t:424.5,cs:"více bodů brz.",en:"more brake points."},
+{t:425.4,cs:"Můžeš být rychlejší, bezpečnější maximalizací pozice těla.",en:"You can be faster, safer by maximizing body position."}];
+var subs5=[{t:0.0,cs:"(hudba)",en:"( music)"},
+{t:9.2,cs:"Takže naše první cvičení na pozici těla v tomto díle.",en:"So for our body position drill number one in this section."},
+{t:12.7,cs:"Bude to u velkého zrcadla",en:"It's going to be set in a full length mirror up in"},
+{t:15.6,cs:"v garáži",en:"our garage"},
+{t:16.7,cs:"Vezměte si telefon na stativ,",en:"Get your phone on a tripod,"},
+{t:17.9,cs:"nebo ať vás někdo natáčí.",en:"have a buddy hold a phone."},
+{t:19.5,cs:"Chceme vidět, jak vypadáme,",en:"And what we're trying to accomplish is see what we look like"},
+{t:22.7,cs:"když se pohybujeme přes motor.",en:"as we move across the body."},
+{t:24.7,cs:"Podívejte se, jestli zvládnete některé z těch",en:"See if we could get some of these touch points"},
+{t:26.9,cs:"kontaktních bodů z videa.",en:"that we gave you in this video."},
+{t:28.3,cs:"Když víte, jak by to mělo vypadat, když je motor",en:"And if you know what it should feel like while the bike is"},
+{t:32.0,cs:"stojící,",en:"stagnant."},
+{t:32.9,cs:"je jednodušší pochopit, jak to cítit, když",en:"It makes a little bit easier to know what it feels like when"},
+{t:36.5,cs:"motor jede. Hodně jezdců si myslí, vole,",en:"the bike is out and rolling. A lot of riders think, man"},
+{t:39.8,cs:"fakt jsem hodně vysazený, a pak se to vidí",en:"I'm way hung off this thing and they see it on camera and"},
+{t:42.7,cs:"na videu a myslí si: ó, vůbec se nehýbu.",en:"they go, oh, I'm not moving my head at all."},
+{t:44.4,cs:"Takže vidět sebe sama je skvělý způsob,",en:"So being able to see yourself as a great way to critique"},
+{t:47.1,cs:"jak kritizovat vlastní jízdu.",en:"your own riding."},
+{t:49.1,cs:"Takže toto cvičení číslo dva na pozici těla",en:"So this body position drill number two is a little bit more"},
+{t:52.1,cs:"je trošku specifičtější a navazuje na to,",en:"specific kind of working on what we were just working on."},
+{t:55.2,cs:"co jsme teď dělali. Ale u většiny jezdců,",en:"But the majority of riders that we see at track days,"},
+{t:57.9,cs:"které vidíme na závodech,",en:"little bit more track specific body."},
+{t:60.4,cs:"vidíme dost váhy v té vnitřní ruce.",en:"We see a lot of weightiness in this inside arm."},
+{t:62.4,cs:"Zaměříme se na dvě věci: rotace,",en:"So we're going to focus on two things, rotating,"},
+{t:65.2,cs:"ohnutí vnitřního lokte,",en:"bending this inside elbow,"},
+{t:66.6,cs:"rotace ruky a skloňování v pase.",en:"rotating that hand and hinging at the waist."},
+{t:70.4,cs:"Rotace v ruce,",en:"Rotating in that hand,"},
+{t:71.5,cs:"loket ven, skloňování v pase.",en:"elbow out hinging at the waist."},
+{t:73.6,cs:"Hodně jezdců si rád představí tu vnější ruku,",en:"Lot of riders like to, to feel for that outside arm,"},
+{t:76.3,cs:"jak jde přes nádržku.",en:"starting to come across the top of that fuel tank."},
+{t:78.3,cs:"Hlava je tam, kde by mohlo být zrcadlo.",en:"They're getting their head to where that mirror might be."},
+{t:81.4,cs:"Ale když se pohybují přes motor,",en:"But as they're moving across,"},
+{t:82.6,cs:"ohýbají vnitřní ruku a skloňují se v pase.",en:"they're bending that inside arm and bending at the waist."},
+{t:88.0,cs:"(zvuk motoru)",en:"(motorcycle engine)"},
+{t:88.9,cs:"Tady je cvičení",en:"Here's a drill"},
+{t:89.7,cs:"na sérii zatáček.",en:"to mess with in a series of corners."},
+{t:92.0,cs:"Každý máme na své oblíbené trase",en:"And each of us have a section like that on our favorite"},
+{t:95.5,cs:"úsek,",en:"street ride,"},
+{t:96.3,cs:"kde jsou zatáčky navázané za sebou.",en:"where a bunch of corners are linked together."},
+{t:98.6,cs:"V tomto cvičení",en:"In this drill."},
+{t:99.5,cs:"chci, abyste používali stehna k zvednutí váhy",en:"I want you to think about using your thighs to lift your"},
+{t:102.5,cs:"ze sedla a cvičili si načasování a přesun váhy",en:"weight off the seat and practice the time and cost of the"},
+{t:105.7,cs:"ze sedla.",en:"seat."},
+{t:106.5,cs:"Načasování je dát váhu na vnitřní stupačku",en:"The timing is to put your weight onto the inside foot peg or"},
+{t:110.7,cs:"ve správný moment.",en:"access to the gyro at the right moment."},
+{t:112.7,cs:"To je to cvičení.",en:"So that's the drill."},
+{t:114.5,cs:"V seríích navázaných zatáček",en:"Final sections that join corners together"},
+{t:116.7,cs:"cvičte si přesun váhy ze sedla na stupačku,",en:"and practice your time and cross the seat onto the foot peg"},
+{t:120.9,cs:"abyste zatáčky lépe zvládli.",en:"to steer into those corners."},
+{t:127.5,cs:"Takže praktická aplikace pozice těla",en:"So the real world application of his body position,"},
+{t:130.2,cs:"je taková: pomáhá motorům lépe stáčet.",en:"a couple of things, it helps the bike steer."},
+{t:132.6,cs:"Dovoluje nám jezdit s menším náklonem v místech,",en:"It lets us run less lean angle on places where we can't move"},
+{t:135.8,cs:"kde se nemůžeme moc pohybovat.",en:"Say we're, we're riding with a passenger"},
+{t:137.8,cs:"Když jsme třeba v tandemu s pasažérem",en:"and we can't move a lot."},
+{t:139.2,cs:"a nemůžeme se moc pohybovat,",en:"We'll counter steer more. We use more bar pressure,"},
+{t:141.6,cs:"budeme více používat protiřízení a tlak na řídítka,",en:"but we can move a little bit."},
+{t:142.9,cs:"ale můžeme se posunou trošku.",en:"Let's try to get weight onto that inside access of the gyro"},
+{t:147.0,cs:"Pojďme se pokusit dostat váhu na vnitřní stupačku,",en:"to help the bike steer. Let's keep this simple."},
+{t:150.6,cs:"aby motor lépe stáčel. Zůstaňme u jednoduchosti.",en:"Here's the motorcycle center line"},
+{t:152.3,cs:"Tady je střední čára motoru",en:"in right-hander."},
+{t:153.3,cs:"v pravé zatáčce.",en:"We want to be to the right of that center line"},
+{t:155.2,cs:"Chceme být napravo od té čáry, vevnitř.",en:"to the inside."},
+{t:156.1,cs:"Pokud ne, motor nebude stáčet dobře.",en:"If you're not the bike won't steer as well."},
+{t:158.9,cs:"V levé zatáčce",en:"In a left-hander"},
+{t:160.0,cs:"přesuňte hlavu a horní část těla doleva.",en:"move that head upper body to the left."},
+{t:162.1,cs:"Ano, na trati se zavěsíme dramaticky,",en:"Yes, on the track will hang off radically"},
+{t:164.8,cs:"aby jsme měli menší náklon,",en:"to run less lean angle,"},
+{t:165.8,cs:"a motor lépe stáčel, ale na silnici se nezavěšujeme,",en:"helped the bike steer but on the street we won't hang off"},
+{t:168.7,cs:"ale posunujeme se dovnitř.",en:"but we will move to the inside."},
+{t:170.9,cs:"Takže zakončujeme pozici těla s několika základní věcmi.",en:"So in a left-hander, right."},
+{t:174.0,cs:"Musíme si dát odstup od nádržky.",en:"wrong,"},
+{t:175.2,cs:"Nejsme tlačeni proti nádržce.",en:"right,"},
+{t:176.9,cs:"Zatěžujeme ruce a paže při brzdění,",en:"wrong."},
+{t:179.9,cs:"prsty ukazují do vnějšku zatáčky",en:"So we wrap up body position with a couple of core things"},
+{t:184.5,cs:"na silničním motoru.",en:"that have to happen. We're back off the gas tank."},
+{t:186.9,cs:"Na závodní trati chceme být uvnitř střední čáry.",en:"We're not up against the gas tank."},
+{t:188.1,cs:"Chceme koukat skrz zatáčku.",en:"We load our hands and arms heavily under the brakes,"},
+{t:190.5,cs:"Začínaš napodobovat",en:"our fingers point to the outside of the corners on the"},
+{t:193.2,cs:"designery motoru.",en:"street bike."},
+{t:194.1,cs:"Tito jezdci se pohybují určitým způsobem.",en:"We want to be inside the bike center line on the racetrack."},
+{t:196.9,cs:"Silniční jízda, o které jsme mluvili,",en:"We wanna to look grom pre."},
+{t:199.1,cs:"nebo závodní jízda, o které jsme mluvili.",en:"You are starting to mimic the designers"},
+{t:201.1,cs:"To je to, co ti to přináší.",en:"of the the motorcycle."},
+{t:202.6,cs:"Najednou tvůj motor začne pracovat",en:"Those riders move their bodies in certain ways."},
+{t:204.9,cs:"přesně tak, jak byl navržený.",en:"Street riding that we talked about,"},
+{t:206.5,cs:"Jezdci, pojďme zakončit",en:"track riding that we talked about."},
+{t:208.1,cs:"tenhle modul pozice těla se dvěma koly",en:"That's what it brings to you."},
+{t:210.2,cs:"na Inde Motorsports Ranch.",en:"All of a sudden your bike starts to work."},
+{t:212.7,cs:"První bude závodní styl s Kylem Wymanem",en:"As it was designed."},
+{t:214.2,cs:"na závodním motoru.",en:"Riders, lets wrap"},
+{t:215.6,cs:"Druhý bude silniční styl s Chrisem Perisem",en:"this body position champion module with two laps"},
+{t:218.9,cs:"na silničním motoru. Pojďme se podívat.",en:"of Inde Motorsports Ranch."},
+{t:220.0,cs:"(zvuk motoru)",en:"The first one will be track style with Kyle Wyman on a race"}];
+
+var state={};
+for(var s=1;s<=5;s++)state[s]={running:false,baseTime:0,startWall:0,lastIdx:-1,rafId:null,sliderDragging:false};
+var sections={1:{subs:subs1,duration:286},2:{subs:subs2,duration:243},3:{subs:subs3,duration:457},4:{subs:subs4,duration:434},5:{subs:subs5,duration:476}};
+
+function formatTime(s){var m=Math.floor(s/60);var sec=Math.floor(s%60);return m+":"+(sec<10?"0":"")+sec;}
+function getCurrentTime(s){if(!state[s].running)return state[s].baseTime;return state[s].baseTime+(Date.now()-state[s].startWall)/1000;}
+function findSubtitle(s,t){var subs=sections[s].subs;var idx=-1;for(var i=0;i<subs.length;i++){if(subs[i].t<=t)idx=i;else break;}return idx;}
+function updateDisplay(s){var t=getCurrentTime(s);var idx=findSubtitle(s,t);if(idx!==state[s].lastIdx){state[s].lastIdx=idx;if(idx>=0){document.getElementById("cs"+s).textContent=sections[s].subs[idx].cs;document.getElementById("en"+s).textContent=sections[s].subs[idx].en;}else{document.getElementById("cs"+s).textContent="…";document.getElementById("en"+s).textContent="";}}document.getElementById("time"+s).textContent=formatTime(t);if(!state[s].sliderDragging)document.getElementById("slider"+s).value=Math.round(t);}
+function tick(s){updateDisplay(s);if(state[s].running)state[s].rafId=requestAnimationFrame(function(){tick(s);});}
+function toggleSync(s){if(state[s].running){pauseSync(s);}else{startSync(s);}}
+function startSync(s){state[s].running=true;state[s].startWall=Date.now();document.getElementById("btn"+s).textContent="\u23F8 Pauza";document.getElementById("btn"+s).classList.add("active");tick(s);}
+function pauseSync(s){state[s].running=false;state[s].baseTime=getCurrentTime(s);if(state[s].rafId)cancelAnimationFrame(state[s].rafId);document.getElementById("btn"+s).textContent="\u25B6 Start";document.getElementById("btn"+s).classList.remove("active");}
+function resetSync(s){var wasRunning=state[s].running;if(wasRunning)pauseSync(s);state[s].baseTime=0;state[s].lastIdx=-1;document.getElementById("slider"+s).value=0;document.getElementById("time"+s).textContent="0:00";document.getElementById("cs"+s).textContent="\u25B6 Spus\u0165te video a klikn\u011Bte Start";document.getElementById("en"+s).textContent="";}
+function setTime(s,t){var wasRunning=state[s].running;if(wasRunning){state[s].baseTime=t;state[s].startWall=Date.now();}else{state[s].baseTime=t;}state[s].lastIdx=-1;updateDisplay(s);}
+function adjustTime(s,delta){setTime(s,Math.max(0,getCurrentTime(s)+delta));}
+function onSliderInput(s){setTime(s,parseFloat(document.getElementById("slider"+s).value));}
+</script>
+</body>
+</html>

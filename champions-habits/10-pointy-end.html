@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>10 — Špička kuželu (The Pointy End) | Champions Habits CZ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f0eb; color: #333; line-height: 1.7; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .module-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 3px solid #cf3339; }
+    .module-header h1 { color: #1a1a2e; font-size: 2em; margin-bottom: 12px; }
+    .nav-sections { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .nav-sections a { display: inline-block; padding: 8px 16px; background: #2d2d5e; color: #ffd700; text-decoration: none; border-radius: 6px; font-weight: 600; transition: background 0.2s; }
+    .nav-sections a:hover { background: #cf3339; color: white; }
+    .section { margin-bottom: 40px; padding-top: 20px; }
+    .section h2 { margin-bottom: 12px; color: #1a1a2e; font-size: 1.5em; }
+    .video-frame { width: 100%; height: 500px; border: 2px solid #e0e0e0; border-radius: 8px 8px 0 0; display: block; }
+    .subtitle-bar { background: #1a1a2e; color: #fff; padding: 18px 24px; min-height: 70px; font-size: 1.1em; text-align: center; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+    .subtitle-bar .cs { color: #ffd700; font-weight: 600; font-size: 1.2em; }
+    .subtitle-bar .en { color: #999; font-size: 0.8em; }
+    .controls { background: #2d2d5e; padding: 12px 24px 14px; border-radius: 0 0 8px 8px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .controls-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .controls button { background: #cf3339; color: white; border: none; padding: 8px 20px; border-radius: 6px; font-size: 0.95em; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .controls button:hover { background: #e85d5d; }
+    .controls button.active { background: #43a047; }
+    .controls button.active:hover { background: #66bb6a; }
+    .controls button.reset-btn { background: #555; }
+    .controls button.reset-btn:hover { background: #777; }
+    .controls .timer { color: #ffd700; font-family: monospace; font-size: 1.1em; min-width: 60px; text-align: center; }
+    .controls .adjust { background: #444; padding: 6px 12px; font-size: 0.85em; border-radius: 4px; }
+    .controls .adjust:hover { background: #666; }
+    .slider-row { display: flex; align-items: center; gap: 8px; padding: 0 2px; }
+    .slider-row label { color: #aaa; font-size: 0.75em; font-family: monospace; }
+    .time-slider { flex: 1; -webkit-appearance: none; appearance: none; height: 5px; border-radius: 3px; background: #444; outline: none; cursor: pointer; }
+    .time-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; }
+    .time-slider::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; border: none; }
+    .info { background: #fff3e0; border-left: 4px solid #ff9800; padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0; font-size: 0.9em; }
+    .info strong { color: #e65100; }
+    .info ol { margin: 8px 0 0 20px; }
+    .info li { margin-bottom: 4px; }
+    .summary-box { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 16px; margin: 20px 0; border-radius: 0 8px 8px 0; font-size: 0.95em; }
+    .summary-box strong { color: #1565c0; display: block; margin-bottom: 8px; font-size: 1.05em; }
+    .summary-box ul { margin: 0 0 0 20px; list-style: disc; }
+    .summary-box li { margin-bottom: 6px; line-height: 1.5; }
+    .module-nav { margin-top: 40px; padding: 20px; background: #2d2d5e; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .module-nav a { color: #ffd700; text-decoration: none; font-weight: 600; font-size: 1.1em; padding: 10px 24px; background: #cf3339; border-radius: 6px; transition: background 0.2s; }
+    .module-nav a:hover { background: #e85d5d; }
+    @media (max-width: 700px) { .video-frame { height: 350px; } .subtitle-bar { padding: 14px 16px; } .subtitle-bar .cs { font-size: 1em; } .controls { gap: 8px; padding: 10px 16px; } .controls button { padding: 6px 14px; font-size: 0.85em; } .nav-sections { flex-direction: column; } .nav-sections a { width: 100%; text-align: center; } .module-nav { flex-direction: column; text-align: center; } .module-nav a { width: 100%; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="module-header">
+    <h1>10 &#8212; &#352;pi&#269;ka ku&#382;elu (The Pointy End of the Cone) | Champions Habits CZ</h1>
+    <p style="color: #666; margin-top: 8px;">Dv&#283; video sekce o konceptu ku&#382;elu &#8212; nejpomalej&#353;&#237; bod zat&#225;&#269;ky a zm&#283;na sm&#283;ru</p>
+  </div>
+
+  <div class="nav-sections">
+    <a href="#sec1">Sekce 1 &#8212; Koncept</a>
+    <a href="#sec2">Sekce 2 &#8212; Cvi&#269;en&#237;</a>
+  </div>
+
+  <div class="info">
+    <strong>Jak pou&#382;&#237;vat &#269;esk&#233; titulky:</strong>
+    <ol>
+      <li>Spus&#357;te video kliknut&#237;m na play p&#345;&#237;mo ve videu</li>
+      <li>Klikn&#283;te na <b>&#9654; Start</b> ve chv&#237;li, kdy video za&#269;ne p&#345;ehr&#225;vat</li>
+      <li>Pomoc&#237; tla&#269;&#237;tek &#177;1s / &#177;3s dola&#271;te synchronizaci</li>
+      <li>Posuvn&#237;kem m&#367;&#382;ete p&#345;esko&#269;it na libovoln&#233; m&#237;sto</li>
+    </ol>
+  </div>
+
+
+  <div class="section" id="sec1">
+    <h2>Sekce 1 &#8212; Koncept špičky kuželu (4:53)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/pointy-end-section-1/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs1">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en1"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(1)" id="btn1">&#9654; Start</button>
+        <span class="timer" id="time1">0:00</span>
+        <button class="adjust" onclick="adjustTime(1,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(1,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(1,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(1,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(1)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider1" min="0" max="293" value="0" step="1"
+               oninput="onSliderInput(1)" onmousedown="state[1].sliderDragging=true" onmouseup="state[1].sliderDragging=false"
+               ontouchstart="state[1].sliderDragging=true" ontouchend="state[1].sliderDragging=false">
+        <label>4:53</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Koncept špičky kuželu</strong>
+      <ul>
+      <li>Špička kuželu = nejpomalejší bod zatáčky, kde motorka mění směr</li>
+      <li>Kužel představuje oblast od brzdné zóny po apex — zužuje se směrem ke špičce</li>
+      <li>Na špičce kuželu: minimální rychlost, maximální náklon, motorka se otáčí</li>
+      <li>Po špičce: kužel se rozšiřuje — začínáte zrychlovat a narovnávat motorku</li>
+      <li>Vizualizace kuželu pomáhá pochopit, kde přesně v zatáčce co dělat</li>
+      <li>Propojení se všemi předchozími návyky: oči, brzdy, tělo, směr — vše kulminuje na špičce</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section" id="sec2">
+    <h2>Sekce 2 &#8212; Cvičení a aplikace (3:35)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/pointy-end-section-2/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs2">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en2"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(2)" id="btn2">&#9654; Start</button>
+        <span class="timer" id="time2">0:00</span>
+        <button class="adjust" onclick="adjustTime(2,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(2,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(2,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(2,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(2)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider2" min="0" max="215" value="0" step="1"
+               oninput="onSliderInput(2)" onmousedown="state[2].sliderDragging=true" onmouseup="state[2].sliderDragging=false"
+               ontouchstart="state[2].sliderDragging=true" ontouchend="state[2].sliderDragging=false">
+        <label>3:35</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Cvičení a aplikace</strong>
+      <ul>
+      <li>Cvičení s kužely: fyzicky umístěte kužely na trati a procvičujte najíždění na špičku</li>
+      <li>Na silnici: představte si kužel v každé zatáčce — kde je špička?</li>
+      <li>Různé zatáčky = různé tvary kuželů (ostré, táhlé, slepé)</li>
+      <li>Slepá zatáčka: špička se odhaluje postupně — brzdění pokračuje déle</li>
+      <li>Cvičení v autě: stejný princip — sledujte, kde je nejpomalejší bod zatáčky</li>
+      <li>Špička kuželu spojuje všechny dosavadní lekce do jednoho konceptu</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <a href="09-downshifting.html">&#8592; Modul 09: Pod&#345;azov&#225;n&#237;</a>
+    <a href="11-rear-brake.html">Modul 11: Zadn&#237; brzda &#8594;</a>
+  </div>
+</div>
+<script>
+var subs1=[{t:4,cs:"Pozor, tam je štěrk!",en:"Look out, there's gravel!"},
+{t:6,cs:"Co děláte, když vás něco překvapí?",en:"What do you do when you're surprised?"},
+{t:7.7,cs:"Tři věci musí být na místě.",en:"Three things have to be in place."},
+{t:10.1,cs:"Projděme si ty tři věci",en:"Let's walk through those three things"},
+{t:11.8,cs:"abyste byli připraveni",en:"so that you're prepared"},
+{t:13.4,cs:"když vás na motorce překvapí něco.",en:"when you're surprised on your motorcycle."},
+{t:16.4,cs:"(motor vrčí)",en:"(engine growling)"},
+{t:23.3,cs:"Wow, to je pěkně reálné, že?",en:"Wow, that's pretty real, isn't it?"},
+{t:25.7,cs:"Viděli jste to už dřív?",en:"Have you seen that before?"},
+{t:27.2,cs:"Ano, já taky.",en:"Yeah, I have too."},
+{t:28.7,cs:"Štěrk na silnici,",en:"Gravel on the road,"},
+{t:29.6,cs:"vyfouknutý autem, které zkrátilo zatáčku.",en:"kicked up by the car that cut the corner."},
+{t:32.6,cs:"Něco padne z náklaďáku,",en:"Something falls out of the pickup truck,"},
+{t:34.1,cs:"nějaký druh trosek, náhradní kolo na silnici,",en:"some type of a debris, spare tire in the road,"},
+{t:37.5,cs:"sjetý zvěř, gauč, viděl jsem gauč v jízdním pruhu,",en:"road kill, a couch, I've seen a couch in the lane,"},
+{t:41.8,cs:"problém s povrchem silnice, na který musíme reagovat.",en:"a problem with the road surface that we have to adjust to."},
+{t:47.3,cs:"A to je něco, čím se zabýváme ve škole,",en:"And this is something that we take on at the school,"},
+{t:50.2,cs:"měníme závodní trať, měníme silnici pro naše studenty,",en:"changing the racetrack, changing the road for our students,"},
+{t:54.1,cs:"pomocí toho, čemu říkáme cvičení se špičkou kuželu.",en:"with what we call the pointy end of the cone drill."},
+{t:57.2,cs:"Takže ve škole umisťujeme kužely a mění se každý průjezd.",en:"So at our school, we place cones and they change every lap."},
+{t:61.1,cs:"Ať už kužel ukazuje jakkoliv,",en:"Whichever way the cone is pointing,"},
+{t:63.1,cs:"požádáme naše studenty, aby jeli ke špičce kuželu.",en:"we ask our students to go to the pointy end of the cone."},
+{t:66.1,cs:"Měníme prostředí a oni musí",en:"We change the environment and they have to"},
+{t:68.2,cs:"změnit svou jízdu tak, aby odpovídala novému prostředí.",en:"change their riding to match that new environment."},
+{t:70.9,cs:"To je váš život na ulici.",en:"So this is your life, on the streets."},
+{t:74.3,cs:"Jedete dolů do zatáčky, vidíte kámen,",en:"You're riding down into a corner, you see a rock,"},
+{t:77.1,cs:"vidíte další trosek, vidíte náhradní kolo,",en:"you see other debris, you see a spare tire,"},
+{t:79.2,cs:"musíte změnit vaši stopu.",en:"you've got to change your line."},
+{t:80.9,cs:"Příští víkend přijedete do stejné zatáčky",en:"Next weekend, you come into the same exact corner"},
+{t:83.2,cs:"a tam je štěrk, který vás přiměje jít",en:"and there's gravel that makes you go"},
+{t:85.6,cs:"na pravou stranu toho štěrku.",en:"to the right side of that gravel."},
+{t:88.4,cs:"Dělíme to ve škole se špičkou kuželu,",en:"We do this at our school with pointy end of the cone,"},
+{t:90.6,cs:"ale je to váš skutečný život.",en:"but it's your real life."},
+{t:94.2,cs:"Prostředí se mění, jedete na trackday,",en:"Environments change, you go to a track day,"},
+{t:97.2,cs:"stanete se jednou z nejrychlejších osob v sezóně,",en:"you become one of the fastest persons in your session,"},
+{t:99.6,cs:"vždycky tam bude někdo na vaší stopě.",en:"there's always going to be someone on your line."},
+{t:101.4,cs:"Musíte jet dovnitř od toho člověka.",en:"You've got to go inside that person."},
+{t:103,cs:"Příští kolo musíte jet venku od dalšího jezdce.",en:"Next lap, you've got to go outside another rider."},
+{t:106.7,cs:"Řekněme, že jedete kolem zatáčky na závodní trati,",en:"Let's say you're coming around a corner on the racetrack,"},
+{t:109.6,cs:"a někdo havaroval a jeho aerodynamický kryt",en:"and somebody had crashed and their fairing"},
+{t:111.4,cs:"leží na silnici a musíte jít",en:"is laying on the road and you've got to go"},
+{t:113.6,cs:"ke špičce kuželu, což je jejich aerodynamický kryt.",en:"to the pointy end of the cone, which is their fairing."},
+{t:118.3,cs:"Jak to tedy děláme?",en:"So how do we do this?"},
+{t:120.5,cs:"Jak zvládneme toto cvičení ve škole?",en:"How do we survive this drill at our school?"},
+{t:122.9,cs:"Ale jak se vyrovnáme se skutečným troskami,",en:"But how do we survive real life debris,"},
+{t:125.8,cs:"dalšími jezdci, problémy na silnici?",en:"other riders, problems in the road?"},
+{t:128.1,cs:"Tři věci musí být v souladu.",en:"Three things have to be in play."},
+{t:129.7,cs:"Oči, musíte to vidět brzy.",en:"Eyes, you have to see it early."},
+{t:131.9,cs:"Brzdy, musíte používat vaše brzdy",en:"Brakes, you have to use your brakes"},
+{t:133.2,cs:"aby jste nastavili svou rychlost a poloměr,",en:"to set your speed and your radius,"},
+{t:135.5,cs:"umístit se kolem trosek.",en:"position yourself around the debris."},
+{t:137,cs:"A třetí věc je přidat tělo, abyste mohli jezdit",en:"And the third thing is add in body so you can run"},
+{t:139.9,cs:"s menším úhlem náklonu při stejném poloměru.",en:"less lean angle at the same radius."},
+{t:141.9,cs:"Oči, brzdy a tělo.",en:"Eyes, brakes, and body."},
+{t:144.3,cs:"Podívejme se na to.",en:"Let's take a look."},
+{t:146,cs:"Tady je to, co chceme udělat,",en:"Here's what we want to do,"},
+{t:147.5,cs:"ukázat vám sérii průjezdů stejnými zatáčkami.",en:"show you a series of runs through the same turns."},
+{t:151.1,cs:"Tento první průjezd",en:"This first run through,"},
+{t:152.5,cs:"vidíte, že kužely jsou umístěny",en:"you'll see that the cones are placed"},
+{t:154.4,cs:"aby umístily našeho jezdce přímo na stopu.",en:"to put our rider right on line."},
+{t:156.6,cs:"Je to nejrychlejší stopa, je to nejbezpečnější stopa.",en:"It's the fastest line, it's the safest line."},
+{t:159.4,cs:"Je to stopa, na kterou je náš jezdec zvyklý, když jede",en:"It's the line our rider is used to when he is running"},
+{t:162.4,cs:"sám bez kuželů kolem.",en:"by himself with no cones around."},
+{t:164,cs:"Vidí kužely, vidí je pěkně brzy,",en:"He sees the cones, sees them nice and early,"},
+{t:166.1,cs:"vidí, jakým způsobem ukazují,",en:"sees which way they're pointing,"},
+{t:167.5,cs:"používá své oči, tělo a brzdy.",en:"uses his, eyes, body, and brakes."},
+{t:169.4,cs:"Podvratí motorku přímo na stopu,",en:"Counter steers the bike right on line,"},
+{t:171.9,cs:"používá své brzdy dost na zpomalení,",en:"uses his brakes enough to slow,"},
+{t:173.6,cs:"dostat motorku přiříznutou, dokonale.",en:"get the bike steered, perfect."},
+{t:174.9,cs:"Ve druhém průjezdu jsme zpřísnili vstup",en:"On the second run through, we've tightened the entrance"},
+{t:177.2,cs:"do pravotočivé zatáčky, která následuje levotočivou,",en:"to the right-hand corner that follows the left,"},
+{t:179.4,cs:"takže jsme zpřísnili vstup do druhé zatáčky.",en:"so we've tightened the entrance of the second corner."},
+{t:182,cs:"Jezdec vyjíždí z první zatáčky,",en:"The rider drives off of the first corner,"},
+{t:183.7,cs:"ale nechá své oči vstoupit do příští zatáčky dostatečně brzy,",en:"but fails to get his eyes into the next corner early enough,"},
+{t:187,cs:"nechá své tělo přejít přes sedlo,",en:"fails to get his body across the seat,"},
+{t:189.7,cs:"takže zůstává uprostřed sedla.",en:"so he's stuck in the middle of the seat."},
+{t:191.2,cs:"Vlastně je uvázlý na špatné straně motorky,",en:"He's actually stuck on the wrong side of the bike,"},
+{t:192.9,cs:"a co dělá motorka, jede rovně.",en:"and what does the bike do, it runs straight."},
+{t:194.9,cs:"Nedokáže se otočit a jít dovnitř,",en:"It fails to be able to turn and go underneath,"},
+{t:197.9,cs:"dovnitř ze špičky kuželu.",en:"inside the pointy end of the cone."},
+{t:200.2,cs:"Musíme pohybovat svými těly, musíme posunout váhu",en:"Gotta move our bodies, we've gotta get weight"},
+{t:202.2,cs:"do vnitřní osy gyroskopu.",en:"to the inside axis of the gyro."},
+{t:205.9,cs:"Dobře, potřetí jsme prošli stejnými dvěma zatáčkami,",en:"All right, on this third time through the same two corners,"},
+{t:209.4,cs:"jsme tlačili našeho jezdce ven u apexu",en:"we've pushed our rider wide at the apex"},
+{t:212,cs:"a přidali druhý kužel.",en:"and added a second cone."},
+{t:213.6,cs:"Pamatujte, jen proto, že jste viděli jeden kousek štěrku",en:"Remember just because you've seen one bit of gravel"},
+{t:215.6,cs:"v zatáčce, neznamená to, že tam není další problém",en:"in the corner, doesn't mean there's not another problem"},
+{t:218.4,cs:"o něco dále.",en:"a little bit further on."},
+{t:219.6,cs:"Náš jezdec nevidí druhý kužel, mine ho.",en:"Our rider fails to see the second cone, misses it."},
+{t:224.2,cs:"Musíte dostat ty oči nahoru a skenovat.",en:"Gotta get those eyes up and scanning."},
+{t:226.1,cs:"I když náš jezdec vidí kužel,",en:"Even if our rider sees the cone,"},
+{t:228.5,cs:"už pustil brzdy.",en:"he's already let go of the brakes."},
+{t:230,cs:"Pustil brzdy a zvedl plyn.",en:"He's released the brakes and picked up the throttle."},
+{t:234,cs:"Průběh se rovná kilometrům za hodinu, všichni,",en:"Rate is equals miles per hour, everybody,"},
+{t:235.5,cs:"a motorka pojede ven.",en:"and his bike is going to run wide."},
+{t:236.9,cs:"Pustil svou kontrolu geometrie řízení,",en:"He released his steering geometry control,"},
+{t:239.6,cs:"přední vidlice se vrátily,",en:"the fork rebounded,"},
+{t:241.3,cs:"a motorka pojede ven.",en:"and the bike is gonna run wide."},
+{t:244.4,cs:"V tomto případě mine kužel,",en:"In this case, he misses a cone,"},
+{t:246.6,cs:"ale mohlo by to být příjezdem přímo do zábradlí",en:"but it could be running right into the guardrail"},
+{t:248.7,cs:"nebo přes střední čáru.",en:"or across the center line."},
+{t:250.6,cs:"Pokud by tento jezdec nechal brzdy déle,",en:"If this rider had left his brakes on longer,"},
+{t:253.2,cs:"motorka by pokračovala v řízení",en:"bike would've continued to steer"},
+{t:255,cs:"a snadno, velmi snadno by minula tento kužel.",en:"and easily, easily made this cone."},
+{t:257.7,cs:"Takže uzavřeme celou tuto myšlenku.",en:"So let's close up this whole idea."},
+{t:259.8,cs:"Oči, tělo, brzdy.",en:"Eyes, body, brakes."},
+{t:261.8,cs:"Když jeden z těchto klíčových jízdních prvků trpí,",en:"When one of those key ridings issues suffer,"},
+{t:264,cs:"oči, tělo, brzdy, jízda se zkomplikuje.",en:"eyes, body, brakes, the riding gets tough."},
+{t:267.5,cs:"Naše oči jsou prvořadé,",en:"Our eyes are paramount,"},
+{t:268.6,cs:"musí vidět situace brzy,",en:"they need to see the situations early,"},
+{t:270.4,cs:"a pak se dívat vedle kuželu.",en:"and then look beside the cone."},
+{t:271.9,cs:"Dívat se vedle štěrku,",en:"Look beside the gravel,"},
+{t:273,cs:"dívat se vedle náhradního kola na čistou cestu,",en:"look beside the spare tire to the clear path,"},
+{t:275.6,cs:"ne na trosek.",en:"not at the debris."},
+{t:277.2,cs:"Pomocí těchto brzd kontrolovat svou rychlost,",en:"Using those brakes to control your speed,"},
+{t:279.3,cs:"kontrolovat váš poloměr kontrolou geometrie vašeho řízení,",en:"control your radius by controlling your steering geometry,"},
+{t:281.9,cs:"a pak konečně přidat tělo, abyste pomohli motorce řídit",en:"and then finally adding the body to help the bike steer"},
+{t:286,cs:"s menším úhlem náklonu, stejný poloměr.",en:"at less lean angle, same radius."},
+{t:289,cs:"Špička kuželu,",en:"Pointy end of the cone,"},
+{t:290.2,cs:"je to příklad ze skutečného světa, co vidíme",en:"it's a real world example of what we see"},
+{t:293.2,cs:"na ulici a na závodní trati.",en:"on the street and the racetrack."}];
+var subs2=[{t:0.2,cs:"(chrípavá nebeská hudba)",en:"(gritty ethereal music)"},
+{t:6.6,cs:"V tom druhém průjezdu,",en:"On that second pass through,"},
+{t:7.9,cs:"nestihla jsem se dostat tělem přes včas,",en:"I couldn't get my body over in time,"},
+{t:9.7,cs:"a toto je něco, co byste si měli procvičit",en:"and this is something you'd practice"},
+{t:11.3,cs:"staticky na své motorce, přesunování váhy.",en:"static on your motorcycle, moving your weight."},
+{t:13.5,cs:"A pokud se vaše motorka hne,",en:"And if your bike moves,"},
+{t:16.5,cs:"pokud se třepe, když přesouváte váhu,",en:"if it wiggles while you move your weight,"},
+{t:18.3,cs:"táhnete na volant",en:"you're pulling on the handlebars"},
+{t:19.5,cs:"a volant je řídící sloupek.",en:"and the handlebars is steering stem."},
+{t:21.8,cs:"A takže to, co musíme udělat, je naučit se",en:"And so what we need to do is learn"},
+{t:23.8,cs:"dělat malý přeskok přes sedlo.",en:"to do a miniature squat across the seat."},
+{t:25.8,cs:"Na ulici se nebudeme hýbat moc,",en:"On the street we're not gonna move a lot,"},
+{t:27.6,cs:"ale malý přeskok.",en:"but a little miniature squat."},
+{t:28.8,cs:"Takže doslova zvednutí zadku ze sedla,",en:"So literally lifting your butt up off the seat,"},
+{t:31.7,cs:"ze strany na stranu.",en:"side to side."},
+{t:33,cs:"Nechceme si sami tahat přes sedlo",en:"We don't wanna pull ourselves across the seat"},
+{t:34.8,cs:"a kolíbat motorku.",en:"and wiggle the bike."},
+{t:36.2,cs:"Na závodní dráze se pohybujeme poměrně hodně.",en:"On the racetrack, we move quite a bit."},
+{t:37.6,cs:"Opět malý přeskok,",en:"Again, a miniature squat,"},
+{t:38.8,cs:"nahoru a přes levou stranu,",en:"up and over left side,"},
+{t:40.2,cs:"nahoru a přes sedlo na pravou stranu.",en:"up and over across the seat to the right side."},
+{t:42.5,cs:"Takže si to můžete procvičit na své motorce.",en:"So you can practice this on your motorcycle."},
+{t:45.1,cs:"Dělej ty přeskaky a představ si načasování",en:"Do those squats and imagine the timing"},
+{t:48.6,cs:"příjezdu na stupačku v pravý moment.",en:"of arriving on the foot peg at the right moment."},
+{t:50.6,cs:"A to je vlastně to, o co v tomto cvičení jde.",en:"And that's kind of what this drill is all about."},
+{t:52.8,cs:"Slyšeli jste, mluvili jsme o tom v ChampU,",en:"You heard, we've talked about it at ChampU,"},
+{t:55.7,cs:"že se většina jezdců hýbe moc rychle, příliš brzy.",en:"that most riders move too quickly, too early."},
+{t:59.8,cs:"A musíme si procvičit načasování.",en:"And we need to practice the timing."},
+{t:62.3,cs:"Takže si to představte.",en:"So think about this."},
+{t:63.2,cs:"Pokud jste jezdec závodního dne, představte si, kde jezdíte,",en:"If you're a track day rider, think about wherever you ride,"},
+{t:65.6,cs:"řekněme vstup do NJNP,",en:"let's say coming down into NJNP,"},
+{t:67.7,cs:"je to velmi populární dráha v New Jersey,",en:"it's a very popular track in New Jersey,"},
+{t:70.1,cs:"vstup do zatáčky tři,",en:"coming down into turn three,"},
+{t:71.5,cs:"jste v 3A,",en:"you're into 3A,"},
+{t:73.1,cs:"nahoru a přes pro 3B,",en:"up and over for 3B,"},
+{t:74.7,cs:"vyjezd ze tří,",en:"drive out of three,"},
+{t:75.5,cs:"a 3B až 3C je delší,",en:"and 3B to 3C is longer,"},
+{t:77.3,cs:"takže vidíte, trvá nám déle",en:"so look, it takes us longer"},
+{t:78.4,cs:"jít zpět přes sedlo pro 3C.",en:"to go back across the seat for 3C."},
+{t:81.6,cs:"Takže A na B bylo rychlejší než B na C",en:"So A to B was quicker than B to C"},
+{t:84.2,cs:"protože tam bylo více délky.",en:"because we had more length there."},
+{t:86.8,cs:"Mysleme na příjezd",en:"Think about arriving"},
+{t:88.3,cs:"na vnitřní přístup gyroskópu v pravý moment,",en:"on the inside access of the gyro at the right moment,"},
+{t:91.5,cs:"a to vám pomůže",en:"and that will help you"},
+{t:92.6,cs:"v tomto cvičení na procvičování načasování těla.",en:"in this drill of practice, body timing."},
+{t:97.1,cs:"Takže zde je vaše cvičení pro špičku kuželu.",en:"So here's your drill for pointy end of the cone."},
+{t:100.3,cs:"Chci, abyste na vašem příštím jízdě,",en:"I want you on your next ride,"},
+{t:101.8,cs:"ať už na ulici nebo na trati.",en:"whether it be on the street on the track."},
+{t:103.7,cs:"Chci, abyste nahlas řekli, co bude dál, v přilbě.",en:"I want you to say what's next out loud in your helmet."},
+{t:107,cs:"Takže je velmi snadné dostat se do posloupnosti zatáček,",en:"So it's very easy to get into a sequence of corners,"},
+{t:111.1,cs:"ať už na vaší oblíbené canyon jízdě,",en:"whether it be on your favorite canyon ride,"},
+{t:113.3,cs:"klikatou sekcí závodní dráhy, ať už kdekoli jezdíte,",en:"twisty section of racetrack, wherever you might be riding,"},
+{t:116.2,cs:"vstoupit, začít nasměrovat oči na jeden bod",en:"to come in, start getting your eyes to one point"},
+{t:119.4,cs:"na vaší jízdě.",en:"on your ride."},
+{t:120.3,cs:"Chci dostat svou motorku směrem k apexu",en:"I wanna get my bike down towards this apex"},
+{t:122.6,cs:"nebo směrem dovnitř zatáčky,",en:"or down towards the inside of the corner,"},
+{t:124.3,cs:"a my necháme naše oči zůstat tam trochu příliš dlouho,",en:"and we leave our eyes they're a little bit too long,"},
+{t:126.7,cs:"aby to, co bude dál, bylo to, co bude zapojovat naši pozornost",en:"so that what next is gonna be what kind of engages our focus"},
+{t:131.7,cs:"a skenovat vzhůru do další zatáčky.",en:"to scan a rise up into that next corner."},
+{t:134.3,cs:"Přicházíme touto sekcí, co bude dál?",en:"Coming through this section, what's next?"},
+{t:136.2,cs:"Dívám se na tento výjezd.",en:"I'm looking at this exit."},
+{t:137.5,cs:"Co bude dál?",en:"What's next?"},
+{t:138.4,cs:"Dívám se dolů na můj výjezd z další zatáčky.",en:"I'm looking down towards my exit to this next turn."},
+{t:140.7,cs:"Takže něco na pohyb těch očí a skenování",en:"So something to get those eyes moving and scanning"},
+{t:143.6,cs:"a dobrá připomínka pro nás, aby se oči stále pohybovaly.",en:"and good reminder for ourselves to keep those eyes moving."},
+{t:147.3,cs:"Jsme tady na indie skid padu",en:"We're out here on indie skid pad"},
+{t:148.7,cs:"pro toto cvičení.",en:"for this drill."},
+{t:149.8,cs:"Je to vrtací cvičení s protisměrem, kládení tlaku na volant,",en:"It's a counter string drill, putting bar pressure,"},
+{t:152.2,cs:"tlačení a tažení na ty volanty různou rychlostí",en:"pushing and pulling on those handlebars at different rates"},
+{t:155.6,cs:"pro různé rychlosti zásahu.",en:"for different turn-in rates."},
+{t:157.4,cs:"Zde je to, co budeme dělat.",en:"Here's what we're gonna do."},
+{t:159,cs:"Chris se k nám přiblíží.",en:"Chris is gonna come toward us."},
+{t:160.4,cs:"Bude muset uhýbat doprava",en:"He's gonna have to veer to the right"},
+{t:162.2,cs:"kolem kuželu v jeho cestě.",en:"around the cone in his path."},
+{t:163.8,cs:"Má spoustu času.",en:"He's got plenty of time."},
+{t:164.9,cs:"Nejede velmi rychle.",en:"He's not going very fast."},
+{t:166.2,cs:"Takže jeho vstupy řízení mohou být docela jemné a pohodlné.",en:"So his steering inputs can be quite gentle and lazy."},
+{t:169.6,cs:"Pak na další průjezd,",en:"Then on the next one through,"},
+{t:171.1,cs:"pojedete rychleji a bude muset",en:"he'll be going faster and he'll have"},
+{t:172.5,cs:"opět uhýbat, aby zmeškal další kužel,",en:"to veer back again to miss the next cone,"},
+{t:174.8,cs:"a bude muset zatočit motorkou",en:"and he's going to have to snap the bike"},
+{t:176.4,cs:"trochu rychleji.",en:"a little bit quicker."},
+{t:177.7,cs:"Takže experimentujte se vstupy protisměru.",en:"So play with counter string inputs."},
+{t:181,cs:"Někdy musí být poměrně rychlé,",en:"They sometimes have to be pretty quick,"},
+{t:184.3,cs:"ale nedělejte je prudké.",en:"but don't make them abrupt."},
+{t:185.7,cs:"Mysleme na veslování s lodí místo na údery do vaku,",en:"Think about rowing a boat instead of punching a bag,"},
+{t:189.9,cs:"možná budeme muset posunout ten volant poměrně rychle,",en:"we might have to move that handle bar pretty quickly,"},
+{t:192.8,cs:"ale nemůžeme ho posunout prudce.",en:"but we can't move it abruptly."},
+{t:196.6,cs:"Oči, brzdy a tělo, oči, brzdy a tělo.",en:"Eyes, brakes and body, eyes, brakes, and body."},
+{t:200,cs:"Ty tři věci musí fungovat.",en:"Those three things have to be working."},
+{t:202,cs:"A krásné na tom je, že si to můžete procvičit",en:"And the beautiful thing is you can practice"},
+{t:204.4,cs:"oči, brzdy a tělo na každé jízdě.",en:"eyes, brakes, and body on every ride."},
+{t:207.3,cs:"Můžete si procvičit oči a brzdy na každé jízdě.",en:"You can practice eyes and brakes on every drive."},
+{t:210.6,cs:"Pokud ty tři věci fungují,",en:"If those three things are working,"},
+{t:212.6,cs:"budete schopní zvládat překvapení na motorce.",en:"you'll handle surprises on a motorcycle."},
+{t:215.3,cs:"(veselá hudba)",en:"(upbeat music)"}];
+var state={};
+for(var s=1;s<=2;s++)state[s]={running:false,baseTime:0,startWall:0,lastIdx:-1,rafId:null,sliderDragging:false};
+var sections={1:{subs:subs1,duration:293},2:{subs:subs2,duration:215}};
+
+function formatTime(s){var m=Math.floor(s/60);var sec=Math.floor(s%60);return m+":"+(sec<10?"0":"")+sec;}
+function getCurrentTime(s){if(!state[s].running)return state[s].baseTime;return state[s].baseTime+(Date.now()-state[s].startWall)/1000;}
+function findSubtitle(s,t){var subs=sections[s].subs;var idx=-1;for(var i=0;i<subs.length;i++){if(subs[i].t<=t)idx=i;else break;}return idx;}
+function updateDisplay(s){var t=getCurrentTime(s);var idx=findSubtitle(s,t);if(idx!==state[s].lastIdx){state[s].lastIdx=idx;if(idx>=0){document.getElementById("cs"+s).textContent=sections[s].subs[idx].cs;document.getElementById("en"+s).textContent=sections[s].subs[idx].en;}else{document.getElementById("cs"+s).textContent="\u2026";document.getElementById("en"+s).textContent="";}}document.getElementById("time"+s).textContent=formatTime(t);if(!state[s].sliderDragging)document.getElementById("slider"+s).value=Math.round(t);}
+function tick(s){updateDisplay(s);if(state[s].running)state[s].rafId=requestAnimationFrame(function(){tick(s);});}
+function toggleSync(s){if(state[s].running){pauseSync(s);}else{startSync(s);}}
+function startSync(s){state[s].running=true;state[s].startWall=Date.now();document.getElementById("btn"+s).textContent="\u23F8 Pauza";document.getElementById("btn"+s).classList.add("active");tick(s);}
+function pauseSync(s){state[s].running=false;state[s].baseTime=getCurrentTime(s);if(state[s].rafId)cancelAnimationFrame(state[s].rafId);document.getElementById("btn"+s).textContent="\u25B6 Start";document.getElementById("btn"+s).classList.remove("active");}
+function resetSync(s){var wasRunning=state[s].running;if(wasRunning)pauseSync(s);state[s].baseTime=0;state[s].lastIdx=-1;document.getElementById("slider"+s).value=0;document.getElementById("time"+s).textContent="0:00";document.getElementById("cs"+s).textContent="\u25B6 Spus\u0165te video a klikn\u011Bte Start";document.getElementById("en"+s).textContent="";}
+function setTime(s,t){var wasRunning=state[s].running;if(wasRunning){state[s].baseTime=t;state[s].startWall=Date.now();}else{state[s].baseTime=t;}state[s].lastIdx=-1;updateDisplay(s);}
+function adjustTime(s,delta){setTime(s,Math.max(0,getCurrentTime(s)+delta));}
+function onSliderInput(s){setTime(s,parseFloat(document.getElementById("slider"+s).value));}
+</script>
+</body>
+</html>

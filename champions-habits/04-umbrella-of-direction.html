@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>04 — Deštník směru (Umbrella of Direction) | Champions Habits CZ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f0eb; color: #333; line-height: 1.7; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .module-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 3px solid #cf3339; }
+    .module-header h1 { color: #1a1a2e; font-size: 2em; margin-bottom: 12px; }
+    .nav-sections { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .nav-sections a { display: inline-block; padding: 8px 16px; background: #2d2d5e; color: #ffd700; text-decoration: none; border-radius: 6px; font-weight: 600; transition: background 0.2s; }
+    .nav-sections a:hover { background: #cf3339; color: white; }
+    .section { margin-bottom: 40px; padding-top: 20px; }
+    .section h2 { margin-bottom: 12px; color: #1a1a2e; font-size: 1.5em; }
+    .video-frame { width: 100%; height: 500px; border: 2px solid #e0e0e0; border-radius: 8px 8px 0 0; display: block; }
+    .subtitle-bar { background: #1a1a2e; color: #fff; padding: 18px 24px; min-height: 70px; font-size: 1.1em; text-align: center; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+    .subtitle-bar .cs { color: #ffd700; font-weight: 600; font-size: 1.2em; }
+    .subtitle-bar .en { color: #999; font-size: 0.8em; }
+    .controls { background: #2d2d5e; padding: 12px 24px 14px; border-radius: 0 0 8px 8px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .controls-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .controls button { background: #cf3339; color: white; border: none; padding: 8px 20px; border-radius: 6px; font-size: 0.95em; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .controls button:hover { background: #e85d5d; }
+    .controls button.active { background: #43a047; }
+    .controls button.active:hover { background: #66bb6a; }
+    .controls button.reset-btn { background: #555; }
+    .controls button.reset-btn:hover { background: #777; }
+    .controls .timer { color: #ffd700; font-family: monospace; font-size: 1.1em; min-width: 60px; text-align: center; }
+    .controls .adjust { background: #444; padding: 6px 12px; font-size: 0.85em; border-radius: 4px; }
+    .controls .adjust:hover { background: #666; }
+    .slider-row { display: flex; align-items: center; gap: 8px; padding: 0 2px; }
+    .slider-row label { color: #aaa; font-size: 0.75em; font-family: monospace; }
+    .time-slider { flex: 1; -webkit-appearance: none; appearance: none; height: 5px; border-radius: 3px; background: #444; outline: none; cursor: pointer; }
+    .time-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; }
+    .time-slider::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; border: none; }
+    .info { background: #fff3e0; border-left: 4px solid #ff9800; padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0; font-size: 0.9em; }
+    .info strong { color: #e65100; }
+    .info ol { margin: 8px 0 0 20px; }
+    .info li { margin-bottom: 4px; }
+    .summary-box { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 16px; margin: 20px 0; border-radius: 0 8px 8px 0; font-size: 0.95em; }
+    .summary-box strong { color: #1565c0; display: block; margin-bottom: 8px; font-size: 1.05em; }
+    .summary-box ul { margin: 0 0 0 20px; list-style: disc; }
+    .summary-box li { margin-bottom: 6px; line-height: 1.5; }
+    .module-nav { margin-top: 40px; padding: 20px; background: #2d2d5e; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .module-nav a { color: #ffd700; text-decoration: none; font-weight: 600; font-size: 1.1em; padding: 10px 24px; background: #cf3339; border-radius: 6px; transition: background 0.2s; }
+    .module-nav a:hover { background: #e85d5d; }
+    @media (max-width: 700px) { .video-frame { height: 350px; } .subtitle-bar { padding: 14px 16px; } .subtitle-bar .cs { font-size: 1em; } .controls { gap: 8px; padding: 10px 16px; } .controls button { padding: 6px 14px; font-size: 0.85em; } .nav-sections { flex-direction: column; } .nav-sections a { width: 100%; text-align: center; } .module-nav { flex-direction: column; text-align: center; } .module-nav a { width: 100%; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="module-header">
+    <h1>04 &#8212; De&#353;tn&#237;k sm&#283;ru (Umbrella of Direction) | Champions Habits CZ</h1>
+    <p style="color: #666; margin-top: 8px;">&#268;ty&#345;i video sekce o z&#225;kladn&#237;m konceptu sm&#283;ru motorky v zat&#225;&#269;ce, rozhodovac&#237;m bodu a praktick&#253;ch cvi&#269;en&#237;ch</p>
+  </div>
+
+  <div class="nav-sections">
+    <a href="#sec1">Sekce 1 &#8212; &#218;vod</a>
+    <a href="#sec2">Sekce 2 &#8212; J&#237;zda na z&#225;klad&#283; sm&#283;ru</a>
+    <a href="#sec3">Sekce 3 &#8212; Rozhodovac&#237; bod</a>
+    <a href="#sec4">Sekce 4 &#8212; Cvi&#269;en&#237; a shrnut&#237;</a>
+  </div>
+
+  <div class="info">
+    <strong>Jak pou&#382;&#237;vat &#269;esk&#233; titulky:</strong>
+    <ol>
+      <li>Spus&#357;te video kliknut&#237;m na play p&#345;&#237;mo ve videu</li>
+      <li>Klikn&#283;te na <b>&#9654; Start</b> ve chv&#237;li, kdy video za&#269;ne p&#345;ehr&#225;vat</li>
+      <li>Pomoc&#237; tla&#269;&#237;tek &#177;1s / &#177;3s dola&#271;te synchronizaci</li>
+      <li>Posuvn&#237;kem m&#367;&#382;ete p&#345;esko&#269;it na libovoln&#233; m&#237;sto</li>
+    </ol>
+  </div>
+
+
+  <!-- SECTION 1 -->
+  <div class="section" id="sec1">
+    <h2>Sekce 1 &#8212; Úvod do deštníku směru (5:18)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/umbrella-of-direction-section-1/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs1">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en1"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(1)" id="btn1">&#9654; Start</button>
+        <span class="timer" id="time1">0:00</span>
+        <button class="adjust" onclick="adjustTime(1,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(1,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(1,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(1,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(1)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider1" min="0" max="318" value="0" step="1"
+               oninput="onSliderInput(1)" onmousedown="state[1].sliderDragging=true" onmouseup="state[1].sliderDragging=false"
+               ontouchstart="state[1].sliderDragging=true" ontouchend="state[1].sliderDragging=false">
+        <label>5:18</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Deštník směru: Úvod</strong>
+      <ul>
+      <li>Deštník směru je 4. základní návyk šampionů — pokrývá vše, co děláme na motorce v zatáčce</li>
+      <li>Apex = bod nejblíže k vnitřní straně zatáčky, kde je motorka nasměrovaná k výjezdu</li>
+      <li>Vše co děláme (oči, brzdy, tělo) slouží k tomu, abychom motorku dostali nasměrovanou na apex</li>
+      <li>Při chybě nájezdu (příliš rychlý vstup) — NEPŘIDÁVAT plyn! Pokračovat v brzdění, nechat motorku zatočit</li>
+      <li>Přidávání plynu + náklonu současně = nebezpečná kombinace (100 bodů přilnavosti)</li>
+      <li>I při chybě se dá zatáčka zachránit — pokračuj ve zpomalování, motorka se nasměruje</li>
+      <li>Hlavní příčina smrtelných nehod: vynášení ze zatáčky do protisměru</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section" id="sec2">
+    <h2>Sekce 2 &#8212; Jízda na základě směru (3:17)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/umbrella-of-direction-section-2/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs2">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en2"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(2)" id="btn2">&#9654; Start</button>
+        <span class="timer" id="time2">0:00</span>
+        <button class="adjust" onclick="adjustTime(2,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(2,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(2,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(2,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(2)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider2" min="0" max="197" value="0" step="1"
+               oninput="onSliderInput(2)" onmousedown="state[2].sliderDragging=true" onmouseup="state[2].sliderDragging=false"
+               ontouchstart="state[2].sliderDragging=true" ontouchend="state[2].sliderDragging=false">
+        <label>3:17</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Jízda na základě směru</strong>
+      <ul>
+      <li>Jezdíme na základě SMĚRU motorky, ne podle pozice na trati</li>
+      <li>Nepřidávat plyn za apexem, dokud nechceme rozšířit poloměr</li>
+      <li>Brzdy → dokud jsme spokojeni se rychlostí a směrem → neutrální plyn → čekáme na výjezd → otevřít poloměr</li>
+      <li>Jemný počáteční plyn — aby se nezvětšil rozvor a motorka se nevynášela</li>
+      <li>Drama = následky ztráty směru (protijedoucí auto, svodidla, překážky)</li>
+      <li>I 1% zlepšení ovládání směru může zachránit život</li>
+      <li>Toto je nejdůležitější koncept celého kurzu</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section" id="sec3">
+    <h2>Sekce 3 &#8212; Rozhodovací bod a aplikace na silnici (7:27)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/umbrella-of-direction-section-3/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs3">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en3"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(3)" id="btn3">&#9654; Start</button>
+        <span class="timer" id="time3">0:00</span>
+        <button class="adjust" onclick="adjustTime(3,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(3,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(3,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(3,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(3)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider3" min="0" max="447" value="0" step="1"
+               oninput="onSliderInput(3)" onmousedown="state[3].sliderDragging=true" onmouseup="state[3].sliderDragging=false"
+               ontouchstart="state[3].sliderDragging=true" ontouchend="state[3].sliderDragging=false">
+        <label>7:27</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Rozhodovací bod</strong>
+      <ul>
+      <li>Rozhodovací bod = místo v zatáčce, kde začínáte vidět výjezd a můžete rozhodnout o ovládání</li>
+      <li>Projíždějte rozhodovacím bodem s brzdami / zpomalujete — NE s otevřeným plynem</li>
+      <li>Brzdění = i brzdění motorem nebo ubírání plynu (jen méně efektivní než brzdy)</li>
+      <li>Štěrk na vnitřku → brzdy déle, poloměr zúžit, projet pod štěrkem</li>
+      <li>Štěrk na vnějšku → plyn dříve, poloměr rozšířit, objet štěrk</li>
+      <li>Unáhlený nájezd do zatáčky = 3. nejčastější příčina pádu</li>
+      <li>Se 100 body přilnavosti můžete brzdit i v náklonu a zpřísnit poloměr</li>
+      <li>Kdo ovládá vstupní rychlost, ovládá deštník směru</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section" id="sec4">
+    <h2>Sekce 4 &#8212; Cvičení a shrnutí (4:38)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/umbrella-of-direction-section-4/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs4">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en4"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(4)" id="btn4">&#9654; Start</button>
+        <span class="timer" id="time4">0:00</span>
+        <button class="adjust" onclick="adjustTime(4,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(4,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(4,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(4,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(4)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider4" min="0" max="278" value="0" step="1"
+               oninput="onSliderInput(4)" onmousedown="state[4].sliderDragging=true" onmouseup="state[4].sliderDragging=false"
+               ontouchstart="state[4].sliderDragging=true" ontouchend="state[4].sliderDragging=false">
+        <label>4:38</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Cvičení a souhrn</strong>
+      <ul>
+      <li>Cvičení v AUTĚ: každý nájezd do zatáčky = trénink. Volant se odvíjí při akceleraci = dobře. Držíte úhel = potřeba více zatočit</li>
+      <li>Cvičení na MOTORCE: nechte brzdové světlo svítit o 3 metry déle než si myslíte. Sledujte, jak motorka lépe mění směr</li>
+      <li>Výjezd ze zatáčky = vysvědčení za rozhodovací bod</li>
+      <li>Reálná situace: nepřehledná zatáčka → zpomalovat dokud neuvidíte výjezd → teprve pak rozhodnutí</li>
+      <li>Čtyři základní návyky šampionů: 1) Mentální soustředění, 2) 100 bodů přilnavosti, 3) Poloměr = rychlost, 4) Deštník směru</li>
+      <li>Deštník směru pokrývá vše — oči, brzdy, tělo, řazení, pasažér, podmínky</li>
+      <li>Nájezd do zatáčky slouží k tomu, aby motorka byla připravena na výjezd</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <a href="03-radius-equals-mph.html">&#8592; Modul 03: R=MPH</a>
+    <a href="05-body-position.html">Modul 05: Pozice t&#283;la &#8594;</a>
+  </div>
+
+</div>
+
+<script>
+var subs1=[{t:5,cs:"Čtvrtá návyk šampionů.",en:"Number four core champion's habits."},
+{t:6.8,cs:"Čtyři věci, které si myslíme,",en:"Four of the things we think"},
+{t:8,cs:"by měly být na vrcholu vaší mysli",en:"should be at the top of your brain"},
+{t:8.9,cs:"a skutečně na tom záleží",en:"that really count"},
+{t:10,cs:"Tato čtvrtá věc se týká nás všech.",en:"This fourth thing covers us all."},
+{t:13.1,cs:"Čtvrtá návyk šampionů se týká nás všech,",en:"The fourth champions habit covers us all,"},
+{t:16.1,cs:"deštník směru.",en:"the umbrella of direction."},
+{t:18.8,cs:"Toto je náš čtvrtý základní návyk šampionů.",en:"This is our fourth core champion habit."},
+{t:20.6,cs:"Chris, proč jsme tady?",en:"Chris, why are we here?"},
+{t:22.4,cs:"Takže jsme tady sedí na apexu.",en:"So we're sitting here on the apex."},
+{t:24,cs:"Apex bude bod, kde jsme",en:"Apex is going to be the point where we are"},
+{t:26,cs:"nejblíže vnitřní obrubě na závodním okruhu.",en:"closest to the inside curbing on a racetrack."},
+{t:29,cs:"A to je můj cíl na trati,",en:"And this is kind of my goal on track,"},
+{t:31.3,cs:"a v každé jedné zatáčce,",en:"and in every single corner,"},
+{t:32.8,cs:"je dostat svůj motorku na tento bod.",en:"is to get my bike to this point."},
+{t:35,cs:"Říká se tomu deštník směru.",en:"It's called the umbrella of direction."},
+{t:37.2,cs:"Kdybychom mohli opravdu upřednostnit",en:"If we could really prioritize"},
+{t:38.8,cs:"tyto čtyři základní návyky šampionů,",en:"these four core champion's habits,"},
+{t:41,cs:"toto by bylo číslo jedna, určitě.",en:"this would be number one, for sure."},
+{t:43.1,cs:"Takže myslíme na to, kam je motorka nasměrovaná",en:"So, we think about where the bike is pointed"},
+{t:45.4,cs:"tak aby byla rovnoběžně se dvěma kužely apex.",en:"being parallel to two apex cones."},
+{t:47.8,cs:"Ať je to silnice nebo trať,",en:"Whether it's the street or the track,"},
+{t:49.7,cs:"motorka v pozici, aby zrychlila",en:"the bike being in a position to accelerate"},
+{t:51.8,cs:"a byla nasměrovaná z zatáčky",en:"and being pointed off the corner"},
+{t:53.1,cs:"je opravdu náš největší cíl.",en:"is really our biggest goal."},
+{t:54.6,cs:"Apex je tady v této části zatáčky,",en:"The apex is here in this part of the corner,"},
+{t:57.5,cs:"protože tady protínáme vnitřek,",en:"because this is where we intersect the inside,"},
+{t:59.8,cs:"když jezdíme s největším možným poloměrem.",en:"when we run the biggest radius possible."},
+{t:62.3,cs:"Zatáčka 2 tady v kterémkoli motorsportovním ranči.",en:"Turn 2 here at any motor sports ranch."},
+{t:64.8,cs:"Říkáme tomu deštník směru",en:"So we call it the umbrella of direction"},
+{t:66.6,cs:"protože všechno, co děláme na motorce,",en:"because everything we do on the motorcycle"},
+{t:68.8,cs:"padá pod tento deštník.",en:"falls underneath this umbrella."},
+{t:70.4,cs:"Jak používáme oči, jak používáme brzdy, tělo,",en:"How we use our eyes, how we use our brakes, our body,"},
+{t:73.4,cs:"všechno, co děláme při nájezdu do zatáčky",en:"everything we do on corner entry"},
+{t:75.5,cs:"slouží motorce, aby se dostala sem do této pozice",en:"serves the bike to get here in this position"},
+{t:78.3,cs:"k bezpečnému výjezdu ze zatáčky.",en:"to exit safely off the corner."},
+{t:80.1,cs:"Hej Chris, udělal jsi skvělou práci dostat svou motorku",en:"Hey Chris, so you did a great job getting your bike"},
+{t:82.1,cs:"na apex.",en:"to the apex."},
+{t:83.1,cs:"Jsi přesně na stopě.",en:"You're like right on line."},
+{t:84.4,cs:"Vypadá to, že jsi udělal skvělou práci s nájezdem do zatáčky.",en:"It looks like you did a great job with your corner entry."},
+{t:87.8,cs:"A pokud je cesta volná, můžeš volně vyjít.",en:"And if the lanes clear you can, you're free to exit."},
+{t:91,cs:"Mezitím tady. Kyle?",en:"Meanwhile, over here. Kyle?"},
+{t:94,cs:"To nejde dobře.",en:"Not doing too well."},
+{t:95.1,cs:"Takže jsem to MTO 9 uchopil do zatáčky.",en:"So I wrote this MTO nine into this corner."},
+{t:97.6,cs:"A jak vidíš,",en:"And as you can see,"},
+{t:98.5,cs:"jsem trochu mimo stopu",en:"I'm a little bit off-line"},
+{t:100,cs:"a důležitější,",en:"and more importantly,"},
+{t:101.7,cs:"vůbec nejsem rovnoběžný s apexem.",en:"I'm not even parallel to the apex."},
+{t:104.1,cs:"Jsem fakticky nasměrovaný na zeď zatáčky 2.",en:"I'm actually pointed out towards this turn 2 wall."},
+{t:106.5,cs:"Takže cokoliv jsem udělal v nájezdu do zatáčky,",en:"So whatever I did in this corner entry,"},
+{t:109.3,cs:"neovládal jsem svou rychlost.",en:"I did not control my speed."},
+{t:111.3,cs:"Nerespektoval jsem nejpomalejší bod.",en:"I did not respect the slowest point."},
+{t:113,cs:"Nerespektoval jsem deštník směru.",en:"I did not respect the umbrella of direction."},
+{t:115.9,cs:"Takže o tom můžeme přemýšlet.",en:"So we can think about this."},
+{t:117.3,cs:"Také v tom poloměru rovná se rychlosti z poslední lekce,",en:"Even in that radius mile an hour from the last lesson,"},
+{t:120.2,cs:"Kyle vyjel s příliš velkou vstupní rychlostí",en:"Kyle came in with too much entry speed"},
+{t:122.1,cs:"a neměl směr na apexu a,",en:"that he did not have direction at the apex and,"},
+{t:125.2,cs:"na závodní trati, to je jen recept na neštěstí.",en:"on the racetrack, that's just the recipe for disaster."},
+{t:128.2,cs:"Takže Chris, co s tím na silnici v této situaci?",en:"So Chris, what about the street in this scenario?"},
+{t:130.6,cs:"Člověče, riziko je mnohem vyšší.",en:"Man, the risk is so much higher."},
+{t:133.1,cs:"Tato myšlenka, pokud nemáme motorku nasměrovanou",en:"This idea, if we don't have our bike pointed"},
+{t:136.2,cs:"a začínáme vynášet ze zatáčky,",en:"and we start running wide,"},
+{t:137.5,cs:"mohli bychom mít auto přijíždějící přes středovou čáru.",en:"we could have a car coming across the center line."},
+{t:140.7,cs:"Mohli bychom mít nějakou překážku tam.",en:"We could have some kind of hazard out there."},
+{t:143.2,cs:"Závodní trať je nejbezpečnějším místem, kde bychom jezdili,",en:"The racetrack is the safest place we could ride a bike,"},
+{t:146.2,cs:"ale, člověče, riziko je na silnici mnohem vyšší.",en:"but, man, the risk is so much higher on that street."},
+{t:148.8,cs:"Takže musíme pracovat mnohem harder tam",en:"So we've got to work extra hard back there"},
+{t:151,cs:"abychom dostali motorku nasměrovanou.",en:"to get our bike pointed."},
+{t:152.9,cs:"Takže Kyle, protože si dal pár nájezdu do zatáčky",en:"So Kyle, since you missed your corner entry"},
+{t:155.2,cs:"a jsi daleko tady,",en:"and you're way out here,"},
+{t:157.3,cs:"je to pro tebe ztraceno?",en:"are you doomed?"},
+{t:158.5,cs:"Co myslíš, jaký máš plán?",en:"Like what, what's your, what's your plan?"},
+{t:160.6,cs:"Ach podívej, myšlenka určitě není, že by to bylo ztraceno.",en:"Ah look, the thinking is definitely not that I'm doomed."},
+{t:163.8,cs:"Jenom proto, že jsem uspěchal nájezd do zatáčky,",en:"Just because I've rushed the corner entry,"},
+{t:165.5,cs:"jenom proto, že jsem opravdu přehnané--",en:"just because I've really been overspeed--"},
+{t:168.1,cs:"Neovládl jsem svou rychlost dost dobře, abych dosáhl apex,",en:"I haven't controlled my speed well enough to get the apex,"},
+{t:170.7,cs:"to neznamená, že by výjezd byl úplně zničený.",en:"doesn't mean that the exit's completely shot."},
+{t:173.7,cs:"Pro mě myslím poloměr rovná se rychlost.",en:"For me, I'm thinking radius equals miles per hour."},
+{t:176.4,cs:"Pokud budu pokračovat v zpomalování své motorky,",en:"If I continue to slow my motorcycle,"},
+{t:178.3,cs:"poloměr bude pokračovat v zúžení, dokud nedosáhnu apex.",en:"the radius will continue to tighten until I get my apex."},
+{t:181.6,cs:"Není to dokonalé,",en:"It's not perfect,"},
+{t:182.6,cs:"ale raději být rovnoběžný a chybět trochu",en:"but I'd rather be parallel and miss it a little bit"},
+{t:185.2,cs:"a pak skončit zatáčku, být v bezpečí.",en:"and then finish my corner, be safe."},
+{t:187,cs:"Zvláště na silnici",en:"Especially on the street"},
+{t:188.4,cs:"když nemáme spoustu poloměru na práci",en:"when we don't have a lot of radius to work with"},
+{t:190.8,cs:"a myslíme na další auta v druhém pruhu.",en:"and we're thinking about other cars in the other lane."},
+{t:193,cs:"Takže Kyle, mluvili jsme o tom,",en:"So Kyle, we've talked about"},
+{t:195.2,cs:"o ovládání naší rychlosti tam",en:"controlling our speed back there"},
+{t:196.9,cs:"abychom začali získávat tento směr.",en:"to start getting this direction."},
+{t:198.4,cs:"A víš, opravdovým hříchem v této situaci",en:"And you know, the, the real sin in this situation"},
+{t:201.2,cs:"je, že začneš zrychlovat,",en:"is you start to accelerate,"},
+{t:202.5,cs:"co se stane s tvým poloměrem?",en:"because what happens to your radius?"},
+{t:203.9,cs:"Poloměr se otevírá, poloměr se otevírá.",en:"The radius opens radius opens."},
+{t:204.8,cs:"Poloměr se otevírá,",en:"The radius opens,"},
+{t:205.7,cs:"takže motorka začíná vynášet ze zatáčky.",en:"so the bike starts to run wider."},
+{t:206.9,cs:"Co tedy uděláš, aby to zůstalo v tvém pruhu širokém 14 stop?",en:"So what do you do to keep it in your 14 foot wide lane?"},
+{t:210,cs:"Pokud budeš zrychlovat,",en:"Well, if you're going to accelerate,"},
+{t:211.3,cs:"jediný způsob je přidat náklon.",en:"the only way to do that is to add lean angle."},
+{t:213.4,cs:"Takže protože jsme mluvili o 100 bodech přilnavosti",en:"So since we talked about a hundred points of grip"},
+{t:215.8,cs:"a poloměr rovná se rychlost,",en:"and radius equals miles per hour,"},
+{t:217.2,cs:"pokud přidám plyn a náklon ve stejný čas,",en:"if I'm adding throttle and lean angle at the same time,"},
+{t:221,cs:"problémy přijdou hned.",en:"there's problems coming pretty quick."},
+{t:223,cs:"Stane se to nám všem. Děláme tyto chyby,",en:"Happens to all of us. We make these mistakes,"},
+{t:225.1,cs:"ale jak můžeme upravit náš poloměr?",en:"but how can we adjust our radius?"},
+{t:228.2,cs:"Jak se můžeme přizpůsobit jako jezdci na to, aby se motorka vrátila na stopu?",en:"How can we adjust as a rider to put the thing back on line?"},
+{t:232.3,cs:"Slyšíme pořád, že pokud je nájezd do zatáčky špatný,",en:"We hear all the time that if your corner entry is shot,"},
+{t:235.2,cs:"celá zatáčka je špatná, ale to opravdu není pravda.",en:"your whole corner's shot, but that's really not true."},
+{t:237.4,cs:"Takže máme možnosti, máme způsoby, jak to napravit",en:"So, we have options, we have ways that we can fix this"},
+{t:240.3,cs:"a to je to, co chceme dělat.",en:"and that's what we want to do."},
+{t:241.1,cs:"Ano, musíme nechat tu motorku zatočit.",en:"Yes, we got to let that bike turn."},
+{t:242.9,cs:"To je vše.",en:"That's it."},
+{t:244.1,cs:"A jezdci, toto je to, na co jsme si vzpomněli",en:"And riders, this is what we referred"},
+{t:245.8,cs:"v úvodních poznámkách.",en:"to in the opening comments."},
+{t:247,cs:"Místo číslo jedna,",en:"The number one place"},
+{t:248.3,cs:"kde si sami ublížíme na motorce,",en:"that we're hurting ourselves on motorcycles,"},
+{t:250.3,cs:"zabíjíme se tím, že vynášíme ze zatáčky.",en:"killing ourselves on motorcycles by running wide."},
+{t:253.6,cs:"A dostáváme se k tomuto deštníku směru.",en:"And we're getting to this umbrella of direction."},
+{t:256,cs:"Všechno, co děláme na motorce, padá pod ten deštník.",en:"Everything we do on a motorcycle falls under that umbrella."},
+{t:259.2,cs:"Takže jak Kyle vešel do zatáčky,",en:"So as Kyle came into the corner,"},
+{t:261.5,cs:"nedostal motorku zpomalenu dost,",en:"didn't get the bike quite slowed enough,"},
+{t:262.8,cs:"ale není to konec.",en:"but it's not over yet."},
+{t:263.7,cs:"Může pokračovat v zpomalování motorky, zpomalování motorky.",en:"He can continue to slow his bike, slow his bike."},
+{t:266.4,cs:"Nemusí dostat směr na dalších 30 stop.",en:"He might not get direction for another 30 feet."},
+{t:269.5,cs:"Ale dostane směr.",en:"But he will get direction."},
+{t:271.6,cs:"Je jeho výjezd dokonalý? Ne!",en:"Is his exit perfect? No!"},
+{t:273.4,cs:"Chris má dokonalou pozici motorky, dokonalý výjezd,",en:"Chris has got the perfect bike placement, perfect exit,"},
+{t:275.8,cs:"ale Kyle si může najít způsob, jak přežít.",en:"but Kyle can survive to ride another day."},
+{t:278,cs:"Na příští neděli pojede znovu.",en:"To next Sunday, he'll be riding again."},
+{t:280.1,cs:"Bude jenom vědět, že tato zatáčka byla tightější, než si myslel,",en:"He'll just realize this corner was tighter than he thought,"},
+{t:282.7,cs:"musel jít do brzd dříve,",en:"he needs to go to the brakes earlier,"},
+{t:284.1,cs:"používat je trochu více, používat déle",en:"using it a bit harder, using bit longer"},
+{t:287,cs:"nebo být trochu jemněji na počáteční plyn",en:"or be a little bit lighter on initial throttle"},
+{t:288.8,cs:"a, Kyle, to tě tam dostane, že ano?",en:"and, Kyle, that'll put you there, right?"},
+{t:290.1,cs:"Absolutně.",en:"Absolutely."},
+{t:291.5,cs:"Deštník směru.",en:"Umbrella direction."},
+{t:292.7,cs:"Kyle to nedostal úplně dokonalé,",en:"Kyle didn't quite get it perfectly,"},
+{t:294,cs:"ale dostane to tam.",en:"but he's going to get it there."},
+{t:295.6,cs:"Dostat motorku otočit a změnit směr.",en:"Get the bike turn and change directions."},
+{t:297.4,cs:"Takže kdykoliv pojedeš svou motorku příště,",en:"So whenever you ride your motorcycle next,"},
+{t:299.9,cs:"ať je to silnice, trať, nebo jízda v terénu,",en:"whether it's street, the track, dirt biking,"},
+{t:302.8,cs:"získat směr je naše priorita.",en:"getting direction is our priority."},
+{t:305.6,cs:"Takže všechny tyto věci nás vedou k nádherně bodu.",en:"So all this stuff brings us to a tremendous point."},
+{t:308.3,cs:"Musíme se tady zastavit a to si uvědomit.",en:"We need to stop here and recognize this."},
+{t:310.4,cs:"Stůj!",en:"Stop!"},
+{t:311.3,cs:"Počkej!",en:"Wait!"},
+{t:312.1,cs:"Drž se!",en:"Hold it."}];
+var subs2=[{t:5.1,cs:"Poslechněte si.",en:"Listen."},
+{t:6.9,cs:"Kyle mluví,",en:"Kyle's talking,"},
+{t:8.7,cs:"Budeme jezdit na základě směru,",en:"We're going to ride the bike based on direction,"},
+{t:10.8,cs:"ne na základě toho, kde se nacházíme na závodním okruhu.",en:"not based on where it is on the racetrack."},
+{t:13.4,cs:"Nejedeme do brzd tady a neotáčíme se tady",en:"We're not going to go to the brakes there and turn in here"},
+{t:16.6,cs:"a používáme brzdy až do tohoto bodu.",en:"and use the brakes until this one point."},
+{t:18.6,cs:"Takto se nejedí.",en:"That's not how we ride."},
+{t:19.8,cs:"Nejedeme na základě naucené rutiny,",en:"We don't ride by rote,"},
+{t:21.4,cs:"jedeme na základě směru.",en:"we're riding the bike based on direction."},
+{t:23.5,cs:"To vědí nejlepší jezdci na světě.",en:"So, the best riders in the world know this."},
+{t:26.4,cs:"Musím kontrolovat svou rychlost bez ohledu na změny,",en:"I need to control my speed no matter what variable happens,"},
+{t:29.4,cs:"ať už se dostanu sem příliš rychle,",en:"whether I get in here too quickly,"},
+{t:31.3,cs:"nebo zatáhnu brzdy příliš brzy,",en:"pull on the brakes too soon,"},
+{t:33.0,cs:"nebo mám malou zásobu paliva nebo velkou,",en:"have a light fuel load, a heavy fuel load,"},
+{t:35.2,cs:"cokoliv se v našem sportu mění,",en:"whatever's changing in our sport,"},
+{t:36.9,cs:"a je tu vždycky něco, co se mění,",en:"which there's always things that are changing,"},
+{t:38.9,cs:"kontrolujeme svou rychlost na základě směru,",en:"we control our speed based on direction,"},
+{t:41.5,cs:"a nasměrujeme motorku bez ohledu na okolnosti.",en:"and we get the bike pointed no matter what."},
+{t:43.8,cs:"Když se vydáte na silniční jízdu a jste moc vzadu,",en:"So if you're out for a street ride and you're too up,"},
+{t:45.8,cs:"máte sedlovky plné věcí,",en:"you have saddlebags loaded with stuff,"},
+{t:48.1,cs:"možná budete muset brzdit dříve.",en:"you might have to pick your breaks up earlier."},
+{t:49.9,cs:"Možná je budete muset používat o trochu déle",en:"You might have to use them a little bit longer"},
+{t:51.2,cs:"v zatáčce, protože jedeme na motorce",en:"into the quarter because we're riding our bike"},
+{t:52.5,cs:"na základě směru.",en:"based on direction."},
+{t:53.9,cs:"V žádném okamžiku se tedy nejedeme hnout na plyn",en:"So at no point now, do we go to the throttle"},
+{t:56.0,cs:"a zrychlit po apexu, jak jste slyšeli.",en:"and accelerate past the apex, which you've heard."},
+{t:58.6,cs:"Motorku nezrychlíte, dokud",en:"You don't accelerate the motorcycle until"},
+{t:60.8,cs:"si nepřejete otevřít poloměr.",en:"you want your radius to open up."},
+{t:62.1,cs:"Takže najednou vzniká myšlenka dostat motorku odtud,",en:"So all of a sudden this idea of getting the bike from here,"},
+{t:65.2,cs:"což je poměrně velká chyba, ne?",en:"which is a fairly big mistake, wouldn't you say?"},
+{t:66.9,cs:"Je to velká chyba, protože víte,",en:"It's a big mistake, because you know,"},
+{t:69.1,cs:"myslíme si, víte, bez ohledu na to, jaká motorka je,",en:"we're thinking about, you know, no matter what the bike is,"},
+{t:71.7,cs:"pokud se nejedeme na základě směru a nerespektujeme",en:"if we don't ride the bike based on direction and respect the"},
+{t:74.1,cs:"nejpomalejší bod, bude tam trocha dramatu.",en:"slowest point, we're going to have a little bit of drama."},
+{t:76.6,cs:"Bude to dramatické, ne?\nTrocha dramatu.",en:"It'll be dramatic, won't it?\nA little dramatic."},
+{t:77.4,cs:"Dostat motorku odtud sem",en:"To get the bike from here to here,"},
+{t:80.3,cs:"je několik různých možností.",en:"is a couple of different choices."},
+{t:81.7,cs:"Nechte brzdy zapnuté o trochu déle.",en:"Leave your brakes on a little bit longer."},
+{t:83.1,cs:"Protože jsme se naučili, že poloměr je roven rychlosti.",en:"'Cause we learned radius is mile an hour."},
+{t:84.6,cs:"Kontrolujte geometrii řízení a kontaktní plochu.",en:"Control your steering, geometry and contact patch."},
+{t:87.2,cs:"Když přejdete na počáteční plyn,",en:"When you go to initial throttle,"},
+{t:88.5,cs:"jděte na něj jemněji, aby se motorka nezvětšila",en:"go to it more gently so that the bike doesn't extend"},
+{t:91.9,cs:"svůj rozvor, rozšířená geometrie řízení, a nezvětšila se.",en:"it's wheel base, extended steering, geometry, and run wider."},
+{t:94.9,cs:"Takže tato myšlenka jezdit na základě směru,",en:"So this idea to write it based on direction,"},
+{t:97.4,cs:"to je to, co pronásledujeme.",en:"this is what we're chasing."},
+{t:98.9,cs:"Takže všichni, kdo vozíte motorku a musíte zrychlit tady nebo",en:"So all of you that ride the bike and must accelerate here or"},
+{t:101.8,cs:"používat brzdy tam, přestaneme to dělat.",en:"use the brakes there, we quit doing that."},
+{t:103.8,cs:"Jedeme do brzd, když jsme nervózní,",en:"We go to the brakes when we're nervous,"},
+{t:105.5,cs:"používáme je, dokud nejsme spokojení s rychlostí a směrem.",en:"we use them 'til we're happy with our speed and direction."},
+{t:108.6,cs:"Pak je to neutrální plyn.",en:"Then it's neutral throttle."},
+{t:109.5,cs:"Čekáme, až uvidíme výjezd ze zatáčky, a pak otevřeme poloměr.",en:"We wait until we see the exit, and then we open our radius."},
+{t:113.6,cs:"Hej Kyle, zmínil jsi drama.",en:"Hey Kyle, so you mentioned drama."},
+{t:115.4,cs:"Co jsi tím myslel?",en:"What did you mean by that?"},
+{t:116.8,cs:"Drama je to,",en:"Well, drama being, look,"},
+{t:118.5,cs:"máme obrovské důsledky, pokud nekontrolujeme",en:"we have tremendous implications if we don't control"},
+{t:121.3,cs:"svou rychlost, nekontrolujeme svůj směr.",en:"our speed, control our direction."},
+{t:123.3,cs:"Budeme se tím zabývat, protože to je opravdu nejdůležitější",en:"We're going to beat up on this because it truly is the most"},
+{t:125.8,cs:"věc, o které budeme mluvit.",en:"important thing we're going to talk about."},
+{t:127.3,cs:"Drama je to, že tady není středová čára",en:"So drama being, look, there's no center line here"},
+{t:130.0,cs:"na závodním okruhu, ale pokud tam je dvojitá plná čára",en:"on the racetrack, but if there's a double yellow in it"},
+{t:132.7,cs:"a F-350 se pomalu vklouzává do vaší pásu,",en:"and there's an F-350 just creeping into your lane,"},
+{t:136.3,cs:"můžete F-350 minout o jeden palec?",en:"can you miss an F-350 by one inch?"},
+{t:138.6,cs:"Můžete, můžete, pokud kontrolujete svůj směr.",en:"You can, you can, by controlling your direction."},
+{t:140.8,cs:"Takže pokud můžeme být o 1 % lepší v kontrole našeho směru,",en:"So if we can be 1% better at controlling our direction,"},
+{t:143.6,cs:"můžeme se vyhnout těmto velkým dramatickým momentům a pokračovat",en:"we can miss those big dramatic moments and continue"},
+{t:147.5,cs:"v jízdě a užívat si motocyklistiku.",en:"to ride on and enjoy motorcycling."},
+{t:150.7,cs:"Takže instruktoři, všichni jsme někdy minuli apex",en:"So, instructors, have we all missed an apex"},
+{t:153.9,cs:"a měli drama na výjezdu?",en:"and had drama at the exit?"},
+{t:156.2,cs:"Určitě.\nOh, jo.",en:"Definitely.\nOh, yeah."},
+{t:157.1,cs:"Okej.\n(smích)",en:"Okay.\n(laughs)"},
+{t:158.2,cs:"Jistě.\nDělali jsme to všechno pro vás.",en:"Certainly.\nWe've done all this for you."},
+{t:160.4,cs:"Dělali jsme to všechno pro vás.",en:"We've done all this for you."},
+{t:161.4,cs:"Když dostanete motorku do zatáčky",en:"At this point, as you get your bike into the corner"},
+{t:163.2,cs:"a já jste se dopustili chyby a motorka je",en:"and you've made your mistake and the bike's"},
+{t:164.9,cs:"trocha vyjetá, ještě ji nemůžete zrychlit.",en:"a little bit wide, you can't accelerate it yet."},
+{t:167.5,cs:"Musíte dostat směr.",en:"You've got to get direction."},
+{t:168.9,cs:"Deštník směru pokrývá to, co děláte.",en:"The umbrella of direction covers what you're doing."},
+{t:171.4,cs:"A Kyle, prostě nemůžeš jít dále, dokud",en:"And Kyle, you just can't go yet until"},
+{t:174.2,cs:"nedostaneš motorku nasměrovanou.",en:"you get the bike pointed."},
+{t:175.4,cs:"To je pravda, vložili jste úsilí",en:"That's right, you've made the investment"},
+{t:176.9,cs:"abychom poslouchali a snažili se porozumět některým z těchto konceptů.",en:"to listen in and try to understand some of these concepts."},
+{t:180.9,cs:"Pokud si vezmeš jednu věc,",en:"If you take one, if you only take one thing away,"},
+{t:183.5,cs:"je to opravdu toto.",en:"it's truly this."},
+{t:184.7,cs:"Jak jsme se naučili, poloměr odpovídá rychlosti,",en:"As we learned in radius equals miles per hour,"},
+{t:187.0,cs:"používáme brzdy, dokud nejsme spokojení s naší rychlostí",en:"we use our brakes until we're happy with our speed"},
+{t:189.0,cs:"a směrem, a o tom mluvíme.",en:"and direction, and this is what we're talking about."}];
+var subs3=[{t:8.1,cs:"Máme tu velmi neomilostnou překážku v druhém jízdním pruhu.",en:"We got an unforgiving obstacle in the other lane."},
+{t:11.3,cs:"Jak to vypadá pro moje kolo tady?",en:"How's it looking for my bike here?"},
+{t:13.2,cs:"Ne, věci pro tebe vypadají opravdu špatně.",en:"Yeah, things are not looking good for you."},
+{t:14.7,cs:"Takže, když se vrátíme tam, kde ses nacházel doma,",en:"So, if we go back to where you are at home,"},
+{t:16.9,cs:"tomu říkáme rozhodovací bod.",en:"we call that our decision point."},
+{t:18.8,cs:"(hudba)",en:"(whimsical music)"},
+{t:21.6,cs:"Takže Keith a já jezdiume hodně na silnici",en:"So, Keith and I do a lot of street riding"},
+{t:22.7,cs:"a stojíme vedle repliky",en:"and we are standing by a replica of"},
+{t:24.2,cs:"toho, čím projížděli Chris a Kyle.",en:"what Chris and Kyle were riding through."},
+{t:26.4,cs:"A Keith, máme se obávat spíše apexu",en:"And Keith, are we worried so much about the apex"},
+{t:29.9,cs:"nebo rozhodovacího bodu při jízdě na silnici?",en:"or the decision point, street riding?"},
+{t:31.8,cs:"Poslouchej, víme, že apex má definici, že?",en:"Listen, we know the apex has a definition, right?"},
+{t:34.2,cs:"Je to místo nejblíž k vnitřní straně zatáčky.",en:"It's the closest to the inside of the turn."},
+{t:36.5,cs:"Ale na silnici je tolik nepřehledných zatáček,",en:"But on the street, so many blind corners,"},
+{t:38.7,cs:"že téměř nikdy neznáme, kde je správné místo pro apex.",en:"we almost never know where the right place to apex is."},
+{t:41.6,cs:"A slyšíme lidi, jak říkají pozdní apex, brzký apex.",en:"And we hear people saying late apex, early apex."},
+{t:44.7,cs:"To nejsou zrovna přesné termíny, že?",en:"It's actually not accurate terms, right?"},
+{t:46.3,cs:"My raději myslíme na rozhodovací bod.",en:"We like to think of it in the terms of the decision point."},
+{t:49.0,cs:"Na silnici mluvíme o rozhodovacím bodě.",en:"On the street, we're talking about the decision point."},
+{t:51.7,cs:"Tak ho definuj.",en:"So define it."},
+{t:52.5,cs:"Rozhodovací bod je místo v zatáčce,",en:"Decision point is the place in the corner"},
+{t:54.5,cs:"kde vidíš, že se výjezd ze zatáčky otevírá.",en:"at which you're seeing the corner exit open up to you."},
+{t:57.8,cs:"Začínáš vidět, co se děje při výjezdu",en:"You can start to see what's happening at the exit"},
+{t:59.9,cs:"a můžeš se rozhodnout, jaké ovládání použít.",en:"and you can make a decision on which control to use."},
+{t:63.2,cs:"A tak, co Chris udělal, když dosáhl rozhodovacího bodu,",en:"And so what Chris did when he got to the decision point,"},
+{t:66.3,cs:"viděl tu nákladní auto tady v úzkém pruhu.",en:"he saw there was a truck here in a narrow lane."},
+{t:68.9,cs:"Takže Keith, Chris dosáhl rozhodovacího bodu",en:"So, Keith, Chris came to the decision point"},
+{t:71.1,cs:"se zapnutými brzdami a zpomaloval.",en:"with his brakes on and he was slowing."},
+{t:73.4,cs:"A podívej, jeho poloměr se zesílil.",en:"And look, his radius tightens."},
+{t:75.1,cs:"Ukaž nám svojí zelenou, co dělal Kyle?",en:"And show us with your green, what was Kyle doing?"},
+{t:78.0,cs:"Kyle stále měl plyn zapnutý,",en:"Kyle was still on the, on the gas,"},
+{t:79.9,cs:"když měl spíš zpomalovat.",en:"trying to accelerate when he should have been slowing."},
+{t:81.8,cs:"Měl špatné ovládání.",en:"He was in the wrong control."},
+{t:83.3,cs:"Zrychloval.",en:"He was accelerating."},
+{t:84.3,cs:"A protože víme, že poloměr odpovídá rychlosti,",en:"And because we know radius is mile an hour,"},
+{t:86.8,cs:"čím vyšší rychlost, tím větší poloměr.",en:"add mile an hour, radius is going to go up."},
+{t:89.0,cs:"Vynášel se přímo na to nákladní auto.",en:"He was running wide right at that truck."},
+{t:91.5,cs:"Takže jezdci, Kyle nemohl vidět přes zatáčku.",en:"So riders, Kyle couldn't see through the corner yet."},
+{t:93.6,cs:"Projel rozhodovacím bodem se vypnutým plynem.",en:"He went through his decision point with a throttle open."},
+{t:96.8,cs:"Chceme projít rozhodovacím bodem",en:"We want to go the through the decision point"},
+{t:98.8,cs:"se zapnutými brzdami nebo se zpomalujícím kolem.",en:"with our brakes on or the bike slowing."},
+{t:101.5,cs:"Takže jsou to vždycky brzdy? Jsou to vždycky brzdy?",en:"So is it always brakes, is it always brake?"},
+{t:103.4,cs:"Když říkáme brzdy,",en:"When we say brakes,"},
+{t:104.6,cs:"myslíme tím vždy zapnuté brzdové světlo?",en:"do we always mean brake light on with the brakes on?"},
+{t:107.0,cs:"Myslíme,",en:"We mean,"},
+{t:108.2,cs:"myslíme zpomalování a brzdění motorem",en:"we mean slowing and engine braking"},
+{t:110.5,cs:"nebo ubírání plynu a klouzání",en:"or rolling off the throttle and coasting down"},
+{t:113.2,cs:"je forma brzdění.",en:"is a form of braking."},
+{t:114.2,cs:"Snižuje tvoji rychlost.",en:"It does lower your mile an hour."},
+{t:115.5,cs:"Zesílňuje tvůj poloměr.",en:"It does tighten your radius."},
+{t:117.3,cs:"Jen to není tak efektivní jako brzdy.",en:"It's just not as efficient as the brakes."},
+{t:119.6,cs:"Takže brzdy používáme často",en:"So, we tend to use the brakes more often"},
+{t:121.3,cs:"a často o nich mluvíme.",en:"and talk about it more often."},
+{t:122.3,cs:"Ale jo, pokud ses cítíš bezpečně s silnicí, rychlostí,",en:"But yeah, if you're comfortable with the road, the speed,"},
+{t:124.8,cs:"svým kolem a brzdením motorem",en:"your motorcycle and your engine braking"},
+{t:126.7,cs:"a regulace není příliš prudká,",en:"and the adjustment isn't too dramatic,"},
+{t:128.8,cs:"můžeš ubrat plyn a tím se přizpůsobit.",en:"you can roll off and make that adjustment."},
+{t:130.4,cs:"Výborně.",en:"Great."},
+{t:131.3,cs:"Takže tady to udělejme trochu realističtější.",en:"So here let's make this a little more real."},
+{t:133.2,cs:"Tohle je náš štěrk a dáme si štěrk sem.",en:"This is our gravel and we'll put gravel in here."},
+{t:135.5,cs:"Vidíš, jak procházíš rozhodovacím bodem,",en:"So you can see, as you come through that decision point,"},
+{t:137.4,cs:"Keith, podíváš se a máš tady nějaké možnosti.",en:"Keith, you're looking and you've got some choices here."},
+{t:140.3,cs:"Tam je tvůj štěrk.",en:"There's your gravel."},
+{t:142.1,cs:"Já prostě budu mít brzdy zapnuté",en:"I'm just going to stay with the brakes"},
+{t:144.5,cs:"o trochu déle,",en:"a little bit longer,"},
+{t:146.0,cs:"zesílním svůj poloměr, abych mohl projet pod štěrkem",en:"tighten my radius so that I can then be under the gravel"},
+{t:150.5,cs:"a pak zrychlit.",en:"and accelerate."},
+{t:151.8,cs:"Pokud jsi vždycky slyšel zrychlit po apexu,",en:"If you've always heard accelerate past the apex,"},
+{t:155.6,cs:"víš, že Keith nemohl zrychlit,",en:"understand that Keith could not yet accelerate"},
+{t:157.6,cs:"protože musel projet pod štěrkem.",en:"because he had to go under the gravel."},
+{t:158.8,cs:"To je jízda na kole podle směru.",en:"So that is riding the bike based on direction."},
+{t:160.9,cs:"Dosáhl svého rozhodovacího bodu.",en:"He got to his decision point."},
+{t:162.3,cs:"Začal vidět štěrk, nechal plyn vypnutý,",en:"He started to see the gravel, left the throttle shut,"},
+{t:165.2,cs:"nechal brzdy zapnuté, projel pod.",en:"left the brakes on, went under."},
+{t:166.8,cs:"A pak příští víkend,",en:"And then the next weekend,"},
+{t:168.9,cs:"tvůj štěrk by mohl být tady, Keith.",en:"your, your gravel could be here, Keith."},
+{t:171.6,cs:"Uzavírá vnitřní linii.",en:"Closing off that inside line."},
+{t:172.9,cs:"Co teď uděláš?",en:"Where, what do you do now?"},
+{t:174.8,cs:"To znamená, že protože já,",en:"That means because I,"},
+{t:176.0,cs:"v mém rozhodovacím bodě je čas udělat si to rozhodnutí,",en:"at my decision point is the time I can make that decision,"},
+{t:179.1,cs:"mohu říci: Štěrk je na vnitřní straně.",en:"I can say, hey, the gravel's on the inside."},
+{t:181.0,cs:"Chci rozšířit svůj poloměr, abych ho obejít.",en:"I want to open up my radius to go around it."},
+{t:183.2,cs:"Mohl bych se vrátit k plynu",en:"I could actually go back to the throttle"},
+{t:185.9,cs:"o trochu dříve, než jsem to dělal minulý víkend",en:"a little bit earlier than I did the weekend before"},
+{t:189.3,cs:"a mám větší poloměr a jdu kolem štěrku.",en:"and run my radius a little wider and go around the gravel."},
+{t:192.1,cs:"Protože jsem respektoval rozhodovací bod,",en:"Because I, because I respected the decision point,"},
+{t:194.7,cs:"jsem schopen to zvládnout.",en:"I'm able to handle it."},
+{t:196.2,cs:"Líbí se mi to.",en:"I like it."},
+{t:197.0,cs:"Pokud si to, jezdci, představíte, hitu do toho",en:"If you'll think about this, riders, hitting this duly"},
+{t:200.5,cs:"v druhém pruhu, to je nejhorší.",en:"in the other lane is, is the worst thing."},
+{t:202.7,cs:"A stává se to proto, že procházíme rozhodovacím bodem",en:"And that happens because we ride through the decision point"},
+{t:206.4,cs:"se zapnutým plynem a rostoucí rychlostí.",en:"with a throttle open and with our speed increasing."},
+{t:208.7,cs:"Chceme dosáhnout rozhodovacího bodu",en:"We want to get to the decision point"},
+{t:210.6,cs:"se klesající rychlostí,",en:"with our mile an hour coming down,"},
+{t:212.0,cs:"brzdami zapnutými, nebo alespoň zpomalujícím",en:"brakes on, or at least decelerating"},
+{t:213.8,cs:"aby jsme mohli vidět přes zatáčku",en:"so when we see through the corner"},
+{t:215.4,cs:"a když vidíme problém jako je ten štěrk,",en:"and we see that there's a problem like this gravel,"},
+{t:218.1,cs:"můžeme použít správné ovládání, abychom jeli pod ním",en:"we can use the proper control to go underneath it"},
+{t:220.8,cs:"nebo kolem vnější strany.",en:"or around the outside of it."},
+{t:222.5,cs:"Měli bychom to vrátit Chrisovi a Kyléovi?",en:"Should we shoot it back to Chris and Kyle?"},
+{t:224.2,cs:"Samozřejmě.",en:"Absolutely."},
+{t:228.3,cs:"Kyle přichází do rozhodovacího bodu se zapnutým plynem.",en:"Kyle is arriving at that decision point on the throttle."},
+{t:231.5,cs:"Takže se jeho poloměr už otevírá.",en:"So his radius is already opening."},
+{t:233.3,cs:"Už se vzdal schopnosti",en:"He's already given up the ability"},
+{t:235.8,cs:"se přizpůsobit situaci.",en:"to adjust to the situation."},
+{t:238.1,cs:"Moje kolo zde, já jsem zpomaloval.",en:"My bike coming in through here, I was decelerating."},
+{t:241.1,cs:"Nechávám kolo pomalu se otáčet a nasměřovat",en:"I was letting my bike slow turn and point"},
+{t:243.7,cs:"dokud nevidím, že se můj pruh otevírá",en:"until I could see my lane was opening"},
+{t:245.9,cs:"a není tam nic, žádná nebezpečí.",en:"and there was nothing, no hazards in my way."},
+{t:248.5,cs:"Situace je velmi nepříznivá, když vstoupíš do rozhodovacího bodu",en:"So things are pretty tough if you enter that decision point"},
+{t:252.3,cs:"se zapnutým plynem, než vidíš výjezd",en:"on the throttle before you can see the exit"},
+{t:254.2,cs:"a ztratíš náklon.",en:"and take away lean angle."},
+{t:255.1,cs:"No, pokud už máš plyn zapnutý,",en:"Well, if you're already on the throttle,"},
+{t:256.7,cs:"pak tam nebyl žádný rozhodovací bod.",en:"then there really was no decision point."},
+{t:259.2,cs:"Rozhodovací bod je místo, kde se rozhoduješ, že je silnice čistá",en:"Decision point is where we decide that the road is clear"},
+{t:261.9,cs:"a můžeš bezpečně zrychlit.",en:"and we can safely accelerate."},
+{t:263.3,cs:"Takže na silnici, určitě,",en:"So on the street, for sure,"},
+{t:265.4,cs:"jdu okolo té nepřehledné zatáčky,",en:"come around this blind corner,"},
+{t:266.7,cs:"budu kontrolovat svou rychlost,",en:"I'm going to control my speed,"},
+{t:267.9,cs:"kontroluji svůj poloměr, dokud si nejsem 100% jistý,",en:"control my radius until I am 100% sure"},
+{t:270.5,cs:"že mohu dát kolo do pozice pro zrychlení.",en:"I can put my bike in a position to accelerate."},
+{t:273.2,cs:"V tomto případě budu muset počkat trochu déle.",en:"In this case, going to have to wait a little bit longer."},
+{t:276.6,cs:"Takže kolo v pozici, ve které je,",en:"So my bike in the position that it's in,"},
+{t:279.3,cs:"opravdu nemám žádné problémy.",en:"I really have no, no drama."},
+{t:281.0,cs:"Nechám kolo pomalu se otáčet a nasměřovat tam",en:"I let that bike turn slow and point back there"},
+{t:283.6,cs:"brzy v zatáčce.",en:"early in the corner."},
+{t:285.3,cs:"Jsem se rozhodl, že je bezpečné zrychlit.",en:"I've made my decision that it is safe to accelerate."},
+{t:288.3,cs:"Takže Chrise, který mě sleduje do zatáčky,",en:"So Chris, following me into this corner,"},
+{t:290.6,cs:"jsem chybu, že jsem příliš brzy uvolnil brzdy,",en:"I've made the mistake of letting go of the brakes too early,"},
+{t:294.4,cs:"ale moje zatáčka není úplně zničená.",en:"but my corner's not completely shot."},
+{t:297.3,cs:"Nejlepší jezdci zůstávají na zpomalujícím ovládání,",en:"The best riders stay on the slowing control,"},
+{t:299.9,cs:"na brzdách, dokud nedosáhnou rozhodovacího bodu.",en:"the brakes, until they reach that decision point."},
+{t:302.7,cs:"Takže budu mít brzdy zapnuté.",en:"So I'm going to stay with the brakes."},
+{t:304.2,cs:"Nechám kolo pokračovat v otáčení,",en:"I'm going to let the bike continue to turn,"},
+{t:306.4,cs:"otáčení a zůstanu na této straně žluté čáry.",en:"turn underneath and stay on this side of the yellow line."},
+{t:311.0,cs:"Pokud nekontroluju svou rychlost a poloměr,",en:"So if I don't control my speed in my radius,"},
+{t:313.7,cs:"jsem v prdeli.",en:"I am (beep)."},
+{t:317.9,cs:"(skřípání brzd)",en:"(brakes screeching)"},
+{t:325.7,cs:"Třetí důvod, proč havarujeme na motorce,",en:"The number three reason we crash a motorcycle,"},
+{t:329.1,cs:"unáhlený nájezd do zatáčky.",en:"rushing corner entry."},
+{t:330.6,cs:"Pojďme si chvíli o tom promluvit, jezdci.",en:"Let's just take a second and talk about that, riders."},
+{t:332.6,cs:"Unáhlený nájezd do zatáčky,",en:"Rushing corner entry,"},
+{t:334.0,cs:"i v tomto minivanu to bylo pěkně divoké.",en:"even in this minivan, it got pretty crazy."},
+{t:336.2,cs:"Bolí se nás, když zapomeneme, že nájezd do zatáčky",en:"We hurt ourselves when we forget that the corner entry"},
+{t:339.9,cs:"je příprava kola na výjezd ze zatáčky,",en:"is to get the bike ready to exit the corner entry,"},
+{t:342.9,cs:"aby bylo kolo připraveno k výjezdu.",en:"to get the bike ready to exit."},
+{t:344.8,cs:"Unáhlený nájezd, třetí důvod, proč padáme.",en:"Rushing corner entry, third reason we fall down."},
+{t:356.3,cs:"Protože jsem studoval 100 bodů přilnavosti",en:"Because I studied 100 points of grip"},
+{t:358.5,cs:"a mám disciplínu na svých prvních 5% brzd,",en:"and I have the discipline for my first 5% of brakes,"},
+{t:361.5,cs:"mohu se vrátit k brzdám v náklonu",en:"I can go back to my brakes at lean angle"},
+{t:364.0,cs:"a zpomalit motorku, abych se dostal pod tu nákladní auto.",en:"and slow my motorcycle to make it underneath that truck."},
+{t:367.4,cs:"Takže, když Kyléa sleduju do zatáčky,",en:"So as I'm following Kyle into this corner,"},
+{t:369.9,cs:"vidíme, že jeho brzdové světlo zhaslo příliš brzy.",en:"we see his brake light come off too early."},
+{t:372.3,cs:"Víš, mysli na jeho brzdy jako na jeho ovládání.",en:"You know, think of his brakes as his control."},
+{t:374.5,cs:"Je fyzicky mimo kontrolu,",en:"He's physically out of control"},
+{t:376.0,cs:"když se dostaneme do rozhodovacího bodu.",en:"when we get to this decision point."},
+{t:377.8,cs:"Kde nechávám kolo, aby se pomalu otáčelo a nasměřovalo",en:"Where I'm letting my bike slow turn and point"},
+{t:380.8,cs:"aby bylo kolo v pozici k výjezdu z zatáčky,",en:"to get the bike in a position to exit off the corner,"},
+{t:384.4,cs:"on prostě vzdává ten nápad na otáčení kola.",en:"he just gives up on that, that idea of the bike turning."},
+{t:388.1,cs:"Opravdu si myslím na to",en:"I'm truly thinking of this"},
+{t:389.4,cs:"opačně, než bych měl.",en:"in the opposite way that I should be."},
+{t:391.4,cs:"V tomto bodě mám špatné ovládání.",en:"I'm in the wrong control at this point."},
+{t:394.2,cs:"Kde bych měl brzdić, já vlastně zrychluju.",en:"Where I should be braking, I'm actually accelerating."},
+{t:397.3,cs:"Ano, slyšeli jsme bláznivé věci, jako",en:"Yeah, we've heard crazy things like"},
+{t:399.3,cs:"\"zvládni zatáčku na plný plyn.\"",en:"power through the corner."},
+{t:400.9,cs:"Jak by to mělo fungovat v tomto případě?",en:"How's that going to work in this situation?"},
+{t:402.7,cs:"Nebude to fungovat moc dobře.",en:"It's not going to work very well."},
+{t:404.1,cs:"Na motorce se dá dělat tolik věcí,",en:"There's so many different things we can do on a motorcycle"},
+{t:406.7,cs:"v parkovišti v dokonalý den",en:"in a parking lot on a perfect day"},
+{t:408.9,cs:"v 90stupňové zatáčce.",en:"in a 90 degree corner."},
+{t:410.4,cs:"Ale jakmile přidáme dramatiku do situace,",en:"But as soon as we add drama to the situation,"},
+{t:412.8,cs:"je jen pár věcí, které tě skutečně dostanou",en:"there's only a few things that can actually get you"},
+{t:415.3,cs:"přes ty situace a do další zatáčky.",en:"through those situations and onto the next corner."},
+{t:418.4,cs:"A chceme kontrolovat svou rychlost",en:"And we want to control our speed"},
+{t:420.1,cs:"abychom se dostali přes ty zatáčky.",en:"to make it through these corners."},
+{t:422.1,cs:"Vidíme, že ten deštník směru",en:"So we could see that this umbrella of direction"},
+{t:424.6,cs:"nás opravdu chrání všechny.",en:"really covers us all."},
+{t:425.7,cs:"Jak používáme naše brzdy, oči, těla",en:"How we use our brakes, eyes, bodies"},
+{t:428.0,cs:"aby jsme se dostali k rozhodovacímu bodu,",en:"to get to that decision point,"},
+{t:430.0,cs:"nás staví do pozice pro úpravu našeho výjezdu,",en:"puts us into a position to adjust our corner exit,"},
+{t:433.4,cs:"nebo dokonce zastavit naše kolo uprostřed zatáčky, když potřebujeme.",en:"or even stop our bike mid corner if we need to."},
+{t:436.1,cs:"Opravdu jsme jezdci, kteří jsou pod kontrolou,",en:"We really are the rider that is in control"},
+{t:438.6,cs:"když kontrolujeme tu rychlost nájezdu",en:"when we control that entry speed"},
+{t:440.5,cs:"a žijeme v tomto deštníku směru.",en:"and live within this umbrella of direction."}];
+var subs4=[{t:6.0,cs:"Takže toto cvičení budete dělat v autě.",en:"So this drill is going to be in your car."},
+{t:8.1,cs:"Využijeme každý nájezd do zatáčky na naší trase, abychom",en:"We are going to use every corner entry on our drive to get"},
+{t:11.4,cs:"dostali auto do pozice pro výjezd.",en:"your car in a position to exit."},
+{t:13.1,cs:"Když zjistíte, že držíte úhel volantu",en:"So if you find that you are holding the steering wheel"},
+{t:15.4,cs:"při zrychlování z zatáčky, tak si uvědomte,",en:"angle as you accelerate off the corner, just realize,"},
+{t:17.5,cs:"že v další zatáčce budeme prostě nechat to auto",en:"hey, next corner, we're just going to let that car"},
+{t:20.2,cs:"se otáčet o trochu déle.",en:"turn a little bit longer."},
+{t:21.6,cs:"Možná jde o větší tlak na brzdy.",en:"Maybe it's more brake pressure."},
+{t:22.9,cs:"Možná jde o to podívat se dopředu trochu dříve.",en:"Maybe it's getting those eyes in there a little bit sooner."},
+{t:25.4,cs:"Pokud odvinujete volant",en:"If you are unwinding that steering wheel,"},
+{t:27.7,cs:"při zrychlování z zatáčky, je to výborně.",en:"as you accelerate off the corner, good job."},
+{t:30.2,cs:"Rozhodně to vede správným směrem.",en:"Definitely getting things going well."},
+{t:32.3,cs:"Toto cvičení děláme na každém programu, který pořádáme.",en:"This drill is something we do at every program we put on."},
+{t:36.0,cs:"Při příští jízdě nechte brzdové světlo zapnuté",en:"On your very next ride, leave your brake light on"},
+{t:38.4,cs:"deset stop déle, než si myslíte, že je správně.",en:"ten feet longer than you think is right."},
+{t:40.7,cs:"Najíždíte do zatáčky se zapnutými brzdami,",en:"You turn into the corner with the brakes on,"},
+{t:42.3,cs:"a myslíte si, \"jsem na tom docela dobře\", nechte to na 10 stop déle.",en:"and you think \"I'm pretty good\", leave it on 10 more feet."},
+{t:45.2,cs:"Podívejte se, jak se motorka mění směr ještě lépe.",en:"Watch how the bike changes direction even better."},
+{t:47.7,cs:"A podívejte se, když si budete s tímto cvičením hrát a pochopíte",en:"And watch, when you play with this drill and you get this"},
+{t:50.0,cs:"myšlenku, jak nasměrovat motorku,",en:"idea to let that bike point,"},
+{t:52.1,cs:"podívejte se, jak toto cvičení dělá jízdu na silnici bezpečnější",en:"watch how this drill makes street riding safer"},
+{t:56.5,cs:"a jízdu na závodním okruhu rychlejší.",en:"and track the riding faster."},
+{t:58.9,cs:"Takže v tomto cvičení chcete mít v každé zatáčce,",en:"So for this drill, you want to have every corner,"},
+{t:61.7,cs:"na výjezdu vysvědčení, jak se vám dařilo v rozhodovacím bodě.",en:"exit B report card for how you did at the decision point."},
+{t:66.2,cs:"Přemýšlejte, pokud začnete plynule zrychlovat a motorka",en:"Thinking if you start to pick your throttle up and the bike"},
+{t:69.1,cs:"začne jedoucí ven a vy budete muset zdrženout plyn nebo",en:"starts running wide and you're having a hold throttle or"},
+{t:71.7,cs:"uetnout plyn, byla to příliš brzy na zrychlení.",en:"chop off the throttle, it was too early to accelerate."},
+{t:75.5,cs:"To nebyl správný rozhodovací bod.",en:"That was not the right decision points."},
+{t:77.1,cs:"Takže nechte motorku otáčet se trochu déle.",en:"So, let that bike turn a little bit longer."},
+{t:79.6,cs:"A opak je, když začnete koukat možná",en:"And the inverse of that is, if you start looking maybe"},
+{t:82.9,cs:"na vnitřek zatáčky příliš dlouho,",en:"at your, the inside of the road too long,"},
+{t:84.9,cs:"na apex koukat příliš dlouho,",en:"looking at an apex too long,"},
+{t:86.2,cs:"při zrychlování z zatáčky,",en:"as you accelerate off the corner,"},
+{t:88.1,cs:"může být hodně silnice na vnější straně",en:"there might be a lot of road left on the outside"},
+{t:91.1,cs:"okruhu, což na silnicích je docela dobrá věc.",en:"of the track, which on the streets are a pretty good thing."},
+{t:94.4,cs:"Ale na závodním okruhu,",en:"But on the racetrack,"},
+{t:95.7,cs:"určitě bychom mohli nechat nějaký čas tam venku.",en:"we could definitely be leaving some time out there."},
+{t:97.8,cs:"Takže nechte ten výjezd ze zatáčky být vaším vysvědčením.",en:"So, let that corner exit be your report card."},
+{t:105.5,cs:"V reálném světě se deštník směru uplatňuje s brzdami.",en:"Real-world, umbrella of direction is met with the brakes."},
+{t:110.1,cs:"Musíme motorku dál zpomalovat do zatáčky",en:"We've got to keep slowing our motorcycle into the corner"},
+{t:113.1,cs:"dokud motorka nezískává směr.",en:"until the bike gets direction."},
+{t:115.4,cs:"Nyní je nasměrovaná a můžeme ji vyvést z zatáčky,",en:"It is now pointed and we can drive it off the corner,"},
+{t:119.0,cs:"pokud je trať volná,",en:"if the lane is clear,"},
+{t:120.3,cs:"Vstoupíte do nepřehledné zatáčky na silnici, kterou jste nikdy neviděli.",en:"You enter a blind corner on a road you've never seen before."},
+{t:123.4,cs:"Je tam vysoký útes, jezdíte kolem útesu.",en:"There's a big cliff there, you're going around the cliff."},
+{t:125.6,cs:"Nevidíte přes zatáčku.",en:"You can't see through the corner."},
+{t:127.0,cs:"Začínáte si uvědomovat deštník směru",en:"You start to realize the umbrella of direction"},
+{t:128.8,cs:"musí být splněn.",en:"has to be met."},
+{t:129.6,cs:"Musím motorku dál zpomalovat, dokud nevidím",en:"I've got to keep slowing that motorcycle until I have a view"},
+{t:133.8,cs:"přes zatáčku, dostanu se do rozhodovacího bodu,",en:"through the corner, I get to my decision point,"},
+{t:135.8,cs:"o kterém jste slyšeli, kde se mohu rozhodnout, co dělat s",en:"which you've heard about, where I can decide what to do with"},
+{t:138.4,cs:"plynem a brzdami.",en:"throttle and breaks."},
+{t:139.5,cs:"To je splnění deštníku směru.",en:"That is meeting this umbrella of direction."},
+{t:141.8,cs:"To je reálný svět, neznámá nepřehledná zatáčka.",en:"That's real world, unknown blind corner."},
+{t:144.5,cs:"A ve vaší mysli",en:"And in your mind,"},
+{t:145.3,cs:"si uvědomíte, že musím motorku dostat dovnitř, protože deštník",en:"you realize I've got to get the bike in because the umbrella"},
+{t:148.6,cs:"směru mě chrání.",en:"of direction covers me."},
+{t:150.6,cs:"To je čtvrtý základní návyk šampionů.",en:"That's the fourth core champions habit."},
+{t:152.9,cs:"Čtvrtá věc, kterou chceme v hlavě každého jezdce",en:"The fourth thing we want in the top of every rider's mind"},
+{t:156.9,cs:"je nasměrování motorky.",en:"is getting the bikes direction."},
+{t:158.3,cs:"Všechno spadá pod deštník směru.",en:"Everything falls under the umbrella of direction."},
+{t:160.8,cs:"Deštník směru pokrývá všechno ostatní, co děláme.",en:"The umbrella of direction covers everything else we do."},
+{t:163.4,cs:"Oči, brzdy, tělo, přeřazování,",en:"Eyes, breaks, body, downshifting,"},
+{t:165.3,cs:"spolujezdec, podmínky silnice.",en:"passenger, road conditions."},
+{t:167.3,cs:"To vše je pod deštníkem směru.",en:"That is underneath the umbrella of direction."},
+{t:169.4,cs:"Musíme motorku dostat do zatáčky.",en:"We've got to get the bike into the corner."},
+{t:171.0,cs:"Musíme ji nasměrovat.",en:"We've got to get it pointed."},
+{t:172.5,cs:"Deštník směru,",en:"That umbrella of direction,"},
+{t:174.1,cs:"jezděte se vším ostatním, co děláte, pod",en:"ride with everything else you do underneath"},
+{t:177.1,cs:"deštníkem směru.",en:"the umbrella of direction."},
+{t:184.8,cs:"Takže to uzavřeme.",en:"So let's wrap this up."},
+{t:186.0,cs:"Pojďme si promluvit o našich základních návycích šampionů.",en:"Let's talk about our core champions habits."},
+{t:188.5,cs:"Ten první byl mít plán,",en:"The very first one was having a plan,"},
+{t:190.9,cs:"soustředit se a znovu se soustředit, když se věci pokazí",en:"getting focused and getting refocused when things go wrong"},
+{t:194.9,cs:"a překonat naše chyby.",en:"and getting over our mistakes."},
+{t:197.1,cs:"Základní návyk šampionů číslo dva.",en:"Core champions habit number two."},
+{t:199.2,cs:"100 bodů přilnavosti, náklon versus tlak na brzdy",en:"100 points of grip, lean angle versus brake pressure"},
+{t:202.1,cs:"v předním náklonu a plyn na zadní pneumatice.",en:"in the front lean angle and throttle on the rear tire."},
+{t:204.8,cs:"Vždy nejprve zatížíme pneumatiku, pak ji používáme,",en:"We always load the tire before we work the tire,"},
+{t:207.2,cs:"body přidáváme lineárně.",en:"we add points in a linear fashion."},
+{t:209.8,cs:"A číslo tři, máme poloměr odpovídá rychlosti.",en:"And number three, we have radius equals miles per hour."},
+{t:213.1,cs:"Musíte být jezdec, který dokáže upravit",en:"You need to become the rider that can adjust"},
+{t:215.3,cs:"poloměr podle rychlosti.",en:"radius based on speed."},
+{t:217.8,cs:"Náš čtvrtý základní návyk šampionů.",en:"Out fourth core champions, habit."},
+{t:219.7,cs:"Deštník směru.",en:"This umbrella of direction."},
+{t:221.3,cs:"Všechno, co v zatáčkách děláme, je dostat motorku dovnitř,",en:"Everything we do in the corners is get the bike in,"},
+{t:224.7,cs:"nasměrovat a připravit ji na výjezd.",en:"pointed, and ready to exit."},
+{t:229.3,cs:"Dobře, jezdci.",en:"All right, riders."},
+{t:230.1,cs:"To nás přivádí na konec čtyř základních návyků šampionů.",en:"That brings us to the end of the four core champions habits."},
+{t:233.6,cs:"Čtyři věci, které chceme",en:"The four things that we want to put"},
+{t:235.4,cs:"dát do čela vaší mysli.",en:"at the top of your brain."},
+{t:237.6,cs:"Duševní soustředění, být v přítomnosti,",en:"Mental focus, being in the moment,"},
+{t:239.2,cs:"překonat chyby, duševně.",en:"getting over mistakes, mentally."},
+{t:241.2,cs:"Číslo dva, sto bodů přilnavosti, je to konečné.",en:"Number two, a hundred points of grip, it's finite."},
+{t:244.6,cs:"To není neomezené.",en:"It's not, it's not unlimited."},
+{t:246.0,cs:"A my to řídíme.",en:"And we manage it."},
+{t:247.6,cs:"Číslo tři, poloměr odpovídá rychlosti.",en:"Number three, radius equals miles per hour."},
+{t:250.2,cs:"Hrajete si s rychlostí, abyste změnili poloměr.",en:"You're playing with your mile an hour to change your radius."},
+{t:252.6,cs:"Číslo čtyři, deštník směru.",en:"Number four, umbrella of direction."},
+{t:254.3,cs:"Všechno, co na motorce děláte, je dostat motorku",en:"Everything you'd do on a motorcycle is to get the bike"},
+{t:256.4,cs:"do zatáčky, k rozhodovacímu bodu nasměrovanou",en:"into the corner, to the decision point pointed"},
+{t:259.1,cs:"vidět, co se děje.",en:"to see what is happening."},
+{t:260.4,cs:"Nájezd do zatáčky slouží k přípravě motorky na výjezd.",en:"The corner entry serves to get the bike ready to exit."},
+{t:263.6,cs:"To jsou čtyři věci, na které myslím,",en:"Those are the four things at the top of my mind,"},
+{t:266.1,cs:"určitě, ať už jedu na silnici nebo závodím,",en:"for sure whether I'm street riding or road racing,"},
+{t:268.1,cs:"moji kolegové, světoví šampioni, se kterými mluvím,",en:"my group, world champions that I talk to,"},
+{t:270.4,cs:"a zupě noví jezdci na silnicích, kteří přijdou do naší",en:"the brand new street riders that come to our"},
+{t:272.0,cs:"školy, ty čtyři věci.",en:"school, those four things."}];
+
+var state={};
+for(var s=1;s<=4;s++)state[s]={running:false,baseTime:0,startWall:0,lastIdx:-1,rafId:null,sliderDragging:false};
+var sections={1:{subs:subs1,duration:318},2:{subs:subs2,duration:197},3:{subs:subs3,duration:447},4:{subs:subs4,duration:278}};
+
+function formatTime(s){var m=Math.floor(s/60);var sec=Math.floor(s%60);return m+":"+(sec<10?"0":"")+sec;}
+function getCurrentTime(s){if(!state[s].running)return state[s].baseTime;return state[s].baseTime+(Date.now()-state[s].startWall)/1000;}
+function findSubtitle(s,t){var subs=sections[s].subs;var idx=-1;for(var i=0;i<subs.length;i++){if(subs[i].t<=t)idx=i;else break;}return idx;}
+function updateDisplay(s){var t=getCurrentTime(s);if(!state[s].sliderDragging){document.getElementById("slider"+s).value=Math.floor(t);}document.getElementById("time"+s).textContent=formatTime(t);var idx=findSubtitle(s,t);if(idx!==state[s].lastIdx){state[s].lastIdx=idx;if(idx>=0){document.getElementById("cs"+s).textContent=sections[s].subs[idx].cs;document.getElementById("en"+s).textContent=sections[s].subs[idx].en;}else{document.getElementById("cs"+s).textContent="";document.getElementById("en"+s).textContent="";}}}
+function tick(s){updateDisplay(s);if(state[s].running)state[s].rafId=requestAnimationFrame(function(){tick(s);});}
+function toggleSync(s){if(state[s].running){pauseSync(s);}else{startSync(s);}}
+function startSync(s){state[s].running=true;state[s].startWall=Date.now();document.getElementById("btn"+s).textContent="⏸ Pauza";document.getElementById("btn"+s).classList.add("active");tick(s);}
+function pauseSync(s){state[s].running=false;state[s].baseTime=getCurrentTime(s);if(state[s].rafId)cancelAnimationFrame(state[s].rafId);document.getElementById("btn"+s).textContent="▶ Start";document.getElementById("btn"+s).classList.remove("active");}
+function resetSync(s){var wasRunning=state[s].running;if(wasRunning)pauseSync(s);state[s].baseTime=0;state[s].lastIdx=-1;document.getElementById("slider"+s).value=0;document.getElementById("time"+s).textContent="0:00";document.getElementById("cs"+s).textContent="▶ Spusťte video a klikněte Start";document.getElementById("en"+s).textContent="";}
+function setTime(s,t){var wasRunning=state[s].running;if(wasRunning){state[s].baseTime=t;state[s].startWall=Date.now();}else{state[s].baseTime=t;}state[s].lastIdx=-1;updateDisplay(s);}
+function adjustTime(s,delta){setTime(s,Math.max(0,getCurrentTime(s)+delta));}
+function onSliderInput(s){setTime(s,parseFloat(document.getElementById("slider"+s).value));}
+</script>
+</body>
+</html>

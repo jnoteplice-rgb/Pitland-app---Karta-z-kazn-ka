@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Champions Habits CZ — Kompletní kurz s českými titulky</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f0eb; color: #333; line-height: 1.7; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+
+    .hero { background: linear-gradient(135deg, #1a1a2e 0%, #2d2d5e 100%); color: white; padding: 40px 32px; border-radius: 12px; margin-bottom: 28px; text-align: center; }
+    .hero h1 { font-size: 2.2em; margin-bottom: 8px; }
+    .hero h1 span { color: #ffd700; }
+    .hero .subtitle { color: #ccc; font-size: 1.1em; margin-bottom: 16px; }
+    .hero .badge { display: inline-block; background: #cf3339; color: white; padding: 6px 18px; border-radius: 20px; font-weight: 600; font-size: 0.95em; }
+
+    .notice { background: #fff3e0; border-left: 4px solid #ff9800; padding: 14px 18px; margin-bottom: 24px; border-radius: 0 8px 8px 0; font-size: 0.92em; }
+    .notice strong { color: #e65100; }
+    .notice a { color: #cf3339; font-weight: 600; }
+
+    .modules { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+
+    .module-card { display: flex; align-items: center; gap: 16px; background: white; border-radius: 10px; padding: 18px 22px; text-decoration: none; color: #333; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-left: 5px solid #2d2d5e; transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s; }
+    .module-card:hover { transform: translateX(6px); box-shadow: 0 4px 16px rgba(0,0,0,0.12); border-left-color: #cf3339; }
+    .module-card .num { background: #1a1a2e; color: #ffd700; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1em; flex-shrink: 0; }
+    .module-card .info { flex: 1; }
+    .module-card .info .title { font-weight: 700; font-size: 1.1em; color: #1a1a2e; }
+    .module-card .info .desc { color: #777; font-size: 0.88em; margin-top: 2px; }
+    .module-card .meta { color: #999; font-size: 0.8em; text-align: right; flex-shrink: 0; }
+    .module-card .arrow { color: #cf3339; font-size: 1.4em; flex-shrink: 0; }
+
+    .module-card.drills-card { border-left-color: #ffd700; background: linear-gradient(90deg, #fffde7 0%, white 30%); }
+    .module-card.drills-card .num { background: #cf3339; }
+
+    .how-to { background: white; border-radius: 10px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 24px; }
+    .how-to h2 { color: #1a1a2e; font-size: 1.3em; margin-bottom: 12px; border-bottom: 2px solid #ffd700; padding-bottom: 8px; display: inline-block; }
+    .how-to ol { margin: 12px 0 0 24px; }
+    .how-to li { margin-bottom: 8px; }
+    .how-to code { background: #f0f0f0; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+
+    .footer { text-align: center; padding: 24px; color: #999; font-size: 0.85em; }
+    .footer a { color: #cf3339; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 28px 20px; }
+      .hero h1 { font-size: 1.6em; }
+      .module-card { padding: 14px 16px; gap: 12px; }
+      .module-card .num { width: 36px; height: 36px; font-size: 0.95em; }
+      .module-card .info .title { font-size: 1em; }
+      .module-card .meta { display: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="hero">
+    <h1><span>Champions Habits</span> CZ</h1>
+    <div class="subtitle">Kompletn&#237; kurz Yamaha Champions Riding School<br>s &#269;esk&#253;mi titulky</div>
+    <div class="badge">13 modul&#367; &bull; 100+ vide&#237; &bull; &#269;esk&#233; titulky</div>
+  </div>
+
+  <div class="notice">
+    <strong>D&#367;le&#382;it&#233;:</strong> Pro spr&#225;vn&#233; fungov&#225;n&#237; vide&#237; mus&#237;te b&#253;t p&#345;ihl&#225;&#353;eni na
+    <a href="https://ridelikeachampion.com" target="_blank">ridelikeachampion.com</a>
+    ve stejn&#233;m prohl&#237;&#382;e&#269;i. Videa jsou zam&#269;ena na dom&#233;nu a bez p&#345;ihl&#225;&#353;en&#237; se nezobraz&#237;.
+  </div>
+
+  <div class="modules">
+
+    <a class="module-card" href="01-mental-approach.html">
+      <div class="num">01</div>
+      <div class="info">
+        <div class="title">Ment&#225;ln&#237; p&#345;&#237;stup</div>
+        <div class="desc">Mental Approach &mdash; z&#225;klad v&#353;ech dovednost&#237; za&#269;&#237;n&#225; v hlav&#283;</div>
+      </div>
+      <div class="meta">3 sekce</div>
+      <div class="arrow">&rsaquo;</div>
+    </a>
+
+    <a class="module-card" href="02-100-points-of-grip.html">
+      <div class="num">02</div>
+      <div class="info">
+        <div class="title">100 bod&#367; p&#345;ilnavosti</div>
+        <div class="desc">100 Points of Grip &mdash; rozd&#283;len&#237; p&#345;ilnavosti mezi brzdu, plyn a n&#225;klon</div>
+      </div>
+      <div class="meta">4 sekce</div>
+      <div class="arrow">&rsaquo;</div>
+    </a>
+
+    <a class="module-card" href="03-radius-equals-mph.html">
+      <div class="num">03</div>
+      <div class="info">
+        <div class="title">Polom&#283;r = rychlost</div>
+        <div class="desc">R=MPH &mdash; polom&#283;r zat&#225;&#269;ky ur&#269;uje maxim&#225;ln&#237; bezpe&#269;nou rychlost</div>
+      </div>
+      <div class="meta">3 sekce</div>
+      <div class="arrow">&rsaquo;</div>
+    </a>
+
+    <a class="module-card" href="04-umbrella-of-direction.html">
+      <div class="num">04</div>
+      <div class="info">
+        <div class="title">De&#353;tn&#237;k sm&#283;ru</div>
+        <div class="desc">Umbrella of Direction &mdash; t&#345;i f&#225;ze zat&#225;&#269;ky: brzda, neutr&#225;l, plyn</div>
+      </div>
+      <div class="meta">4 sekce</div>
+      <div class="arrow">&rsaquo;</div>
+    </a>
+
+    <a class="module-card" href="05-body-position.html">
+      <div class="num">05</div>
+      <div class="info">
+        <div class="title">Pozice t&#283;la</div>
+        <div class="desc">Body Position &mdash; spr&#225;vn&#233; dr&#382;en&#237; a p&#345;esun v&#225;hy na motorce</div>
+      </div>
+      <div class="meta">5 sekc&#237;</div>
+      <div class="arrow">&rsaquo;</div>
+    </a>
+
+    <a class="module-card" href="06-braking-practice.html">
+      <div class="num">06</div>
+      <div class="info">
+        <div class="title">Brzd&#283;n&#237;</div>
+        <div class="desc">Braking Practice &mdash; technika brzd&#283;n&#237; a trail braking</div>
+      </div>
+      <div class="meta">5 sekc&#237;</div>
+      <div class="arrow">&rsaquo;</div>
+    </a>
+
+    <a class="module-card" href="07-100mm-of-travel.html">
+      <div class="num">07</div>
+      <div class="info">
+        <div class="title">100 mm zdvihu</div>
+        <div class="desc">100mm of Travel &mdash; pr&#225;ce s p&#345;edn&#237; vidlic&#237; a zp&#283;tn&#225; vazba podvozku</div>
+      </div>
+      <div class="meta">3 sekce</div>
+      <div class="arrow">&rsaquo;</div>
+    </a>
+
+    <a class="module-card" href="08-ergonomics.html">
+      <div class="num">08</div>
+      <div class="info">
+        <div class="title">Ergonomie</div>
+        <div class="desc">Ergonomics &mdash; spr&#225;vn&#233; nastaven&#237; p&#225;&#269;ek, stupadel a &#345;&#237;dtek</div>
+      </div>
+      <div class="meta">1 sekce</div>
+      <div class="arrow">&rsaquo;</div>
+    </a>
+
+    <a class="module-card" href="09-downshifting.html">
+      <div class="num">09</div>
+      <div class="info">
+        <div class="title">Pod&#345;azov&#225;n&#237;</div>
+        <div class="desc">Downshifting &mdash; 6 krok&#367; spr&#225;vn&#233;ho pod&#345;azov&#225;n&#237;</div>
+      </div>
+      <div class="meta">4 sekce</div>
+      <div class="arrow">&rsaquo;</div>
+    </a>
+
+    <a class="module-card" href="10-pointy-end.html">
+      <div class="num">10</div>
+      <div class="info">
+        <div class="title">&#352;pi&#269;ka ku&#382;elu</div>
+        <div class="desc">Pointy End of the Cone &mdash; apex, proto&#345;&#237;zen&#237; a na&#269;asov&#225;n&#237;</div>
+      </div>
+      <div class="meta">2 sekce</div>
+      <div class="arrow">&rsaquo;</div>
+    </a>
+
+    <a class="module-card" href="11-rear-brake.html">
+      <div class="num">11</div>
+      <div class="info">
+        <div class="title">Zadn&#237; brzda</div>
+        <div class="desc">Rear Brake &mdash; kdy a jak pou&#382;&#237;vat zadn&#237; brzdu</div>
+      </div>
+      <div class="meta">3 sekce</div>
+      <div class="arrow">&rsaquo;</div>
+    </a>
+
+    <a class="module-card" href="12-car-practice.html">
+      <div class="num">12</div>
+      <div class="info">
+        <div class="title">Cvi&#269;en&#237; v aut&#283; + ukon&#269;en&#237;</div>
+        <div class="desc">Car Practice &amp; Wrap Up &mdash; tr&#233;ninky v aut&#283; a z&#225;v&#283;r kurzu</div>
+      </div>
+      <div class="meta">4 sekce</div>
+      <div class="arrow">&rsaquo;</div>
+    </a>
+
+    <a class="module-card drills-card" href="13-drills.html">
+      <div class="num">D</div>
+      <div class="info">
+        <div class="title">Drills &mdash; Praktick&#225; cvi&#269;en&#237;</div>
+        <div class="desc">11 dril&#367; ke ka&#382;d&#233;mu modulu &mdash; cvi&#269;te na parkovi&#353;ti, v gar&#225;&#382;i i na silnici</div>
+      </div>
+      <div class="meta">11 sekc&#237;</div>
+      <div class="arrow">&rsaquo;</div>
+    </a>
+
+  </div>
+
+  <div class="how-to">
+    <h2>Jak to funguje</h2>
+    <ol>
+      <li><strong>P&#345;ihla&#353;te se</strong> na <a href="https://ridelikeachampion.com" target="_blank">ridelikeachampion.com</a> ve sv&#233;m prohl&#237;&#382;e&#269;i</li>
+      <li><strong>Otev&#345;ete modul</strong> kliknut&#237;m na kartu v&#253;&#353;e</li>
+      <li><strong>Spus&#357;te video</strong> tla&#269;&#237;tkem play p&#345;&#237;mo v p&#345;ehr&#225;va&#269;i</li>
+      <li><strong>Klikn&#283;te Start</strong> na panelu pod videem &mdash; &#269;esk&#233; titulky se za&#269;nou zobrazovat</li>
+      <li>Pomoc&#237; tla&#269;&#237;tek <code>&plusmn;1s</code> / <code>&plusmn;3s</code> dola&#271;te synchronizaci pokud je pot&#345;eba</li>
+    </ol>
+  </div>
+
+  <div class="footer">
+    Champions Habits &mdash; The Core Curriculum |
+    <a href="https://ridelikeachampion.com" target="_blank">Yamaha Champions Riding School</a><br>
+    &#268;esk&#253; p&#345;eklad pro intern&#237; pou&#382;it&#237; Pitland.cz
+  </div>
+
+</div>
+</body>
+</html>

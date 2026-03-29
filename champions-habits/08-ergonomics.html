@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>08 — Ergonomie (Ergonomics) | Champions Habits CZ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f0eb; color: #333; line-height: 1.7; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .module-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 3px solid #cf3339; }
+    .module-header h1 { color: #1a1a2e; font-size: 2em; margin-bottom: 12px; }
+    .section { margin-bottom: 40px; padding-top: 20px; }
+    .section h2 { margin-bottom: 12px; color: #1a1a2e; font-size: 1.5em; }
+    .video-frame { width: 100%; height: 500px; border: 2px solid #e0e0e0; border-radius: 8px 8px 0 0; display: block; }
+    .subtitle-bar { background: #1a1a2e; color: #fff; padding: 18px 24px; min-height: 70px; font-size: 1.1em; text-align: center; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+    .subtitle-bar .cs { color: #ffd700; font-weight: 600; font-size: 1.2em; }
+    .subtitle-bar .en { color: #999; font-size: 0.8em; }
+    .controls { background: #2d2d5e; padding: 12px 24px 14px; border-radius: 0 0 8px 8px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .controls-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .controls button { background: #cf3339; color: white; border: none; padding: 8px 20px; border-radius: 6px; font-size: 0.95em; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .controls button:hover { background: #e85d5d; }
+    .controls button.active { background: #43a047; }
+    .controls button.active:hover { background: #66bb6a; }
+    .controls button.reset-btn { background: #555; }
+    .controls button.reset-btn:hover { background: #777; }
+    .controls .timer { color: #ffd700; font-family: monospace; font-size: 1.1em; min-width: 60px; text-align: center; }
+    .controls .adjust { background: #444; padding: 6px 12px; font-size: 0.85em; border-radius: 4px; }
+    .controls .adjust:hover { background: #666; }
+    .slider-row { display: flex; align-items: center; gap: 8px; padding: 0 2px; }
+    .slider-row label { color: #aaa; font-size: 0.75em; font-family: monospace; }
+    .time-slider { flex: 1; -webkit-appearance: none; appearance: none; height: 5px; border-radius: 3px; background: #444; outline: none; cursor: pointer; }
+    .time-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; }
+    .time-slider::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; border: none; }
+    .info { background: #fff3e0; border-left: 4px solid #ff9800; padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0; font-size: 0.9em; }
+    .info strong { color: #e65100; }
+    .info ol { margin: 8px 0 0 20px; }
+    .info li { margin-bottom: 4px; }
+    .summary-box { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 16px; margin: 20px 0; border-radius: 0 8px 8px 0; font-size: 0.95em; }
+    .summary-box strong { color: #1565c0; display: block; margin-bottom: 8px; font-size: 1.05em; }
+    .summary-box ul { margin: 0 0 0 20px; list-style: disc; }
+    .summary-box li { margin-bottom: 6px; line-height: 1.5; }
+    .module-nav { margin-top: 40px; padding: 20px; background: #2d2d5e; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .module-nav a { color: #ffd700; text-decoration: none; font-weight: 600; font-size: 1.1em; padding: 10px 24px; background: #cf3339; border-radius: 6px; transition: background 0.2s; }
+    .module-nav a:hover { background: #e85d5d; }
+    @media (max-width: 700px) { .video-frame { height: 350px; } .subtitle-bar { padding: 14px 16px; } .subtitle-bar .cs { font-size: 1em; } .controls { gap: 8px; padding: 10px 16px; } .controls button { padding: 6px 14px; font-size: 0.85em; } .module-nav { flex-direction: column; text-align: center; } .module-nav a { width: 100%; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="module-header">
+    <h1>08 &#8212; Ergonomie (Ergonomics) | Champions Habits CZ</h1>
+    <p style="color: #666; margin-top: 8px;">Jedna video sekce o nastaven&#237; motorky pro va&#353;e t&#283;lo &#8212; &#345;id&#237;tka, p&#225;&#269;ky, stupadla, sedlo a dal&#353;&#237;</p>
+  </div>
+
+  <div class="info">
+    <strong>Jak pou&#382;&#237;vat &#269;esk&#233; titulky:</strong>
+    <ol>
+      <li>Spus&#357;te video kliknut&#237;m na play p&#345;&#237;mo ve videu</li>
+      <li>Klikn&#283;te na <b>&#9654; Start</b> ve chv&#237;li, kdy video za&#269;ne p&#345;ehr&#225;vat</li>
+      <li>Pomoc&#237; tla&#269;&#237;tek &#177;1s / &#177;3s dola&#271;te synchronizaci</li>
+      <li>Posuvn&#237;kem m&#367;&#382;ete p&#345;esko&#269;it na libovoln&#233; m&#237;sto</li>
+    </ol>
+  </div>
+
+  <div class="section" id="sec1">
+    <h2>Ergonomie &#8212; Nastaven&#237; motorky pro va&#353;e t&#283;lo (9:34)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/ergonomics-3/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs1">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en1"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(1)" id="btn1">&#9654; Start</button>
+        <span class="timer" id="time1">0:00</span>
+        <button class="adjust" onclick="adjustTime(1,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(1,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(1,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(1,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(1)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider1" min="0" max="574" value="0" step="1"
+               oninput="onSliderInput(1)" onmousedown="state[1].sliderDragging=true" onmouseup="state[1].sliderDragging=false"
+               ontouchstart="state[1].sliderDragging=true" ontouchend="state[1].sliderDragging=false">
+        <label>9:34</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Kl&#237;&#269;ov&#233; body &#8212; Ergonomie</strong>
+      <ul>
+      <li>Ergonomie = jak nastav&#237;te motorku tak, aby sedla va&#353;emu t&#283;lu</li>
+      <li>&#344;id&#237;tka: v&#253;&#353;ka a &#250;hel ovliv&#328;uj&#237; pohodl&#237; a kontrolu &#8212; ruce by m&#283;ly b&#253;t v p&#345;irozen&#233; pozici</li>
+      <li>P&#225;&#269;ky (brzda + spojka): nastaven&#237; dosahu tak, aby prsty dosahaly pohodln&#283; na p&#225;&#269;ku</li>
+      <li>Stupadla: pozice ovliv&#328;uje celou pozici t&#283;la na motorce</li>
+      <li>Sedlo: v&#253;&#353;ka a tvar &#8212; m&#367;&#382;e b&#253;t upraveno p&#283;nov&#253;mi vlo&#382;kami nebo sn&#237;&#382;en&#237;m</li>
+      <li>Plexi/&#353;t&#237;t: spr&#225;vn&#225; v&#253;&#353;ka chr&#225;n&#237; p&#345;ed v&#283;trem a sni&#382;uje &#250;navu</li>
+      <li>Zrc&#225;tka: nastaven&#237; pro maxim&#225;ln&#237; v&#253;hled bez nutnosti ot&#225;&#269;et hlavu</li>
+      <li>Ka&#382;d&#225; motorka se d&#225; p&#345;izp&#367;sobit &#8212; investice do ergonomie se vyplat&#237; na ka&#382;d&#233; j&#237;zd&#283;</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <a href="07-100mm-of-travel.html">&#8592; Modul 07: 100mm zdvihu</a>
+    <a href="09-downshifting.html">Modul 09: Pod&#345;azov&#225;n&#237; &#8594;</a>
+  </div>
+
+</div>
+
+<script>
+var subs1=[{t:0.5,cs:"(dramatické zvuky)",en:"(dramatic sounds)"},
+{t:3.8,cs:"Ergonomie, jak se vám motorka přizpůsobuje.",en:"Ergonomics, how the bike fits us."},
+{t:8,cs:"Zařadili jsme to sem na Champ University, protože na našich",en:"We stuck it here in Champ University because at our"},
+{t:10.6,cs:"školách pracujeme se studenty",en:"schools, we work with our students"},
+{t:12.5,cs:"když si přinesou vlastní motorky",en:"when they bring their own bikes on"},
+{t:14.1,cs:"a přizpůsobí je sobě.",en:"adjusting that bike to work better for them."},
+{t:17.3,cs:"Pojďme na to správně.",en:"Let's do it right here."},
+{t:19.6,cs:"Ergonomie, mysleli jsme si, že je opravdu důležité",en:"Ergonomics, we thought it was really important"},
+{t:22.2,cs:"vzít ergonomii do diskuse",en:"to bring ergonomics as a discussion,"},
+{t:23.9,cs:"jako součást Champ University.",en:"as part of Champ University."},
+{t:25.4,cs:"Spoustu našich studentů, kteří k nám přijdou,",en:"That a lot of our students that come in"},
+{t:27.5,cs:"má nastavené řidítka a páčky úplně špatně.",en:"handlebars and levers are kind of all jacked up."},
+{t:29.8,cs:"Tak jsme se rozhodli přidat tady malý segment, abychom vám",en:"So we figured we'd put a little segment in here, help you"},
+{t:32.2,cs:"pomohli se naučit něco o přizpůsobení motorky sobě.",en:"guys learn a bit about getting your motorcycle fit to you."},
+{t:34.6,cs:"Když mluvíme o ergonomii,",en:"When we say ergonomics specifically,"},
+{t:36.8,cs:"máme na mysli, kde jsou dotykové body na motorce,",en:"what we're saying is where the touch points are in the"},
+{t:39.3,cs:"jak vám sedí, kde máte nastavené páčky,",en:"motorcycle, how it fits you, where your levers are adjusted,"},
+{t:42.3,cs:"řidítka, stupadla a podobně.",en:"handlebars, your feet and all that kind of stuff."},
+{t:44.9,cs:"Dobrý příklad tady. Díky, Chrisi. Řidítka,",en:"Good example here. Thanks Chris. Handlebars,"},
+{t:50.6,cs:"to jsou všechna nastavitelné páčky spojky,",en:"these are all adjustable clutch levers,"},
+{t:53,cs:"páčky brzdy, to je ergonomie.",en:"brake levers, that's ergonomics."},
+{t:55.1,cs:"Celá myšlenka ergonomie je, aby jste byli pohodlní",en:"The whole idea of ergonomics is to get you comfortable on"},
+{t:58.2,cs:"na motorce. Je to tak důležité na Champ school,",en:"the motorcycle. It's so important at Champ school,"},
+{t:61.5,cs:"všichni instruktoři si nosí nářadí, abychom vám pomohli",en:"all the instructors carry tools with them so we can help the"},
+{t:64.4,cs:"dostat ergonomii správně na motorce",en:"students get their ergonomics right on the motorcycle"},
+{t:66.8,cs:"na samém začátku školy.",en:"the very beginning of the school."},
+{t:69,cs:"Ano, všechno se vrací k tomu celému focusu.",en:"Yeah, it all comes back to that whole idea of focus."},
+{t:71.8,cs:"Náš focus by měl být na jízdě, na příštím zákrutě,",en:"Our focus should be on our riding, the next turn,"},
+{t:74.1,cs:"na příštích kroků, na čem bychom zrovna pracovali,",en:"the next day packs, whatever you might be working on"},
+{t:77.4,cs:"ne na tom, že \"Bohu, nemohu se dostat k řadícce.\"",en:"it shouldn't be, \"God, I can't get to the shifter.\""},
+{t:79.5,cs:"Nebo \"Bolí mě zápěstí.\"",en:"Or, \"My wrists are feeling uncomfortable.\""},
+{t:81.5,cs:"Takže ergonomie je něco, co stále pronásledujeme.",en:"So ergonomics is something we're always chasing."},
+{t:85.1,cs:"Jako instruktor vidíme spoustu různých věcí,",en:"As an instructor, we see a lot of different things,"},
+{t:87.4,cs:"especially s řadičkami. Můžete je mít moc vysoko,",en:"especially with shifters. You can get them too high,"},
+{t:89.9,cs:"moc nízko. Vidíte jezdce, kterí ztrácí řazení.",en:"too low. You'll see riders missing shifts."},
+{t:92.5,cs:"Je to trochu nepříjemné pro jezdce.",en:"It becomes a little bit of a pain for the rider."},
+{t:94.8,cs:"Ale vidíme celkem často,",en:"But, what we'll see quite often"},
+{t:97.5,cs:"že se nikdy nechceme vrátit",en:"is we never really want to go back"},
+{t:99.3,cs:"do středu sedla, když jedeme,",en:"to the center of the seat when we're riding,"},
+{t:100.8,cs:"vidíme jezdce, kteří se musí vrátit, aby se dostali",en:"we're seeing riders have to come back to be able to get"},
+{t:103.3,cs:"nohou pod řadičku.",en:"their foot underneath the shifter."},
+{t:104.8,cs:"A najednou to úplně změní jejich celý vstup do zákrutě",en:"And all of a sudden it just throws off their whole corner"},
+{t:107.2,cs:"jen tím, že můžeme změnit tu ergonomii.",en:"entry simply by just, we could change those ergonomics."},
+{t:111.6,cs:"Keith to teď opravuje",en:"Keith's getting it working right now"},
+{t:113.6,cs:"pár otáčkami na tom páčce,",en:"where a couple of little spins on that bar,"},
+{t:116,cs:"můžete ji posouvat nahoru a dolů a dostat motorku tam, kde",en:"you can move it up and down and get the bike where it needs"},
+{t:118,cs:"má být, a usnadníte si život.",en:"to be and make the rider's life a lot easier."},
+{t:120.7,cs:"Zadní brzda, to je také velmi důležitá část",en:"Rear brake lever, another they're very important part"},
+{t:122.9,cs:"ergonomie. Páčka zadní brzdy se dá nastavit",en:"of ergonomics. Rear brake lever can be adjusted"},
+{t:125.8,cs:"níž nebo výš.",en:"to be lower or higher."},
+{t:127.3,cs:"Záleží na velikosti vaší nohy,",en:"Changes depending on the size of your foot,"},
+{t:129,cs:"na typu jízdy, kterou děláte, na typu motorky,",en:"the type of riding you're doing, the type of motorcycle"},
+{t:130.9,cs:"na které jste. Jednoduše se to nastaví dvěma klíči,",en:"you're on. Simply adjustable with two wrenches,"},
+{t:133.5,cs:"trvá to pár sekund.",en:"takes a couple seconds."},
+{t:135.1,cs:"Silniční jezdci, nezapomeňte, když si nastavíte páčku brzdy,",en:"Street riders, don't forget if you adjust your brake lever,"},
+{t:138.1,cs:"ujistěte se, že nastavíte také spínač brzdového světla.",en:"make sure you adjust your brake light switch as well."},
+{t:140.1,cs:"Abyste nejezdili s brzdovým světlem zapnutým",en:"So you're not riding around with your brake light on"},
+{t:141.8,cs:"pořád omylem.",en:"all the time by mistake."},
+{t:143.3,cs:"Další dobrý příklad je tenhle, moje Supermoto motorka,",en:"Another good example is this, my Supermoto bike here,"},
+{t:146.2,cs:"ve skutečnosti se také používá jako offroad.",en:"it actually doubles as my dirt bike as well."},
+{t:148.4,cs:"Páčka zadní brzdy na téhle věci je tak dramaticky",en:"The rear brake lever on this thing is so dramatically"},
+{t:151.2,cs:"různá, podle toho, jestli jedu Supermoto stylem",en:"different, depending if I'm riding super motor style"},
+{t:154,cs:"nebo offroadovým stylem. Na offroadu",en:"or dirt bike style. On the dirt bike,"},
+{t:155.9,cs:"mám stupadla pěkně vysoko, protože spoustu času stojím",en:"my pedals are nice and high, because I stand up a lot"},
+{t:158.3,cs:"a chci se tam dostat.",en:"and I want to get to it."},
+{t:159.4,cs:"Ale když dělám Supermoto na asfaltu,",en:"But when I'm doing Supermoto on the pavement,"},
+{t:161.8,cs:"vždy vstupuji do zákrutě v sedě",en:"I'm always entering the corner sitting down"},
+{t:163.9,cs:"takže si musím páčku brzdy nastavit mnohem níž.",en:"so I need to have my brake lever a lot lower."},
+{t:166.2,cs:"Velká změna způsobuje velký rozdíl v tom, jak jedu dobře.",en:"Big adjustment makes a big difference in how well I ride."},
+{t:169.4,cs:"Takže teď se posuneme nahoru na motorce",en:"So now we're going to move up on the motorcycle"},
+{t:172.2,cs:"k řidítkům.",en:"up to handlebars."},
+{t:174.4,cs:"Na FC7 tady není moc co dělat, na",en:"Obviously not a lot you could do on an FC7 here, on the"},
+{t:177.1,cs:"školních motorech je necháváme standartní, ale na našich závodních motorech",en:"school bikes we leave them stock, but on our race bikes,"},
+{t:180,cs:"si můžete sehnat clipon, silniční motorky mají spoustu",en:"you can get clip on, street bikes gets a lot of"},
+{t:182.2,cs:"aftermarketu a můžete si je umisťovat dovnitř a ven",en:"aftermarket stuff and you can position them in and out"},
+{t:185.1,cs:"kamkoliv se vám líbí, kde se vám cítí pohodlněji.",en:"wherever you like them, wherever they feel more comfortable."},
+{t:189,cs:"Typicky si je líbí mít trochu širší.",en:"Typically, I like them out a little bit wider."},
+{t:191.5,cs:"Málokdy si je chcete nechat úplně těsně u",en:"Rarely do you want to get them in really tight against the"},
+{t:194.3,cs:"nádrže, jakoby vám to stlačilo zápěstí, ruce,",en:"tank, kind of pinches off your wrists, hands,"},
+{t:196.3,cs:"usnou vám a je to nepříjemné,",en:"fall asleep and gets pretty uncomfortable,"},
+{t:198.1,cs:"ale je to nastavení, které máme.",en:"but it is an adjustment that we do have."},
+{t:200.6,cs:"Měli bychom také myslet na páčku spojky.",en:"We also want to think about our clutch lever as well."},
+{t:203.3,cs:"Víte, dostat tu páčku do správné pozice je",en:"You know, getting that lever in position is,"},
+{t:205.4,cs:"velmi důležitá část.",en:"is a very important part of it."},
+{t:208.1,cs:"Hledáme celkem přesné úhly,",en:"We're looking for some pretty exact angles,"},
+{t:211.1,cs:"ale tahle spojka je moc zapnutá.",en:"but this clutch is way too engaged."},
+{t:216.6,cs:"Ano, souhlasím.",en:"Yeah, I agree."},
+{t:218.1,cs:"Velmi důležité, pokud jde o ergonomii,",en:"Very important when it comes to ergonomics,"},
+{t:219.6,cs:"budeme také zahrnovat nastavení spojky,",en:"we're also gonna include a clutch adjustment,"},
+{t:221.4,cs:"což trochu zasahuje mechanickou část motoru,",en:"kind of dabbles in the mechanical part of the motor,"},
+{t:224.3,cs:"ale dá se nastavit podle ergonomie.",en:"but it's adjustable based on ergonomics."},
+{t:226.8,cs:"Spojka, která je příliš těsná, jako tahle,",en:"A clutch that's too tight like this one is,"},
+{t:229,cs:"vleče kabel.",en:"it's pulling the cable."},
+{t:230.6,cs:"A když vleče kabel,",en:"And when it's pulling the cable,"},
+{t:231.5,cs:"odděluje to vaše spojková lamela uvnitř motoru.",en:"it's separating your clutch plates inside the motor."},
+{t:233.8,cs:"A to dělá to, že ta lamela proklouží a vaše",en:"And what that's doing is making those plates slip and your"},
+{t:237.9,cs:"pokud nemáte správnou vůli v kabelu.",en:"if you don't have the right play in your cable."},
+{t:240.1,cs:"Tak jednoduchý, jednoduchý malý knofíček, všechno, co musíte,",en:"So simple, simple little, little knob, all you need to do,"},
+{t:243.7,cs:"otočte to pár krát, dokud nedostanete vůli.",en:"give it a couple turns until you get some play like that."},
+{t:247.7,cs:"Někteří říkají, dej tam minci, dej tam nikl,",en:"Some people say, put a dime in there, put a nickel in there,"},
+{t:250.9,cs:"já nebudu být konkrétní.",en:"I'm not really going to get specific."},
+{t:252.2,cs:"Vždy musí být trochu vůle, protože",en:"Always have a little bit of play because"},
+{t:253.3,cs:"pokud je tu vůle,",en:"as long as there's a play in here,"},
+{t:255.3,cs:"víte, že netlačíte lamelami rozevřít.",en:"you know you're not pulling your clutch plates apart."},
+{t:257.5,cs:"Ano, a trochu opačně je to",en:"Yeah, and kind of the inverse of that is"},
+{t:259.6,cs:"když vidíme někdy jezdce s moc velkou vůlí.",en:"we'll see riders sometimes have it with way too much slack."},
+{t:262.7,cs:"A mluvili jsme o downshiftování,",en:"And we've talked about downshifting,"},
+{t:264.8,cs:"hraní si s tímhle bodem tření,",en:"playing with this friction point,"},
+{t:266.1,cs:"kde se ta spojková lamela vrací dohromady.",en:"of where those clutch plates come back together."},
+{t:268.2,cs:"Pokud se to vrací úplně zpátky a zasahuje vám prsty,",en:"If it's coming all the way back in and hitting your fingers,"},
+{t:270.7,cs:"neplejetujete spojku úplně.",en:"you're not fully disengaging the clutch."},
+{t:272.7,cs:"Je to docela těžké jezdit takto.",en:"It's a pretty tough thing to ride around."},
+{t:275.1,cs:"Určitě si chcete tato nastavení opravit hned.",en:"You definitely want to make those adjustments right away."},
+{t:276.9,cs:"Ani to není dobré pro vašeho převodovku.",en:"Doesn't do much justice for your transmission either."},
+{t:279,cs:"Ne, je to docela špatné vůbec.",en:"No, it's pretty much bad all around."},
+{t:280.9,cs:"Ano, ano.",en:"Yeah, yeah."},
+{t:281.9,cs:"Takže to je pár dotykových bodů na té spojce.",en:"So those are a couple of touch points on that clutch."},
+{t:284.1,cs:"Ale co skutečně chceme vstoupit, je toto,",en:"But what we really want to get into is this,"},
+{t:286.2,cs:"tato myšlenka brzdy. Mluvíme o tom tolik na Champ U,",en:"this brake idea. We talk about it so heavily at Champ U,"},
+{t:290.4,cs:"projdi nás pár věcmi, které hledáme.",en:"walk us through a couple of things that we're looking for."},
+{t:292.4,cs:"Přední brzdový pák, správně. To bude",en:"Front brake, right. This is going to be,"},
+{t:295.5,cs:"považuji za nejdůležitější nastavení.",en:"I consider it the most important adjustment."},
+{t:297.3,cs:"Slyšeli jste Champ University mluvit o tom, jak jít na brzdy,",en:"You've heard Champ University talking about you going to"},
+{t:300.1,cs:"jak používat brzdy,",en:"the brakes, how to use the brakes,"},
+{t:301.7,cs:"je to vše o brzdy.",en:"it's all about the brakes."},
+{t:302.6,cs:"Jeden z nejdůležitějších prvků na motorce.",en:"One of the most important controls on the motorcycle."},
+{t:305.2,cs:"Takže dostat ten páčku správně pro vás a nastavit",en:"So getting that lever just right for your ride and getting"},
+{t:307.8,cs:"ergonomii pro vás, bude opravdu",en:"the ergonomics set for you, is going to be really,"},
+{t:310.7,cs:"důležité.",en:"really important."},
+{t:311.9,cs:"Pokud máte páčku brzdy, nechal jsem tuhle trochu volnou,",en:"If you have a brake lever, I left this one a little loose,"},
+{t:314.1,cs:"jen abych vám to ukázal, je to trochu moc vysoko.",en:"just so I can show you that's up a little bit too high."},
+{t:316.7,cs:"Když jedete motorku,",en:"When you're riding the motorcycle,"},
+{t:318.5,cs:"můžete skončit tím, že si zdvihните zápěstí a",en:"you could end up having to kind of like jack your wrist and"},
+{t:321.1,cs:"může vám zalezt ruka, pokud to není správně.",en:"it could put your hand to sleep if it's not right."},
+{t:323.1,cs:"Také pokud se musíte dostat na brzdy, správně,",en:"Also, if you have to go to the brakes, right,"},
+{t:325.6,cs:"uvolnit plyn a jít na brzdy,",en:"roll off and go to the brakes,"},
+{t:326.9,cs:"můžete se zjistit, že stále tlačíte plyn, zatímco",en:"you may find yourself still applying throttle while you're"},
+{t:330,cs:"se pokoušíte stisknout brzdy.",en:"trying to squeeze the brakes."},
+{t:331.5,cs:"Překrývání přední brzdy a",en:"Overlapping and front brake and"},
+{t:332.9,cs:"plynu je velké ne-ne v motorc jízdě.",en:"throttle is a big no-no in riding a motorcycle."},
+{t:334.8,cs:"Takže dostat ten páčku trochu níž.",en:"So getting that lever down a little bit."},
+{t:336.7,cs:"Aby dostal stejný úhel, o kterém mluvil Chris",en:"So it gets that same angle of attack that Chris talked about"},
+{t:339.5,cs:"na straně spojky, bude opravdu, opravdu důležité.",en:"on the clutch side is going to be really, really important."},
+{t:342.3,cs:"Další věc, kterou je třeba mít na paměti, je jak daleko je ten páčka brzdy.",en:"Another thing to keep in mind is how far out this brake"},
+{t:345.1,cs:"Všichni mají různé délky prstů, správně?",en:"lever is. Everybody has different lengths of fingers, right?"},
+{t:348.5,cs:"Takže si to možná chcete mít pěkně blízko",en:"So you might want this thing in nice and close"},
+{t:351.3,cs:"abyste se k němu snadno dostali.",en:"so you can get to it easily."},
+{t:352.5,cs:"Abyste byli pohodlní, když si kryjete brzdy v",en:"So you're comfortable when you're covering your brakes in"},
+{t:355.4,cs:"provozu. Pokud to máte příliš daleko, můžete skončit",en:"traffic. If you have it out too far, you may end up"},
+{t:358,cs:"tím, že jste trochu moc agresivní se stisknutím.",en:"being a little bit too aggressive with the squeeze."},
+{t:360.1,cs:"Takže je velmi důležité dostat ergonomii správně na",en:"So it's very important to get the ergonomics just right on"},
+{t:362.9,cs:"páčce přední brzdy.",en:"your front brake lever."},
+{t:365.1,cs:"Všichni jsme měli příběhy, které se nám staly.",en:"We've all had stories that have happened to us."},
+{t:367.6,cs:"Učil jsem se, jak to správně udělat pro sebe.",en:"I was learning how to get this right for me."},
+{t:371.3,cs:"Zjistil jsem, že si stiskáme dvěma prsty",en:"And I found myself squeezing with two fingers"},
+{t:373.6,cs:"a brzdy mi zasahují ostatní dva prsty.",en:"and the brakes hitting my other two fingers."},
+{t:375.4,cs:"A nemusel jsem používat brzdy správně.",en:"And I couldn't apply the brakes properly."},
+{t:377.3,cs:"Skoro jsem si způsobil problémy.",en:"Almost caused, some headaches for me."},
+{t:379.3,cs:"Takže to jsem se musel naučit.",en:"So something I had to learn."},
+{t:381,cs:"A dávno, v mých BC dnech,",en:"And in the old days, in my BC days,"},
+{t:383.4,cs:"říkám to před Champ školou,",en:"I call that before Champ school,"},
+{t:385.1,cs:"měl jsem si páčku tak daleko ven,",en:"I used to keep my lever so far out, man,"},
+{t:387.1,cs:"protože jsem chtěl mít co nejvíce vzdálenosti.",en:"because I wanted to have as much travel as possible."},
+{t:389.5,cs:"Abychom mohli aplikovat maximální tlak brzdy.",en:"So I can apply the maximum amount of breaks."},
+{t:391.7,cs:"Poté, co jsem se začal učit od vás,",en:"Then after I started learning from you guys,"},
+{t:393.4,cs:"pravděpodobně používám 40% množství síly brzdy",en:"I probably use 40% of the amount of breaks pressure"},
+{t:396.3,cs:"kterou jsem používal před 10, 15 lety.",en:"that I used to use 10, 15 years ago."},
+{t:398.3,cs:"Prostě je používám lehčeji déle a párka brzdy",en:"I just use them lighter longer and having a break lever"},
+{t:401,cs:"která je správně nastavena, hodně pomůže.",en:"that's set right goes a long way."},
+{t:402.9,cs:"A schopnost dělat to lehčeji déle,",en:"And being able to do lighter longer,"},
+{t:404.9,cs:"způsob, jakým tito chlapci učí.",en:"the way that these guys teach."},
+{t:406.2,cs:"Ano, také způsob, jakým kryjete brzdu",en:"Yeah, also the way that you're covering that brake"},
+{t:408,cs:"když je ten páčka tak daleko,",en:"when that lever is so far out,"},
+{t:409.4,cs:"budete se opravdu muset překročit.",en:"you're really going to have to overextend."},
+{t:411.1,cs:"Takže to je něco, o čem určitě přemýšlíme a",en:"So that's something we're definitely thinking about and"},
+{t:413.7,cs:"ať už je to páčka spojky nebo páčka brzdy,",en:"whether it's your clutch lever or your brake lever,"},
+{t:416.6,cs:"hledáte přímou linii",en:"you're looking for a straight line"},
+{t:418.9,cs:"jak si sedáte na brzdy.",en:"as you're sitting up onto the brakes."},
+{t:421,cs:"Hledáme přímou linii od tohoto ramene",en:"We're looking for a straight line from that shoulder"},
+{t:422.9,cs:"dolů skrz to zápěstí až dolů,",en:"down through that wrist all the way, coming down,"},
+{t:425.4,cs:"kde vám vychází ty špičky prstů",en:"where those fingertips come on"},
+{t:427.1,cs:"jak na páčce spojky, tak na páčce brzdy.",en:"both the clutch and brake lever."},
+{t:428.8,cs:"Takže si nezatiskneme to zápěstí a nebudeme mít",en:"So we're not pinching off that wrist and going to get arm"},
+{t:431.7,cs:"únavou paže, krev by měla proudit pěkně,",en:"pump, blood could flow nicely through there,"},
+{t:434.3,cs:"pohodlně. Můžeme hýbat rukama,",en:"nice and comfortable. We can move our hands,"},
+{t:436.1,cs:"otáčet na řidítkách, jak mluvíme o tom",en:"pivot on the bars like we talk about"},
+{t:437.9,cs:"v našich videích o poloze těla.",en:"in our body position videos."},
+{t:439.5,cs:"Závodníci na trati, další věc, kterou je třeba mít na paměti,",en:"Track riders, another thing to keep in mind,"},
+{t:441.2,cs:"pokud je páčka přední brzdy příliš nízko,",en:"if the front brake lever is too low,"},
+{t:443.5,cs:"bude to náročné dostat se k ní.",en:"it's going to be challenging to reach it and get to it."},
+{t:445.9,cs:"Také bude těžké dostat na to zatížení do vašich rukou",en:"Also, it's going to be hard to get that load into your hands"},
+{t:448.5,cs:"protože jste jako nad řidítky",en:"because you're kind of up over the bars"},
+{t:450.7,cs:"snažíte se dosáhnout páčky brzdy.",en:"trying to reach for your brake lever."},
+{t:452.1,cs:"Když chcete vstupovat do řidítek a mít ten",en:"When you want to be coming into the bars and having that"},
+{t:454,cs:"úhel útoku, kde si můžete dostat zatížení",en:"angle attack where you can get that load"},
+{t:455.8,cs:"na vašich rukách při brzdění.",en:"on your arms under braking."},
+{t:457.7,cs:"Poslední věc, kterou to dělá, pokud je to příliš nízko,",en:"Last thing that it does, if it's too low,"},
+{t:460.3,cs:"je to těžké dostat se k ní a je to pozdě.",en:"it makes it hard to get to and it makes it late."},
+{t:462.6,cs:"A když jste pozdě, co jste, Chrisi?",en:"And when you're late, what are you Chris?"},
+{t:464.9,cs:"Prudký.",en:"Abrupt."},
+{t:465.8,cs:"To je ono. V pořádku, takže náš hlavní cíl",en:"That's it. All right, so our main goal"},
+{t:467.8,cs:"když mluvíme o ergonomii,",en:"for talking to you about ergonomics,"},
+{t:469.5,cs:"Chris a já jsme chtěli zajistit, že chápete",en:"Chris and I wanted to make sure that you guys understand"},
+{t:472.9,cs:"že čím více pohodlný jste na motorce,",en:"that the more comfortable you are on the bike,"},
+{t:475.1,cs:"tím více radosti budete mít v jízdě.",en:"the more joy you're going to have riding."},
+{t:476.8,cs:"Takže se nebojte dělat ta nastavení.",en:"So don't be afraid to make those adjustments."},
+{t:478.6,cs:"Dávají vám sady nářadí a motorky, které téměř",en:"They give you the toolkits and the motorcycles that almost"},
+{t:481.5,cs:"vždy obsahují nástroje na úpravu těchto páček a",en:"always include the tools to adjust these levers and these"},
+{t:484.6,cs:"pedálů, aby to bylo pohodlné.",en:"pedals to make it comfortable."},
+{t:485.9,cs:"Tak si svou motorku udělejte pohodlnou pro sebe a mějte",en:"So get your motorcycle comfortable for yourself and have"},
+{t:489,cs:"více radosti v jízdě.",en:"more joy in riding."},
+{t:491.1,cs:"V pořádku, takže toto cvičení je skutečně",en:"All right, so this drill is actually"},
+{t:492.9,cs:"spíše povzbuzením než cvičením.",en:"more of an encouragement than a drill."},
+{t:494.5,cs:"A toto je pro vás, abyste si sedli na motorku a možná si posuňte",en:"And this is for you to get on your motorcycle and maybe move"},
+{t:498.2,cs:"věci, které nejsou tak pohodlné.",en:"some things around things that maybe aren't so comfortable."},
+{t:501.9,cs:"Zadní brzda, všechno tady je nastavitelné.",en:"Rear brake, all this back here is adjustable."},
+{t:505.2,cs:"Zjistili jsme, že z výroby přicházejí",en:"We find from the factory, they come typically"},
+{t:507.8,cs:"typicky trochu příliš vysoko.",en:"a little bit too high."},
+{t:508.7,cs:"Takže pokud se musíte natáhnout nohou a není to",en:"So if you're having to reach your foot up and it's not"},
+{t:510.6,cs:"pohodlné, posuňte si to.",en:"comfortable, move it for you."},
+{t:512.6,cs:"To je celá myšlenka, že",en:"That's the whole idea about this is"},
+{t:514.3,cs:"si to udělejte pohodlné pro sebe.",en:"make it comfortable for yourself."},
+{t:516.8,cs:"Víte, máme řidítka, která se pohybují dovnitř a ven,",en:"You know, we got bars that'll move in and out,"},
+{t:519.9,cs:"brzdy se pohybují nahoru a dolů.",en:"breaks move up and down."},
+{t:522.1,cs:"Tenhle plyn má trochu více volnosti",en:"This throttle has got a little bit more play"},
+{t:524.7,cs:"než bych obvykle chtěl.",en:"than what I would typically like."},
+{t:526.3,cs:"Takže si můžeme udělat úpravu nahoru na lynátkách plynu,",en:"So we can just make the adjustment up on the throttle"},
+{t:528.9,cs:"utáhneme si to a, víte,",en:"cables, tighten that up and, you know,"},
+{t:532.5,cs:"uděláme motorku, víte, přizpůsobíme ji tomu, co chcete",en:"make the bike for, you know, fit for what you want"},
+{t:535.2,cs:"a co je pro vás pohodlné.",en:"and what's comfortable for yourself."},
+{t:536.7,cs:"Takže toto cvičení je jen povzbuzení, abyste si sedli",en:"So this drill is just the encouragement to get out on your"},
+{t:539.9,cs:"na svou motorku a si pohráli s tímhle věcmi, jděte do garáže,",en:"bike and play with some of this stuff, get in the garage,"},
+{t:543,cs:"vezměte si nářadí a podívejte se, zda si můžete svou motorku",en:"grab your tools and see if you can get your bike"},
+{t:546.1,cs:"možná trochu více pohodlnou pro sebe.",en:"maybe a little bit more comfortable for you."},
+{t:549.6,cs:"V pořádku, teď, když rozumíte výhodám",en:"All right, so now that you understand the benefits"},
+{t:552.4,cs:"úpravy vaší motorky,",en:"of adjusting your motorcycle,"},
+{t:553.6,cs:"doufáme, že vám to dá sebevědomí,",en:"we hope this gives you the confidence,"},
+{t:555.4,cs:"povzbuzení, posunout si věci,",en:"the encouragement, to move some things around,"},
+{t:557.8,cs:"aby si motorka vůbec lépe seděla.",en:"make the bike fit you a little bit better."},
+{t:559.8,cs:"Vždy hledáme radost z jízdy na motorce",en:"We're always looking for motorcycle joy"},
+{t:562,cs:"a jedna velká věc je, že si vás motorka musí sedět.",en:"and one big thing is the bike has to fit you."},
+{t:565.5,cs:"Zkuste pár změn.",en:"Try some changes."}];
+
+var state={};
+state[1]={running:false,baseTime:0,startWall:0,lastIdx:-1,rafId:null,sliderDragging:false};
+var sections={1:{subs:subs1,duration:574}};
+
+function formatTime(s){var m=Math.floor(s/60);var sec=Math.floor(s%60);return m+":"+(sec<10?"0":"")+sec;}
+function getCurrentTime(s){if(!state[s].running)return state[s].baseTime;return state[s].baseTime+(Date.now()-state[s].startWall)/1000;}
+function findSubtitle(s,t){var subs=sections[s].subs;var idx=-1;for(var i=0;i<subs.length;i++){if(subs[i].t<=t)idx=i;else break;}return idx;}
+function updateDisplay(s){var t=getCurrentTime(s);var idx=findSubtitle(s,t);if(idx!==state[s].lastIdx){state[s].lastIdx=idx;if(idx>=0){document.getElementById("cs"+s).textContent=sections[s].subs[idx].cs;document.getElementById("en"+s).textContent=sections[s].subs[idx].en;}else{document.getElementById("cs"+s).textContent="\u2026";document.getElementById("en"+s).textContent="";}}document.getElementById("time"+s).textContent=formatTime(t);if(!state[s].sliderDragging)document.getElementById("slider"+s).value=Math.round(t);}
+function tick(s){updateDisplay(s);if(state[s].running)state[s].rafId=requestAnimationFrame(function(){tick(s);});}
+function toggleSync(s){if(state[s].running){pauseSync(s);}else{startSync(s);}}
+function startSync(s){state[s].running=true;state[s].startWall=Date.now();document.getElementById("btn"+s).textContent="\u23F8 Pauza";document.getElementById("btn"+s).classList.add("active");tick(s);}
+function pauseSync(s){state[s].running=false;state[s].baseTime=getCurrentTime(s);if(state[s].rafId)cancelAnimationFrame(state[s].rafId);document.getElementById("btn"+s).textContent="\u25B6 Start";document.getElementById("btn"+s).classList.remove("active");}
+function resetSync(s){var wasRunning=state[s].running;if(wasRunning)pauseSync(s);state[s].baseTime=0;state[s].lastIdx=-1;document.getElementById("slider"+s).value=0;document.getElementById("time"+s).textContent="0:00";document.getElementById("cs"+s).textContent="\u25B6 Spus\u0165te video a klikn\u011Bte Start";document.getElementById("en"+s).textContent="";}
+function setTime(s,t){var wasRunning=state[s].running;if(wasRunning){state[s].baseTime=t;state[s].startWall=Date.now();}else{state[s].baseTime=t;}state[s].lastIdx=-1;updateDisplay(s);}
+function adjustTime(s,delta){setTime(s,Math.max(0,getCurrentTime(s)+delta));}
+function onSliderInput(s){setTime(s,parseFloat(document.getElementById("slider"+s).value));}
+</script>
+</body>
+</html>

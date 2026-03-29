@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>11 — Zadní brzda (Rear Brake) | Champions Habits CZ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f0eb; color: #333; line-height: 1.7; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .module-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 3px solid #cf3339; }
+    .module-header h1 { color: #1a1a2e; font-size: 2em; margin-bottom: 12px; }
+    .nav-sections { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .nav-sections a { display: inline-block; padding: 8px 16px; background: #2d2d5e; color: #ffd700; text-decoration: none; border-radius: 6px; font-weight: 600; transition: background 0.2s; }
+    .nav-sections a:hover { background: #cf3339; color: white; }
+    .section { margin-bottom: 40px; padding-top: 20px; }
+    .section h2 { margin-bottom: 12px; color: #1a1a2e; font-size: 1.5em; }
+    .video-frame { width: 100%; height: 500px; border: 2px solid #e0e0e0; border-radius: 8px 8px 0 0; display: block; }
+    .subtitle-bar { background: #1a1a2e; color: #fff; padding: 18px 24px; min-height: 70px; font-size: 1.1em; text-align: center; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+    .subtitle-bar .cs { color: #ffd700; font-weight: 600; font-size: 1.2em; }
+    .subtitle-bar .en { color: #999; font-size: 0.8em; }
+    .controls { background: #2d2d5e; padding: 12px 24px 14px; border-radius: 0 0 8px 8px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .controls-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .controls button { background: #cf3339; color: white; border: none; padding: 8px 20px; border-radius: 6px; font-size: 0.95em; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .controls button:hover { background: #e85d5d; }
+    .controls button.active { background: #43a047; }
+    .controls button.active:hover { background: #66bb6a; }
+    .controls button.reset-btn { background: #555; }
+    .controls button.reset-btn:hover { background: #777; }
+    .controls .timer { color: #ffd700; font-family: monospace; font-size: 1.1em; min-width: 60px; text-align: center; }
+    .controls .adjust { background: #444; padding: 6px 12px; font-size: 0.85em; border-radius: 4px; }
+    .controls .adjust:hover { background: #666; }
+    .slider-row { display: flex; align-items: center; gap: 8px; padding: 0 2px; }
+    .slider-row label { color: #aaa; font-size: 0.75em; font-family: monospace; }
+    .time-slider { flex: 1; -webkit-appearance: none; appearance: none; height: 5px; border-radius: 3px; background: #444; outline: none; cursor: pointer; }
+    .time-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; }
+    .time-slider::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; border: none; }
+    .info { background: #fff3e0; border-left: 4px solid #ff9800; padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0; font-size: 0.9em; }
+    .info strong { color: #e65100; }
+    .info ol { margin: 8px 0 0 20px; }
+    .info li { margin-bottom: 4px; }
+    .summary-box { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 16px; margin: 20px 0; border-radius: 0 8px 8px 0; font-size: 0.95em; }
+    .summary-box strong { color: #1565c0; display: block; margin-bottom: 8px; font-size: 1.05em; }
+    .summary-box ul { margin: 0 0 0 20px; list-style: disc; }
+    .summary-box li { margin-bottom: 6px; line-height: 1.5; }
+    .module-nav { margin-top: 40px; padding: 20px; background: #2d2d5e; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .module-nav a { color: #ffd700; text-decoration: none; font-weight: 600; font-size: 1.1em; padding: 10px 24px; background: #cf3339; border-radius: 6px; transition: background 0.2s; }
+    .module-nav a:hover { background: #e85d5d; }
+    @media (max-width: 700px) { .video-frame { height: 350px; } .subtitle-bar { padding: 14px 16px; } .subtitle-bar .cs { font-size: 1em; } .controls { gap: 8px; padding: 10px 16px; } .controls button { padding: 6px 14px; font-size: 0.85em; } .nav-sections { flex-direction: column; } .nav-sections a { width: 100%; text-align: center; } .module-nav { flex-direction: column; text-align: center; } .module-nav a { width: 100%; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="module-header">
+    <h1>11 &#8212; Zadn&#237; brzda (Rear Brake) | Champions Habits CZ</h1>
+    <p style="color: #666; margin-top: 8px;">T&#345;i video sekce o spr&#225;vn&#233;m pou&#382;&#237;v&#225;n&#237; zadn&#237; brzdy &#8212; teorie, praktick&#225; uk&#225;zka a cvi&#269;en&#237;</p>
+  </div>
+
+  <div class="nav-sections">
+    <a href="#sec1">Sekce 1 &#8212; Teorie</a>
+    <a href="#sec2">Sekce 2 &#8212; Uk&#225;zka</a>
+    <a href="#sec3">Sekce 3 &#8212; Cvi&#269;en&#237;</a>
+  </div>
+
+  <div class="info">
+    <strong>Jak pou&#382;&#237;vat &#269;esk&#233; titulky:</strong>
+    <ol>
+      <li>Spus&#357;te video kliknut&#237;m na play p&#345;&#237;mo ve videu</li>
+      <li>Klikn&#283;te na <b>&#9654; Start</b> ve chv&#237;li, kdy video za&#269;ne p&#345;ehr&#225;vat</li>
+      <li>Pomoc&#237; tla&#269;&#237;tek &#177;1s / &#177;3s dola&#271;te synchronizaci</li>
+      <li>Posuvn&#237;kem m&#367;&#382;ete p&#345;esko&#269;it na libovoln&#233; m&#237;sto</li>
+    </ol>
+  </div>
+
+
+  <div class="section" id="sec1">
+    <h2>Sekce 1 &#8212; Zadn&#237; brzda: teorie (4:40)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/rear-brake-section-1/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs1">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en1"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(1)" id="btn1">&#9654; Start</button>
+        <span class="timer" id="time1">0:00</span>
+        <button class="adjust" onclick="adjustTime(1,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(1,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(1,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(1,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(1)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider1" min="0" max="280" value="0" step="1"
+               oninput="onSliderInput(1)" onmousedown="state[1].sliderDragging=true" onmouseup="state[1].sliderDragging=false"
+               ontouchstart="state[1].sliderDragging=true" ontouchend="state[1].sliderDragging=false">
+        <label>4:40</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Kl&#237;&#269;ov&#233; body &#8212; Zadn&#237; brzda: teorie</strong>
+      <ul>
+      <li>Zadn&#237; brzda je d&#367;le&#382;it&#253; n&#225;stroj, kter&#253; mnoho jezdc&#367; ignoruje nebo pou&#382;&#237;v&#225; &#353;patn&#283;</li>
+      <li>V&#253;robci dali zadn&#237; brzdu na ka&#382;dou motorku v&#269;etn&#283; z&#225;vodn&#237;ch &#8212; nen&#237; tam zbyte&#269;n&#283;</li>
+      <li>Zadn&#237; brzda pom&#225;h&#225; stabilizovat motorku p&#345;i n&#237;zk&#253;ch rychlostech a v zat&#225;&#269;k&#225;ch</li>
+      <li>Kl&#237;&#269;ov&#233;: nejprve zat&#237;&#382;it pneumatiku, pak teprve brzdovou s&#237;lu zvy&#353;ovat (load before you work)</li>
+      <li>Prudké dup&#225;n&#237; na brzdu vede k zablokován&#237; nebo aktivaci ABS &#8212; u&#269;te se plynul&#233;mu vstupu</li>
+      <li>P&#345;edn&#237; brzda je &#250;&#269;inn&#283;j&#353;&#237; d&#237;ky p&#345;enosu hmotnosti, ale zadn&#237; m&#225; sv&#233; specifick&#233; vyu&#382;it&#237;</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section" id="sec2">
+    <h2>Sekce 2 &#8212; Praktick&#225; uk&#225;zka (7:30)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/rear-brake-section-2/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs2">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en2"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(2)" id="btn2">&#9654; Start</button>
+        <span class="timer" id="time2">0:00</span>
+        <button class="adjust" onclick="adjustTime(2,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(2,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(2,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(2,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(2)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider2" min="0" max="450" value="0" step="1"
+               oninput="onSliderInput(2)" onmousedown="state[2].sliderDragging=true" onmouseup="state[2].sliderDragging=false"
+               ontouchstart="state[2].sliderDragging=true" ontouchend="state[2].sliderDragging=false">
+        <label>7:30</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Kl&#237;&#269;ov&#233; body &#8212; Praktick&#225; uk&#225;zka</strong>
+      <ul>
+      <li>Chris demonstruje spr&#225;vn&#233; pou&#382;it&#237; zadn&#237; brzdy na trati</li>
+      <li>Uk&#225;zka rozd&#237;lu mezi plynul&#253;m a prudk&#253;m brz&#271;en&#237;m zadn&#237; brzdou</li>
+      <li>Zadn&#237; brzda pomáhá zkrátit rozvor a zpevnit podvozek v zatáčce</li>
+      <li>Správný postup: lehce zatížit pedál, pak postupně přidávat sílu</li>
+      <li>Pozor na rozdíl mezi motorkami s ABS a bez ABS</li>
+      <li>Zadní brzda jako doplněk přední &#8212; ne náhrada, ale důležitý nástroj navíc</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section" id="sec3">
+    <h2>Sekce 3 &#8212; Cvičení a tipy (3:16)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/rear-brake-section-3/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs3">&#9654; Spusťte video a klikněte Start</div>
+      <div class="en" id="en3"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(3)" id="btn3">&#9654; Start</button>
+        <span class="timer" id="time3">0:00</span>
+        <button class="adjust" onclick="adjustTime(3,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(3,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(3,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(3,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(3)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider3" min="0" max="196" value="0" step="1"
+               oninput="onSliderInput(3)" onmousedown="state[3].sliderDragging=true" onmouseup="state[3].sliderDragging=false"
+               ontouchstart="state[3].sliderDragging=true" ontouchend="state[3].sliderDragging=false">
+        <label>3:16</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body &#8212; Cvičení a tipy pro reálný provoz</strong>
+      <ul>
+      <li>Cvičení 1: Najděte bezpečné místo a zkoušejte brzdový pedál &#8212; najděte práh zablokování/ABS</li>
+      <li>Cvičení 2: Porovnejte brzdnou dráhu přední vs. zadní brzdy při stejné rychlosti</li>
+      <li>V autě: všímejte si, jak prudce reagujete nohou na brzdu při leknutí</li>
+      <li>Při přenosu hmotnosti dopředu je přední brzda účinnější &#8212; zadní doplňuje</li>
+      <li>V provozu: při jízdě mezi pruhy mějte nohu připravenou na zadní brzdě</li>
+      <li>Nebojte se zadní brzdy &#8212; výrobci ji dávají na každou motorku včetně Grand Prix</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <a href="10-pointy-end.html">&#8592; Modul 10: Špička kuželu</a>
+    <a href="12-car-practice.html">Modul 12: Cvičení v autě &#8594;</a>
+  </div>
+</div>
+<script>
+var subs1=[{t:4.1,cs:"Zadní brzda.",en:"Rear brake."},
+{t:5.5,cs:"O čem budeme mluvit dál.",en:"The next thing we're going to talk about."},
+{t:7.9,cs:"Zajímavé téma.",en:"Interesting subject."},
+{t:9,cs:"Někteří z vás vám řekli,",en:"Some of you've been told,"},
+{t:9.9,cs:"nikdy se nedotýkejte zadní brzdy.",en:"never touch the rear brake."},
+{t:11.9,cs:"Někteří z vás vám řekli, používejte pouze zadní brzdu.",en:"Some of you've been told, only use the rear brake."},
+{t:15.4,cs:"Pojďme se na to podívat.",en:"Let's take a look."},
+{t:17.4,cs:"Vítejte v našem studiu zadní brzdy.",en:"Welcome to our study of rear brake."},
+{t:19.4,cs:"A museli jsme to zahrnout, zahrnuli jsme to v naší školě zde",en:"And we have to include this, we included in our school here"},
+{t:22.7,cs:"na univerzitě Champ také,",en:"in Champ University as well,"},
+{t:23.8,cs:"protože existuje tolik názorů, co myslíš Keith?",en:"because there's so many opinions, huh Keith?"},
+{t:25.9,cs:"Hmm, ano.",en:"Gosh, yeah."},
+{t:26.7,cs:"Studenti přijdou se sportovními motorkami a řeknou nám,",en:"Students come in on sport bikes and they tell us that they"},
+{t:29.2,cs:"že jim řekli, že nemohou používat svou zadní brzdu.",en:"were told they could never use their rear brake."},
+{t:30.9,cs:"Je to nebezpečné, neměla by být vůbec na motorce.",en:"It's dangerous, it shouldn't even be on the motorcycle."},
+{t:33.3,cs:"Nyní děláme mnohem víc práce s ulièními jezdci a pak",en:"Now we're doing a lot more work with street riders and then"},
+{t:35.8,cs:"cruisery a cruiserovými tréninky.",en:"cruisers and cruiser clinics."},
+{t:37.5,cs:"A spousta z nich přijde a řekne,",en:"And a lot of them come in and say,"},
+{t:38.9,cs:"pouze zadní brzda, nemohu se dotknout přední.",en:"rear brake only, can't touch the front."},
+{t:40.5,cs:"Pouze si skrčím přední, takže se nikdy nedotýkám přední brzdy.",en:"I'll just tuck the front, so I never touch the front brake."},
+{t:43.6,cs:"Není to úžasné, Keith,",en:"Isn't it amazing Keith,"},
+{t:44.8,cs:"že inženýři Grand Prix vložili zadní brzdu",en:"that the grand prix engineers put a rear brake"},
+{t:47,cs:"na motorku Grand Prix, a inženýři",en:"on a grand prix bike, and the engineers"},
+{t:49.3,cs:"kteří stavují začátečnické motorky vložili na ně zadní brzdu.",en:"who build beginner bikes put a rear brake on them."},
+{t:51.6,cs:"Co to znamená?",en:"So, what does that tell you?"},
+{t:52.6,cs:"Mluvili jste o tom v průběhu všech",en:"You guys have been talking about through all"},
+{t:53.8,cs:"těchto různých lekcí, že chceme jezdit na motorce,",en:"these different lessons that we want to ride the bikes,"},
+{t:55.7,cs:"tak jak ji inženýři navrhli.",en:"the way the engineers designed them to be ridden."},
+{t:58.2,cs:"Takže čím blíže můžeme jezdit na motorce tak, jak ji",en:"So the closer we can ride the motorcycles to the way those"},
+{t:60.7,cs:"inženýři navrhli,",en:"engineers designed it,"},
+{t:62,cs:"tím lépe motorka pro nás bude fungovat.",en:"the better motorcycle's going to work for us."},
+{t:63.8,cs:"A to je zvládnutí zadní brzdy a získání",en:"And that's mastering the rear brake and getting"},
+{t:64.7,cs:"cítění pro ni, a když přijdete na školení Champ,",en:"a feel for it, and when you come to Champ school,"},
+{t:67.9,cs:"uděláme tři, čtyři kola pouze se zadní brzdou",en:"we do three, four laps, rear brake only"},
+{t:69.9,cs:"a získáme cítění pro ni.",en:"and get a feel for it."},
+{t:70.8,cs:"A někteří lidé to fakt milují.",en:"And some people really dig it."},
+{t:73.2,cs:"Pak je to, pro některé z vás, někteří veteráni",en:"Then it's, for some of you, some of you veterans"},
+{t:74.7,cs:"kteří se přibližují k tomu, aby dělali víc",en:"that are sneaking up on doing some more"},
+{t:76.9,cs:"závodů a nalezli malý,",en:"racing and finding a little,"},
+{t:78.4,cs:"další malý způsob kontroly věcí bude velmi dobrý.",en:"another little way to control things will be very good."},
+{t:81.1,cs:"A používáme zadní brzdu v různých úrovních,",en:"And we use rear brake in different levels,"},
+{t:86,cs:"různé tlaky a výkony, v závislosti na motorce.",en:"different pressures and powers, depending on the motorcycle."},
+{t:89.5,cs:"Pojďme projít těmito třemi a pak si povíme,",en:"Let's walk through these three and then let's talk about"},
+{t:92.7,cs:"kdy používáme zadní brzdu.",en:"when we use rear brake."},
+{t:93.9,cs:"Ano, samozřejmě.",en:"Yeah, absolutely."},
+{t:95,cs:"Dobře, máme tady několik příkladů",en:"All right, so we have a couple of examples"},
+{t:96.2,cs:"zadních brzd.",en:"of rear brakes here."},
+{t:97.3,cs:"Toto je moderní sportovní motorka.",en:"This is a modern sport bike."},
+{t:99.1,cs:"Kotoučová větraná brzda, třmen,",en:"Disc vented, caliper,"},
+{t:102.1,cs:"něco k poznámce tady, tento drát,",en:"something to note on here, this wire,"},
+{t:103.8,cs:"toto je snímač rychlosti kola pro protiblokovací brzdový systém",en:"this is a wheel speed sensor for the antilock brakes"},
+{t:106.5,cs:"a je těžké vidět, zda je zde malý ozubený prstenec",en:"and hard to see if there's a little tone ring in here"},
+{t:108.5,cs:"a měří rychlost kola.",en:"and it measures the speed of the wheel."},
+{t:110,cs:"Řídí počítač, jak rychle se kolo pohybuje.",en:"It tells the computer how fast the wheel is going."},
+{t:112.2,cs:"Pomohou to modulovat ten brzdový pedál, pokud máte situaci,",en:"Kind of helps modulate that pedal if you have a situation"},
+{t:114.8,cs:"kde jste ztratili přilnavost.",en:"where you've lost traction."},
+{t:116.2,cs:"Toto je na většině moderních motork v těchto dnech.",en:"So this is on most modern bikes these days."},
+{t:119.3,cs:"Supermoto tady, mnohem lehčí motorka, ne?",en:"Supermoto over here, lot lighter of a motorcycle, right?"},
+{t:122.8,cs:"Takže kotoučová brzda je velkého průměru, protože",en:"So, the disc brake is large diameter because"},
+{t:125.7,cs:"používáme hodně zadní brzdy, když si hraju",en:"we're using a lot of rear brake when I'm playing"},
+{t:127.4,cs:"na supermoto tratích, určitě.",en:"in the Supermoto tracks, for sure."},
+{t:128.9,cs:"Ale pokud to nemůžete vidět, je to opravdu tenké, velmi dobře větrané.",en:"But if you can't see, it's really thin, very well vented."},
+{t:132.4,cs:"Takže určitě jiné nastavení, jiné použití,",en:"So definitely a different setup, different use,"},
+{t:134.4,cs:"hodně silného brzdění zadní brzdou, když si hrajeme",en:"a lot of heavy rear braking when playing"},
+{t:136.1,cs:"na supermoto tratích.",en:"on the Supermoto tracks."},
+{t:137.8,cs:"Toto je před-ABS",en:"This is a pre-ABS"},
+{t:141.4,cs:"golá sportovní motorka, jak bychom to mohli nazvat.",en:"naked sport bike, I guess you could call it."},
+{t:143,cs:"Nebo standardní.",en:"Or a standard."},
+{t:144.9,cs:"Je také větrána.",en:"It's also vented."},
+{t:145.7,cs:"Má taky nějaké vlnky zde",en:"It's also got some waves on here"},
+{t:147.4,cs:"a je trochu větší, ne?",en:"and it's a little bit larger, right?"},
+{t:148.7,cs:"Protože to není super sportovní motorka,",en:"'Cause it's not a super sport bike,"},
+{t:150.9,cs:"takže mírně delší rozvor kol.",en:"so slightly longer wheel base."},
+{t:152.3,cs:"Takže používá více zadní brzdy.",en:"So it uses up some more rear brakes."},
+{t:154,cs:"Takže to kompenzovali tím, že dali kotouč",en:"So they compensated for that to put the disc"},
+{t:156.2,cs:"trochu větší.",en:"on a little bigger."},
+{t:157.4,cs:"Pokud bychom měli zde běžný cruiser,",en:"If we had a regular cruiser here,"},
+{t:159.7,cs:"viděli byste gigantický zadní kotouč.",en:"you would see a gigantic rear disc."},
+{t:162.5,cs:"Někdy téměř stejně velký jako kolo, protože my,",en:"Sometimes almost as big as the wheel, because we,"},
+{t:164.3,cs:"jak jsme mluvili o cruiserových motorách,",en:"like we talked about on the cruiser bikes,"},
+{t:166,cs:"používáte mnohem více zadní brzdy.",en:"you use a lot more rear brakes."},
+{t:167.1,cs:"Takže, pár různých příkladů od inženýrů,",en:"So, a couple of different examples of the engineers,"},
+{t:169.8,cs:"jak je navrhli, co na ně dali.",en:"how they designed them, what they put on them."},
+{t:171.8,cs:"Takže můžeme používat zadní brzdu tak, jak byla navržena",en:"So we can use the rear brake the way it was designed"},
+{t:173.4,cs:"na použití.",en:"to be used."},
+{t:174.3,cs:"Takže, právě jsme se podívali na spoustu různých nastavení.",en:"So, we just looked at a bunch of different setups."},
+{t:175.9,cs:"Chlapče, ty bubnové brzdy.",en:"Boy, those drum brakes."},
+{t:177.7,cs:"Myslím, že existují všechny druhy různých zadních brzd",en:"I mean, there's all sorts of different rear brakes"},
+{t:179.2,cs:"a pojďme mluvit o tom, být flexibilním jezdcem,",en:"going on and let's talk about being the adjustable rider,"},
+{t:182.9,cs:"a kdy je používáme.",en:"and when we use them."},
+{t:183.8,cs:"Vím, že na škole je používáme poměrně hodně během dvou",en:"I know at the school we use them quite a bit during the two"},
+{t:186,cs:"jezdcových kol, jsme na motorce s poměrně dlouhým rozvorem,",en:"up laps, we're on a fairly long wheelbase motorcycle,"},
+{t:189.2,cs:"Tracer GT, MT-10, FC-1,",en:"a Tracer GT, a MT-10, a FC-1,"},
+{t:192.5,cs:"a máme váhu vzadu, která nám pomáhá.",en:"and we have weight on the back that helps."},
+{t:194.4,cs:"Takže bychom mohli trochu více hraní s zadní brzdou.",en:"So we could tease a little bit more rear brakes."},
+{t:195.9,cs:"Takže stále přemýšlíme, chlapče, co se tu děje,",en:"So we're always thinking about boy, what's going on here,"},
+{t:197.8,cs:"delší rozvor, můžeme to dělat více.",en:"longer wheel base, we can do it more."},
+{t:200.3,cs:"Jezdíme cruisery.",en:"We ride cruisers."},
+{t:201.1,cs:"Kde jste u cruiseru s používáním zadní brzdy?",en:"Where are you on the cruiser rear brake usage?"},
+{t:203,cs:"Minimálně polovina, na cruiserech je rozvor dlouhý,",en:"At least half on the cruisers, the wheel base is long,"},
+{t:207.9,cs:"takže váha bude trochu,",en:"so the weight is going to be a little bit,"},
+{t:209.5,cs:"trochu více vyrovnaná spředu dozadu.",en:"a little more equal front to back."},
+{t:210.9,cs:"Takže je můžete používat oba ve stejný čas.",en:"So you can use them both the same time."},
+{t:213,cs:"Obvykle je nejezdíte tak agresivně.",en:"You're usually not riding them as aggressively."},
+{t:214.9,cs:"Takže přenos váhy, který vychází ze sportovní motorky",en:"So, the weight transfer that comes out of the sport bike"},
+{t:217.4,cs:"se nutně nepoužívá.",en:"doesn't necessarily apply."},
+{t:219,cs:"Takže ano, na cruiseru, hodně jej používáme.",en:"So yeah, on the cruiser, using it a lot."},
+{t:220.9,cs:"Sportovní motorka, jedeme rychle, hodně přední brzdy,",en:"Sport bike, riding it quickly, a lot of front brake,"},
+{t:224.5,cs:"zjevně velké brzdy vpředu.",en:"obviously big breaks in the front."},
+{t:226.3,cs:"Kolik zadní brzdy na jednoho z těchto malých kamarádů?",en:"How much rear brake on one of these little fellows?"},
+{t:229,cs:"Měl bych tendenci říci, pokud máte více než 5 % na zadní brzdě,",en:"I'd tend to say, if you're more than 5% in the rear brake,"},
+{t:231.5,cs:"pravděpodobně nadměrně používáte zadní brzdu.",en:"you're probably overusing the rear brake."},
+{t:233,cs:"Je to velmi málo.",en:"It's very little."},
+{t:234.1,cs:"Ale slyšíte to jezdci,",en:"But you hear that riders,"},
+{t:234.9,cs:"vy jezdci na sportovních motorka, budete jít a ven z",en:"you sport bike riders, we're going to be in and out of the"},
+{t:236.8,cs:"zadní brzdy jemně, lehce, hladce, získejte cítění pro to.",en:"rear brake gently, lightly, smoothly, get a feel for that."},
+{t:239.5,cs:"Nebude to dělat moc zastavovací síly, jak uvidíte",en:"It's not going to do a whole lot of stopping power as you'll"},
+{t:241.8,cs:"v naší lekci brzdění.",en:"see in our braking practice classroom."},
+{t:243.8,cs:"Jedna poslední věc i na sportovní motorce,",en:"One last thing on the sport bike too,"},
+{t:246.2,cs:"na trati, je používáme hodně v levotočivých zatáčkách.",en:"on track, we use them a lot in left-hand corners."},
+{t:249.5,cs:"Profesionální jezdci,",en:"Professional racers,"},
+{t:251,cs:"Moto GP, některé světové Superbike a podobně.",en:"Moto GP, some world Superbike and stuff."},
+{t:253,cs:"Skutečně si přizpůsobili brzdu palcem na levém řídítku",en:"They've actually adapted a thumb break on the left handlebar"},
+{t:256.6,cs:"aby pomohla v pravotočivých zatáčkách.",en:"to aid in the right hand turns."},
+{t:257.9,cs:"Protože je poměrně těžké udržet správnou pozici těla",en:"'Cause it's kind of hard to keep proper body position"},
+{t:259.9,cs:"a dostat se k té zadní brzdě,",en:"and get to that rear brake,"},
+{t:261.3,cs:"ale pomáhá to udržet pozastavení usazené, takže mohou držet",en:"but it helps keep the suspension settled so they could hold"},
+{t:263.8,cs:"těsnější linii do zatáčky.",en:"a tighter line to the turn."},
+{t:264.8,cs:"Takže, spoustu jezdců používá zadní brzdu, aby jim pomohla",en:"So, a lot of racers are using rear brake to help them"},
+{t:267.2,cs:"také s jejich zatáčením, dobré.",en:"with their cornering too, okay."}];
+var subs2=[{t:0.4,cs:"(logo dunivý zvuk)",en:"(logo booming)"},
+{t:5.5,cs:"Podívejme se na používání zadní brzdy.",en:"Let's look a little rear brake usage."},
+{t:7.6,cs:"Pojďte sem, Chris čeká tady dole.",en:"We'll get, Chris is down here waiting."},
+{t:9.5,cs:"Chrise, pojď sem. On bude,",en:"Chris, come on in. He's going to,"},
+{t:11,cs:"udělej nejlepší zastavení se zadní brzdou!",en:"do your best stop with the rear brake!"},
+{t:13.2,cs:"(zvuk motoru motocyklu)",en:"(motorcycle engine roaring)"},
+{t:15.2,cs:"To je dobré.",en:"That's good."},
+{t:16.1,cs:"Aha. Aha. Fúh! Děkuju kamaráde, díky moc.",en:"Oh yeah. Oh. Whew! Thanks buddy, thanks a lot."},
+{t:21.5,cs:"Tak viď, Chrise, je zřejmé, že zadní brzda",en:"So Chris, it's apparent that the rear brake"},
+{t:24.7,cs:"není něco, co používáš.",en:"is not something you use."},
+{t:26.7,cs:"Je příliš silná.↵Není, viď?",en:"It's way too strong.↵Is it, man?"},
+{t:28.6,cs:"Ano. Pokaždé, když na ni sáhnu nohou",en:"Yeah. Every time I throw my foot at it"},
+{t:30,cs:"se to ihned zablokuje. Dupnu na ten pedál",en:"it just locks up. Stomp on that lever"},
+{t:32.3,cs:"a hned se zablokuje,",en:"and just locks immediately,"},
+{t:34.7,cs:"je to opravdu těžké na ovládání.",en:"pretty difficult to use."},
+{t:36.1,cs:"(zvuk harfy)",en:"(harp sounding)"},
+{t:39.6,cs:"No, Chrise Perise. Náhlednost.",en:"Woe, Chris Peris. Abruptness."},
+{t:42.3,cs:"Druhá příčina, proč padáme na motocyklu.",en:"The second reason we crash motorcycles."},
+{t:45.9,cs:"Co řekl, co řekl, Keite?",en:"What did he, what did he say, Keith?"},
+{t:47.1,cs:"Dupání, náhlednost,",en:"Stomp, abruptness,"},
+{t:49.7,cs:"důvod číslo dva, proč padáme na motocyklu.",en:"reason number two that we crash the motorcycles."},
+{t:51.6,cs:"Náhlednost, dupnutí na zadní brzdu,",en:"Abruptness, stomp on that rear brake,"},
+{t:53.7,cs:"věci budou náhlé.",en:"things are gonna get abrupt."},
+{t:54.7,cs:"Věci se pokazí.",en:"Things are gonna go wrong."},
+{t:56.1,cs:"Nebude to tak dobré.",en:"It's not going to work out so well."},
+{t:57.4,cs:"A proto necháme toto cvičení",en:"And it's why we leave this drill"},
+{t:59.2,cs:"na druhý den školy mistřů,",en:"to the second day in champ school,"},
+{t:60.5,cs:"protože jezdíme z aut.",en:"because we do come out of cars."},
+{t:61.7,cs:"Jezdíme z aut a z aut s ABS.",en:"We come out of cars and ABS cars."},
+{t:64.6,cs:"Čtyři velká kola na zemi.",en:"Four big tires on the ground."},
+{t:66.1,cs:"Můžeš být na nohu opravdu rychlý,",en:"You can get really quick with that foot,"},
+{t:68.1,cs:"ale Chris si vzal tu praxi z auta, špatnou,",en:"but Chris has taken that car practice, bad,"},
+{t:70.3,cs:"špatnou praxi dupání na nohu.",en:"bad car practice of stomping on that foot."},
+{t:73,cs:"Tak možná, KC, nechaj Chrise udělat další pokus",en:"So KC, maybe we'll have Chris do another one"},
+{t:75.5,cs:"a dáme mu, dáme mu malý tip",en:"and let's give him, give him a little tip"},
+{t:77.1,cs:"na kterém by měl pracovat.",en:"to work on coming in here."},
+{t:78.9,cs:"Ano. Hladce.",en:"Yeah. Smooth."},
+{t:81.8,cs:"Zkus to hladce.",en:"Try smooth."},
+{t:83,cs:"Zatěž pneumatiku dříve, než ji začneš používat.",en:"Load the tire before you work the tire."},
+{t:85.7,cs:"Zkusme to znova.",en:"Let's try it again."},
+{t:87,cs:"Možná přijel jen z aut s ABS? Tak neví,",en:"Maybe he came from ABS only? So he doesn't know"},
+{t:90.4,cs:"co dělat bez ABS motocyklu?",en:"what to do without an ABS bike?"},
+{t:91.9,cs:"Ano, ano.↵(zvuk motoru motocyklu)",en:"Yeah, yeah.↵(motorcycle engine roaring)"},
+{t:99.3,cs:"Zjišťuješ, že to funguje?",en:"Are you finding it does work?"},
+{t:100.7,cs:"Je to docela dobré.",en:"It's pretty good."},
+{t:101.6,cs:"Ano. Funguje to docela dobře.",en:"Yeah. Works pretty well."},
+{t:102.9,cs:"Ano. Pokud do toho vložíš zatížení.",en:"Yeah. If you put a load into it."},
+{t:104.3,cs:"Funguje to docela dobře.",en:"Works out pretty well."},
+{t:105.2,cs:"Ten hladký lineární graf, o kterém jsme mluvili.",en:"That smooth linear graph we talked about."},
+{t:107,cs:"Pokud by Chris přidělal více přední brzdy,",en:"If Chris added more and more front brake,"},
+{t:109.2,cs:"pochopeníčeho má více přední brzdy,",en:"understand as he has more front brake,"},
+{t:110.6,cs:"váha se přenese dopředu",en:"weight transfers forward"},
+{t:111.7,cs:"zadní pneumatika přijde ze země a",en:"back tire comes off the ground and"},
+{t:113,cs:"uvidíš, uvidíš Marqueze přijíždějícího do zatáčky,",en:"you'll, you'll see, you see Marquez coming into the corner,"},
+{t:115.5,cs:"zadní pneumatika ze země",en:"back tire off the ground"},
+{t:116.7,cs:"protože má tolik přední brzdy.",en:"because he's got so much front brake on."},
+{t:118.1,cs:"Prostě si to musíme promyslet, jezdci,",en:"So we just gotta think about this, riders,"},
+{t:119.9,cs:"když zvyšujeme tlak přední brzdy,",en:"as we increase front brake pressure,"},
+{t:121.8,cs:"zadní se musí uvolnit.",en:"rear has got to come off."},
+{t:122.9,cs:"Zadní se musí uvolnit. Ano.",en:"Rear has got to come off. Yeah."},
+{t:125,cs:"Překrývání, prostě takový,",en:"Overlapping, just kind of,"},
+{t:126.7,cs:"jen na zlomek sekundy, řekl bych.",en:"just for a split second, per say."},
+{t:128.6,cs:"Správně. Ukážeme to za moment.",en:"Right. We'll show that in just a second as well."},
+{t:130.8,cs:"Takže pořád myslíme na to, co řekl Keith,",en:"So we're always thinking what Keith's said,"},
+{t:133.2,cs:"teď se mi líbí ji používat v levé zatáčce",en:"now I like to use it in a left-hand corner"},
+{t:135.4,cs:"protože v levých zatáčkách brzdíš průběžně",en:"because in left-hand corners you trail in"},
+{t:137.8,cs:"když tlak přední brzdy opadá,",en:"as front brake pressure comes off,"},
+{t:139.1,cs:"můžeš v levých zatáčkách použít trochu zadní brzdy.",en:"you can use a little bit of rear brake in left-hand corners."},
+{t:142.6,cs:"V zatáčkách pod kopcem, naložené zavazadlem,",en:"Downhill corners, all loaded up with your luggage,"},
+{t:145.8,cs:"pasažérem vzadu, zatáčky pod kopcem s rostoucím poloměrem.",en:"passenger on the back, downhill tightening radius corners."},
+{t:148.5,cs:"Jsi skloněný, nemáš,",en:"You're leaned over, you don't,"},
+{t:149.9,cs:"já nemám spoustu přilnavosti vpředu,",en:"I don't really have a lot of points in the front,"},
+{t:151.8,cs:"ale máš trochu přilnavosti vzadu.",en:"but you got some points in the rear."},
+{t:153.3,cs:"Kamaráde, můžeš ten motocykl stabilizovat.",en:"Boy, you can get that bike settled."},
+{t:154.8,cs:"Pokud je přední brzda zatažena silně, zadní brzda,",en:"If the front brake is on hard, the rear brake,"},
+{t:157.4,cs:"to jest, můžeš snadno zablokovat zadní brzdu cruiseru",en:"I mean, you can easily lock a cruiser rear brake"},
+{t:159.9,cs:"pokud je přední brzda zatažena silně.",en:"if the front brake is on hard."},
+{t:161,cs:"Takže pořád myslíme na to, kde je přenos váhy.",en:"So we're always thinking about where the weight transfer is."},
+{t:163.4,cs:"A Chrise, teď ti sundám přilbu,",en:"And Chris, we're going to pull your helmet off here,"},
+{t:166.5,cs:"protože máš oblíbené místo na používání",en:"'cause you've got a favorite place to use"},
+{t:168.1,cs:"zadní brzdy. Chceme to ukázat.",en:"the rear brake. We want to show that."},
+{t:169.4,cs:"Ano. Určitě.",en:"Yeah. Definitely."},
+{t:170.9,cs:"Takže se mi zadní brzda líbí z mnoha důvodů.",en:"So, I like the rear brake for a lot of reasons."},
+{t:174,cs:"Na ulici určitě pomáhá",en:"On the street, it definitely just helps"},
+{t:175.8,cs:"motocykl zpomalit z obou stran, víš,",en:"the bike slow from both ends, you know,"},
+{t:177.9,cs:"může to být blíž 50/50 na ulici,",en:"might be closer to 50/50 on the street,"},
+{t:180,cs:"prostě zpomalení věcí.",en:"just getting the things slowed down."},
+{t:182.5,cs:"Na závodní dráze, kde se mi to opravdu líbí",en:"On the racetrack where I really like it"},
+{t:184.8,cs:"je to zpomalení přenosu váhy",en:"is to actually slow the weight transfer of"},
+{t:186.8,cs:"motocyklu. Takže když si myslíme,",en:"the motorcycle. So if we think,"},
+{t:189,cs:"přijídějící, možná dlouhou přímou na zatáčku",en:"coming down, maybe a long straightaway for a corner"},
+{t:191.3,cs:"do které se musíme hodně zpomalit.",en:"that we have to slow a lot for."},
+{t:193,cs:"Když vyjímeme přední brzdu,",en:"As we roll off onto that front brake,"},
+{t:195.4,cs:"ta předem sražená pneumatika vezme zatížení,",en:"that forward collapsed tire takes a load,"},
+{t:197.5,cs:"ale ta váha se přenese vpředu opravdu rychle",en:"but that weight really transfers forward quite quickly"},
+{t:200,cs:"jakmile začneme zpomalovat a máme tu hybnost",en:"as soon as we start slowing it and having that momentum"},
+{t:202.7,cs:"jakby vrh motocyklu dopředu.",en:"kind of throw the bike forward."},
+{t:204.8,cs:"Takže co se mi líbí, v opravdu tvrdých brzdových zónách",en:"So what I'll like to do is, in really hard braking zones"},
+{t:208.1,cs:"je zajet na zadní brzdu téměř o milisekundu",en:"is get on the rear brake almost a millisecond"},
+{t:211.2,cs:"dříve, než se skutečně dostaneš na přední brzdu.",en:"before you're actually getting on that front brake."},
+{t:213.2,cs:"A co to dělá, je to, že ten zadní třmen",en:"And what that does is, that rear caliper"},
+{t:216.5,cs:"stisne tu desku. A vlastně,",en:"clamps onto that disc. And it actually,"},
+{t:219.1,cs:"vidíš, jak to zpomaluje přenos váhy motocyklu.",en:"you'll watch it slow the weight transfer the motorcycle."},
+{t:222,cs:"Takže se nemůže jen vrhnout všechna váha vpředu.",en:"So it can't just push all the weight forward."},
+{t:224.3,cs:"Pocítíš, že se téměř celý motocykl",en:"You'll feel the whole bike almost kind of"},
+{t:225.6,cs:"sedne a vlastně se přenese",en:"sit down a little bit and it actually transfers"},
+{t:228,cs:"váha trochu pomaleji.",en:"weight a little bit more slowly."},
+{t:229.6,cs:"Takže to vlastně můžeme ukázat, pokud Keith,",en:"So, we'll actually can show this if Keith,"},
+{t:232.4,cs:"pokud jen zatlačíš na tu, tu zadní",en:"if you just push on that, that rear"},
+{t:234,cs:"část motocyklu právě tam, podívej se na ten zadní třmen.",en:"of the bike right there, take a look at this rear caliper."},
+{t:237.3,cs:"Takže když se ten motocykl hrbi, vidíš ten třmen",en:"So as that bike is squatting, you could see the caliper"},
+{t:241.6,cs:"by normálně, nebo se valí přes disk,",en:"would normally, or is rolling over the disk,"},
+{t:244.4,cs:"když se motocykl pohybuje,",en:"when the bike's moving,"},
+{t:245.2,cs:"disk se valit přes třmen.",en:"the disc is rolling through the caliper."},
+{t:247,cs:"Ale co budeme dělat je",en:"But what we're going to start doing is"},
+{t:249.4,cs:"na každý třetí zatlak, který Keith dá,",en:"on every third push that Keith gives it,"},
+{t:252.3,cs:"já se trochu zmáčknu na zadní brzdu.",en:"I'm going to squeeze on a little bit of rear brake."},
+{t:254.2,cs:"A co to bude dělat, je to, že ty",en:"And what that's going to do is have those"},
+{t:256,cs:"brzdové destičky zadní brzdy se stisknou na disk.",en:"rear brake pads clamp on that disc."},
+{t:258,cs:"A uvidíš vlastně zadní",en:"And you'll actually watch the rear"},
+{t:259.8,cs:"část motocyklu se vrátí výrazně pomaleji.",en:"of the motorcycle rebound significantly slower."},
+{t:262.3,cs:"Takže se podívíme téměř na sedlo",en:"So we'll take a look almost at the seat"},
+{t:265.1,cs:"a sledujeme, jak se to vrátí.",en:"and watch how that rebounds."},
+{t:266.4,cs:"Tak Keite, začni zatlačovat. 1, 2, 3,",en:"So Keith start pushing. 1, 2, 3,"},
+{t:271.6,cs:"vidíš jak se to zvedá pomaleji? 1, 2, 3.",en:"see how it comes up slower? 1, 2, 3."},
+{t:275.4,cs:"1, 2, 3.",en:"1, 2, 3."},
+{t:281.7,cs:"Takže jak jsme venku na závodní dráze, ta zadní brzda,",en:"So as we're out on the racetrack that rear brake,"},
+{t:284.4,cs:"nebo i na ulici, myšlenka je pořád stejná.",en:"or even on the street, the idea is still the same."},
+{t:286.9,cs:"Jen se nemusíme zpomalovat tak spěšně",en:"We just may not be stopping as much of a hurry"},
+{t:289.7,cs:"jak bys se možná zpomaloval, protože nejedeme",en:"as you might be because we're not going"},
+{t:291.7,cs:"takovým tempem na ulici.",en:"to be riding at that pace on the street."},
+{t:293.9,cs:"Ale pokud dokážeš zpomalit ten přenos váhy,",en:"But if you can slow that weight transfer,"},
+{t:296.7,cs:"můžeš vyhlazovat vjezd do zatáčky.",en:"you can smooth out that corner entry."},
+{t:298.4,cs:"A to je skutečně to, na co se chceme soustředit.",en:"And that's really what we're chasing with this idea."},
+{t:300.6,cs:"Ano. Parádní, Chrise.",en:"Yeah. Great, Chris."},
+{t:301.4,cs:"Takže pojďme, zavřeme tuhle myšlenku",en:"So let's, let's close this, this idea"},
+{t:303,cs:"a zadní brzdu s pár věcmi.",en:"and rear break up with a couple of things."},
+{t:305.2,cs:"Chceme věnovat pozornost tomu, jak ovládáme",en:"We want to pay attention to how we manipulate"},
+{t:308.3,cs:"zadní brzdu.",en:"the rear brake."},
+{t:309.2,cs:"Obvykle jezdíme s nohama takto.",en:"We're generally riding with our feet like this."},
+{t:311,cs:"Musíme se ujistit, že si necháme nohu na podpěře",en:"We're gonna make sure we leave our foot on the foot peg"},
+{t:313,cs:"a pak ohneme náš kotník vpředu.",en:"and then flex our ankle forward."},
+{t:314,cs:"Vidíš v třídě ergonomie, kterou",en:"You can see in the ergonomics class that we,"},
+{t:316.7,cs:"Keith dělal, máme tenhle brzdový pedál",en:"that Keith did, we've got this rear brake pedal"},
+{t:319.2,cs:"snížený na to, kde je velmi pohodlné",en:"lowered to where it's very comfortable"},
+{t:321.1,cs:"a ohýbáme kotník vpředu.",en:"and we flex our ankle forward."},
+{t:322.4,cs:"Nechceme si sundat nohu z podpěry.",en:"We don't want to take our foot off the foot peg."},
+{t:324.4,cs:"Viděli jsme jezdce, kteří si sundají nohu z podpěry.",en:"We've seen riders do that, take their foot off the foot peg."},
+{t:326.5,cs:"Přijdeš o všechnu citlivost. Je to ten hladký ohyb,",en:"You lose all feel. It's that smooth flex on,"},
+{t:329.3,cs:"hladký ohyb ven. A to, to může být jeden důvod,",en:"smooth flex off. And that, that may be one reason"},
+{t:332.7,cs:"proč jsi náhlý. Sundávaš si nohu z",en:"you're abrupt. You're taking your foot off"},
+{t:334,cs:"podpěry a myslím, že my zakládáme",en:"that foot peg and I think that we base"},
+{t:337.4,cs:"naši používání zadní brzdy na tom, kolik",en:"our rear brake use on how much"},
+{t:339.1,cs:"přední brzdy používáme, jaký rozvor máme.",en:"front brake we're using, what wheel base we have."},
+{t:341.9,cs:"Dlouhý rozvor, pasažér vzadu,",en:"Long wheel base, passenger on the back,"},
+{t:343.5,cs:"kamaráde, zadní brzda je na maximu.",en:"man, the rear brake's through the roof."},
+{t:345.3,cs:"Nemáš spoustu přední brzdové síly,",en:"Not a lot of front brake pressure on,"},
+{t:346.9,cs:"zadní brzda je na maximu.",en:"rear brake's through the roof."},
+{t:349.3,cs:"Chrise, v dešti, na štěrkových cestách,",en:"Chris, in the rain, on gravel roads,"},
+{t:351.7,cs:"pokud sjedelš z dráhy, kde je tvá zadní brzda",en:"if you run off the track, where's your rear brake"},
+{t:353.7,cs:"v tvé hlavě na tom?",en:"in your brain on that one?"},
+{t:354.8,cs:"Ano. Určitě ti pomůže",en:"Yeah. It's definitely going to help you"},
+{t:355.9,cs:"zpomalit motocykl, když možná nechceme",en:"slow the motorcycle when we maybe don't"},
+{t:358,cs:"používat tolik přední brzdy",en:"want to use it a ton of front brake"},
+{t:359.7,cs:"a věci jako v dešti nebo na studené pneumatice.",en:"and things like in the rain or on a cold tire."},
+{t:362.6,cs:"Líbí se mi to jen jako měřítko, kolik přilnavosti mám.",en:"I like it just as a gauge of how much grip I have."},
+{t:365,cs:"Vjeď si ji v hlíně. Dobře. Nebo na studené pneumatice.",en:"You run it in the dirt. Okay. Or on a cold tire."},
+{t:367.9,cs:"Pokud na ni hladce zmáčknu a ihned se zablokuje,",en:"If I squeeze on it smoothly and it's locking immediately,"},
+{t:370.5,cs:"vím, že je má pneumatika studená. Pocítíš, kdy je teplá.",en:"I know my tire's cold. You'll get a feel for when it's warm."},
+{t:373.8,cs:"Pocítíš, jak kouše a chytá.",en:"You'll feel how it bites and grips."},
+{t:375.5,cs:"A stane se to opravdu dobrým měřítkem",en:"And it becomes a really good kind of gauge"},
+{t:377.8,cs:"jak teplá může být tvá pneumatika.",en:"of how warm your tire might be."},
+{t:379.9,cs:"Takže vezmeš své znalosti o tom, jak se to sune",en:"So you take your knowledge of how it skids"},
+{t:381.9,cs:"na pěkné, teplé, čistém kusu vozovky.",en:"on a nice, warm, clean piece of pavement."},
+{t:384.5,cs:"A pak to procvičuješ, když najdeš",en:"And then you practice that when you find"},
+{t:386,cs:"nový kus vozovky, déšť, a tak dále.",en:"a new piece of pavement, rain, et cetera."},
+{t:388,cs:"Jasně.",en:"Yup."},
+{t:389,cs:"Dobře. Můžeme brzdít průběžně se zadní brzdou klíč?",en:"Good. Can we trail brake with a rear brake key?"},
+{t:390.9,cs:"Absolutně. Vždy respektujeme",en:"Absolutely. We're always respecting"},
+{t:392.1,cs:"sto bodů přilnavosti",en:"the hundred points of grip"},
+{t:393.4,cs:"a chceme být přizpůsobivý jezdec, že ne?",en:"and we want to be the adjustable rider, right?"},
+{t:395.1,cs:"Takže ať je situace jaká,",en:"So whatever the situation is,"},
+{t:396.3,cs:"chceme se přizpůsobit situaci",en:"we want to adjust to the situation"},
+{t:398,cs:"a zadní brzda je součást té situace.",en:"and the rear brake is part of that situation."},
+{t:400.1,cs:"Zadní brzda. Je to dole na naší prioritní stupnici,",en:"Rear brake. It's down on our priority scale,"},
+{t:402.8,cs:"ale záleží na tom, kde jsi v jízdě, že ne?",en:"but it depends where you are in your riding, right?"},
+{t:404.7,cs:"Pokud jsi, pokud jsi přes kopec do štěrku,",en:"If you're, if you're over a hill, into the gravel road,"},
+{t:407.8,cs:"zadní brzda bude velmi vysokou prioritou.",en:"rear brake will be a very high priority."},
+{t:410.5,cs:"Pokud jsi na úrovni experta silničního závodníka",en:"If you're an expert level road racer"},
+{t:412.3,cs:"a jsi v první pětce",en:"and you're in the top five"},
+{t:413.1,cs:"a chceš se dostat na pódium,",en:"and you want to get on the podium,"},
+{t:413.9,cs:"zadní brzda bude velmi vysokou prioritou.",en:"rear brake's going to be a very high priority."},
+{t:416,cs:"Pokud si v poledne shodíš motocykl",en:"If you drop your bike at lunch"},
+{t:417.4,cs:"a zlomíš páku přední brzdy,",en:"and you snap the front brake lever off,"},
+{t:420.9,cs:"Takže si ji dáme do tvého nástrojů. Neříkáme nikdy ji nepoužívej.",en:"So we put it in your toolbox. We don't say never use it."},
+{t:424.2,cs:"Neříkáme vždy ji používej. Říkáme vhodně,",en:"We don't say always use it. We say appropriate,"},
+{t:427.3,cs:"v závislosti na rozvor, zatížení, přední brzdový tlak,",en:"based on wheel base, load, front brake pressure,"},
+{t:430.5,cs:"kdo je vzadu.",en:"who's on the back."},
+{t:431.5,cs:"Zadní brzda, zvykni si na ni,",en:"Rear brake, get used to it,"},
+{t:433.4,cs:"procvičuj ji, udělej si z ní kamaráda.",en:"practice it, make it your buddy."}];
+var subs3=[{t:5.8,cs:"Takže toto cvičení,",en:"So this drill,"},
+{t:6.8,cs:"které vlastně není tak moc cvičením,",en:"which is maybe not as much of a drill,"},
+{t:9.2,cs:"jako spíš výzva, abyste si vyšli a vyzkoušeli",en:"as encouragement to get out and experience playing"},
+{t:12.5,cs:"si hrát s tou zadní brzdou.",en:"with that rear brake."},
+{t:13.5,cs:"V bezpečném a vhodném prostředí",en:"So in a safe and suitable environment,"},
+{t:16.8,cs:"rozjeďte si motorku, ne na bláznivé rychlosti,",en:"get your bike going, not crazy speeds,"},
+{t:19.4,cs:"ale snažte se najít, kde je ten brzdový pedál,",en:"but kind of find where that brake pedal is,"},
+{t:21.8,cs:"zjistěte, možná kde se vám motorka zamykala,",en:"find where maybe your bike locks,"},
+{t:24.8,cs:"pokud nemáte ABS,",en:"if you don't have ABS,"},
+{t:26.1,cs:"pokud máte ABS, budete cítit, jak páka začne pulzovat",en:"if you do have ABS you'll feel the lever start to pulsate"},
+{t:29.7,cs:"pokud se do toho pouštíte,",en:"if as you're getting into it,"},
+{t:30.9,cs:"takže tak nějak najdete ten práh,",en:"so you kind of find that threshold,"},
+{t:32.8,cs:"víte, znovu,",en:"you know, again,"},
+{t:33.6,cs:"nebudeme létat nohou na ten brzdový pedál,",en:"we're not going to throw our foot at that, that brake pedal,"},
+{t:36.4,cs:"nejdřív do něho zatížíme, pak s ním pracujeme,",en:"we're going to put a load in it before we work it,"},
+{t:38.6,cs:"a budete překvapeni, jak dobře to funguje.",en:"and you'll be shocked how well it works."},
+{t:40.6,cs:"Takže pokud máte pár různých motorek,",en:"So if you've got a couple of different bikes,"},
+{t:42.4,cs:"vyzkoušejte si to na pár různých motorek,",en:"try it on a couple different bikes,"},
+{t:44,cs:"protože jsou všechny jiné.",en:"cause they're all different."},
+{t:44.9,cs:"Takže toto cvičení, vyjeďte si, najděte svou brzdu.",en:"So this drill, go out, find your brake lever."},
+{t:48.8,cs:"Pokud řídíte auto, děláte toto cvičení.",en:"If you're driving a car, you do this drill."},
+{t:51.5,cs:"Začněte si všímat, jak rychle, jak náhle",en:"Start to pay attention, to how quickly, abruptly,"},
+{t:55.7,cs:"sáhnete na brzdy, když vás něco překvapí.",en:"you get to the brakes when you're shocked."},
+{t:57.8,cs:"Něco vás překvapí,",en:"Something will shock you,"},
+{t:58.8,cs:"třeba auto se vám skoro vrhne do pruhu.",en:"maybe a car almost pulls in front of you."},
+{t:60.7,cs:"Překvapí to vaše tělo, překvapí to vaše oči,",en:"It shocks your body, it shocks your eyes,"},
+{t:63.3,cs:"ale překvapí to vaši nohu?",en:"but does it shock your foot."},
+{t:65.1,cs:"Pokud ano, pak budete prudce sešlapovat",en:"If it does, then you'll be stabbing"},
+{t:66.5,cs:"ten brzdový pedál na motorce",en:"that rear brake pedal on a motorcycle"},
+{t:68.4,cs:"a zablokujete brzdu a vjezdete do ABS.",en:"and locking up the brake and going into the ABS."},
+{t:70.7,cs:"Musíte zjistit, jakmile jste v ABS,",en:"You need to find out once you're in ABS,"},
+{t:73.5,cs:"prodlužuje se brzdná dráha, musíme být jemní,",en:"it lengthens the stock, so we need to be smooth on it,"},
+{t:76.7,cs:"a můžeme si to procvičit s tímto cvičením,",en:"and we can practice that with this drill,"},
+{t:79.3,cs:"všímáme-li si naší prudkosti v autě.",en:"by paying attention to our abruptness in our car."},
+{t:82.4,cs:"Takže toto cvičení je spíš o tom prokázat si",en:"So this drill is more proving to yourself"},
+{t:85.4,cs:"brzdnou dráhu přední",en:"about the stopping distance of the front"},
+{t:87.2,cs:"versus zadní brzdy.",en:"versus the rear brake."},
+{t:89,cs:"Najděte si bezpečné a vhodné místo, vyberte si rychlost,",en:"Go find a safe suitable location, pick a mile an hour,"},
+{t:91.8,cs:"nemusí to být bláznivá rychlost,",en:"doesn't need to be a crazy speed,"},
+{t:93.7,cs:"ale zrychlte na určitou rychlost,",en:"but accelerate to a certain mile an hour,"},
+{t:96.3,cs:"použijte přední brzdu, odhadněte si brzdnou dráhu.",en:"use that front brake, kinda gauge that stopping distance."},
+{t:99.4,cs:"Podívejte se, jaká to je.",en:"See what that is."},
+{t:100.5,cs:"Udělejte to samé, zrychlte na stejnou rychlost,",en:"Do the same thing, get up to that same speed,"},
+{t:102.5,cs:"použijte zadní brzdu.",en:"use the rear brake."},
+{t:103.8,cs:"Podívejte se, jaká bude brzdná dráha.",en:"See what that stopping distance ends up being."},
+{t:106,cs:"A zjistíte, že když zpomalujete motorku,",en:"And so you'll find that as you slow your motorcycle,"},
+{t:109.3,cs:"váha se přenáší dopředu.",en:"weight transfers forward."},
+{t:110.7,cs:"A proto je přední brzda",en:"And that's why that front brake ends up being"},
+{t:112.4,cs:"podstatně účinnější než ta zadní.",en:"just that much more efficient than the rear."},
+{t:115,cs:"Takže chceme, abyste si to vyšli a pocítili.",en:"So we want you to get out and get a feel for how that works."},
+{t:122.8,cs:"Všichni jezdci, chvíli si na to vezměte čas.",en:"Hey riders, let's just take a moment."},
+{t:124.8,cs:"Zastavte se, vykliďte si hlavu.",en:"Stop, clear our minds."},
+{t:127.1,cs:"Podívejme se na to.",en:"Let's take a look at this."},
+{t:128.5,cs:"Hej, v reálu je zadní brzda ABS.",en:"Hey, real-world rear brake is ABS."},
+{t:131,cs:"Pokud se vám ABS spustí hned",en:"If you're into ABS immediately"},
+{t:132.8,cs:"když se dotknete zadní brzdy,",en:"when you touch the rear brake,"},
+{t:134.1,cs:"prudce ji dupnete.",en:"you're stabbing it."},
+{t:135.4,cs:"Vyhlaďte si svůj počáteční vstup do zadní brzdy.",en:"Smooth out your initial input into that rear brake."},
+{t:138,cs:"Zatížte pneumatiku, než s ní budete pracovat.",en:"Load the tire before you work the tire."},
+{t:139.9,cs:"V reálu si přehodnoťte zadní brzdu.",en:"Real world, change your mind about the rear brake."},
+{t:143.2,cs:"Jestli jste slyšeli, že ji vždycky používejte.",en:"If you've heard always use it."},
+{t:144.5,cs:"Jestli jste slyšeli, že ji nikdy nepoužívejte.",en:"If you've heard, never use it."},
+{t:146.1,cs:"Ne, vyjeďte si, najděte si prostor a trénujte si ji.",en:"No, go out, find yourself some room and practice it."},
+{t:149.7,cs:"Seznamte se s ní.",en:"Become familiar with it."},
+{t:151.1,cs:"Je to důležité.",en:"It's a big deal."},
+{t:152.1,cs:"Musíte si ji naučit.",en:"You need to learn it."},
+{t:153,cs:"Jezdci, pojďme si říct o zadní brzdě a v provozu.",en:"Riders, let's cover the rear brake and traffic."},
+{t:155.4,cs:"Pokud jezdíte mezi pruhy, hustý provoz na dálnici,",en:"If you're splitting lanes, densely populated freeway,"},
+{t:159,cs:"městská jízda, držte nohu nad tou zadní brzdou",en:"city riding, have your foot hovering over that rear brake"},
+{t:162.2,cs:"aby jste si zkrátili reakční dobu.",en:"to cut your reaction time."},
+{t:164.4,cs:"Jo, hodně jsme si povídali o mání na přední brzdě,",en:"Yeah, we've talked a lot about covering that front brake,"},
+{t:166.8,cs:"tak pojďme si mít připravenou i zadní brzdu.",en:"cover the rear brake."},
+{t:169.2,cs:"Končíme zadní brzdou",en:"We end rear brake"},
+{t:170.5,cs:"s nadějí, že se jí nebudete bát.",en:"with the hope that you're not afraid of it."},
+{t:173.4,cs:"Myslíte na rozvor své motorky.",en:"Think about the wheelbase of your motorcycle."},
+{t:175.4,cs:"Řídíte někdy jako cestující?",en:"Do you ride as a passenger?"},
+{t:177.1,cs:"Kolik máte zapojené přední brzdy?",en:"How much front brake do you have on?"},
+{t:178.8,cs:"Jak jemně umíte být s nohama?",en:"How smooth can you be with your foot?"},
+{t:180.4,cs:"A pomyslíte si,",en:"And think about this,"},
+{t:181.3,cs:"že výrobci dali zadní brzdu na každou motorku, kterou vyrábějí,",en:"the manufacturers put a rear brake on every bike they make,"},
+{t:184.2,cs:"včetně Grand Prix motorek.",en:"including Grand Prix bike."},
+{t:185.9,cs:"Naučte se ji používat, je to další nástroj ve vaší sadě.",en:"Learn to use it, it's another tool for your toolbox."}];
+
+var state={};
+for(var s=1;s<=3;s++)state[s]={running:false,baseTime:0,startWall:0,lastIdx:-1,rafId:null,sliderDragging:false};
+var sections={1:{subs:subs1,duration:280},2:{subs:subs2,duration:450},3:{subs:subs3,duration:196}};
+
+function formatTime(s){var m=Math.floor(s/60);var sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec;}
+function getCurrentTime(s){if(!state[s].running)return state[s].baseTime;return state[s].baseTime+(Date.now()-state[s].startWall)/1000;}
+function findSubtitle(subs,t){var idx=-1;for(var i=0;i<subs.length;i++){if(subs[i].t<=t)idx=i;else break;}return idx;}
+function updateDisplay(s){var t=getCurrentTime(s);var sec=sections[s];var idx=findSubtitle(sec.subs,t);if(idx!==state[s].lastIdx){state[s].lastIdx=idx;var csEl=document.getElementById('cs'+s);var enEl=document.getElementById('en'+s);if(idx>=0&&idx<sec.subs.length){csEl.textContent=sec.subs[idx].cs;enEl.textContent=sec.subs[idx].en;}else{csEl.textContent='';enEl.textContent='';}}document.getElementById('time'+s).textContent=formatTime(t);if(!state[s].sliderDragging){document.getElementById('slider'+s).value=Math.floor(t);}}
+function tick(s){updateDisplay(s);if(state[s].running)state[s].rafId=requestAnimationFrame(function(){tick(s);});}
+function startSync(s){state[s].startWall=Date.now();state[s].running=true;state[s].rafId=requestAnimationFrame(function(){tick(s);});document.getElementById('btn'+s).textContent='⏸ Pauza';document.getElementById('btn'+s).classList.add('active');}
+function pauseSync(s){state[s].baseTime=getCurrentTime(s);state[s].running=false;if(state[s].rafId)cancelAnimationFrame(state[s].rafId);document.getElementById('btn'+s).textContent='▶ Pokračovat';document.getElementById('btn'+s).classList.remove('active');}
+function toggleSync(s){if(state[s].running)pauseSync(s);else startSync(s);}
+function resetSync(s){pauseSync(s);state[s].baseTime=0;state[s].lastIdx=-1;updateDisplay(s);document.getElementById('btn'+s).textContent='▶ Start';document.getElementById('cs'+s).textContent='▶ Spusťte video a klikněte Start';document.getElementById('en'+s).textContent='';}
+function setTime(s,t){var wasRunning=state[s].running;if(wasRunning)pauseSync(s);state[s].baseTime=t;state[s].lastIdx=-1;updateDisplay(s);if(wasRunning)startSync(s);}
+function adjustTime(s,delta){setTime(s,Math.max(0,getCurrentTime(s)+delta));}
+function onSliderInput(s){state[s].sliderDragging=true;setTime(s,parseFloat(document.getElementById('slider'+s).value));state[s].sliderDragging=false;}
+</script>
+</body>
+</html>

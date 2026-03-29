@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>06 — Brzdná praxe (Braking Practice) | Champions Habits CZ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f0eb; color: #333; line-height: 1.7; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .module-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 3px solid #cf3339; }
+    .module-header h1 { color: #1a1a2e; font-size: 2em; margin-bottom: 12px; }
+    .nav-sections { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .nav-sections a { display: inline-block; padding: 8px 16px; background: #2d2d5e; color: #ffd700; text-decoration: none; border-radius: 6px; font-weight: 600; transition: background 0.2s; }
+    .nav-sections a:hover { background: #cf3339; color: white; }
+    .section { margin-bottom: 40px; padding-top: 20px; }
+    .section h2 { margin-bottom: 12px; color: #1a1a2e; font-size: 1.5em; }
+    .video-frame { width: 100%; height: 500px; border: 2px solid #e0e0e0; border-radius: 8px 8px 0 0; display: block; }
+    .subtitle-bar { background: #1a1a2e; color: #fff; padding: 18px 24px; min-height: 70px; font-size: 1.1em; text-align: center; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+    .subtitle-bar .cs { color: #ffd700; font-weight: 600; font-size: 1.2em; }
+    .subtitle-bar .en { color: #999; font-size: 0.8em; }
+    .controls { background: #2d2d5e; padding: 12px 24px 14px; border-radius: 0 0 8px 8px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .controls-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .controls button { background: #cf3339; color: white; border: none; padding: 8px 20px; border-radius: 6px; font-size: 0.95em; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .controls button:hover { background: #e85d5d; }
+    .controls button.active { background: #43a047; }
+    .controls button.active:hover { background: #66bb6a; }
+    .controls button.reset-btn { background: #555; }
+    .controls button.reset-btn:hover { background: #777; }
+    .controls .timer { color: #ffd700; font-family: monospace; font-size: 1.1em; min-width: 60px; text-align: center; }
+    .controls .adjust { background: #444; padding: 6px 12px; font-size: 0.85em; border-radius: 4px; }
+    .controls .adjust:hover { background: #666; }
+    .slider-row { display: flex; align-items: center; gap: 8px; padding: 0 2px; }
+    .slider-row label { color: #aaa; font-size: 0.75em; font-family: monospace; }
+    .time-slider { flex: 1; -webkit-appearance: none; appearance: none; height: 5px; border-radius: 3px; background: #444; outline: none; cursor: pointer; }
+    .time-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; }
+    .time-slider::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; border: none; }
+    .info { background: #fff3e0; border-left: 4px solid #ff9800; padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0; font-size: 0.9em; }
+    .info strong { color: #e65100; }
+    .info ol { margin: 8px 0 0 20px; }
+    .info li { margin-bottom: 4px; }
+    .summary-box { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 16px; margin: 20px 0; border-radius: 0 8px 8px 0; font-size: 0.95em; }
+    .summary-box strong { color: #1565c0; display: block; margin-bottom: 8px; font-size: 1.05em; }
+    .summary-box ul { margin: 0 0 0 20px; list-style: disc; }
+    .summary-box li { margin-bottom: 6px; line-height: 1.5; }
+    .module-nav { margin-top: 40px; padding: 20px; background: #2d2d5e; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .module-nav a { color: #ffd700; text-decoration: none; font-weight: 600; font-size: 1.1em; padding: 10px 24px; background: #cf3339; border-radius: 6px; transition: background 0.2s; }
+    .module-nav a:hover { background: #e85d5d; }
+    @media (max-width: 700px) { .video-frame { height: 350px; } .subtitle-bar { padding: 14px 16px; } .subtitle-bar .cs { font-size: 1em; } .controls { gap: 8px; padding: 10px 16px; } .controls button { padding: 6px 14px; font-size: 0.85em; } .nav-sections { flex-direction: column; } .nav-sections a { width: 100%; text-align: center; } .module-nav { flex-direction: column; text-align: center; } .module-nav a { width: 100%; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="module-header">
+    <h1>06 &#8212; Brzdn&#225; praxe (Braking Practice) | Champions Habits CZ</h1>
+    <p style="color: #666; margin-top: 8px;">P&#283;t video sekc&#237; o spr&#225;vn&#233;m brzd&#283;n&#237; na motorce &#8212; technika, cvi&#269;en&#237;, pr&#367;b&#283;&#382;n&#233; brzd&#283;n&#237; a re&#225;ln&#233; sc&#233;n&#225;&#345;e</p>
+  </div>
+
+  <div class="nav-sections">
+    <a href="#sec1">Sekce 1 &#8212; &#218;vod</a>
+    <a href="#sec2">Sekce 2 &#8212; Cvi&#269;en&#237;</a>
+    <a href="#sec3">Sekce 3 &#8212; Trail braking</a>
+    <a href="#sec4">Sekce 4 &#8212; Pokro&#269;il&#233;</a>
+    <a href="#sec5">Sekce 5 &#8212; Shrnut&#237;</a>
+  </div>
+
+  <div class="info">
+    <strong>Jak pou&#382;&#237;vat &#269;esk&#233; titulky:</strong>
+    <ol>
+      <li>Spus&#357;te video kliknut&#237;m na play p&#345;&#237;mo ve videu</li>
+      <li>Klikn&#283;te na <b>&#9654; Start</b> ve chv&#237;li, kdy video za&#269;ne p&#345;ehr&#225;vat</li>
+      <li>Pomoc&#237; tla&#269;&#237;tek &#177;1s / &#177;3s dola&#271;te synchronizaci</li>
+      <li>Posuvn&#237;kem m&#367;&#382;ete p&#345;esko&#269;it na libovoln&#233; m&#237;sto</li>
+    </ol>
+  </div>
+
+
+  <!-- SECTION 1 -->
+  <div class="section" id="sec1">
+    <h2>Sekce 1 &#8212; Úvod do brzdění (14:04)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/braking-practice-section-1/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs1">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en1"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(1)" id="btn1">&#9654; Start</button>
+        <span class="timer" id="time1">0:00</span>
+        <button class="adjust" onclick="adjustTime(1,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(1,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(1,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(1,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(1)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider1" min="0" max="844" value="0" step="1"
+               oninput="onSliderInput(1)" onmousedown="state[1].sliderDragging=true" onmouseup="state[1].sliderDragging=false"
+               ontouchstart="state[1].sliderDragging=true" ontouchend="state[1].sliderDragging=false">
+        <label>14:04</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Úvod do brzdění</strong>
+      <ul>
+      <li>Brzdění je jedna z nejdůležitějších dovedností na motorce — může zachránit život</li>
+      <li>Přední brzda poskytuje ~70% brzdné síly, zadní ~30% — obě brzdy používat současně</li>
+      <li>Progresivní aplikace brzdy: postupné zvyšování tlaku, ne prudké stisknutí</li>
+      <li>Trail braking (průběžné brzdění) = brzdění pokračuje do zatáčky, postupně uvolňujeme</li>
+      <li>Pozice těla při brzdění: sevřít koleny nádrž, ruce lehké na řidítkách</li>
+      <li>Přední vidlice se při brzdění stlačí — to je normální a žádoucí (přesouvá váhu dopředu)</li>
+      <li>Cvičení brzdění by mělo být součástí každé jízdy</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section" id="sec2">
+    <h2>Sekce 2 &#8212; Praktické cvičení brzdění (5:03)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/braking-practice-section-2/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs2">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en2"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(2)" id="btn2">&#9654; Start</button>
+        <span class="timer" id="time2">0:00</span>
+        <button class="adjust" onclick="adjustTime(2,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(2,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(2,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(2,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(2)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider2" min="0" max="303" value="0" step="1"
+               oninput="onSliderInput(2)" onmousedown="state[2].sliderDragging=true" onmouseup="state[2].sliderDragging=false"
+               ontouchstart="state[2].sliderDragging=true" ontouchend="state[2].sliderDragging=false">
+        <label>5:03</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Praktické cvičení brzdění</strong>
+      <ul>
+      <li>Nastavte si bezpečnou cvičební zónu s kužely pro trénink zastavení</li>
+      <li>Koučování přátel: sledujte pozici těla, práci s brzdami a vidlici</li>
+      <li>Přední vidlice by se měla stlačit plynule, ne prudce — to ukazuje správnou techniku</li>
+      <li>Pozorujte, zda jezdec používá obě brzdy současně</li>
+      <li>Opakování je klíčem — čím více trénujete, tím přirozenější brzdění bude</li>
+      <li>Správné brzdění funguje na jakékoli motorce v jakýchkoli podmínkách</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section" id="sec3">
+    <h2>Sekce 3 &#8212; Průběžné brzdění v zatáčkách (3:40)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/braking-practice-section-3/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs3">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en3"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(3)" id="btn3">&#9654; Start</button>
+        <span class="timer" id="time3">0:00</span>
+        <button class="adjust" onclick="adjustTime(3,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(3,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(3,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(3,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(3)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider3" min="0" max="220" value="0" step="1"
+               oninput="onSliderInput(3)" onmousedown="state[3].sliderDragging=true" onmouseup="state[3].sliderDragging=false"
+               ontouchstart="state[3].sliderDragging=true" ontouchend="state[3].sliderDragging=false">
+        <label>3:40</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Průběžné brzdění v zatáčkách</strong>
+      <ul>
+      <li>Trail braking = postupné uvolňování brzdy při nájezdu do zatáčky</li>
+      <li>Brzdy pomáhají motorce zatáčet — stlačená vidlice zpřísňuje poloměr</li>
+      <li>Kontrola geometrie motorky: brzdění mění geometrii a pomáhá s řízením</li>
+      <li>Nikdy nepouštějte brzdy prudce — plynulý přechod z brzdění na neutrální plyn</li>
+      <li>Jemnost a plynulost jsou klíčové — žádné prudké pohyby</li>
+      <li>Průběžné brzdění dává jezdci kontrolu přes celý nájezd do zatáčky</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 4 -->
+  <div class="section" id="sec4">
+    <h2>Sekce 4 &#8212; Pokročilé brzdné scénáře (4:52)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/braking-practice-section-4/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs4">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en4"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(4)" id="btn4">&#9654; Start</button>
+        <span class="timer" id="time4">0:00</span>
+        <button class="adjust" onclick="adjustTime(4,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(4,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(4,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(4,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(4)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider4" min="0" max="292" value="0" step="1"
+               oninput="onSliderInput(4)" onmousedown="state[4].sliderDragging=true" onmouseup="state[4].sliderDragging=false"
+               ontouchstart="state[4].sliderDragging=true" ontouchend="state[4].sliderDragging=false">
+        <label>4:52</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Pokročilé brzdné scénáře</strong>
+      <ul>
+      <li>Zakrytí brzdy (covering) = prsty připravené na brzdové páčce při jízdě v provozu</li>
+      <li>Zakrytí brzdy zkracuje reakční čas o cenné desetiny sekundy</li>
+      <li>V křižovatkách: vždy mít prsty na brzdě, být připraven na nečekané situace</li>
+      <li>Porovnání jezdců: kdo zakrývá brzdu vs. kdo ne — obrovský rozdíl v brzdné dráze</li>
+      <li>Periferní vnímání: sledujte pohyb aut na okraji zorného pole</li>
+      <li>Technika zakrytí brzdy by se měla stát automatickým návykem v provozu</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 5 -->
+  <div class="section" id="sec5">
+    <h2>Sekce 5 &#8212; Technologie, shrnutí a praxe (12:36)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/braking-practice-section-5/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs5">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en5"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(5)" id="btn5">&#9654; Start</button>
+        <span class="timer" id="time5">0:00</span>
+        <button class="adjust" onclick="adjustTime(5,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(5,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(5,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(5,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(5)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider5" min="0" max="756" value="0" step="1"
+               oninput="onSliderInput(5)" onmousedown="state[5].sliderDragging=true" onmouseup="state[5].sliderDragging=false"
+               ontouchstart="state[5].sliderDragging=true" ontouchend="state[5].sliderDragging=false">
+        <label>12:36</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Technologie a shrnutí</strong>
+      <ul>
+      <li>ABS je bezpečnostní systém, ne náhrada za správnou techniku brzdění</li>
+      <li>ABS pomáhá nejvíc v panických situacích — zabrání zablokování kol</li>
+      <li>I s ABS je důležité cvičit správnou techniku progresivního brzdění</li>
+      <li>Kontrola trakce a další elektronika jsou pomocníci, ne záchranáři</li>
+      <li>Přílišná důvěra v technologii vede k nebezpečným návykům</li>
+      <li>Křižovatky jsou 2. nejčastější místo nehod — zakrytí brzdy je klíčové</li>
+      <li>Jak často cvičit brzdění? Každou jízdu!</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <a href="05-body-position.html">&#8592; Modul 05: Pozice t&#283;la</a>
+    <a href="07-100mm-of-travel.html">Modul 07: 100mm zdvihu &#8594;</a>
+  </div>
+
+</div>
+
+<script>
+var subs1=[{t:5.0,cs:"Dobře, jezdci.",en:"All right, riders."},
+{t:5.9,cs:"Příští velká třída je věnována brzdění.",en:"Huge class coming up next, braking practice."},
+{t:8.9,cs:"Pokud existuje jedna komponenta, kterou musíte zvládnout na vašem motocyklu,",en:"If there's a single component to master on your motorcycle,"},
+{t:12.4,cs:"jsou to brzdy.",en:"it's the brakes."},
+{t:14.1,cs:"Zde máte podrobný návod, jak se stát expertním brzdičem.",en:"Here's a step by step guide to become an expert braker."},
+{t:18.2,cs:"(zvuk revvingu motoru motocyklu)",en:"(motorcycle engine revving)"},
+{t:24.2,cs:"Vítejte v jednom z nejdůležitějších témat",en:"Welcome to one of the most important topics"},
+{t:26.6,cs:"v životě jezdce, všechno ostatní, co děláme,",en:"in your life as a rider driver, everything else we do,"},
+{t:30.1,cs:"a Kyle, právě ta komponenta, kterou je třeba zvládnout.",en:"and Kyle, the one component to master."},
+{t:34.2,cs:"Je to přední brzdová páčka.",en:"It's the front brake lever."},
+{t:35.8,cs:"Samozřejmě.",en:"Absolutely."},
+{t:36.6,cs:"Nejdůležitější komponenta na motocyklu.",en:"The most important component on the motorcycle."},
+{t:38.4,cs:"Používáme ji k zpomalování, používáme ji k zatáčení,",en:"We use it to slow, we use it to turn,"},
+{t:40.9,cs:"používáme ji k vytváření síly",en:"we use it to generate force"},
+{t:43.0,cs:"kterou je motocykl konstruován, aby zvládl.",en:"that the motorcycle's designed to take."},
+{t:44.9,cs:"Toto je brzdění - cvičení.",en:"This is braking practice."},
+{t:46.7,cs:"Chystáme se vám poskytnout podrobný návod",en:"We're going to give you a step by step guide"},
+{t:48.4,cs:"na to, co cvičit, abyste zvládli nejdůležitější komponentu",en:"on what to practice to master the most important component"},
+{t:51.5,cs:"na motocyklu.",en:"on a motorcycle."},
+{t:52.3,cs:"Takže Chrise, když jsi sem přijel,",en:"So, Chris, as you came in here,"},
+{t:54.3,cs:"projdeš nás svými postupy, jak to dostat na motorku sem.",en:"walk us through your processes to get the bike to here."},
+{t:56.7,cs:"Ano.",en:"Yep."},
+{t:57.5,cs:"Víte,",en:"You know,"},
+{t:58.4,cs:"pravděpodobně jedna z nejdůležitějších věcí",en:"probably one of the biggest things"},
+{t:59.5,cs:"je snaha dostat oči do budoucnosti.",en:"is trying to get my eyes out to the future."},
+{t:61.4,cs:"Vidím, kde chci začít přicházet k zastavení.",en:"I see where I want to start coming to that stop."},
+{t:63.2,cs:"Skenuju oči tam ven",en:"I scan my eyes out there"},
+{t:64.8,cs:"a pak se snažíme jen posoudit",en:"and then we're trying to just assess"},
+{t:66.7,cs:"kde jsme v tomto prostoru a dělat tyto úpravy",en:"where we are in that space, and make these adjustments"},
+{t:69.3,cs:"našeho brzdného tlaku na základě toho, co začínáme vidět.",en:"to our brake pressure based on what we start seeing."},
+{t:71.4,cs:"Takže dostaneme oči do té budoucnosti,",en:"So we get our eyes out to that future,"},
+{t:73.4,cs:"pak můžeme skutečně začít vázat naše oči na naši brzdovou páčku,",en:"then we can really start to tie our eyes to our brake lever,"},
+{t:76.1,cs:"o čem je sport opravdu hodně.",en:"which is what so much of the sport is really about."},
+{t:78.6,cs:"A pak je opravdu druhou věcí",en:"And then really the second thing is"},
+{t:80.9,cs:"chci být tak efektivní, jak jen mohu.",en:"I want to be as efficient as I can."},
+{t:82.4,cs:"Takže pokaždé, když zavřu plyn,",en:"So anytime I shut the throttle,"},
+{t:84.1,cs:"zavřu ten plyn na tu přední brzdu, zbavím se toho,",en:"I close that throttle to that front brake, get rid of that,"},
+{t:88.0,cs:"toho času, kdy bychom nemuseli být schopni něco udělat.",en:"that time where we might not be able to do something."},
+{t:91.1,cs:"Takže chci zavřít plyn",en:"So I want to shut the throttle"},
+{t:92.5,cs:"a okamžitě začít s procesem zpomalování.",en:"and immediately start my slowing process."},
+{t:95.0,cs:"Uklidní to můj mozek",en:"It calms my brain down"},
+{t:96.3,cs:"a budeme se přizpůsobovat od tohoto bodu.",en:"and we'll start to adjust from that point."},
+{t:99.2,cs:"To je skvělá myšlenka.",en:"That's a great thought."},
+{t:100.6,cs:"Vázejte své oči na své brzdy.",en:"Tie your eyes to your brakes."},
+{t:102.3,cs:"Když zavřete plyn,",en:"When you close the throttle,"},
+{t:103.4,cs:"zavíráte svůj plyn, protože váš mozek říká co?",en:"you're closing your throttle cause your brain says what?"},
+{t:105.6,cs:"Zpomalte",en:"Slow down"},
+{t:106.4,cs:"Zpomalte.",en:"Slow down."},
+{t:107.3,cs:"A to znamená, že se blížíte k průsečíku",en:"And that means you're approaching the intersection"},
+{t:108.2,cs:"a budete zavírat ten pád.",en:"and you're going to close that fall."},
+{t:109.0,cs:"To je trochu šílené.",en:"This is kind of crazy."},
+{t:109.9,cs:"Blížíte se ke své příjezdové cestě, k zatáčce,",en:"You're approaching your driveway, a corner,"},
+{t:111.8,cs:"a zavřete plyn.",en:"and you close the throttle."},
+{t:112.8,cs:"Takže Chris nikdy nebude zavírat svůj plyn takto.",en:"So, Chris is never going to close his throttle like that."},
+{t:115.8,cs:"Bude zavírat svůj plyn tímto způsobem.",en:"He's going to close this throttle like that."},
+{t:118.1,cs:"A existuje skvělé video Marka Márqueze, mistra světa,",en:"And there's a great video of Mark Marquez, a world champion,"},
+{t:121.8,cs:"a než zavře svůj plyn, jeho prsty se zvedají",en:"and before he closes his throttles his fingers come up"},
+{t:123.7,cs:"a Chrise, to je to, co tady chytáš.",en:"and Chris, that's what you're chasing with this one."},
+{t:125.3,cs:"Ano, ta myšlenka.",en:"Yeah, that idea."},
+{t:126.1,cs:"Jen zkrátit tu dobu reakce",en:"Just cutting that reaction time"},
+{t:127.0,cs:"a jen hladce se dostat na ten brzdný tlak.",en:"and just smoothly getting onto that brake pressure."},
+{t:130.0,cs:"Otázka pro Kyla.",en:"Question for Kyle."},
+{t:131.7,cs:"Někdy překrýváme plyn a přední brzdu?",en:"Do we ever overlap throttle and front brake?"},
+{t:135.0,cs:"Ne.",en:"No."},
+{t:135.9,cs:"Téměř.",en:"Almost."},
+{t:137.5,cs:"Téměř se překrývá.",en:"Almost overlap."},
+{t:138.7,cs:"Takže nechceme spouštět plyn",en:"So we don't want to run the throttle"},
+{t:139.9,cs:"proti přední brzdě.",en:"against the front brake."},
+{t:141.0,cs:"Máme váhu jdoucí zpět s otevřeným plynem.",en:"We've got weight going back with the throttle open."},
+{t:143.0,cs:"váhu přicházející vpřed s brzdou.",en:"weight coming forward with the brake."},
+{t:144.2,cs:"Je to boj.",en:"It's a battle."},
+{t:145.8,cs:"Vytváří to válku v podvozku.",en:"It creates a war in the chassis."},
+{t:148.3,cs:"Co chceme, je chvíle, kdy zavřeme",en:"What we want is we want that brief moment where we shut"},
+{t:151.0,cs:"plyn a dostaneme se na tu přední brzdu,",en:"the throttle and get on to that front brake,"},
+{t:153.5,cs:"chceme opravdu krátký plyn,",en:"we want a really brief throttle,"},
+{t:155.2,cs:"volnou zónu, kde se motorka může přeorientovat.",en:"free zone where the bike can transition."},
+{t:157.3,cs:"Takže ta doba přechodu je opravdu o",en:"So that transition time is really about"},
+{t:160.1,cs:"naší schopnosti manipulovat",en:"our ability to manipulate"},
+{t:161.6,cs:"tím krátkou chvílí bez plynu na motorce.",en:"that brief throttle free moment on the bike."},
+{t:164.4,cs:"Čím lépe se to naučíme,",en:"The better we get at that,"},
+{t:166.1,cs:"tím lépe se pohybujeme v provozu.",en:"the better we'll move through traffic."},
+{t:169.5,cs:"Tím lépe se pohybujeme přes zatáčku.",en:"The better we'll move through a corner."},
+{t:171.4,cs:"Tím lepší bude naše tělesné postavení.",en:"The better our body positioning is going to be."},
+{t:174.2,cs:"Je čas na správnou fázi brzdného tlaku, Chrise.",en:"It's time for a proper brake pressure phase, Chris."},
+{t:177.1,cs:"Takže teď víme",en:"So now we know"},
+{t:178.6,cs:"naše oči jsou v budoucnosti,",en:"our eyes are out to the future,"},
+{t:180.3,cs:"a víme, že se dostaneme z plynu na brzdu.",en:"and we know we're going to get from throttle to brake."},
+{t:182.7,cs:"Pojďme si povídat o tlaku, který použijeme na brzdovou páčku.",en:"Let's talk about the pressure we apply to the brake lever."},
+{t:185.2,cs:"Takže, Chrise, kde se nacházíme právě tady,",en:"So, Chris, where we are right here,"},
+{t:187.1,cs:"toto je něco jako dno brzdné zóny.",en:"this is kind of the bottom of the braking zone."},
+{t:190.2,cs:"Kyle, dívám se na to, kde je moje brzdná zóna",en:"Kyle, I'm looking out to where my braking zone is"},
+{t:192.5,cs:"a jakmile se dostaneme do té brzdné zóny,",en:"and once we run to that braking zone,"},
+{t:195.6,cs:"teď je čas na to, abychom postupně,",en:"now it's time for us to gradually,"},
+{t:198.2,cs:"hladce se dostali na tu přední brzdovou páčku.",en:"smoothly get onto that front brake lever."},
+{t:202.8,cs:"snažte se izolovat brzdové prsty, kterékoliv používáte,",en:"try to isolate the braking fingers, whichever you use,"},
+{t:206.2,cs:"obvykle ne všechny čtyři.",en:"just typically not four."},
+{t:208.3,cs:"Které prsty používáte,",en:"Whichever fingers you use,"},
+{t:209.5,cs:"izolujte je od zbytku vaší ruky,",en:"isolate them from the rest of your hand,"},
+{t:211.4,cs:"aby jste neotevírali plyn",en:"so you're not pulling the throttle open"},
+{t:212.9,cs:"když stisknete brzdovou páčku.",en:"when you squeeze the brake lever."},
+{t:214.6,cs:"Skvěle.",en:"Great."},
+{t:215.4,cs:"Když přijdeme sem, pojďme si povídat o izolaci prstů.",en:"As we come in here, talk about isolating fingers."},
+{t:217.8,cs:"Takže, Chrise, od té doby, co jsi tady, kde je tvá váha?",en:"So, Chris since you come in here, where's your weight?"},
+{t:219.6,cs:"Stiskaš palivovou nádrž?",en:"Are you pinching the fuel tank?"},
+{t:221.3,cs:"Máš, máš malý kousek suchého zipu",en:"Are you, have you got a little piece of velcro"},
+{t:223.4,cs:"který tě váže dozadu na sedadle?",en:"tying you backward on the seat?"},
+{t:224.7,cs:"Myslím, co se děje s váhou?",en:"I mean, what's going on with the weight?"},
+{t:226.9,cs:"Ne, určitě budeme mimo palivovou nádrž.",en:"No, we're definitely going to be off that fuel tank."},
+{t:228.9,cs:"Opět chceme být schopni zajistit, aby naše horní tělo",en:"Again we want to be able to make sure our upper body"},
+{t:231.1,cs:"mělo schopnost pohybovat se, pokud to potřebujeme.",en:"has the ability to move if we need it."},
+{t:233.1,cs:"Ale když se valíme na tu přední brzdu,",en:"But as we roll onto that front brake,"},
+{t:235.2,cs:"zatížení jakoby jde do těch dlaní.",en:"the load is kind of going into those palms."},
+{t:237.3,cs:"Takže jsem trochu mimo palivovou nádrž,",en:"So, I'm off that fuel tank a little bit,"},
+{t:239.0,cs:"ale ty dlaně se opravdu zatěžují.",en:"but those palms get really loaded up."},
+{t:242.1,cs:"Takže si myslíte,",en:"So, you think to yourself,"},
+{t:243.8,cs:"Chci cvičit své brzdění.",en:"I'm going to practice my braking."},
+{t:245.0,cs:"Chci tam jít a brzdit.",en:"I'm going to get out there and brake."},
+{t:246.4,cs:"Není to jen o brzdění.",en:"It's not just about braking."},
+{t:249.1,cs:"Jde o celý proces vedoucí k brzdění.",en:"It's about the entire process leading up to the braking."},
+{t:251.5,cs:"A brzdění je opravdu o",en:"And the braking is really about"},
+{t:254.8,cs:"jak agresivně můžeme zatížit ten vidlici.",en:"how aggressively we can load that fork."},
+{t:257.0,cs:"A jak hladcí s tím můžeme být.",en:"And how smooth we can be with it."},
+{t:259.2,cs:"Čím agresivněji ji zatížíme,",en:"So the more aggressively we load it,"},
+{t:260.7,cs:"tím lépe budou fungovat pneumatiky.",en:"the better the tires are going to work."},
+{t:263.1,cs:"Pojďme si povídat o tahu za руку.",en:"Let's talk about some handgrip pressure."},
+{t:265.0,cs:"Takže tlak úchopu v ruce",en:"So the grip pressure in your hand"},
+{t:266.8,cs:"se bude lišit, možná od jedné do tří.",en:"is going to vary, so maybe one to three."},
+{t:269.6,cs:"Co to znamená?",en:"What does that mean?"},
+{t:271.2,cs:"Pokud jsem jen držím motorku",en:"Well, if I'm just holding the bike"},
+{t:272.9,cs:"s lehkým dotykem jeden,",en:"with a light touch one,"},
+{t:275.3,cs:"Jsem velmi měkký.",en:"I'm very soft."},
+{t:276.4,cs:"Nestiskuji tvrdě.",en:"I'm not squeezing hard."},
+{t:278.5,cs:"Dva jsou,",en:"Two is,"},
+{t:279.5,cs:"Zatížil jsem svou brzdovou páčku.",en:"I've loaded my brake lever."},
+{t:281.0,cs:"Udělal jsem úpravu.",en:"I've made an adjustment."},
+{t:282.5,cs:"Držím tento brzdný tlak stabilní.",en:"I'm holding that brake pressure steady."},
+{t:286.5,cs:"A začínám se z toho valit.",en:"And I'm starting to roll off of it."},
+{t:289.5,cs:"Tři jsou,",en:"Three is,"},
+{t:290.7,cs:"Používám velký tlak na brzdovou páčku.",en:"I'm using a lot of pressure on the brake lever."},
+{t:293.6,cs:"A takže teď jsem právě tady, kde trať končí",en:"And so now I'm right here where the track ends"},
+{t:297.0,cs:"a přicházíme k zatáčce.",en:"and we're coming to a corner."},
+{t:299.5,cs:"Jaká bude naše fáze tlaku?",en:"What's our pressure phase going to be?"},
+{t:301.2,cs:"Fáze tlaku bude záviset",en:"The pressure phase is going to depend"},
+{t:303.5,cs:"na tom, jak rychle se budeme zpomalovat,",en:"on how fast we're going to slow down,"},
+{t:305.8,cs:"jak agresivní je naše počáteční zpomalení.",en:"how aggressive our initial deceleration is."},
+{t:309.0,cs:"Takže s jedním bodem,",en:"So with a one point,"},
+{t:310.9,cs:"lehký brzdný vstup,",en:"a light braking input,"},
+{t:312.2,cs:"(kroky)",en:"(footsteps)"},
+{t:314.1,cs:"Okay, myslíš si, že je to to",en:"Okay you think that's what"},
+{t:315.6,cs:"co znamená jeden bod?",en:"one point means?"},
+{t:317.2,cs:"Držím brzdovou páčku tady venku",en:"I'm holding the brake lever out here"},
+{t:318.5,cs:"a aplikuji lehký tlak.",en:"and I'm applying light pressure."},
+{t:320.9,cs:"Nezpomaluju tak agresivně.",en:"I'm not slowing down that aggressively."},
+{t:323.6,cs:"Dva body jsou,",en:"A two point is,"},
+{t:325.1,cs:"Aplikuji více tlaku a trochu více zpomaluju.",en:"I'm applying more pressure and I'm slowing down a bit more."},
+{t:328.0,cs:"Tři body jsou,",en:"A three point is,"},
+{t:329.6,cs:"Stiskuji tvrdě a jdu tvrdě na brzdy.",en:"I'm squeezing hard and I'm getting hard on the brakes."},
+{t:333.1,cs:"Takže to je fáze tlaku.",en:"So that's the pressure phase."},
+{t:335.0,cs:"A teď je věc o fázi tlaku.",en:"And now here's the thing about the pressure phase."},
+{t:337.8,cs:"Musíme dělat všechny tyto fáze tlaku",en:"We need to do all these pressure phases"},
+{t:339.8,cs:"v každé jedné zatáčce,",en:"on every single corner,"},
+{t:341.2,cs:"pokaždé,",en:"every single time,"},
+{t:342.3,cs:"protože nevíme, jak se na tu zatáčku přiblížíme.",en:"because we don't know how we're going to approach that corner."},
+{t:344.9,cs:"Někdy budeme mít jeden bod",en:"Sometimes we're going to go one point"},
+{t:346.2,cs:"někdy budeme mít tři body,",en:"sometimes we're going to go three point,"},
+{t:348.6,cs:"a někdy budeme někde uprostřed.",en:"and sometimes we're going to go somewhere in between."},
+{t:351.8,cs:"Musíte tedy cvičit",en:"So you need to practice"},
+{t:353.5,cs:"všechny tři tyto scénáře.",en:"all three of these scenarios."},
+{t:355.9,cs:"Dobře, takže máme oči v budoucnosti.",en:"Alright, so we got the eyes out to the future."},
+{t:358.2,cs:"Máme přechod z plynu na brzdu.",en:"We got throttle to brake."},
+{t:359.7,cs:"Máme fázi tlaku.",en:"We've got a pressure phase."},
+{t:361.8,cs:"Teď jsme na dně brzdné zóny.",en:"Now we're at the bottom of the braking zone."},
+{t:364.5,cs:"Pojďme si povídat o fázi vypouštění.",en:"Let's talk about a roll off phase."},
+{t:366.6,cs:"Takže fáze vypouštění,",en:"So the roll off phase,"},
+{t:368.5,cs:"je to tam, kde budeme uvolňovat brzdný tlak",en:"is where we're going to be releasing brake pressure"},
+{t:371.0,cs:"když se valíme do zatáčky.",en:"as we roll into the corner."},
+{t:373.5,cs:"Myslím, že otázka by byla,",en:"I guess the question would be,"},
+{t:375.4,cs:"jak rychle budeme odlehčovat brzdu?",en:"how fast are we going to unload the brake?"},
+{t:378.4,cs:"Takže rychlost našeho vypouštění",en:"So the speed of our roll off"},
+{t:380.0,cs:"bude záviset na naší lince.",en:"is going to depend on our line."},
+{t:382.8,cs:"Naše rychlost vypouštění",en:"Our speed of our roll off"},
+{t:384.5,cs:"bude záviset na tom, jak se budeme přizpůsobovat",en:"is going to depend on how we're going to adjust"},
+{t:386.6,cs:"naší poloze těla v zatáčce.",en:"our body position in the corner."},
+{t:389.0,cs:"Bude to záviset na tom, jak agresivně",en:"It's going to depend on how aggressively"},
+{t:390.5,cs:"chceme napadnout zatáčku,",en:"we want to attack the corner,"},
+{t:392.7,cs:"a bude to záviset na dostupném gripe.",en:"and it's going to depend on the available grip."},
+{t:394.6,cs:"a to je nájezd do zatáčky na závodní trati.",en:"and that's corner entry on a race track for sure."},
+{t:397.4,cs:"Ale na ulici,",en:"But on the street,"},
+{t:398.7,cs:"budete vždy nechat to zatížení vpředu,",en:"you're just always going to leave that load forward,"},
+{t:400.9,cs:"a někdy prostě nejdeš tak rychle.",en:"and just sometimes you're not going that quick."},
+{t:402.8,cs:"Chceš jen půl bodu,",en:"You only want a half a point,"},
+{t:404.0,cs:"protože chceš, aby se ten fort zhroutil",en:"'cause you want that fort collapse"},
+{t:405.8,cs:"a ta styková plocha se natáhla.",en:"and that contact patch stretched out."},
+{t:407.3,cs:"Takže, budeme si jen opravdu hrát s tím, že z toho nikdy neskočíme,",en:"So, we'll just really play with never jumping off it,"},
+{t:411.0,cs:"nikdy do toho nenajíždíme.",en:"never stabbing at it."},
+{t:413.4,cs:"Chrise, je fér říci",en:"Chris, it's fair to say"},
+{t:415.8,cs:"že jste ty body vlastně rozděloval, ne?",en:"you were actually dividing those points, weren't you?"},
+{t:417.2,cs:"Šel jsi od jedné k jedné a půl,",en:"You were going from one to one and a half,"},
+{t:419.3,cs:"jedné a tři čtvrtiny, dva.",en:"one and three quarters, two."},
+{t:421.1,cs:"Jezdci, pokud nevyvinete tuto ruku,",en:"Riders, if you don't develop this hand,"},
+{t:422.3,cs:"pokud tvrdě nepracujete na této ruce,",en:"if you don't work hard on this hand,"},
+{t:423.9,cs:"Myslím, pracuj na tom každý den",en:"I mean work on it every single day"},
+{t:425.2,cs:"dokud to nedostaneš úplně správně.",en:"until you get it just right."},
+{t:427.6,cs:"Někdy se vyklopíš přes kopec na štěrkový silnici",en:"You will pop over the hill sometime onto a gravel road"},
+{t:428.6,cs:"a sloníš přední kolo.",en:"and tuck the front."},
+{t:430.8,cs:"Odejdeš z práce a začne létat sníh,",en:"You'll leave work and it'll start to sleet,"},
+{t:433.9,cs:"a najednou ti tříbodová ruka sloní přední kolo.",en:"and all of a sudden, a three-point hand tucks the front."},
+{t:434.5,cs:"Takže musíme si svoje mozky zaměřit na to počáteční",en:"So we need to get our brains around that initial"},
+{t:437.5,cs:"aby se dostaly na tu přední brzdovou páčku.",en:"to get on that front brake lever."},
+{t:438.1,cs:"A pak, jak naše ruce budou řídit",en:"And then how our hands are going to manage"},
+{t:440.3,cs:"tlak v celé brzdné zóně.",en:"the pressure throughout the braking zone."},
+{t:442.3,cs:"Musíme s každou jednou zatáčkou,",en:"We need to, with every single corner,"},
+{t:443.6,cs:"skrz všechny fáze tlaku,",en:"all the way through the pressure phase,"},
+{t:446.1,cs:"skrz všechny fáze vypouštění.",en:"all the way through the roll off phase."},
+{t:448.8,cs:"Musíme se opravdu soustředit na tuto akci",en:"We need to really focus on that action"},
+{t:450.7,cs:"a musíme se ujistit",en:"and we need to make sure"},
+{t:452.3,cs:"že aplikujeme tlak hladce a kontrolovatelně,",en:"we're applying pressure smooth and controllable,"},
+{t:454.8,cs:"a pak vypouštíme hladce a kontrolovatelně.",en:"and then rolling off smooth and controllable."},
+{t:457.2,cs:"Máme tedy tři věci: máme tlak,",en:"So we got three things we got the pressure,"},
+{t:459.4,cs:"máme uvolnění",en:"we got the release"},
+{t:460.0,cs:"a máme rychlost uvolnění.",en:"and we got the speed of the release."},
+{t:462.1,cs:"A musíme cvičit všechny tři pohyby rukou,",en:"And we need to practice all three of these hand movements,"},
+{t:464.5,cs:"každý den,",en:"every single day,"},
+{t:465.9,cs:"dokud je nedostaneme dokonalé.",en:"until we get them perfect."},
+{t:468.8,cs:"Počkat, pojďme si to zrekapitulovat.",en:"Hold on, let's do a recap."},
+{t:471.2,cs:"Stále si myslím, že na něco zapomínáme.",en:"I keep thinking we're forgetting something."},
+{t:473.8,cs:"Cvičili jsme pozici očí?",en:"Did we practice eye position?"},
+{t:476.4,cs:"Cvičili jsme",en:"Did we practice"},
+{t:477.8,cs:"přechod z plynu na brzdu?",en:"throttle to brake transition?"},
+{t:480.9,cs:"Cvičili jsme brzdný tlak?",en:"Did we practice brake pressure?"},
+{t:483.2,cs:"Cvičili jsme uvolnění brzdy?",en:"Did we practice brake release?"},
+{t:486.0,cs:"Cvičili jsme rychlost uvolnění brzdy?",en:"Did we practice the speed of the brake release?"},
+{t:489.8,cs:"Ano, to jsou věci",en:"Yes, these are the things"},
+{t:491.5,cs:"které musíme cvičit každý den",en:"we need to practice every single day"},
+{t:494.1,cs:"dokud se nestal expertem na brzdění.",en:"until we become an expert braker."},
+{t:496.1,cs:"A teď, Chrise, řekni mi něco.",en:"And now, Chris, tell me something."},
+{t:499.1,cs:"Jak bude to jiné",en:"How is that going to be different"},
+{t:500.7,cs:"od toho, jak jsi brždil před šesti měsíci?",en:"from the way you were braking six months ago?"},
+{t:503.5,cs:"Víte, před šesti měsíci,",en:"Well, six months ago,"},
+{t:504.3,cs:"byl jsem naprosto vyděšený mou přední brzdou.",en:"I was absolutely terrified of my front brake."},
+{t:505.8,cs:"Používal jsem ji jako zapínač nebo vypínač.",en:"I was using it like an on or off switch."},
+{t:508.1,cs:"Teď chápu, že je to modulační nástroj.",en:"Now I understand that it's a modulation tool."},
+{t:510.7,cs:"Je to jako hraní na klavír.",en:"It's like playing piano."},
+{t:512.7,cs:"Je to věc citu.",en:"It's a feel thing."},
+{t:513.6,cs:"Jak vím, že to dělám správně.",en:"How do I know if I'm doing it right."},
+{t:516.5,cs:"Takže je to v tomto scénáři, Chrise.",en:"So it's in this scenario, Chris."},
+{t:518.1,cs:"Pokud můžeš jít do zatáčky v zatáčce",en:"If you can go a corner at a corner"},
+{t:519.2,cs:"na tři body a hodně zpomalit,",en:"at three point and slow down a lot,"},
+{t:521.5,cs:"můžeš se vrátit k téže zatáčce",en:"you can come back to that same corner"},
+{t:522.7,cs:"a udělat jeden bod, lehký brzdný vstup,",en:"and do a one point, a light braking input,"},
+{t:525.0,cs:"a jen trochu zpomalit,",en:"and slow down just a little bit,"},
+{t:526.3,cs:"Budete vědět, že jste to zvládli.",en:"You'll know you've mastered this."},
+{t:529.0,cs:"Budete vědět, že jste zvládli tuto brzdící techniku.",en:"You'll know you've mastered this braking technique."},
+{t:531.4,cs:"A stal se si lepší v tom, co nazýváme",en:"And you've gotten better at what we call"},
+{t:533.6,cs:"modulace tlaku.",en:"pressure modulation."},
+{t:536.1,cs:"Na konci jsme my v kontrole tlumení zpětného rázu.",en:"At the very end, we are in charge of rebound damping."},
+{t:538.7,cs:"Zdvihněte své nastavovače tlumení zpětného rázu.",en:"Hold up your rebound damping adjusters."},
+{t:540.4,cs:"Toto je váš nastavovač tlumení zpětného rázu.",en:"This is your rebound damping adjuster."},
+{t:542.1,cs:"A to je důvod, proč dobří jezdci",en:"And this is why good riders"},
+{t:544.0,cs:"vozí vše, co se dotknou, velmi dobře",en:"ride everything they touch really well"},
+{t:546.5,cs:"Protože si uvědomují,",en:"Because they realize,"},
+{t:547.3,cs:"oh, pružina je trochu příliš těžká, ať už dělají cokoliv,",en:"oh, the spring's a little too heavy, whatever they do,"},
+{t:549.9,cs:"přizpůsobují se tlumení zpětného rázu",en:"they adjust to the rebound damping"},
+{t:552.0,cs:"tím, jak pustí brzdovou páčku.",en:"with how they let go of the brake lever."},
+{t:553.5,cs:"A takže Chrise, měl jsi tu vidlici na konci.",en:"And so Chris, you had that fork bottomed."},
+{t:556.6,cs:"A nechals ji na konci a motorka se nakonec otočila",en:"And you left it bottomed, and the bike finally came around"},
+{t:559.2,cs:"a začala chytat trať a chytit trať.",en:"and started to grab the track and start to grip the track."},
+{t:562.5,cs:"A v tom okamžiku,",en:"And at that point,"},
+{t:563.4,cs:"dal jsi to malé mikronastavení",en:"you gave that a little micro adjustment"},
+{t:565.9,cs:"na tvé uvolnění brzdy a",en:"on your brake release and"},
+{t:567.7,cs:"ta motorka se probudila.",en:"that bike came to life."},
+{t:569.2,cs:"Jak se ti to cítilo?",en:"How did it feel?"},
+{t:570.4,cs:"Neuvěřitelné.",en:"Incredible."},
+{t:571.5,cs:"Motorka se znovu oživila.",en:"The bike came alive again."},
+{t:573.1,cs:"To je správné, kluci.",en:"That's right, guys."},
+{t:574.1,cs:"Jste v kontrole nastavovače tlumení zpětného rázu.",en:"You are in charge of the rebound damping adjuster."},
+{t:575.5,cs:"A to je chvíle právě teď",en:"And that is the moment right now"},
+{t:577.0,cs:"kde jde motorka z dobré na skvělou.",en:"where the bike goes from good to great."},
+{t:578.4,cs:"Takže jsme se naučili o očích, očích, očích.",en:"So we learned about eyes, eyes, eyes."},
+{t:580.7,cs:"Naučili jsme se o přechodu z plynu na brzdu.",en:"We learned about throttle to brake transition."},
+{t:583.9,cs:"Naučili jsme se o brzdném tlaku.",en:"We learned about brake pressure."},
+{t:586.2,cs:"Naučili jsme se o uvolnění brzdy.",en:"We learned about brake release."},
+{t:588.4,cs:"Naučili jsme se o rychlosti uvolnění brzdy.",en:"We learned about the speed of brake release."},
+{t:590.8,cs:"A naučili jsme se o nastavovači tlumení zpětného rázu.",en:"And we learned about rebound damping adjuster."},
+{t:593.1,cs:"To je kompletní proces",en:"That is the complete process"},
+{t:595.1,cs:"aby se stal expertem na brzdění.",en:"to become an expert braker."},
+{t:596.8,cs:"Dobře, kluci, děkuji vám za sledování.",en:"All right, guys, thank you very much for watching."},
+{t:598.3,cs:"Doufám, že se vám líbilo toto cvičení brzdění.",en:"Hope you enjoyed this braking practice."},
+{t:600.3,cs:"Pokud jste ještě ne,",en:"If you haven't already,"},
+{t:601.8,cs:"podívejte se na naše další kurzy.",en:"check out our other courses."},
+{t:603.2,cs:"Bezpečné cestování.",en:"Safe travels."},
+{t:576,cs:"a jen cítíš, jak se ta vidlice vrací zpět.",en:"and you just feel that fork jump back out."},
+{t:577.8,cs:"Jakmile je zatížení energie jít vpřed,",en:"Once the energy load is going forward,"},
+{t:579.9,cs:"prostě se hned vrátí.",en:"it just rebounds immediately."},
+{t:581.5,cs:"Takže příliš tlaku.",en:"So too much pressure."},
+{t:583.7,cs:"Když se dostane do ABS, motorky, které mají ABS,",en:"When it goes into ABS, bikes that have ABS,"},
+{t:587.4,cs:"je to obvykle proto, že jste tak nějak nabodli brzdy",en:"it's usually because you kind of stabbed the brakes"},
+{t:589.2,cs:"nebo se do toho dostanete příliš náhle, že?",en:"or you get into it too abrupt, right?"},
+{t:590.7,cs:"Ano, nedáváme zatížení do té pneumatiky",en:"Yeah, we're not putting a load in that tire"},
+{t:592.8,cs:"než ji zpracujeme,",en:"before we work it,"},
+{t:593.7,cs:"skočili jsme přes okraj gripe,",en:"we jumped through the edge of grip,"},
+{t:595.2,cs:"a motorka říká, \"Wow, to je trochu moc.\"",en:"and the bike goes, \"Whoa, that's a little bit too much.\""},
+{t:597.6,cs:"Začíná to vzdávat",en:"It starts giving it away"},
+{t:598.6,cs:"protože jsme nespravili tu úpravu.",en:"because we didn't make that adjustment."},
+{t:600.7,cs:"Motorka se tedy snaží kompenzovat.",en:"So the bikes trying to compensate."},
+{t:602.7,cs:"Náš dobrý kamarád, Tommy Aquino,",en:"Our good buddy, Tommy Aquino,"},
+{t:603.9,cs:"mluví o tom milisekundu zatížení, že?",en:"talks about that millisecond of load, isn't it?"},
+{t:606.1,cs:"Ta milisekunda zatížení,",en:"That millisecond of load,"},
+{t:607.5,cs:"a to je hladký počáteční stisk.",en:"and that is that smooth initial squeeze."},
+{t:609.6,cs:"Zatěžuje vidličové pružiny, vytlačuje pneumatiku,",en:"Loads the fork Springs, squeezes out the tire,"},
+{t:612.4,cs:"nechej ABS pocítit, co se děje.",en:"let's the ABS get a sense of what's going on."},
+{t:614.7,cs:"Na konci jsme my v kontrole tlumení zpětného rázu.",en:"At the very end, we are in charge of rebound damping."},
+{t:617.7,cs:"Zdvihněte své nastavovače tlumení zpětného rázu.",en:"Hold up your rebound damping adjusters."},
+{t:619.8,cs:"Toto je váš nastavovač tlumení zpětného rázu.",en:"This is your rebound damping adjuster."},
+{t:621.5,cs:"A to je důvod, proč dobří jezdci",en:"And this is why good riders"},
+{t:623.4,cs:"vozí vše, co se dotknou, velmi dobře",en:"ride everything they touch really well"},
+{t:625.9,cs:"Protože si uvědomují,",en:"Because they realize,"},
+{t:626.7,cs:"oh, pružina je trochu příliš těžká, ať už dělají cokoliv,",en:"oh, the spring's a little too heavy, whatever they do,"},
+{t:629.3,cs:"přizpůsobují se tlumení zpětného rázu",en:"they adjust to the rebound damping"},
+{t:631.3,cs:"tím, jak pustí brzdovou páčku.",en:"with how they let go of the brake lever."},
+{t:632.9,cs:"A takže Chrise, měl jsi tu vidlici na konci.",en:"And so Chris, you had that fork bottomed."},
+{t:636,cs:"A nechals ji na konci a motorka se nakonec zastavila.",en:"And you left it bottomed, and the bike finally stopped."},
+{t:638.9,cs:"A pak?",en:"And then?"},
+{t:639.7,cs:"Ano, energie se musela vrátit příliš rychle.",en:"Yeah, the energy had to kind of rebound back too quickly."},
+{t:642.6,cs:"Takže, pokud bych respektoval těchto posledních 5%, jak jsem se vytratil,",en:"So, if I respected that last 5%, how I trailed off,"},
+{t:646.5,cs:"viděli byste, jak energie pomalu nechá tu vidlici se vrátit",en:"you'd see that energy slowly let that fork rebound"},
+{t:650,cs:"místo aby se vrátila zpět, protože nepoužívám trail braking.",en:"instead of snapping back, 'cause I'm not trail breaking."},
+{t:653,cs:"A vraťte se, pokud chcete,",en:"And back it up if you want to,"},
+{t:654.6,cs:"to je důvod, proč jste na čempionské univerzitě,",en:"this is why you're at champ university,"},
+{t:655.7,cs:"vraťte se a podívejte se na ten první.",en:"back it up and watch that first one."},
+{t:657.2,cs:"Pojďme jít teď druhým způsobem.",en:"Let's go the other way now."},
+{t:658.7,cs:"Držel jsi brzdu příliš dlouho, pojďme jít teď druhým způsobem.",en:"You held the brake too long, let's go the other way now."},
+{t:661,cs:"Pojďme z toho slézt příliš brzy.",en:"Let's get off it too early."},
+{t:662.2,cs:"Sledujeme cestování vidlice.",en:"We're watching the fork travel."},
+{t:671.8,cs:"Co řekl Kyle o vytváření tlaku?",en:"What did Kyle say about building pressure?"},
+{t:673.9,cs:"Kyle, učíme lidi jen být hladcí?",en:"Kyle, are we just teaching people how to be smooth?"},
+{t:676.6,cs:"Je úžasně hladký.",en:"He is amazingly smooth."},
+{t:677.4,cs:"Není hladký, ne?",en:"Isn't he smooth?"},
+{t:678.4,cs:"Tak hladký.",en:"So smooth."},
+{t:679.2,cs:"Hladké přímo do strany autobusu.",en:"Smooth right into the side of the bus."},
+{t:680.8,cs:"Ano.",en:"Yes."},
+{t:681.6,cs:"Jsi tak hladký.",en:"You are so smooth."},
+{t:682.5,cs:"Děkuji.",en:"Thank you."},
+{t:683.3,cs:"To byl nejlepší, co myslím, že jsem kdy dělal.",en:"That was the best I think I've ever done."},
+{t:684.2,cs:"To bylo fantastické.",en:"That was fantastic."},
+{t:685.1,cs:"Je mimo v trávě.",en:"He's off in the weeds."},
+{t:687.4,cs:"Takže všichni, vraťte se k tomu, co řekl Kyle.",en:"So everybody, get back to what Kyle said."},
+{t:689.4,cs:"Kyle, mluv o brzdném tlaku.",en:"Kyle, talk about brake pressure."},
+{t:690.6,cs:"Co se tady stalo?",en:"What happened here?"},
+{t:692.4,cs:"Prvních 5% bylo docela dobré.",en:"First 5% was pretty good."},
+{t:694.1,cs:"Ale nikdy jsi opravdu nevytvořil nějaký tlak.",en:"But you never really built any pressure."},
+{t:695.9,cs:"Takže v určitém okamžiku musíme zastavit motorku.",en:"So, at some point we got to stop the motorcycle."},
+{t:698.4,cs:"Takže zpočátku ty brzdy přijdou,",en:"So initially, those brakes come on,"},
+{t:700.2,cs:"vidlice jde vpřed do pneumatiky.",en:"the fork goes forward into the tire."},
+{t:702.6,cs:"Musíme vytvořit tlak.",en:"We need to build pressure."},
+{t:703.7,cs:"Můžeme vytvořit opravdu tolik, kolik chceme",en:"We can build to really as much as we want"},
+{t:707,cs:"A pak to pomalu vypustit, nechej tu vidlici se vrátit.",en:"And then bleed it off slowly, let that fork rebound."},
+{t:711.3,cs:"Takže Chris se trochu zmátl.",en:"So, Chris got a little bit confused."},
+{t:713,cs:"Má, \"Musím být super hladký, nula až pět.\"",en:"He's got, \"I've gotta be super smooth, zero to five.\""},
+{t:715.1,cs:"A pak to jen nechal na pět nebo šest,",en:"And then he just left it at five or six,"},
+{t:716.5,cs:"a bác přímo kolem nás.",en:"and boom right by us."},
+{t:717.9,cs:"A v určitém okamžiku musíme vytvořit tlak.",en:"And, at some point we got to build pressure."},
+{t:719.8,cs:"A to je něco, co",en:"And this is something that"},
+{t:720.9,cs:"nováčci opravdu musí na tom pracovat.",en:"the new riders really need to work on."},
+{t:723.4,cs:"Kolik zatížení ta přední vezme?",en:"How much load does that front take?"},
+{t:725.4,cs:"Jakmile si uvědomíte, co pneumatika zvládne,",en:"Once you realize what the tire can take,"},
+{t:727.7,cs:"když ji hladce zatížíte,",en:"when you load it smoothly,"},
+{t:729.1,cs:"budete mít sebevědomí",en:"you're going to have the confidence"},
+{t:731.6,cs:"abyste mohli zrychlovat směrem k jakékoliv situaci.",en:"to be able to accelerate toward any situation."},
+{t:734.6,cs:"Takže není to problém akcelerace,",en:"So it's not an acceleration problem,"},
+{t:736.6,cs:"je to problém brzdění.",en:"it's a braking problem."},
+{t:737.6,cs:"Pro lidi, kteří se bojí",en:"For people that are afraid"},
+{t:738.6,cs:"musíš jen zvýšit tempo.",en:"you just got to bring the pace up."},
+{t:740.3,cs:"Musíš pracovat na brzdách.",en:"You got to work on the brakes."},
+{t:742.4,cs:"Pojďme udělat jednu další.",en:"Let's do one more."},
+{t:747.7,cs:"Takže náhle,",en:"So, all of a sudden,"},
+{t:749.4,cs:"to vám ukazuje, kdo kontroluje tlumení zpětného rázu.",en:"it shows you who's in charge of rebound damping."},
+{t:753.5,cs:"Kyle, projdeš nás tím, co jsme právě viděli.",en:"Kyle, walk us through what we just saw."},
+{t:755.1,cs:"Budeme to sledovat znovu v pomalém pohybu a projdeš nás.",en:"We'll watch it again in slow motion, and walk us through."},
+{t:758.1,cs:"Tak palubní inženýr pustil brzdy",en:"Well the onboard engineer let go of the brakes"},
+{t:760,cs:"a vidlice se vrátila.",en:"and the fork rebound."},
+{t:761,cs:"Je to navrženo tak, aby pracovalo tímto způsobem.",en:"It's designed to work that way."},
+{t:762.7,cs:"Takže jsi sem přišel, zpomaluješ motorku.",en:"So you got in here, you're slowing the motorcycle."},
+{t:766.5,cs:"Pojďme předstírat, že je to zatáčka.",en:"Let's pretend it's a corner."},
+{t:769,cs:"Nastavuješ si svou rychlost.",en:"You're setting your speed."},
+{t:770,cs:"Myslíš si, že ses dostatečně zpomalil.",en:"You think that you've got the thing slowed down enough."},
+{t:772.4,cs:"Co se stalo s geometrií?",en:"What happened to the geometry?"},
+{t:774.1,cs:"Člověče, právě jsem se vzdal těch brzd",en:"Man, I just gave up on those brakes"},
+{t:775.8,cs:"a vidlice se hned vrátí.",en:"and the fork just jumps back."},
+{t:777.1,cs:"A je to skoro jako když se snažíš být bez brzdy",en:"And it's almost like that trying to be off brake"},
+{t:779.8,cs:"než skloním do zatáčky,",en:"before I tip into the corner,"},
+{t:781,cs:"Mám nastavenou svou rychlost, ale v okamžiku, kdy jsem se vzdal brzd,",en:"I got my speed set, but the moment I gave up on the brakes,"},
+{t:784,cs:"prostě se to vrátí tak rychle.",en:"it just rebounds so quickly."},
+{t:785.8,cs:"Geometrie je dlouhá,",en:"Geometries long,"},
+{t:787.1,cs:"to mi dává těžký způsob, jak kousnout motorku do zatáčky.",en:"give me a tough way to steer a bike into the corner."},
+{t:789.5,cs:"Méně gumy na silnici, ne?",en:"Less rubber against the road, right?"},
+{t:791.2,cs:"Rozhodně.",en:"Significantly."},
+{t:792,cs:"Máte mráz v zádech, všichni?",en:"You got a chill up your spine, everybody?"},
+{t:793.8,cs:"Zajímá vás, proč náš sport neroste?",en:"Wonder why our sports not growing?"},
+{t:795.8,cs:"Podívejte se na sto milimetrů cesty prosím,",en:"Looking at a hundred millimeters of travel please,"},
+{t:798.3,cs:"podívej se na tu třídu a jdi do té třídy.",en:"look at that class, and get in that class."},
+{t:799.8,cs:"Ale Chrise, přišel jsi,",en:"But Chris, you came in,"},
+{t:800.7,cs:"hladce jsi spustil vidlice, ne?",en:"you lowered the forks smoothly, right?"},
+{t:802.4,cs:"Šel na brzdu hladce, vytvořil tlak.",en:"He went to the brake smoothly, he built pressure."},
+{t:804,cs:"To je dobré, vytvořený tlak.",en:"That's good, built pressure."},
+{t:805.5,cs:"Ale když pustil brzdy,",en:"But when he let go of the brakes,"},
+{t:806.8,cs:"šel jsi ze 40 bodů na co?",en:"you went from 40 points to what?"},
+{t:808.9,cs:"Nula.",en:"Zero."},
+{t:810.1,cs:"Sekl jsem brzdovou páčku.",en:"Snapped off the brake lever."},
+{t:811.6,cs:"Pokud jste slyšeli, že byste měli jezdit tímto způsobem,",en:"If you've heard you should ride that way,"},
+{t:813.4,cs:"sjeďte z brzd před tím, než se otočíte,",en:"get off the brakes before you turn in,"},
+{t:814.8,cs:"dělej veškeré brzdění v přímce.",en:"do all your braking in a straight line."},
+{t:816.4,cs:"Snažíme se to změnit.",en:"We're trying to change that."},
+{t:817.6,cs:"A důvod, proč dělаme naši brzdící praxi tímto způsobem",en:"And the reason that we do are our braking practice this way"},
+{t:820.3,cs:"je, že to není posledních tři stopy jak tvrdě zastavíš.",en:"is, it is not the last three feet of how hard you stop."},
+{t:824.2,cs:"Používáme posledních 2, 3, 1 stopu k uvolnění té brzdy",en:"We're using the last 2, 3, 1 foot to release that brake"},
+{t:828.3,cs:"a cvičíme si naš trail braking.",en:"and practice our trail braking."},
+{t:830.9,cs:"Měli bychom vidět ještě jednu dobrou?",en:"Should we see one more good one?"},
+{t:832,cs:"Ano, jednu další.",en:"Yeah, one more."},
+{t:837.9,cs:"Teď si povídáme.",en:"Now we're talking."}];
+var subs2=[{t:3.7,cs:"Prošli jsme si některé tyto techniky brzdění",en:"We've walked through some of these techniques of braking"},
+{t:6.5,cs:"a teď se pustíme do praktických cvičení.",en:"and now we're going to move into some practice."},
+{t:8.1,cs:"A máme tu jednoduchou plochu.",en:"And we've got a simple area here."},
+{t:9.5,cs:"Je pěkná a čistá, trochu prší, což je skvělé.",en:"It's nice and clean, raining a little bit, which is great."},
+{t:12.4,cs:"Tito jezdci budou začínat tam vzadu.",en:"These riders are going to start back there."},
+{t:13.7,cs:"Budou k nám přijíždět a budou brzdět",en:"They're going to approach us and they're going to stop"},
+{t:16.1,cs:"mezi těmito dvěma kuželíky a budeme je moct trénovat.",en:"between these two cones and we'll be able to coach them."},
+{t:18.5,cs:"Pokud máte přátele a rodinu, kterou byste chtěli trénovat,",en:"If you have friends and family that you want to coach,"},
+{t:20.4,cs:"chcete to dělat sami,",en:"want to do this yourself,"},
+{t:21.2,cs:"připravte si pěkné místo, kde to můžete dělat bezpečně,",en:"set up a nice area that you can do this, it's safe,"},
+{t:23.7,cs:"a jsme hotovi.",en:"and we're good."},
+{t:24.6,cs:"A Elena, coby trenérka,",en:"And Elena, as a coach,"},
+{t:25.9,cs:"koukáme, jak sem přijíždějí naši přátelé.",en:"we're watching our friends come in here."},
+{t:27.8,cs:"Na co se koukat?",en:"What are you looking for?"},
+{t:28.6,cs:"Na co je budeme trénovat?",en:"What are we going to coach them on?"},
+{t:29.9,cs:"Tak víte, Nick,",en:"So what we're looking for, Nick,"},
+{t:31.2,cs:"chceme vidět, jak se podvozek pomalu kompresuje",en:"is really to see that suspension compress slowly"},
+{t:35.6,cs:"a jak jezdci brzdí",en:"as they're going to the brakes"},
+{t:38.5,cs:"a jak se do brzdění postupně tlačí.",en:"and really see the build pressure."},
+{t:41.4,cs:"A pak, když se zastavují, vidíme pomalu se rozpínající vidlici.",en:"And then, as they're stopping, see that fork rebound slowly."},
+{t:44.7,cs:"Dobré, takže se koukat na",en:"Good, so you're looking for"},
+{t:46.1,cs:"jak pohybují tou pružinou přes její zdvih,",en:"how they move that spring through its stroke,"},
+{t:48.3,cs:"jak ji kompresi a jak se vrací.",en:"compress it, and rebound it."},
+{t:49.2,cs:"Přesně tak. Máme na mysli to?",en:"Absolutely.↵Are we about that?"},
+{t:50.1,cs:"Ano.",en:"Yep."},
+{t:50.9,cs:"Kyle, řekni něco dalšího, co budeme (neslyšitelné).",en:"Kyle, talk some other things we're gonna (indistinct)."},
+{t:51.7,cs:"Ano, myslím si,",en:"Yeah, I mean, we're thinking"},
+{t:53,cs:"že rozebíráme celou brzdnou zónu od začátku do konce.",en:"the whole braking zone from beginning to end."},
+{t:55,cs:"Takže se jim oči podívají dolů sem",en:"So, they're going to be moving their eyes down in here"},
+{t:57.6,cs:"a vidí, kde se opravdu zastavují.",en:"and seeing where the stopping point really is."},
+{t:61,cs:"A od toho bodu si jejich mozek řekne,",en:"And from that point, their brain is going to say,"},
+{t:63.2,cs:"\"Dobrá, asi bychom měli začít zpomalovat.\"",en:"\"Alright, probably should start slowing down.\""},
+{t:65.1,cs:"Kdy se dáš na brzdění?",en:"When do you go to the brakes?"},
+{t:66,cs:"Když se cítíš nervózně, dej si brzdy.",en:"When you get nervous, go to the brakes."},
+{t:67.7,cs:"Jdi do prvních 5 procent hladce, vidlice se kompresují,",en:"Go to the first 5% nice and smooth, forks compress,"},
+{t:70.8,cs:"stavíme si ten tlak, o kterém Elena mluvila,",en:"we build to that pressure like Elena was talking about,"},
+{t:73.3,cs:"a pak si brzdy regulujeme, jak posuzujeme svou rychlost",en:"and then we're controlling our brakes as we judge our speed"},
+{t:76.9,cs:"zatímco se zastavujeme.",en:"while we're coming to a stop."},
+{t:78,cs:"Takže neustále provádíme úpravy.",en:"So we're constantly making adjustments."},
+{t:80.2,cs:"Dobré, jedeme trochu moc rychle,",en:"Okay, I'm a little bit hot,"},
+{t:81.3,cs:"potřebuji větší tlak na brzdě, nebo zase méně,",en:"I need more brake pressure, a little bit less,"},
+{t:83.4,cs:"a pak se dostaneme k hladkému zastavení,",en:"and then we come down to a smooth stop,"},
+{t:85.4,cs:"a poslední 5 procent hladce necháme",en:"trail off the last 5% smooth,"},
+{t:87.6,cs:"aby vidlice krásně vyskočila.",en:"so we have a nice rebound of the fork."},
+{t:90.2,cs:"To se mi líbí.",en:"I love it."},
+{t:91,cs:"Jak často bychom měli trénovat brzdění, Elena?",en:"How often should we practice our braking, Elena?"},
+{t:94.3,cs:"Tak často, jak jen můžete. A pokaždé, když jezdíte.",en:"Oh, as often as you possibly can. And every time you ride."},
+{t:97.6,cs:"To se mi líbí. Pusťme se do toho.",en:"I like it. Let's give this a try."},
+{t:99.4,cs:"Pojďme na pár pokusů, budeme si s nimi povídat,",en:"Let's run a couple, we'll talk to them,"},
+{t:100.8,cs:"a uvidíme, co dělají.",en:"and we'll see what they're doing."},
+{t:102.3,cs:"(motory motocyklů startují)",en:"(motorcycle engines starting)"},
+{t:106.7,cs:"Chrise! Počkej, počkej Chrise!",en:"Chris! Wait, wait Chris!"},
+{t:108.4,cs:"Nikdy nechceš urvat tu brzdovou páčku.",en:"You never want to grab that brake lever."},
+{t:110,cs:"Krytuje si brzdu, když odjíždí",en:"He's covering the brake when he leaves"},
+{t:111.6,cs:"a když jsem řekl stoj, tak si ji neuchopil.",en:"and when I said stop, he didn't grab at it."},
+{t:113.8,cs:"Zůstal klidný.",en:"He stayed calm."},
+{t:114.9,cs:"Možná ho moje slova šokovala,",en:"He might've been shocked by my words,"},
+{t:116.9,cs:"ale nedostalo se to do jeho ruky.",en:"but it didn't get to his hand."},
+{t:118.4,cs:"Dobré.",en:"Okay."},
+{t:119.3,cs:"(Jízda na motocyklu)",en:"(Motorcycle driving)"},
+{t:128.7,cs:"Chrise,",en:"All right, Chris,"},
+{t:129.6,cs:"to bylo trošku méně hladké, než bychom chtěli.",en:"that was a little bit less smooth than we'd like."},
+{t:134.5,cs:"Ten první počáteční úhel,",en:"That first initial bite,"},
+{t:135.5,cs:"viděl jsem, jak se vidlice velmi rychle kompresuje",en:"I saw that fork compress really quickly"},
+{t:137.7,cs:"a když jsi ji uvolnil, tak se vrátila.",en:"and as you released it, it just came back."},
+{t:140.3,cs:"Takže pokud bychom mohli pracovat na tom, aby sis brzdě",en:"So if we can work on maybe getting to the brake"},
+{t:142.5,cs:"přistupoval trošku hladčeji,",en:"a little bit smoother,"},
+{t:143.3,cs:"stavit si tlak a pak ho pomalu uvolňovat,",en:"build that pressure, and then slowly release it,"},
+{t:145.2,cs:"to by bylo skvělé.",en:"that'd be great."},
+{t:146.6,cs:"(motor motocyklu startuje)",en:"(motorcycle engine starts)"},
+{t:150.7,cs:"(jízda na motocyklu)",en:"(motorcycle driving)"},
+{t:156,cs:"Dobré, Marku, tak jsem tě viděl včas. To se mi líbilo.",en:"Okay, Mark, so, saw me nice and early. I liked that."},
+{t:159.8,cs:"Měl jsi oči dole sem,",en:"You had your eyes down in here,"},
+{t:161.5,cs:"vybudoval jsi spoustu tlaku na brzdě,",en:"built a lot of brake pressure,"},
+{t:162.7,cs:"viděl jsem, jak se ABS trochu spustil.",en:"saw that ABS cycle a little bit."},
+{t:164.4,cs:"Takže se dostáváš k hranici přilnavosti, dobré.",en:"So getting to the edge of grip, okay."},
+{t:166.6,cs:"Takže se snažit nestavět tolik tlaku,",en:"So, try not to build as much pressure,"},
+{t:168.5,cs:"i když si brzdě vezmeš trošku dříve,",en:"even if you go to the brakes a little bit sooner,"},
+{t:170.8,cs:"budeš moct regulovat až k zastavení, spíš než",en:"you'll be able to control down to a stop rather than being"},
+{t:173.4,cs:"být tady tak pozdě s takovým tlakem",en:"in here so late with so much pressure"},
+{t:175.6,cs:"a nemít možnost regulovat, jak se vidlice vrací.",en:"and not being in a position to control the rebound."},
+{t:178.6,cs:"(jezdec něco mumlá)",en:"(motorcycle driver mumbles)"},
+{t:183.9,cs:"Prvních 5 procent bylo krásné, velmi hladké.",en:"First 5% was beautiful, very smooth."},
+{t:186.4,cs:"Ale musíš si stavět nějaký tlak, dobré.",en:"But you got to build some pressure, okay."},
+{t:188.7,cs:"Zastavujeme se u kuželíku.",en:"We're coming to a stop at the cone."},
+{t:190.1,cs:"Takže propoj si oči a jak se blížíš,",en:"So, connect your eyes and as you get closer,"},
+{t:193,cs:"budeš si muset stavět větší tlak na brzdě,",en:"you're going to have to build more brake pressure,"},
+{t:195.2,cs:"aby se věci zpomalily",en:"so you get the things slowed down"},
+{t:196.9,cs:"a dospěly k hladkému zastavení, dobré?",en:"and come to a smooth stop, okay?"},
+{t:204.3,cs:"Marku, opravdu hezké zastavení.",en:"Mark, really nice stop."},
+{t:206.1,cs:"Viděl jsem, že ses znovu díval včas,",en:"I saw you just saw it early again,"},
+{t:209.1,cs:"ale dostal ses tam trošku dříve,",en:"but you got to a little bit sooner,"},
+{t:210.8,cs:"abys se mohl zpomalit už v první polovině",en:"so you could actually get the slowing in the first half"},
+{t:213.1,cs:"brzdné zóny.",en:"of the brake zone."},
+{t:214.1,cs:"Pokud se věci nezpomalí a nedostaneš dost tlaku",en:"If you don't get the things slowed and get enough pressure"},
+{t:216.5,cs:"v počáteční části brzdné zóny,",en:"in the initial part of the brake zone,"},
+{t:218,cs:"nebudeš moct hladce regulovat",en:"you're not going to be able to adjust smoothly"},
+{t:220,cs:"až k zastavení.",en:"down to a stop."},
+{t:221.3,cs:"Pokud to posuneme do zatáčky,",en:"If we move this down into a corner,"},
+{t:224.1,cs:"vaše technika byla skvělá, protože jste uvolňoval",en:"your technique was great, because you were trailing off"},
+{t:226.6,cs:"brzdu hladce, jak byste zvyšoval úhel náklonu.",en:"the brake smoothly as you would be adding lean angle."},
+{t:231.7,cs:"(motor motocyklu startuje)",en:"(motorcycle engine starting)"},
+{t:238.4,cs:"Dobré. Vidíte, Chris se rychle zlepšuje.",en:"Alright. So you can see Chris is rapidly improving."},
+{t:241.2,cs:"A Chrise, jedna ze věcí,",en:"And, Chris, one of the things"},
+{t:242.8,cs:"kterou slyšíme od Kyrla a Eleny,",en:"that we hear in Kyle and Elena,"},
+{t:244.5,cs:"to, co slyšíme od našich studentů tak často,",en:"we hear from our students so often is,"},
+{t:246,cs:"\"Nikdy jsem nevěděl, že můj motocykl může tak dobře brzdit.\"",en:"\"I never knew my bike could stop this well.\""},
+{t:248.2,cs:"Pojďme koukat na Marka.",en:"Let's watch Mark."},
+{t:253.2,cs:"Nádherné.",en:"Beautiful."},
+{t:254.2,cs:"Takže budou říkat, \"Nikdy jsem nevěděl, že můj motocykl může tak dobře brzdit,\"",en:"So they'll say, \"I never knew my bike could stop this well,\""},
+{t:256.5,cs:"protože to nikdy netrénovali, protože hodně lidí",en:"because they never practiced it, because a lot of people are"},
+{t:258.6,cs:"se bojí brzdové páčky.",en:"afraid of the brake lever."},
+{t:259.9,cs:"Ano. Samozřejmě.",en:"Yes. Absolutely."},
+{t:261.2,cs:"A v důsledku toho se bojí i plynu, že ano?",en:"And in turn, they're afraid of the throttle, right?"},
+{t:263.9,cs:"Protože když nemáš dovednost s brzdami",en:"Because when you don't have the proficiency with the brakes"},
+{t:267.4,cs:"abys měl sebevědomí",en:"to have the confidence"},
+{t:268.4,cs:"vědomě, že budeš moci zpomalit věc na zastavení",en:"knowing you're going to slow the thing for a stop"},
+{t:270.3,cs:"nebo zpomalit věc do zatáčky,",en:"or slow the thing for a corner,"},
+{t:271.9,cs:"tak nikdy nezvýšíš plyn.",en:"you're just never going to pick up the throttle."},
+{t:273.9,cs:"A to je krásná součást jízdy na motocyklu.",en:"And that's a pretty enjoyable part of riding a motorcycle."},
+{t:276.3,cs:"Takže nechceme, aby nám to chybělo.",en:"So we don't want to leave that out."},
+{t:277.8,cs:"Ano.",en:"Yeah."},
+{t:278.6,cs:"Pokud máš čtyři motocykly,",en:"If you own four motorcycles,"},
+{t:280.7,cs:"na kolika motocyklech bys měl trénovat brzdění.",en:"how many motorcycles should you practice braking on."},
+{t:283.7,cs:"Na čtyřech motocyklech. Ano.",en:"Four motorcycles. Yeah."},
+{t:285.7,cs:"Samozřejmě jsou tady různé komponenty,",en:"For sure there's different components here,"},
+{t:287.5,cs:"ale myšlenkou je, že se můžeš stát tak dobrý",en:"but the idea is you can get so good"},
+{t:290.3,cs:"v pocitu poslední 5 procent a v hladkosti",en:"at the feel of the last 5% and the smoothness"},
+{t:293.7,cs:"že se tvoje schopnost regulace může adaptovat",en:"that your adjustability can adapt"},
+{t:296.4,cs:"na jakýkoli motocykl, na který si sedneš.",en:"to any motorcycle that you jump on."},
+{t:298.2,cs:"Takže to trénuj v různých scénářích,",en:"So practice it in all different scenarios,"},
+{t:301.3,cs:"ale měl bys být schopný to udělat",en:"but you should be able to do this"},
+{t:302.9,cs:"na jakémkoli motocyklu v jakýchkoli podmínkách.",en:"on any motorcycle in any condition."}];
+var subs3=[{t:4.7,cs:"Tak dobře.",en:"All right."},
+{t:5.6,cs:"Teď jsme si věci přeuspořádali, že ano?",en:"We've moved things around now haven't we,"},
+{t:6.5,cs:"Elena, trénovali jsme Kyla, teď trénujeme tady u zastavení.",en:"Elena we were coaching Kyle we're coaching up on the stop"},
+{t:9.4,cs:"Co se tady změnilo?",en:"what have we changed here?"},
+{t:10.6,cs:"Tady máme Marka, který natáčí Chrise,",en:"So here we have Mark filming Chris,"},
+{t:12.9,cs:"a ten sem přijede na brzdě,",en:"and they're going to come in here on the brakes,"},
+{t:15.1,cs:"iniciuje zatáčku a zastaví se tu přímo před námi.",en:"initiate a turn in and stop right at us."},
+{t:18,cs:"Zastavení uprostřed zatáčky?",en:"Stopping mid corner?"},
+{t:20.6,cs:"Přesně tak.",en:"Absolutely."},
+{t:21.4,cs:"To je děsivé.",en:"It's terrifying."},
+{t:22.3,cs:"Vůbec ne.",en:"No, it's not."},
+{t:23.1,cs:"Opravdu vůbec ne.",en:"Absolutely not."},
+{t:24.9,cs:"A navíc už začíná pršet, což je úžasné,",en:"And it's starting to rain, which is awesome,"},
+{t:26.2,cs:"to je přesně to, co chceme. A všichni zastavují uprostřed zatáčky,",en:"which is what we want. And everybody's stopping mid corner,"},
+{t:28,cs:"tohle je speciál branže, to vám změní život.",en:"this is the industry saver this is what changes your life."},
+{t:30.8,cs:"Jdete na brzdu, když jste,",en:"You go to the brakes, when you're,"},
+{t:32,cs:"kdy jdete na brzdu?",en:"when do you go to the brakes?"},
+{t:33.2,cs:"Kdy jdete na brzdu?",en:"When do you go to the brakes?"},
+{t:34.3,cs:"Když se bojíte.",en:"When you're nervous."},
+{t:35.2,cs:"Když se bojíte, brzdíte až do chvíle, kdy jste spokojení",en:"When you're nervous, and you use them until you're"},
+{t:36.4,cs:"s dvěma věcmi: rychlostí a směrem.",en:"happy with two things, speed and direction."},
+{t:38.5,cs:"Pojďte se podívat. Tak dobře, Christe, Marku, pojďte dál.",en:"Let's take a look. All right, Chris, Mark, come on through."},
+{t:48.4,cs:"Tak to bylo krásné.",en:"All right, beautiful."},
+{t:49.5,cs:"Takže Christe,",en:"So, Chris,"},
+{t:50.5,cs:"tam jste šel na brzdu, ať už z jakéhokoliv důvodu.",en:"you went to the brakes back there for whatever reason."},
+{t:52.4,cs:"Jaký byl důvod, proč jste šel na brzdu?",en:"What was the reason you went to the brakes?"},
+{t:54.3,cs:"Bál jsem se.",en:"I was nervous."},
+{t:55.2,cs:"Měl strach.",en:"He's nervous."},
+{t:56.1,cs:"Měl strach z toho, že nebude moci zatáčku zvládnout. A Christe,",en:"He was nervous on making the corner. And then Chris,"},
+{t:58.6,cs:"zatočil jste s aktivní brzdou,",en:"you turned in with the brake on,"},
+{t:60.1,cs:"během zatáčení jste uvolňoval tlak na brzdu",en:"you gave away brake pressure as you turned in"},
+{t:62.5,cs:"přesně jak jste si to nacvičoval.",en:"just like you practiced."},
+{t:63.4,cs:"Ano.",en:"Yep"},
+{t:64.3,cs:"Správně.",en:"Right."},
+{t:65.1,cs:"Uvolňoval jste - tomu se říká průběžné brzdění,",en:"You gave away that's called trail braking,"},
+{t:65.9,cs:"průběžné brzdění skrz zatáčku.",en:"trail braking pressure right through the corner."},
+{t:68,cs:"Brzdíte průběžně do zatáčky, dokud nejste spokojení",en:"You trail brake pressure into the corner until you're happy"},
+{t:69.6,cs:"se dvěma věcmi.",en:"with two things."},
+{t:70.5,cs:"Rychlostí a směrem.",en:"Speed and direction."},
+{t:71.3,cs:"Ano. V tomto případě",en:"Yeah. In this case,"},
+{t:72.1,cs:"Kyle stojí tady, Elena a já jsme použili brzdy.",en:"Kyle standing there, Elena and myself have used the brakes."},
+{t:75.2,cs:"Jak strašně obtížné je to dělat?",en:"How, how insanely difficult is doing that?"},
+{t:78,cs:"Není to těžké, je to jen procvičování stejné techniky,",en:"Not very, I mean, it's just practicing the same technique,"},
+{t:81.2,cs:"získávání pocitu a vazby svých očí na páku brzdy,",en:"getting a feel for getting your eyes tied to that brake"},
+{t:83.7,cs:"a práce s tlakem,",en:"lever,"},
+{t:84.6,cs:"dokud nedostanete motorku tam, kam",en:"praying with that pressure until you get the bike stop where"},
+{t:87.1,cs:"ji potřebujete.",en:"you need it."},
+{t:87.9,cs:"Pojďme zkusit další, ale něco si změníme.",en:"Let's try another one, but let's change something."},
+{t:89.4,cs:"Teď, Christe, když budete iniciovat zatáčku u kuželů,",en:"Now, Chris, at the turn, in at the cones,"},
+{t:91.9,cs:"musíte pustit brzdu.",en:"you've got to let go of your brakes."},
+{t:93,cs:"Budeme sledovat, jak zhasne kontrolka brzdy,",en:"We'll watch the brake light go out,"},
+{t:94.4,cs:"a pak přijdete k nám.",en:"and then come and see us."},
+{t:96.2,cs:"Brzda je zapnutá,",en:"Brakes are on,"},
+{t:97.3,cs:"brzda je vypnutá, a je po zatáčení.",en:"break are off, and it's just done turning."},
+{t:101.9,cs:"Právě jste si procvičil něco nového.",en:"You just practiced something."},
+{t:103.6,cs:"Jak to vypadalo?",en:"How did it work?"},
+{t:104.8,cs:"To je nejděsivější věc, kterou musíme dělat",en:"That's the most terrifying thing that we have to do at the"},
+{t:107.1,cs:"na naší škole.",en:"school."},
+{t:107.9,cs:"Ano.",en:"Yeah."},
+{t:108.7,cs:"Já vím, že chci zastavit,",en:"Just, I know I want to stop,"},
+{t:110.1,cs:"ale pustil jsem brzdu a tentkrát jsem vás viděl,",en:"but I've given up my breaks and this time I could see you,"},
+{t:113.5,cs:"ale když projíždíte slepou zatáčkou a nevíte,",en:"but if you're going around a blind corner and you don't"},
+{t:116.5,cs:"že máte zastavit a už jste pustili",en:"know that you're having to stop and you've already given up"},
+{t:118.5,cs:"brzdu. To je prostě recept na katastrofu.",en:"on the brakes. I mean, it's just a recipe for disaster."},
+{t:121.7,cs:"Marku, měl jsi brzdu zapnutou déle než Chris,",en:"Mark, did you leave your brakes on longer than Chris,"},
+{t:123.9,cs:"nebo stejně jako Chris?",en:"or just like Chris?"},
+{t:125.1,cs:"Déle než Chris, on říkal déle než Chris.",en:"Longer than Chris he said, longer than Chris."},
+{t:127.2,cs:"Měl jsem brzdu zapnutou déle než Chris.",en:"I left my breaks on longer than Chris."},
+{t:128.5,cs:"Takže Christe,",en:"So Chris,"},
+{t:129.3,cs:"pustil jsi brzdu tam, protože",en:"you got off the brakes back there for the reason that you're"},
+{t:131.2,cs:"ses chystal zatočit do zatáčky a my chceme toto",en:"going to turn in the corner and we want to change that in"},
+{t:134,cs:"změnit ve vašem jízdním stylu.",en:"your lives."},
+{t:134.8,cs:"Nepustíte brzdu, opravdu ji nepustíte",en:"You don't let go of that break, you do not let go of"},
+{t:136.4,cs:"dokud nejste spokojení se dvěma věcmi, Eleno,",en:"that break until you're happy with two things Elena,"},
+{t:137.7,cs:"které to jsou?",en:"what are they?"},
+{t:138.6,cs:"Vaše rychlost a směr.",en:"Your speed and direction."},
+{t:139.7,cs:"Rychlost a směr. V tomto případě",en:"Speed and direction, in this case,"},
+{t:140.8,cs:"se kontrolka brzdy vypnula a Christe,",en:"that brake light popped off, and Chris,"},
+{t:142.6,cs:"měl jsi poměrně velký úhel náklonu, že?",en:"you actually ran quite a bit of lean angle, right?"},
+{t:145.9,cs:"Jak se tomu jinak říká - úhel náklonu?",en:"The other word for lean angle?"},
+{t:146.8,cs:"Riziko, velké riziko.",en:"Risk, a lot of risk on that."},
+{t:148.4,cs:"Ano, ztratil jsi kontrolu geometrie řízení,",en:"Yeah, you've let go your steering geometry control,"},
+{t:150.9,cs:"ztratil jsi kontrolu přední pneumatiky,",en:"you've let go of your front contact patch control,"},
+{t:153.6,cs:"ztratil jsi kontrolu rychlosti.",en:"you've let go your speed control."},
+{t:155.3,cs:"A zbývá ti jen úhel náklonu a úhel náklonu je riziko.",en:"And all you got left is lean angle and lean angles risk."},
+{t:157.7,cs:"A museli jsme jít až sem, abychom si s tebou povídali.",en:"And we had to walk all the way over here to talk to you."},
+{t:160.3,cs:"A skoro jsi srazil našeho zvukaře,",en:"And you almost hit our sound guy,"},
+{t:161.9,cs:"skoro jsem srazil zvukaře, měl jsem obrovský strach.",en:"I almost hit the sound guy, I got really nervous."},
+{t:163.9,cs:"Musel utéct a stalo se to opravdu dramatické.",en:"He had to run out of the way and it gets really dramatic."},
+{t:166.8,cs:"Ej vole.",en:"Oh man."},
+{t:167.6,cs:"Jezdci, musíme se na tohle podívat ještě jednou,",en:"Riders, we have to look at this one more time,"},
+{t:170.2,cs:"protože nejčastější příčina nehod na motorkách",en:"cause the number one place we're dying on motorcycles is"},
+{t:172.3,cs:"je vyjíždění ze zatáčky ven.",en:"running wide in corners."},
+{t:173.9,cs:"Podívejte se.",en:"Let's take a look."},
+{t:174.9,cs:"Chris jde na brzdu, když se bojí,",en:"Chris goes to the brakes when he's nervous,"},
+{t:176.7,cs:"ale někdy slyšel nebo se naučil,",en:"but he had maybe heard or learned,"},
+{t:178.4,cs:"že veškeré brzdění má být pouze v přímé linii.",en:"he must do all his breaking in the straight line."},
+{t:180.7,cs:"Kontrolka brzdy se vypne dřív, než zatočí, vidlice se vrátí,",en:"The brake light goes off before he turns the fork rebounds,"},
+{t:185.1,cs:"motorka začne vyjíždět ven, podívejte se na toho chudáka zvukaře,",en:"the bike starts running wide, look at the poor sound guy,"},
+{t:187.7,cs:"neustále se lekává.",en:"he keeps getting scared to death."},
+{t:189.5,cs:"Chris sunul nohu mimo pedale,",en:"Chris puts his foot off,"},
+{t:191.2,cs:"protože mu zbývá jen",en:"cause all he has left right now"},
+{t:192.8,cs:"Jezdci, úhel náklonu, aby zvládl zatáčku.",en:"Riders, is lean angle to make the corner."},
+{t:195.4,cs:"Ztratil si kontrolu geometrie a kontrolu rychlosti.",en:"He's given away his geometry control and his speed control."},
+{t:198.4,cs:"Máme průběžné brzdění,",en:"We've got a trail brake pressure,"},
+{t:200.4,cs:"projít apexem,",en:"pass the tip in,"},
+{t:201.2,cs:"dostat se do přesného místa, kde skončí Mark.",en:"to get down to the exact spot where Mark"},
+{t:204,cs:"V tomto cvičení",en:"ends up."},
+{t:205.4,cs:"jste velmi přesní.",en:"In this practice,"},
+{t:206.7,cs:"Cvičíme počáteční jemnost,",en:"he's very pointed."},
+{t:208.4,cs:"finální jemnost,",en:"We practice initial smoothness,"},
+{t:210.2,cs:"budování tlaku,",en:"final smoothness, building the pressure,"},
+{t:211.9,cs:"cvičíme v přímé linii mnohokrát,",en:"we practice in a straight line a whole bunch of times,"},
+{t:213.8,cs:"abychom dostali vidlice právě do správného zatížení.",en:"getting that fork loading just right."},
+{t:215.4,cs:"Navzájem si radíme, jsou to naši přátelé a rodina,",en:"We coach our each other we're for friends and family,"},
+{t:217.6,cs:"navzájem si radíme a přecházíme na hák a pak",en:"we coach each other and we move into a button hook and we"},
+{t:220.1,cs:"přijíždíme se průběžným brzdením.",en:"come trail breaking in."}];
+var subs4=[{t:5.2,cs:"Tak, jak se Chris a Mark řadí do linie",en:"All right, as Chris and Mark lineup"},
+{t:6.1,cs:"na tuto demonstraci brzdění.",en:"for this breaking demonstration."},
+{t:7.4,cs:"Když spustím ruku,",en:"When I drop my arm,"},
+{t:9.5,cs:"oba se budou snažit zastavit co nejlépe umí.",en:"they're both going to stop as well as they can."},
+{t:11.3,cs:"Podívejme se.",en:"Let's take a look."},
+{t:15.5,cs:"(motor motocyklu startuje)",en:"(motorcyle engine starts)"},
+{t:21.9,cs:"Oba jste se snažili co nejhůř?",en:"Did you both try as hard as you could?"},
+{t:24,cs:"Nejlepší zastavení, jaké jste mohli udělat?",en:"Best stop you could make?"},
+{t:24.8,cs:"Jo.",en:"Yeah."},
+{t:25.6,cs:"Dobře.",en:"Good."},
+{t:26.5,cs:"Obrovský rozdíl, K Dub,",en:"Significant difference, K Dub,"},
+{t:27.3,cs:"co se tady děje?",en:"what's going on here?"},
+{t:28.1,cs:"Obrovský rozdíl.",en:"Big time difference."},
+{t:29,cs:"Ano. Takže máme",en:"Yep. So we've got"},
+{t:29.8,cs:"stejné motocykly, stejné pneumatiky,",en:"the same motorcycles, same tires,"},
+{t:32.8,cs:"stejné podmínky.",en:"same conditions."},
+{t:33.8,cs:"Oba mají opravdu dobré reakční doby.",en:"They both have really good reaction times."},
+{t:36.4,cs:"Jaký je rozdíl?",en:"What's the difference?"},
+{t:37.6,cs:"Jaký je váš přístup, Chris?",en:"What is your approach, Chris?"},
+{t:39.9,cs:"Jaký je váš přístup ke vstupu do této křižovatky?",en:"What is your approach going into this intersection?"},
+{t:44.4,cs:"Jízda městem tímto způsobem.",en:"Riding through town like this."},
+{t:46.2,cs:"Že ano, CP?",en:"Right, CP?"},
+{t:47.1,cs:"Takže když ruka padla,",en:"So, when the arm dropped,"},
+{t:48.7,cs:"když auto vyrazilo před vás,",en:"when the car pulled out in front of you,"},
+{t:49.9,cs:"co jste musel udělat?",en:"what'd you have to do?"},
+{t:51.6,cs:"Zatáhnout páku brzdy.",en:"Pull the brake lever."},
+{t:53.2,cs:"Kyle, ten tah.",en:"Kyle, that move."},
+{t:54.4,cs:"Jak dlouho to trvalo?",en:"What, how long did that take?"},
+{t:55.4,cs:"Co se tady děje?",en:"What's going on with this?"},
+{t:56.4,cs:"Myslím, že asi čtvrt sekundy nebo",en:"I mean, maybe a quarter second or"},
+{t:57.9,cs:"půl sekundy mezi tím, co jde z tady",en:"half a second to go from here"},
+{t:59.6,cs:"až do chvíle, kdy má konečně prsty na brzdě",en:"to where he's finally got his fingers on the brake"},
+{t:62.4,cs:"a vidíme to rozšířeno na vzdálenost",en:"and we see it extended over a distance of,"},
+{t:64.4,cs:"Jakou máte rychlost?",en:"What's your speed?"},
+{t:66.3,cs:"Uh, 40",en:"Uh, 40"},
+{t:67.1,cs:"Asi 40 mil za hodinu. Takže na vzdálenost,",en:"About 40 miles per hour. So over a distance,"},
+{t:68.8,cs:"40 mil za hodinu,",en:"40 miles per hour,"},
+{t:70.1,cs:"vidíme velký rozdíl v tom, kde",en:"we can see a big difference where"},
+{t:71.4,cs:"veškerý čas, který si vzal pokus dostat se",en:"all this time he took trying to get"},
+{t:72.8,cs:"k brzdám, aby mohl začít zpomalovat",en:"to the brakes so he could start slowing"},
+{t:74.8,cs:"se rozprostřel.",en:"has been spread out."},
+{t:77.2,cs:"Pojďme zpět k Markovi.",en:"Let's go back to Mark."},
+{t:78.3,cs:"Marku, ukáž nám polohu ruky při jízdě městem.",en:"Mark, show us your hand position cruising through town."},
+{t:82,cs:"Jízda městem.",en:"Cruising through town."},
+{t:83.5,cs:"Tomu se říká zakrytí páky brzdy.",en:"This is called covering the brake lever."},
+{t:85.1,cs:"Zakrýváš páku brzdy.",en:"You're covering the brake lever."},
+{t:86.1,cs:"Hodně jsme o tom mluvili.",en:"We talked a lot about it."},
+{t:87.1,cs:"To bude obrovské v tvém životě.",en:"This is going to be a big deal in your life."},
+{t:88.9,cs:"Mark jede městem,",en:"Mark is cruising to town,"},
+{t:90.1,cs:"přes parkoviště a po vedlejších silnicích,",en:"through the parking lot on the back roads,"},
+{t:92.6,cs:"zakrývá přeplnené dálnice,",en:"covering crowded freeways,"},
+{t:94.7,cs:"zakrývá páku brzdy",en:"covering the brake lever"},
+{t:96,cs:"protože Kyle, není to jen",en:"because Kyle, it isn't just"},
+{t:97.9,cs:"kdo dokáže zastavit svůj motocykl nejlépe, že ne?",en:"who can stop their motorcycle the best, isn't it?"},
+{t:100.2,cs:"Ne.",en:"No."},
+{t:101.1,cs:"Dějí se tady dvě další věci.",en:"There's two other things going on."},
+{t:102.2,cs:"Ano, myslím si, že máme, um",en:"Well, yeah, I mean, we've got, um"},
+{t:103.9,cs:"máme tady dva jezdce, kteří jsou zruční,",en:"we've got two riders here who are skilled,"},
+{t:106.4,cs:"oba se mohou dostat k brzdám poměrně rychle,",en:"who can both get to the brakes pretty quick,"},
+{t:108.9,cs:"ale my jsme dali dvě různé techniky",en:"but we put two different techniques out there"},
+{t:110.8,cs:"a rozdíl je obrovský.",en:"and it gets spread out big time."},
+{t:113,cs:"Takže tu určitě můžete vejít auto nebo",en:"So, you can definitely fit a car or,"},
+{t:116,cs:"nebo nějakou překážku v tomto typu oblasti.",en:"or some hazard in this type of area."},
+{t:119,cs:"Pokud byste mohli zastavit svůj stroj tak lépe,",en:"If you could stop your bike this much better,"},
+{t:121.9,cs:"opravdu bez jakýchkoliv nákladů",en:"really with no cost"},
+{t:123.5,cs:"je to, o čem mluvíme",en:"is what we're talking about"},
+{t:125.1,cs:"mít prsty nahoře předem.",en:"is having our fingers up beforehand."},
+{t:126.5,cs:"Budeme se rovnou dostat k brzdám.",en:"We're going to get straight to the brakes."},
+{t:130.4,cs:"Když to začnete dělat poprvé,",en:"When you first start doing this,"},
+{t:131.5,cs:"začnete zakrývat brzdy.",en:"you start covering the breaks."},
+{t:132.5,cs:"Takže to je s našimi studenty,",en:"So this is with our students,"},
+{t:133.3,cs:"zvláště s naší vojenskou skupinou",en:"our military group, especially"},
+{t:134.8,cs:"zpočátku vám bolí ruce, že ne?",en:"at first, your hands a little sore, isn't it?"},
+{t:136.4,cs:"Ruce vám trochu bolí, když jezdíte tímto způsobem,",en:"Your hands a little bit sore riding this way,"},
+{t:137.5,cs:"ale pak to zvládnete,",en:"but then you get it figured out,"},
+{t:139.3,cs:"jezdíte po dálnici.",en:"cruising up the freeway."},
+{t:140.1,cs:"Tohle rozšiřujete,",en:"You're extending that,"},
+{t:141.3,cs:"vykřikujete to, protože K dub,",en:"driving that thing out because K dub,"},
+{t:143.8,cs:"je to vnímání,",en:"it's perception,"},
+{t:145.1,cs:"oba viděli problém ve stejný moment.",en:"they both saw the problem at the same moment."},
+{t:147.9,cs:"Ano.",en:"Right."},
+{t:148.7,cs:"Oba velmi, velmi dobře brzdili,",en:"They both braked really, really well,"},
+{t:150.6,cs:"ale mezi vnímáním a brzdením,",en:"but between perception and breaking,"},
+{t:152.9,cs:"Jaký byl rozdíl?",en:"What was the difference?"},
+{t:154.1,cs:"Od chvíle, kdy jejich mozek řekl: musím zastavit.",en:"From the moment their brain said, I need to stop."},
+{t:156.2,cs:"A od chvíle, kdy stroj skutečně začal zpomalovat,",en:"And the moment the bike can actually started to slow,"},
+{t:159.9,cs:"byl obrovský rozdíl.",en:"there was a big difference."},
+{t:162.3,cs:"Takže zcela zadarmo si můžeme dát prsty nahoru.",en:"So for nothing, we can have our fingers up."},
+{t:165,cs:"Můžeme se dostat k brzdám hned, když je potřebujeme.",en:"We can get to the brakes as soon as we need them."},
+{t:167.9,cs:"A jak přidáme rychlost, vzdálenost,",en:"And as we add speed to this, the distance,"},
+{t:171.5,cs:"rozdíl v té vzdálenosti se jen",en:"the difference in, in the distance just gets"},
+{t:173.6,cs:"exponenciálně zvyšuje.",en:"exponentially longer."},
+{t:176.1,cs:"Takže chceme zakrýt brzdu.",en:"So, we want to cover the brake."},
+{t:179,cs:"Chceme se postavit do pozice",en:"We want to put ourselves in a position"},
+{t:180.8,cs:"abychom se mohli přizpůsobit",en:"to be able to adjust"},
+{t:182,cs:"jakýmkoliv překážkám, které nám stojí v cestě.",en:"to whatever obstacles thrown our way."},
+{t:184.1,cs:"V tomto případě auto, které vyrazilo před nás,",en:"In this case, a car pulling out in front,"},
+{t:186.9,cs:"srna, cokoliv to je.",en:"a deer, whatever it is."},
+{t:188.8,cs:"A na závěr, než si ukážeme další demo.",en:"And to finish this up before we do our next demo."},
+{t:190.5,cs:"Pokud to nevíte,",en:"If you don't know this,"},
+{t:191.3,cs:"druhý způsob, jak jsou motorkáři zraňování a zabíjení.",en:"the second way motorcyclists were being hurt and killed."},
+{t:194.2,cs:"Motocyklisty jsou zraňování a zabíjení.",en:"Motorcycles are being hurt and killed."},
+{t:196.1,cs:"Jsou to auta, která vyrazí před nimi na křižovatkách,",en:"Is cars pulling out in front of them in intersections,"},
+{t:198.4,cs:"někdo porušuje vaše právo přednosti na křižovatce,",en:"someone violating your to right of way in an intersection,"},
+{t:201.8,cs:"a každý jezdí na těchto křižovatkách tímto způsobem.",en:"and everybody for riding in those intersections like that."},
+{t:205.6,cs:"Vidíte rozdíl. Chris se zranil.",en:"You see the difference. Chris got hurt."},
+{t:207.5,cs:"Mark je v pořádku.",en:"Mark is fine."},
+{t:209.1,cs:"Ukáž nám něco dalšího.",en:"Show us something else."},
+{t:212.1,cs:"(motor motocyklu startuje)",en:"(motorcycle engine starts)"},
+{t:220.1,cs:"Wow.",en:"Wow."},
+{t:223,cs:"Christe, slyšíš nás?",en:"Chris, can you hear us?"},
+{t:226.6,cs:"Jaký byl tvůj styl?",en:"Well, what was your style?"},
+{t:227.8,cs:"Je asi 30 stop za kamerou.",en:"He's about 30 feet past the camera."},
+{t:229.7,cs:"Jaký byl tvůj styl přístupu na křižovatce.",en:"What was your style of poach in the intersection."},
+{t:232.1,cs:"Jenom zadní brzda.",en:"Rear brake only."},
+{t:233.5,cs:"[Společně] Zadní brzda.",en:"[Together] Rear brake."},
+{t:234.7,cs:"Jak to na něm fungovalo, K Dub?",en:"How did it work for him, K Dub?"},
+{t:236.5,cs:"Samozřejmě, vůbec ne dobře.",en:"Obviously, not very good."},
+{t:237.5,cs:"Takže mluvíme jenom o zadní brzdě versus",en:"So we're talking rear brake only versus"},
+{t:241,cs:"jakou byla tvá strategie?",en:"what was your strategy?"},
+{t:243.4,cs:"Zakrýval jsem přední brzdu a byl připraven",en:"I was covering the front brake and prepared"},
+{t:245.8,cs:"přední brzda a já jsem ji zakrýval.",en:"front brake and he was covering it."},
+{t:247.5,cs:"Takže mluvíme o 40 mil za hodinu,",en:"So we're talking at 40 mile an hour,"},
+{t:250.6,cs:"sto stop?",en:"a hundred feet?"},
+{t:253.1,cs:"Sto stop rozdílu.",en:"A hundred feet of difference."},
+{t:254.3,cs:"A samozřejmě mluvíme o zadní brzdě versus přední brzdě.",en:"And obviously we're talking rear brake versus front brake."},
+{t:259.3,cs:"Zadní brzda je opravdu doplňkem",en:"Rear brake is really a supplement"},
+{t:261.4,cs:"k přední brzdě,",en:"to the front brake,"},
+{t:262.3,cs:"zvláště u sportovního motocyklu, kde máte",en:"especially on a sport bike where you have a"},
+{t:263.9,cs:"krátkou základnu.",en:"short wheel base."},
+{t:264.8,cs:"Většina váhy je nad přední pneumatikou, může být",en:"Most of the weight is over the front tire might be"},
+{t:267.3,cs:"2% z vašich celkových schopností zastavení.",en:"2% of your overall stopping capabilities."},
+{t:270,cs:"Takže v nouzové situaci,",en:"So in an emergency situation,"},
+{t:271.1,cs:"když zpomalujete a váha se pohybuje vpřed,",en:"when you slow in the weight goes forward,"},
+{t:273.5,cs:"sejme všechna váhu ze zadní pneumatiky.",en:"it takes all this weight off the rear tire."},
+{t:275.6,cs:"Jak používáte zadní brzdu?",en:"How do you use a rear break?"},
+{t:276.7,cs:"Jezdci, ještě jednou v pomalém pohybu.",en:"Riders, one more time and slow motion."},
+{t:279.2,cs:"Mark jde k přední brzdě,",en:"Mark goes to the front brake,"},
+{t:280.8,cs:"zastaví stroj velmi rychle.",en:"gets the bike stopped very quickly."},
+{t:282.6,cs:"Chris jde k zadní brzdě.",en:"Chris goes to the rear brake."},
+{t:283.5,cs:"Stroj se nezastaví další sto stop.",en:"Bike doesn't stop for another hundred feet."},
+{t:286.3,cs:"Vyjděte a cvičte tyto věci.",en:"Get out practice these things."},
+{t:288,cs:"Dokažte sami sobě",en:"Prove to yourself"},
+{t:288.9,cs:"jak silná a jak dobře ta přední brzda funguje,",en:"how strong and how well that front brake works,"},
+{t:291.6,cs:"zvláště když je zakrytá.",en:"especially when it's covered."}];
+var subs5=[{t:4.2,cs:"Tato další demonstrace je úplně o technologii.",en:"This next demonstration is all about technology."},
+{t:7,cs:"Milujeme ji, věříme jí",en:"We love it, we trust it"},
+{t:9,cs:"a je to opravdu velká součást našeho sportu.",en:"and it's really a big part of our sport."},
+{t:12,cs:"Mluvíme o systémech protiblokovacích brzd,",en:"We're talking about antilock brake systems,"},
+{t:13.9,cs:"přední i zadní.",en:"front and rear."},
+{t:15.2,cs:"Máme tady velkou skútrovnu,",en:"We've got us a big skid pad here,"},
+{t:17.8,cs:"ale nebudeme používat asfalt.",en:"but we're not really going to use the asphalt."},
+{t:19.9,cs:"Budeme mluvit o používání země.",en:"We're going to talk about using the dirt."},
+{t:22,cs:"A chceme vám ukázat, proč",en:"And we're going to show why"},
+{t:23.1,cs:"věříme této technologii tolik.",en:"we trust this technology so much."},
+{t:25.8,cs:"Dobře.",en:"All right."},
+{t:26.6,cs:"Přiveďme tyto kluky sem vedle sebe.",en:"Let's bring these guys down in here, side by side."},
+{t:28.8,cs:"Půjdou na brzdy a udělají nejlepší možné zastavení.",en:"They're gonna go to the brakes, make their very best stop."},
+{t:31.1,cs:"Dobře, Chrise a Marku.",en:"All right, Chris and Mark."},
+{t:32,cs:"Nejlepší možné zastavení, když spustím ruku.",en:"Very best stop, when I drop my arm."},
+{t:34.4,cs:"(motory vrčí)",en:"(engines revving)"},
+{t:42.8,cs:"(smích)",en:"(laughing)"},
+{t:43.7,cs:"Co vy na to?",en:"How about it?"},
+{t:44.6,cs:"To byl těžký útlum pro ty dva,",en:"That is hard in the throat for those two,"},
+{t:46.3,cs:"ale co se ujalo?",en:"but what took over?"},
+{t:47.5,cs:"Co se ujalo?",en:"What took over?"},
+{t:48.4,cs:"Technologie.",en:"Technology."},
+{t:50.2,cs:"Pojďme si o tom povídat.",en:"Let's talk about it."},
+{t:51,cs:"Jo, technologie.",en:"Yeah, technology."},
+{t:51.8,cs:"Hej,",en:"Hey,"},
+{t:52.7,cs:"přední i zadní brzdy pro vás oba, správně?",en:"front and rear for both of you guys, right?"},
+{t:53.8,cs:"Jo.",en:"Yeah."},
+{t:54.6,cs:"Určitě.",en:"Absolutely."},
+{t:55.5,cs:"Takže šli na brzdy na asfaltu.",en:"So they went to the brakes on the asphalt."},
+{t:57.5,cs:"To je scénář, když přijedete přes slepý kopec",en:"This is a scenario that you come over the blind crests"},
+{t:59.8,cs:"a právě asfaltovali a posypali cestu.",en:"and they've just tarred and graveled the road."},
+{t:63.1,cs:"Co uděláte?",en:"What do you do?"},
+{t:64.3,cs:"Co uděláte?",en:"What do you?"},
+{t:65.4,cs:"Když jdeš na první track day, vyjdeš mimo trať,",en:"If you go to your first track day, you run off,"},
+{t:67.2,cs:"vyjdeš mimo asphalt, už jsi někdy vyjel mimo asphalt?",en:"you run off, have you ever run off the asphalt?"},
+{t:70.2,cs:"Stalo se to každému z nás a",en:"It's happened to each and every one of us and"},
+{t:72.6,cs:"v tuto chvíli jsi,",en:"in the, in the time and in the moment, you're,"},
+{t:75,cs:"máš strach,",en:"you're scared,"},
+{t:75.8,cs:"ale technologie opravdu převzala kontrolu",en:"but technology really has come to take over"},
+{t:78.6,cs:"a udělala tyto situace méně děsivými.",en:"and make those situations a little less scary."},
+{t:80.6,cs:"Chceme ti to vložit do mozku, jezdci.",en:"We want to put this in your brain, riders."},
+{t:82.4,cs:"Pokud používáš ABS pořád na suchém asfaltu,",en:"If you're using ABS all the time on, on dry asphalt,"},
+{t:85,cs:"chytáš a bodáš,",en:"you're grabbing and stabbing,"},
+{t:86.4,cs:"a překračuješ limity velmi rychle.",en:"and you're, you're getting over those limits so quickly."},
+{t:88.7,cs:"Pokud jej používáš, když ho potřebuješ, právě jako tady,",en:"If you use them when you need it like this,"},
+{t:90.8,cs:"do štěrkového parkoviště do situace jako tato,",en:"into a graveled parking lot into a situation like this,"},
+{t:93.7,cs:"to je, kde tě opravdu zachrání.",en:"this is where it really saves you."},
+{t:95.2,cs:"A my jsme na to velkými fanoušky, ne?",en:"And we're, we're big fans of it, aren't we?"},
+{t:96.7,cs:"Jsme velkými fanoušky této věci.",en:"We're big fans of this stuff."},
+{t:97.9,cs:"Opravdu ano.",en:"Really are, yeah."},
+{t:98.7,cs:"A víš, na závodní dráze, třeba znáš,",en:"And you know, on the racetrack, maybe, you know,"},
+{t:102.2,cs:"to může být trochu překážkou, víš,",en:"it can be a little bit of a hindrance, you know,"},
+{t:107,cs:"Ale když mluvíme o cestovním jezdectví nebo,",en:"But when we're talking about street riding or,"},
+{t:109.4,cs:"nebo novém silničním obsluhování,",en:"or a new road,"},
+{t:110.9,cs:"člověče, toto funguje tak dobře.",en:"man, this stuff just works so well."},
+{t:113.7,cs:"Tak dobře.",en:"So well."},
+{t:114.5,cs:"To se za posledních zhruba deset let velmi zlepšilo.",en:"It's gone a long way in just so, you know, about a decade."},
+{t:116.7,cs:"Opravdu působivá věc.",en:"So really impressive stuff."},
+{t:118.7,cs:"A tihle kluci si budou jezdit další den",en:"And these guys are going to ride a another day"},
+{t:121.4,cs:"a budou si užívat svůj život.",en:"and enjoy their life."},
+{t:123.1,cs:"Na motorce je spousta věcí, v nichž být dobrý,",en:"There's a lot of things to get good at on a motorcycle,"},
+{t:125.7,cs:"ale myslím si, že ovládnutí brzd,",en:"but I got to think that getting good at the brakes,"},
+{t:127.6,cs:"zvládnutí brzd,",en:"mastering the brakes,"},
+{t:128.5,cs:"je na vrcholu všeho, na čem pracujeme.",en:"is at the tippy top of everything we work on."},
+{t:130.6,cs:"A Eleno, kde je to, je to ve tvém životě,",en:"And Elena, where does it, is it in your life,"},
+{t:133.6,cs:"v tvém tréninku?",en:"in your coaching?"},
+{t:134.5,cs:"Jak se k tomu stavíš?",en:"How do you approach it?"},
+{t:136,cs:"Opravdu, nejdůležitější věc pro mě je být hladký.",en:"Really, the biggest thing for me is being smooth."},
+{t:138.9,cs:"Je to něco, co jsem trénovala",en:"It's something I've practiced"},
+{t:140.2,cs:"během celé své závodní kariéry a,",en:"throughout my entire racing career and,"},
+{t:142.4,cs:"a je to něco, na čem opravdu ve školách hodně pracujeme.",en:"and something we really work on so much at these schools."},
+{t:145.4,cs:"A opravdu, je to v mé mysli,",en:"And really it's, it's in my mind,"},
+{t:148.2,cs:"být hladký na iniciálním brzdovém",en:"being smooth on that initial brake,"},
+{t:150.5,cs:"tlaku, budovat tlak a hladký na té uvolnění",en:"pressure, building pressure and smooth on that release"},
+{t:153.8,cs:"aby to umožnilo odpružení komprese a odrazu",en:"so it allows that suspension to compress and rebound"},
+{t:157.8,cs:"a neznepokojit motorku",en:"and not upset the motorcycle"},
+{t:160,cs:"v nejkritičtější části trasy.",en:"in the most critical part of the track."},
+{t:162.3,cs:"To je opravdu dobré.",en:"That's really good."},
+{t:163.2,cs:"A Eleno, teď dělá hodně motokrosu.",en:"And Elena, you, you do a lot of Motocross now."},
+{t:164.8,cs:"KTM 250. Jo.",en:"KTM 250.↵Yeah."},
+{t:166,cs:"Jezdíš si s tím.",en:"You're out playing around."},
+{t:167.1,cs:"A je terénní motorka dobrým místem na trénink tohoto?",en:"And dirt bike a good place to train this, on this stuff?"},
+{t:170.4,cs:"Víš, určitě.",en:"You know, absolutely."},
+{t:171.3,cs:"Je to skvělé prostředí na to.",en:"It's, it's a great environment for it."},
+{t:173,cs:"Země je trochu měkčí než silnice.",en:"The dirt's a little bit softer than, than the pavement."},
+{t:176.1,cs:"A obvykle je,",en:"And usually it's,"},
+{t:177.2,cs:"je to na skvělém řízeném místě",en:"it's in a great controlled environment"},
+{t:179.4,cs:"kde si můžeš opravdu osvojit ty dovednosti.",en:"where you can really own those skills."},
+{t:180.9,cs:"Jo, je to opravdu dobré.",en:"Yeah, it's really good."},
+{t:181.7,cs:"Takže, myslím, že každý silniční závodník, kterého známe, vlastní terénní motorku.",en:"So, I think every road racer we know owns a dirt bike."},
+{t:184.2,cs:"Všichni máme terénní motorky, hrajeme si s nimi a.",en:"We all have dirt bikes, we play on dirt bikes and."},
+{t:187,cs:"A pořád si s tím hrajeme.",en:"And always playing with that."},
+{t:188,cs:"Takže Marku Schellinger, jsi silniční závodník,",en:"So Mark Schellinger, you're a road racer,"},
+{t:191.1,cs:"jezdec na expertní úrovni",en:"expert level rider"},
+{t:192.7,cs:"a dělá hodně vojenského školení řidičů.",en:"and do a lot of military car driver training."},
+{t:195.2,cs:"Kde je brzdění ve tvém světě?",en:"Where's the braking practice in your world?"},
+{t:197.5,cs:"Nicku, je to zásadní.",en:"Nick, it's paramount."},
+{t:199.9,cs:"Víš, musíme používat brzdy.",en:"You know, we have to use the brakes."},
+{t:201.5,cs:"Ať už jedeme v autě nebo jezdíme na motorce,",en:"Whether we're driving in the car or riding our motorcycle,"},
+{t:203.8,cs:"musíme stroj zpomalit.",en:"we've got to get the machine slowed."},
+{t:205.8,cs:"Něco, co mi opravdu vyskočí do očí",en:"Something that really jumps out to me"},
+{t:207.3,cs:"je pozorování Chrisových demo právě tady",en:"is watching Chris's demos right here"},
+{t:209.2,cs:"kde sešel z brzdy před sklonem.",en:"where he got off the brake before tip in."},
+{t:211.6,cs:"Vzdal se kontroly geometrie,",en:"He gave up his geometry control,"},
+{t:214.3,cs:"vzdal se své kontaktní plochy",en:"he gave up his contact patch"},
+{t:216.1,cs:"a vzdal se kontroly rychlosti.",en:"and he gave up his speed control."},
+{t:217.6,cs:"Fuj.",en:"Phew."},
+{t:218.4,cs:"Udělal jsem to demo tolikrát pro tebe, Nicku.",en:"I've done that, that demo many times for you, Nick."},
+{t:221.4,cs:"Je to jedno z nejtěžších, která dělám, dělám.",en:"It's one of the hardest ones I do, we do."},
+{t:222.8,cs:"Jo, jo.",en:"Yeah, yeah."},
+{t:224.4,cs:"Je to opravdu těžké.",en:"It's a, it's a difficult one."},
+{t:225.6,cs:"Takže opravdu zvládnutí té brzdy je něco",en:"So, really mastering that brake is something"},
+{t:228.5,cs:"na čem opravdu chceme tvrdě pracovat.",en:"we really want to work hard at."},
+{t:230.7,cs:"Pojďme se vrhnout na Kyrila.",en:"Let's push it over to Kyle."},
+{t:231.5,cs:"Kyrile, jsi na motorce, která má",en:"Kyle, you're on a motorcycle that makes"},
+{t:233.5,cs:"dobře přes 200 koňských sil.",en:"well over 200 horsepower."},
+{t:235.7,cs:"Takže, kde,",en:"So, where,"},
+{t:237,cs:"kde jsou brzdy v tvém životě, můj přítele?",en:"where are the breaks in your life, my friend?"},
+{t:238.5,cs:"Jo, je to docela důležitá věc.",en:"Yeah, it's a pretty important deal."},
+{t:239.9,cs:"(Nick se smeje)",en:"(Nick laughing)"},
+{t:240.7,cs:"Takže to je, víš, víc rychlosti, víc brzd, jak říkáme.",en:"So that's, you know, more speed, more breaks, as we say."},
+{t:243,cs:"Víš, sledovali jsme, jak Chris projde tímto rohem",en:"You know, we watched Chris come through here in this corner"},
+{t:245.3,cs:"a je docela zřejmé, co se stane",en:"and it's pretty apparent what happens"},
+{t:247.4,cs:"když nemáš kontrolu své rychlosti, víš?",en:"when you don't have control of your speed, you know?"},
+{t:249.9,cs:"Mluvili jsme o deštníku směru",en:"We've talked about the umbrella of direction"},
+{t:251.4,cs:"který nás všechny chrání a opravdu je",en:"covering us all and really being"},
+{t:254.5,cs:"největší zásadní zvykem šampiona, na kterém myslíme.",en:"the biggest core champion's habit that we think about."},
+{t:257.7,cs:"A bez brzd",en:"And without the brakes"},
+{t:259.4,cs:"a bez kontroly poloměru v rohu,",en:"and controlling our radius in the corner,"},
+{t:261.3,cs:"prostě nemáme směr.",en:"we just, we don't have direction."},
+{t:263,cs:"Takže, nejpomalejší bod je to, na co myslíme",en:"So, the slowest point is what we're thinking about"},
+{t:265.7,cs:"a kontrola vaší rychlosti až do toho nejpomalejšího bodu",en:"and controlling your speed down to that slowest point"},
+{t:267.6,cs:"nás tam dostane.",en:"is going to get us there."},
+{t:268.5,cs:"A víš, ať už jsi na kole nebo, víš,",en:"And you know, whether you're on a bicycle or, you know,"},
+{t:271.4,cs:"200 plus koňských sil superbajk,",en:"200 plus horsepower super bike,"},
+{t:273.5,cs:"najdeš roh",en:"you're going to find a corner"},
+{t:275.1,cs:"kde se budeš muset zpomalit.",en:"where you're gonna have to slow for us."},
+{t:276,cs:"Musíš se dobře naučit brzdy.",en:"You better get good at the brakes."},
+{t:276.9,cs:"Ha ha, to se mi líbí.",en:"Ha ha, I like it."},
+{t:277.8,cs:"Dobře, pak to dokončme, než půjdeme k Chrisovi,",en:"Okay, then let's finish up, before we go to Chris,"},
+{t:279.5,cs:"pojďme to zakončit s touto myšlenkou.",en:"let's finish up with this idea."},
+{t:282.4,cs:"Jít nahoru kanyonem versus jít dolů kanyonem.",en:"Going up the canyon versus going down the canyon."},
+{t:285.3,cs:"Naši studenti milují jít nahoru kanyonem.",en:"Our students love going up the canyon."},
+{t:286.7,cs:"Milují jít nahoru kanyonem.",en:"They love going up the canyon."},
+{t:287.7,cs:"Dostanou se na vrchol.",en:"They get to the top."},
+{t:288.5,cs:"Ó, doufám, že přežiju jití dolů.",en:"Oh, I hope I survive going down."},
+{t:290.1,cs:"Pojďme si s tím pracovat",en:"Let's just work on that solution"},
+{t:291.8,cs:"než to předáme Chrisovi.",en:"before we throw it to Chris."},
+{t:293.1,cs:"Řešení na to, aby se ti líbilo jít dolů kanyonem,",en:"The solution for enjoying going down the canyon,"},
+{t:295,cs:"stejně jako nahoru.",en:"as much as up."},
+{t:295.8,cs:"Takže, dvakrát tolik brzd,",en:"Well, twice as much breaks,"},
+{t:297.1,cs:"protože jak se zvedáme nahoru kanyonem,",en:"because as we go up, up the canyon road,"},
+{t:299.5,cs:"gravitace nás trochu zatáhne",en:"gravity's going to pull on us a little bit"},
+{t:301.4,cs:"a bude nám motorku zpomalovat rychleji.",en:"and it's going to help slow the motorcycle quicker."},
+{t:303.3,cs:"Když motorku zpomalíme rychleji,",en:"When we slow the motorcycle quicker,"},
+{t:305.4,cs:"co se stane s poloměrem?",en:"what happens to the radius?"},
+{t:306.7,cs:"Zmenší se.",en:"Tightens."},
+{t:307.5,cs:"Zmenší se rychleji.",en:"Tightens quicker."},
+{t:308.4,cs:"Takže, když jdeme zpátky dolů kopcem,",en:"So, when we're going back down the hill,"},
+{t:309.9,cs:"je potřeba mnohem větší brzdné výkonu na zpomalení",en:"it takes a lot more braking power to slow the thing"},
+{t:312.6,cs:"a obejití těchto rohů, tak.",en:"and get around these corners, so."},
+{t:314.2,cs:"V tomto rohu jezdíme spolu v Arizoně.",en:"In this corner, we ride in Arizona together."},
+{t:317,cs:"Jo.",en:"Yep."},
+{t:317.8,cs:"Jezdíme spolu v jižní Kalifornii.",en:"We ride in Southern California together."},
+{t:319.1,cs:"Kolik rohů znáš",en:"How many corners do you know"},
+{t:320.7,cs:"s touto krásnou zónou uvolnění",en:"with this beautiful runoff room"},
+{t:323.3,cs:"kde můžeš dělat chyby, na kterých jsme jezdili?",en:"that you can make mistakes in that we've ridden on?"},
+{t:326.2,cs:"Jo, není jich moc.",en:"Yeah, there's, there's not many of them."},
+{t:327.9,cs:"Vždycky to je,",en:"It's always,"},
+{t:328.7,cs:"vždycky je to bezpečnostní závor, kaktus, cokoli.",en:"it's always the guard rail, the cactus, the whatever."},
+{t:331,cs:"Myslím, že obrubník.",en:"I mean, curbing."},
+{t:332.4,cs:"Vždycky tam něco je.",en:"There's always something out there."},
+{t:333.9,cs:"Takže, víš, to je, kde se lidé zraňují,",en:"So that is, you know, that's where people are getting hurt,"},
+{t:336.7,cs:"prostě nemají kontrolu své rychlosti vcházející do těchto rohů",en:"just not controlling their speed entering these corners"},
+{t:339.4,cs:"protože silnice jsou velmi neodpouštivé",en:"because the streets are very unforgiving"},
+{t:341.2,cs:"jakmile tam vyjedeme.",en:"once you get out there."},
+{t:342.1,cs:"Takže schopnost kontroly v pozdní části rohu",en:"So being able to control that late in the corner"},
+{t:345.1,cs:"je jen měnič hry.",en:"is just the game changer."},
+{t:347,cs:"A jezdci, největší místo",en:"And riders, the number one place"},
+{t:348.5,cs:"kde se dostáváme do potíží, do nehod,",en:"that we are getting in trouble, in accidents,"},
+{t:351.4,cs:"jsou křižovatky.",en:"is intersections."},
+{t:352.9,cs:"Právě jsme mluvili o zakrytí brzdové páčky.",en:"We just talked about covering the brake lever."},
+{t:354.9,cs:"Zakrytí brzdové páčky, jsi v dopravě",en:"Covering the brake lever, you're in traffic"},
+{t:356.8,cs:"s prsty zakrývajícími brzdovou páčku,",en:"with your fingers covering the brake lever,"},
+{t:358.3,cs:"tvoje noha připravena na zadní brzdu.",en:"your foot ready on the rear brake."},
+{t:359.8,cs:"A trénuješ si brzdění tak, jak jsme ti to ukázali.",en:"And you practice your braking the way we showed you."},
+{t:362.1,cs:"Zatížení vidlice, měkké stisknutí.",en:"Loading the fork, smooth squeeze."},
+{t:364.2,cs:"To řeší ten problém křižovatky,",en:"That solves that intersection issue,"},
+{t:366.8,cs:"dává ti dobrou šanci na zastavení.",en:"gives you a good chance of getting the thing stopped."},
+{t:369.2,cs:"Místo číslo dvě to, nebo",en:"The number two place that,"},
+{t:371.2,cs:"místo číslo jedna, kde se zraňujeme,",en:"or the number one place we're dying,"},
+{t:373.2,cs:"místo číslo dvě, kde se topíme,",en:"number two place we're crashing,"},
+{t:374.9,cs:"jsou zadní cesty sami na sobě.",en:"is back roads by ourselves."},
+{t:376.1,cs:"Zadní cesty sami na sobě, jezdíme široko v rohách,",en:"Back roads by ourselves, running wide in corners,"},
+{t:379,cs:"široko v rohách.",en:"wide in corners."},
+{t:380,cs:"Takže když jsme viděli Chrisův brzdový reflektor,",en:"So when we saw Chris's brake light,"},
+{t:381.8,cs:"vyskočil,",en:"jump off,"},
+{t:383,cs:"jeho motorka ujela ze silnice",en:"his bike ran wide"},
+{t:383.9,cs:"ze všech důvodů, o kterých Mark mluvil.",en:"for all the reasons that Mark talked about."},
+{t:385.8,cs:"Takže, myšlení na ty dva problémy,",en:"So, thinking about those two issues,"},
+{t:388,cs:"křižovatky a zadní cesty,",en:"intersections and back roads,"},
+{t:389.6,cs:"to jsou místa, kde se zraňujeme.",en:"that's, those are the places we're getting hurt."},
+{t:392.2,cs:"Jaký je společný jmenovatel řešení těchto dvou míst?",en:"What's the common denominator of fixing those two places?"},
+{t:395.2,cs:"Více brzd.",en:"More brakes."},
+{t:397.3,cs:"Champ University.",en:"Champ University."},
+{t:398.6,cs:"Brzdy ti zachrání život.",en:"The brakes will save your life."},
+{t:405.7,cs:"Keithe, Keithe, Keithe.",en:"Keith, Keith, Keith."},
+{t:409,cs:"Měl jsi vidět závod, který jsem měl.",en:"You should have just seen the race that I had."},
+{t:412.2,cs:"Skončil jsem na pódiu.",en:"Finished on the podium."},
+{t:413.7,cs:"Závod pro nové jezdce, ale člověče,",en:"New riders race, but man,"},
+{t:415.7,cs:"to by nemohlo dopadnout lépe.",en:"it just could not have gone better."},
+{t:417.4,cs:"Na pódiu?",en:"On the podium?"},
+{t:418.3,cs:"To je dobré, jaké místo?",en:"That's good, what place?"},
+{t:419.1,cs:"Třetí.",en:"Third."},
+{t:419.9,cs:"Bez problémů.",en:"Cool."},
+{t:421.6,cs:"Kolik závodníků?",en:"How many racers?"},
+{t:422.4,cs:"Byli jen tři, ale, ale to byla přesvědčivá,",en:"There was only three, but, but it was a solid,"},
+{t:425,cs:"přesvědčivá třetí místo, i tak.",en:"solid third place, though."},
+{t:426.6,cs:"Dobře.",en:"Good job."},
+{t:427.4,cs:"Mám to všechno vymyšleno.",en:"I've got, man, I just got this all figured out."},
+{t:431,cs:"Mám to všechno vymyšleno.",en:"Got it all figured out."},
+{t:431.9,cs:"Myslím na,",en:"I'm thinking about,"},
+{t:433.4,cs:"Mohl bych spustit, fanouškovský klub nebo armádu",en:"I might start a, a fan club or an army"},
+{t:436.3,cs:"protože já stoupám, stoupám.",en:"'cause I'm coming up, coming up."},
+{t:439,cs:"Takže musím získat všechny",en:"So I got to get all my,"},
+{t:440.9,cs:"všechny své sledující",en:"all my followers"},
+{t:442,cs:"aby dostali.",en:"to get."},
+{t:447.1,cs:"Seřaď brzdy.",en:"Put the brakes on."},
+{t:448.2,cs:"Číslo šest důvod, proč se shodíme na motorce,",en:"Number six reason we crash a motorcycle,"},
+{t:451.1,cs:"přílišná sebedůvěra.",en:"overconfidence."},
+{t:452.5,cs:"Přílišná sebedůvěra,",en:"Overconfidence,"},
+{t:453.4,cs:"a my všichni jsme to zažili, ne?",en:"and we've all experienced this, haven't we?"},
+{t:456.2,cs:"Máme.",en:"We have."},
+{t:457.9,cs:"Všechno jde skvěle.",en:"Everything's going great."},
+{t:458.7,cs:"Máš to vymyšleno.",en:"You've got it figured out."},
+{t:459.5,cs:"Jsi hotov učením.",en:"You're done learning."},
+{t:461.2,cs:"Bam, jsi dole.",en:"Bam, you're down."},
+{t:462.5,cs:"Přílišná sebedůvěra.",en:"Overconfidence."},
+{t:463.3,cs:"Musíme být",en:"We need to be"},
+{t:465.1,cs:"opatrní vůči přílišné sebedůvěře, která zablokuje zaměření.",en:"careful of overconfidence getting in the way of focus."},
+{t:468.9,cs:"Je v pořádku mít sebedůvěru, když se vaše dovednosti rozvíjejí.",en:"It's okay to have the confidence as your skills build."},
+{t:472.2,cs:"Ale Chris má přílišnou sebedůvěru.",en:"But Chris has overconfidence."},
+{t:473.9,cs:"Právě skončil se třetím místem ze tří",en:"Just came off of a third place finish out of three"},
+{t:475.9,cs:"v závodě pro nové jezdce",en:"in the new riders race"},
+{t:476.8,cs:"a myslí si, že má všechno vymyšleno.",en:"and thinks he's got it all figured out."},
+{t:478.7,cs:"Právě začíná své kroky.",en:"He's just starting his steps."},
+{t:480.1,cs:"Takže, šestý důvod, proč se shodíme na motorce, přílišná sebedůvěra.",en:"So, sixth reason we crash a motorcycle, overconfidence."},
+{t:482.3,cs:"Vrať to zpět na technické jezdectví,",en:"Bring it back down to the technical riding,"},
+{t:485.3,cs:"hladkost, oči, brzdy po sklopu,",en:"the smoothness, the eyes, brakes past tip in,"},
+{t:488.8,cs:"všechny věci, které se učíme tady",en:"all the things that we're learning here"},
+{t:489.9,cs:"na Champ University.",en:"at Champ University."},
+{t:498,cs:"Toto je fantastické cvičení z mnoha důvodů.",en:"This is a fantastic drill for a number of reasons."},
+{t:501.1,cs:"Jeden z nich je zůstat naživu.",en:"One of them is staying alive."},
+{t:503.1,cs:"Nauč se uvolňovat akcelerátor",en:"Learn to roll off the throttle"},
+{t:504.5,cs:"jak se blížíš křižovatce",en:"as you approach an intersection"},
+{t:506,cs:"s červeným světlem nebo znakem stop",en:"with a red light or a stop sign"},
+{t:507.6,cs:"a zvedni si brzdový reflektor brzy a lehce.",en:"and pick up your brake light early and lightly."},
+{t:510.2,cs:"Takže, tvoje motorka se ještě moc nespouští.",en:"So, your bike's not slowing down very much yet."},
+{t:512.5,cs:"Ve skutečnosti se jen sotva zpomaluje,",en:"In fact, it's barely slowing down,"},
+{t:514.1,cs:"ale tvůj brzdový reflektor svítí.",en:"but your brake light is lit."},
+{t:516.1,cs:"Když se tvůj brzdový reflektor rozsvítí, vidí to provoz za tebou.",en:"When your brake light lights, traffic behind you sees that."},
+{t:518.7,cs:"A více si uvědomují, že zpomalují.",en:"And they're more aware that you're slowing down."},
+{t:521,cs:"Jezdec, který se blíží křižovatce",en:"The rider who approaches an intersection"},
+{t:524.7,cs:"a prostě sesadí několikrát na zpomalení,",en:"and simply downshifts a couple of times to slow down,"},
+{t:527.9,cs:"nikdy nedá to varování toho brzdového reflektoru",en:"never gives that warning of that brake light"},
+{t:530,cs:"řidičům za ním.",en:"to the drivers behind them."},
+{t:531.3,cs:"To je jeden důvod k praxi tohoto konkrétního cvičení.",en:"So that's one reason to practice this particular drill."},
+{t:533.8,cs:"Druhý důvod je zasvícením brzdového reflektoru",en:"The second reason is by lighting up your brake light"},
+{t:536.6,cs:"jak přicházíš k křižovatce",en:"as you come up towards an intersection"},
+{t:537.8,cs:"aby ses upozornil lidi za tebou,",en:"to warn people behind you,"},
+{t:539.9,cs:"ve skutečnosti cvičíš jednu z nejdůležitějších",en:"you are actually practicing one of the most important"},
+{t:543.9,cs:"složek dobrého motorkářského jezdectví.",en:"components of good motorcycle riding."},
+{t:545.7,cs:"A to je to iniciální stisknutí brzdové páčky.",en:"And that is that initial squeeze on that brake lever."},
+{t:548.8,cs:"Takže pro toto cvičení,",en:"So for this drill,"},
+{t:549.7,cs:"budeme trénovat naše nouzové brzdění,",en:"we're going to practice our emergency braking,"},
+{t:552.1,cs:"kterou, víš,",en:"which you know,"},
+{t:553.5,cs:"normálně neplánujeme tyto nouzové situace,",en:"we're never normally planning for these emergencies,"},
+{t:556.1,cs:"ale podvolají ti",en:"but they sneak up on you"},
+{t:557.6,cs:"a nechceš, aby první čas",en:"and you don't want the first time"},
+{t:558.9,cs:"musel jsi zastavit svoji motorku na rychlost",en:"you have to stop your motorcycle at speed"},
+{t:561.5,cs:"aby to byl první čas, kdy to dělají.",en:"to be the first time you're doing it."},
+{t:563,cs:"Takže chci, aby ses simuloval",en:"So I want you to simulate"},
+{t:566.3,cs:"tvou jízdu, že?",en:"your ride, right?"},
+{t:567.3,cs:"Pokud obvykle máš cestujícího,",en:"If you usually have a passenger,"},
+{t:569.4,cs:"dělej zastavení v bezpečném a vhodném prostředí",en:"do some stops in a safe and suitable environment"},
+{t:572.2,cs:"s cestujícím na zadní části.",en:"with your passenger on the back."},
+{t:574.1,cs:"Pokud máš batohový sáček, zastavit si to s tím na sobě.",en:"If you have a tank bag, stop with that tank bag on there."},
+{t:577.3,cs:"Pokud jsi terénní jezdec, zastav tu motorku v zemi.",en:"If you're a dirt rider, stop that bike in the dirt."},
+{t:580.9,cs:"Pokud máš několik různých motork,",en:"If you have several different bikes,"},
+{t:582.9,cs:"jezdi na všech, zastav je všechny",en:"ride all of them, stop all of them"},
+{t:585,cs:"protože se dostaneš do těchto panických situací.",en:"because you'll get in these panic situations."},
+{t:587.4,cs:"A všechno by mohlo náhle změnit s,",en:"And all of a sudden things might change with,"},
+{t:589.1,cs:"no, já jsem zastavil tuto motorku na vlastní,",en:"well, I've stopped this bike on my own,"},
+{t:590.8,cs:"ale nikdy jsem neměl tu extra 200 liber",en:"but I've never had the extra 200 pounds"},
+{t:593.3,cs:"vybavení na zadní části nebo cokoli to může být.",en:"of gear on the back of it or whatever it might be."},
+{t:596,cs:"Takže vyjedete na svou motorku, která jezdíte",en:"So get out on your bike that you're riding"},
+{t:599.1,cs:"obvykle zatížená tolik, jak jsi",en:"typically loaded up as much as you are"},
+{t:601.1,cs:"a vyjedete a cvičujte pár těchto zastavení.",en:"and get out and practice a few of these stops."},
+{t:603.1,cs:"Toto cvičení jsme udělali",en:"This drill is what we did"},
+{t:604.6,cs:"na konci naší brzdné praxe.",en:"at the end of our braking practice."},
+{t:606.2,cs:"A chci, aby jsi to dělal.",en:"And I want you to do this."},
+{t:607.6,cs:"Přidej spínač u konce své brzdné praxe.",en:"Add a button hook at the very end of your breaking practice."},
+{t:610.9,cs:"Všichni si vyjedete a cvičujte",en:"Everybody gets out and practices"},
+{t:612.3,cs:"brzdění v přímce a já to opravdu oceňuji.",en:"braking in a straight line and I do appreciate that."},
+{t:614.8,cs:"Ale jsou časy, kdy musíme řídit naši motorku",en:"But there's times when we need to steer our bike"},
+{t:616.8,cs:"se zapnutými brzdami aby se vyhnuli autu,",en:"with the brakes on to miss a car,"},
+{t:618.8,cs:"aby zmeškal pneumatiku v naší jízdě,",en:"to miss the tire in our lane,"},
+{t:620.7,cs:"aby zmeškal jelena je docela skutečné.",en:"to miss the deer is a pretty real one."},
+{t:622.6,cs:"Takže tento spínač ti umožní získat tu páku tlaku",en:"So this button hook allows you to get that bar pressure"},
+{t:625.1,cs:"aby pomohla motorce řídit.",en:"to help the bike steer."},
+{t:626.4,cs:"A číslo dvě, samozřejmě,",en:"And the number two, of course,"},
+{t:627.9,cs:"dostaneš zvyk, obzvláště ty noví jezdci,",en:"you get in the habit, especially you new riders,"},
+{t:630.3,cs:"dostaneš zvyk",en:"you get in the habit"},
+{t:631.2,cs:"umět zastavit svou motorku uprostřed rohu.",en:"of being able to stop your bike mid corner."},
+{t:633.1,cs:"A to je něco, co každý absolvent",en:"And that is something that every graduate"},
+{t:635.8,cs:"z Champ School dělá za poslední, víš, 12 let.",en:"from Champ School has done for the last, you know, 12 years."},
+{t:639.4,cs:"Zastavil svou motorku uprostřed rohu.",en:"Stopped their bike mid corner."},
+{t:640.9,cs:"Takže tento spínač,",en:"So this button hook,"},
+{t:641.8,cs:"sjíždíš do rovné brzdné zóny na brzdách.",en:"you come down into the straight breaking zone on the brakes."},
+{t:645,cs:"Stavíš tlak.",en:"You build pressure."},
+{t:646.5,cs:"Začínáš uvolňovat tlak.",en:"You start to release pressure."},
+{t:647.6,cs:"Skloníš se do spínače a zastavíš se.",en:"You tip into the button hook and come to a stop."},
+{t:650.2,cs:"A jezdci, nebylo by to zle, aby si to cvičení udělal",en:"And riders, it wouldn't hurt if you do this drill"},
+{t:652.7,cs:"pokaždé, když jezdíš svou motorku.",en:"every time you ride your bike."},
+{t:656.3,cs:"Vrátíme se zpět do našich aut",en:"we're going to get back into our cars"},
+{t:657.9,cs:"a dostaneme tuto myšlenku",en:"and get this idea going of"},
+{t:660.3,cs:"slučování úhlu řízení s tlakem brzdy.",en:"blending steering wheel angle with brake pressure."},
+{t:663.3,cs:"A všichni to děláme přirozeně.",en:"And we all do it naturally."},
+{t:665.6,cs:"Hraní si na rampách na dálnicích.",en:"Playing with this on freeway on ramps."},
+{t:667.7,cs:"Opravdu si zapni mozek, když řídíš dovnitř,",en:"Really get your brain on as you're steering in,"},
+{t:670.4,cs:"jak si obchodujeme tyto brzdné body.",en:"how we're trading off these brake points."},
+{t:672.8,cs:"Jak se zařazuješ do parkovacího místa Walmart,",en:"As you turn into the Walmart parking lot,"},
+{t:675.6,cs:"můžeš se vytvořit více tlaku.",en:"you might build more pressure."},
+{t:677,cs:"Hraní si jak si ty",en:"Play with how we're getting those,"},
+{t:678.5,cs:"vstupy řídícího kola začínají.",en:"the steering wheel inputs going in."},
+{t:680.2,cs:"A my se budeme vždycky jen dostat k této myšlence",en:"And we're always going to just get this idea of"},
+{t:682.3,cs:"vždycky stále trénuj z těchto brzdných tlaků",en:"always constantly training off these brake pressure"},
+{t:685,cs:"a body sklonů.",en:"and lean angle points."},
+{t:691.6,cs:"Chvíl, to je spoustu informací, zpomal všichni.",en:"Wait, that's a lot of information, slow down everybody."},
+{t:694.7,cs:"Pojďme se podívat na to, o čem mluvíme.",en:"Let's take a look at what we're talking about."},
+{t:696.8,cs:"Takže věděl jsi, že jsou tu školy",en:"So did you know there's some schools out there"},
+{t:698.7,cs:"které nedělají praxi prahové brzdy?",en:"that do not do threshold braking practice?"},
+{t:701.3,cs:"Mají příliš mnoho havárii.",en:"They have too many crashes."},
+{t:702.7,cs:"A proto jsme to udělali pro tebe na Champ U.",en:"And this is why we did this class for you at Champ U."},
+{t:706.8,cs:"Zaměř se na uzavření akcelerátoru na přední brzdu,",en:"Focus on closing the throttle to the front brake,"},
+{t:710.8,cs:"nula až 5% stisknutí,",en:"the zero to 5% squeeze,"},
+{t:713.6,cs:"protože to je to, co zatěžuje vidlice a",en:"because that is what loads the forks and"},
+{t:716.6,cs:"dělá tu kontaktní plochu větší.",en:"makes that contact patch bigger."},
+{t:719.4,cs:"A pak můžeme zvýšit brzdný tlak.",en:"And then we can increase brake pressure."},
+{t:722.3,cs:"Takže trénuj si brzdění,",en:"So, practice your breaking,"},
+{t:724.2,cs:"ale ujistil si, že to iniciální stisknutí tam je",en:"but make sure that initial squeeze is there"},
+{t:726.2,cs:"protože musíme dostat tu kontaktní plochu velkou.",en:"'cause we've got to get that contact patch big."},
+{t:729.6,cs:"Takže jezdci, statistiky nám ukazují",en:"So riders, statistics show us"},
+{t:732.7,cs:"že druhé nejčastěji místo, kde se zraňujeme",en:"that the second most common place that we're being hurt"},
+{t:735.5,cs:"je v křižovatkách, když auto porušuje naši přednost v jízdě.",en:"is in intersections when a car violates our right of way."},
+{t:738.3,cs:"Zvládnutí brzd,",en:"Mastering the brakes,"},
+{t:739.2,cs:"schopnost zastavit tu motorku",en:"being able to stop that motorcycle"},
+{t:740.5,cs:"v nejkratší době je velká věc.",en:"in the shortest bit of time is a huge deal."},
+{t:742.8,cs:"Zakrytí brzd v dopravě.",en:"Covering the brakes in traffic."},
+{t:745,cs:"Jak často bys měl cvičit brzdění?",en:"How often should you practice breaking?"},
+{t:747.4,cs:"Při každé jízdě.",en:"Every ride."}];
+
+var state={};
+for(var s=1;s<=5;s++)state[s]={running:false,baseTime:0,startWall:0,lastIdx:-1,rafId:null,sliderDragging:false};
+var sections={1:{subs:subs1,duration:844},2:{subs:subs2,duration:303},3:{subs:subs3,duration:220},4:{subs:subs4,duration:292},5:{subs:subs5,duration:756}};
+
+function formatTime(s){var m=Math.floor(s/60);var sec=Math.floor(s%60);return m+":"+(sec<10?"0":"")+sec;}
+function getCurrentTime(s){if(!state[s].running)return state[s].baseTime;return state[s].baseTime+(Date.now()-state[s].startWall)/1000;}
+function findSubtitle(s,t){var subs=sections[s].subs;var idx=-1;for(var i=0;i<subs.length;i++){if(subs[i].t<=t)idx=i;else break;}return idx;}
+function updateDisplay(s){var t=getCurrentTime(s);var idx=findSubtitle(s,t);if(idx!==state[s].lastIdx){state[s].lastIdx=idx;if(idx>=0){document.getElementById("cs"+s).textContent=sections[s].subs[idx].cs;document.getElementById("en"+s).textContent=sections[s].subs[idx].en;}else{document.getElementById("cs"+s).textContent="\u2026";document.getElementById("en"+s).textContent="";}}document.getElementById("time"+s).textContent=formatTime(t);if(!state[s].sliderDragging)document.getElementById("slider"+s).value=Math.round(t);}
+function tick(s){updateDisplay(s);if(state[s].running)state[s].rafId=requestAnimationFrame(function(){tick(s);});}
+function toggleSync(s){if(state[s].running){pauseSync(s);}else{startSync(s);}}
+function startSync(s){state[s].running=true;state[s].startWall=Date.now();document.getElementById("btn"+s).textContent="\u23F8 Pauza";document.getElementById("btn"+s).classList.add("active");tick(s);}
+function pauseSync(s){state[s].running=false;state[s].baseTime=getCurrentTime(s);if(state[s].rafId)cancelAnimationFrame(state[s].rafId);document.getElementById("btn"+s).textContent="\u25B6 Start";document.getElementById("btn"+s).classList.remove("active");}
+function resetSync(s){var wasRunning=state[s].running;if(wasRunning)pauseSync(s);state[s].baseTime=0;state[s].lastIdx=-1;document.getElementById("slider"+s).value=0;document.getElementById("time"+s).textContent="0:00";document.getElementById("cs"+s).textContent="\u25B6 Spus\u0165te video a klikn\u011Bte Start";document.getElementById("en"+s).textContent="";}
+function setTime(s,t){var wasRunning=state[s].running;if(wasRunning){state[s].baseTime=t;state[s].startWall=Date.now();}else{state[s].baseTime=t;}state[s].lastIdx=-1;updateDisplay(s);}
+function adjustTime(s,delta){setTime(s,Math.max(0,getCurrentTime(s)+delta));}
+function onSliderInput(s){setTime(s,parseFloat(document.getElementById("slider"+s).value));}
+</script>
+</body>
+</html>

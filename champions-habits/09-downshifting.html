@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>09 — Podřazování (Downshifting) | Champions Habits CZ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f0eb; color: #333; line-height: 1.7; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .module-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 3px solid #cf3339; }
+    .module-header h1 { color: #1a1a2e; font-size: 2em; margin-bottom: 12px; }
+    .nav-sections { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .nav-sections a { display: inline-block; padding: 8px 16px; background: #2d2d5e; color: #ffd700; text-decoration: none; border-radius: 6px; font-weight: 600; transition: background 0.2s; }
+    .nav-sections a:hover { background: #cf3339; color: white; }
+    .section { margin-bottom: 40px; padding-top: 20px; }
+    .section h2 { margin-bottom: 12px; color: #1a1a2e; font-size: 1.5em; }
+    .video-frame { width: 100%; height: 500px; border: 2px solid #e0e0e0; border-radius: 8px 8px 0 0; display: block; }
+    .subtitle-bar { background: #1a1a2e; color: #fff; padding: 18px 24px; min-height: 70px; font-size: 1.1em; text-align: center; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+    .subtitle-bar .cs { color: #ffd700; font-weight: 600; font-size: 1.2em; }
+    .subtitle-bar .en { color: #999; font-size: 0.8em; }
+    .controls { background: #2d2d5e; padding: 12px 24px 14px; border-radius: 0 0 8px 8px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .controls-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .controls button { background: #cf3339; color: white; border: none; padding: 8px 20px; border-radius: 6px; font-size: 0.95em; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .controls button:hover { background: #e85d5d; }
+    .controls button.active { background: #43a047; }
+    .controls button.active:hover { background: #66bb6a; }
+    .controls button.reset-btn { background: #555; }
+    .controls button.reset-btn:hover { background: #777; }
+    .controls .timer { color: #ffd700; font-family: monospace; font-size: 1.1em; min-width: 60px; text-align: center; }
+    .controls .adjust { background: #444; padding: 6px 12px; font-size: 0.85em; border-radius: 4px; }
+    .controls .adjust:hover { background: #666; }
+    .slider-row { display: flex; align-items: center; gap: 8px; padding: 0 2px; }
+    .slider-row label { color: #aaa; font-size: 0.75em; font-family: monospace; }
+    .time-slider { flex: 1; -webkit-appearance: none; appearance: none; height: 5px; border-radius: 3px; background: #444; outline: none; cursor: pointer; }
+    .time-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; }
+    .time-slider::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; border: none; }
+    .info { background: #fff3e0; border-left: 4px solid #ff9800; padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0; font-size: 0.9em; }
+    .info strong { color: #e65100; }
+    .info ol { margin: 8px 0 0 20px; }
+    .info li { margin-bottom: 4px; }
+    .summary-box { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 16px; margin: 20px 0; border-radius: 0 8px 8px 0; font-size: 0.95em; }
+    .summary-box strong { color: #1565c0; display: block; margin-bottom: 8px; font-size: 1.05em; }
+    .summary-box ul { margin: 0 0 0 20px; list-style: disc; }
+    .summary-box li { margin-bottom: 6px; line-height: 1.5; }
+    .module-nav { margin-top: 40px; padding: 20px; background: #2d2d5e; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .module-nav a { color: #ffd700; text-decoration: none; font-weight: 600; font-size: 1.1em; padding: 10px 24px; background: #cf3339; border-radius: 6px; transition: background 0.2s; }
+    .module-nav a:hover { background: #e85d5d; }
+    @media (max-width: 700px) { .video-frame { height: 350px; } .subtitle-bar { padding: 14px 16px; } .subtitle-bar .cs { font-size: 1em; } .controls { gap: 8px; padding: 10px 16px; } .controls button { padding: 6px 14px; font-size: 0.85em; } .nav-sections { flex-direction: column; } .nav-sections a { width: 100%; text-align: center; } .module-nav { flex-direction: column; text-align: center; } .module-nav a { width: 100%; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="module-header">
+    <h1>09 &#8212; Pod&#345;azov&#225;n&#237; (Downshifting) | Champions Habits CZ</h1>
+    <p style="color: #666; margin-top: 8px;">&#268;ty&#345;i video sekce o spr&#225;vn&#233;m pod&#345;azov&#225;n&#237; &#8212; srovn&#225;n&#237; ot&#225;&#269;ek, spojka a kombinace s brzd&#283;n&#237;m</p>
+  </div>
+
+  <div class="nav-sections">
+    <a href="#sec1">Sekce 1 &#8212; &#218;vod</a>
+    <a href="#sec2">Sekce 2 &#8212; Uk&#225;zka</a>
+    <a href="#sec3">Sekce 3 &#8212; Pokro&#269;il&#233;</a>
+    <a href="#sec4">Sekce 4 &#8212; Cvi&#269;en&#237;</a>
+  </div>
+
+  <div class="info">
+    <strong>Jak pou&#382;&#237;vat &#269;esk&#233; titulky:</strong>
+    <ol>
+      <li>Spus&#357;te video kliknut&#237;m na play p&#345;&#237;mo ve videu</li>
+      <li>Klikn&#283;te na <b>&#9654; Start</b> ve chv&#237;li, kdy video za&#269;ne p&#345;ehr&#225;vat</li>
+      <li>Pomoc&#237; tla&#269;&#237;tek &#177;1s / &#177;3s dola&#271;te synchronizaci</li>
+      <li>Posuvn&#237;kem m&#367;&#382;ete p&#345;esko&#269;it na libovoln&#233; m&#237;sto</li>
+    </ol>
+  </div>
+
+
+  <div class="section" id="sec1">
+    <h2>Sekce 1 &#8212; Úvod do podřazování (6:26)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/downshifting-section-1/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs1">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en1"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(1)" id="btn1">&#9654; Start</button>
+        <span class="timer" id="time1">0:00</span>
+        <button class="adjust" onclick="adjustTime(1,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(1,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(1,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(1,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(1)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider1" min="0" max="386" value="0" step="1"
+               oninput="onSliderInput(1)" onmousedown="state[1].sliderDragging=true" onmouseup="state[1].sliderDragging=false"
+               ontouchstart="state[1].sliderDragging=true" ontouchend="state[1].sliderDragging=false">
+        <label>6:26</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Úvod do podřazování</strong>
+      <ul>
+      <li>Podřazování = řazení na nižší převod při zpomalování před zatáčkou</li>
+      <li>Srovnání otáček (rev-matching) = krátké kopnutí plynem při podřazování pro plynulý přechod</li>
+      <li>Bez srovnání otáček: zadní kolo se zablokuje nebo motorka cuká</li>
+      <li>Správná sekvence: brzda → spojka → řazení dolů → kopnutí plynem → uvolnění spojky</li>
+      <li>Prokluzová spojka (slipper clutch) pomáhá, ale nenahrazuje správnou techniku</li>
+      <li>Brzdění motorem doplňuje brzdění brzdami — ne naopak</li>
+      <li>Cvičení podřazování by mělo být součástí každé jízdy</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section" id="sec2">
+    <h2>Sekce 2 &#8212; Praktická ukázka (3:17)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/downshifting-section-2/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs2">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en2"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(2)" id="btn2">&#9654; Start</button>
+        <span class="timer" id="time2">0:00</span>
+        <button class="adjust" onclick="adjustTime(2,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(2,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(2,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(2,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(2)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider2" min="0" max="197" value="0" step="1"
+               oninput="onSliderInput(2)" onmousedown="state[2].sliderDragging=true" onmouseup="state[2].sliderDragging=false"
+               ontouchstart="state[2].sliderDragging=true" ontouchend="state[2].sliderDragging=false">
+        <label>3:17</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Praktická ukázka</strong>
+      <ul>
+      <li>Vizuální demonstrace správného vs. špatného podřazování</li>
+      <li>Poslouchejte motor: plynulý zvuk = správné srovnání otáček</li>
+      <li>Cukání nebo škubnutí = špatné srovnání, příliš rychlé uvolnění spojky</li>
+      <li>Jemnost je klíčová — malé, přesné kopnutí plynem stačí</li>
+      <li>Trénink na parkovišti: zpomalování z vyšších rychlostí s podřazováním</li>
+      <li>Postupně zvyšujte rychlost a počet podřazení</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section" id="sec3">
+    <h2>Sekce 3 &#8212; Pokročilé techniky (6:13)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/downshifting-section-3/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs3">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en3"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(3)" id="btn3">&#9654; Start</button>
+        <span class="timer" id="time3">0:00</span>
+        <button class="adjust" onclick="adjustTime(3,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(3,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(3,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(3,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(3)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider3" min="0" max="373" value="0" step="1"
+               oninput="onSliderInput(3)" onmousedown="state[3].sliderDragging=true" onmouseup="state[3].sliderDragging=false"
+               ontouchstart="state[3].sliderDragging=true" ontouchend="state[3].sliderDragging=false">
+        <label>6:13</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Pokročilé techniky</strong>
+      <ul>
+      <li>Timing podřazování: kdy přesně řadit dolů v brzdné zóně</li>
+      <li>Falešný neutrál = převodovka nepadne do převodu — řešení: důrazné sešlápnutí</li>
+      <li>Kombinace brzdění + podřazování: obě akce současně, ne sekvenčně</li>
+      <li>Spojka jako nástroj kontroly: postupné uvolňování pro plynulost</li>
+      <li>Na okruhu: podřazování v brzdné zóně před zatáčkou, hotovo před apexem</li>
+      <li>Na silnici: stejný princip, ale s větší rezervou a menší agresivitou</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section" id="sec4">
+    <h2>Sekce 4 &#8212; Cvičení a shrnutí (3:26)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/downshifting-section-4/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs4">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en4"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(4)" id="btn4">&#9654; Start</button>
+        <span class="timer" id="time4">0:00</span>
+        <button class="adjust" onclick="adjustTime(4,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(4,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(4,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(4,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(4)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider4" min="0" max="206" value="0" step="1"
+               oninput="onSliderInput(4)" onmousedown="state[4].sliderDragging=true" onmouseup="state[4].sliderDragging=false"
+               ontouchstart="state[4].sliderDragging=true" ontouchend="state[4].sliderDragging=false">
+        <label>3:26</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Cvičení a shrnutí</strong>
+      <ul>
+      <li>Cvičení v autě: podřazování v autě s manuální převodovkou — stejný princip</li>
+      <li>Cvičení na motorce: začněte pomalu, soustřeďte se na plynulost</li>
+      <li>Postupný trénink: nejdříve jedno podřazení, pak dvě, pak tři za sebou</li>
+      <li>Cíl: podřazování se stane automatickým, nevyžaduje vědomé přemýšlení</li>
+      <li>Podřazování je most mezi brzdami a nájezdem do zatáčky</li>
+      <li>Správné podřazování = plynulejší jízda, lepší kontrola, větší bezpečnost</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <a href="08-ergonomics.html">&#8592; Modul 08: Ergonomie</a>
+    <a href="10-pointy-end.html">Modul 10: &#352;pi&#269;ka ku&#382;elu &#8594;</a>
+  </div>
+
+</div>
+
+<script>
+var subs1=[{t:0,cs:"(hvíždění)",en:"(whooshing)"},
+{t:3.9,cs:"Dále jedna z nejnáročnějších věcí",en:"Next up, one of the most challenging things"},
+{t:6.3,cs:"pro nové jezdce,",en:"for new riders,"},
+{t:7.5,cs:"a překvapivě mnoho veteránů s tím zápasí.",en:"and a surprising amount of veterans struggle with this."},
+{t:10.6,cs:"Podřazování se srovnáním otáček při brzdění.",en:"Downshifting, with a rev match while the brakes are on."},
+{t:14.1,cs:"Pojďme se na to podívat.",en:"Let's take a look."},
+{t:15.4,cs:"Co slyšíte zde na Champ University",en:"What you're hearing here at Champ University"},
+{t:17.3,cs:"je, jak moc se zaměřujeme na nájezd do zatáčky.",en:"is how hard we work on corner entry."},
+{t:19.8,cs:"Jak moc se zaměřujeme na nájezd do zatáčky.",en:"How hard we work on corner entry."},
+{t:21.5,cs:"A to je věc, kterou vidíme,",en:"And that is eye's seeing it,"},
+{t:23.1,cs:"jdeme na brzdy, když jste nervózní,",en:"going to the breaks when you're nervous,"},
+{t:24.5,cs:"připravujeme tělo a podřazujeme.",en:"getting the body ready and downshifting."},
+{t:26.7,cs:"A to je to, o čem budeme mluvit",en:"And that's what we're gonna talk about"},
+{t:27.8,cs:"v další sekci, podřazování.",en:"in this next little section, downshifting."},
+{t:30,cs:"Zařazení motocyklu do rychlostního stupně, který budete potřebovat.",en:"Getting the bike in the gear that you need for the future."},
+{t:33,cs:"To může být v tomto případě nájezd do zatáčky,",en:"That could be in this case, coming into the corner,"},
+{t:35.1,cs:"převod, který potřebujete k akceleraci po zatáčce.",en:"the gear you need to accelerate off this next corner."},
+{t:37.7,cs:"Převod potřebný k předjíždění auta nebo stoupání.",en:"The gear you need to pass the car, drive up the hill."},
+{t:40.8,cs:"Podřazování také pomáhá zpomalit motocykl,",en:"Downshift thing also helps slow the motorcycle,"},
+{t:44,cs:"ale brzdy to dělají o něco lépe.",en:"but the brakes do that a little bit better."},
+{t:46.2,cs:"Pojďme se podívat na podřazování",en:"Let's take a look at some downshifting"},
+{t:48,cs:"při vjezdu do zatáčky čtyři na Inde Motorsports Ranch,",en:"coming into turn four Inde Motorsports Ranch,"},
+{t:50.4,cs:"příprava na výjezd z zatáčky čtyři.",en:"getting ready for the exit off of turn four."},
+{t:53.2,cs:"(motor motocyklu dunění)",en:"(motor cycle engine roaring)"},
+{t:62.3,cs:"Dobrá, existuje tolik proměnných na nájezu do zatáčky,",en:"All right, so there are so many variables for corner entry,"},
+{t:64.8,cs:"rychlost, přilnutí, ostatní lidé, trhlinky v asfaltu.",en:"speed, grip, other people around, potholes."},
+{t:68.5,cs:"Kdybychom mohli jezdit bez těchto proměnných",en:"If we could ride without those variables"},
+{t:70.7,cs:"a část jízdy bez proměnných",en:"and part of that riding without variables"},
+{t:72.4,cs:"je mít přesné podřazování,",en:"is getting our downshifts precise,"},
+{t:74.2,cs:"a mít je právě správná.",en:"and getting them just right."},
+{t:75.8,cs:"Takže to, co uděláme,",en:"So what we're gonna do,"},
+{t:77.3,cs:"ukážeme vám spolu s Chrisem",en:"we're gonna show you, with Chris,"},
+{t:79.7,cs:"konkrétní pohyby na podřazování",en:"some finite actions on downshifts"},
+{t:82.2,cs:"které udělají tento proces plynulý,",en:"that will make this process smooth,"},
+{t:84.2,cs:"a najednou vaše nájezdy do zatáček",en:"and all of a sudden your corner entries"},
+{t:85.8,cs:"budou lépe předvídatelné,",en:"get more predictable,"},
+{t:87.1,cs:"to vám pomáhá se vším",en:"this helps you with everything"},
+{t:88.1,cs:"od výběru linie, přilnutí, až po klid.",en:"from line choice to grip, to calmness."},
+{t:90.8,cs:"Pojďme se podívat na některé z těchto přesných pohybů.",en:"Let's take a look at some of these precise control actions."},
+{t:93.5,cs:"Dobra, Chris a já",en:"Alright, Chris and I"},
+{t:94.4,cs:"mluvíme s vámi o podřazování.",en:"are talking about downshifting with you."},
+{t:95.8,cs:"A podřazování, jak ho budeme vyučovat,",en:"And downshifting the way we're gonna teach it"},
+{t:98.2,cs:"je taková věc, že výrobci",en:"is such a big deal that the manufacturers"},
+{t:100.5,cs:"začínají na nové motorky montovat něco.",en:"are starting to put something on their new bikes."},
+{t:102.1,cs:"Co to je? Ano, všichni začínají",en:"What is it?↵Yeah, they're all starting"},
+{t:103.3,cs:"montovat automatické připlynutí",en:"to put auto-blippers on them"},
+{t:104.5,cs:"protože je to opravdu tak důležité",en:"because it really is that big of a deal"},
+{t:106.4,cs:"mít motocykl hladce vjíždět do zatáčky, v podstatě.",en:"to have that bike smoothly enter corner entry, essentially."},
+{t:109.8,cs:"Tato automatická připlynutí jsou srovnání otáček,",en:"These auto-blippers are rev matcher"},
+{t:111.5,cs:"které vám budeme vyučovat a naučíme vás to.",en:"that we're gonna talk about and get you doing."},
+{t:113.5,cs:"Slyšeli jste někdy o selhání automatického připlynutí?",en:"Have you ever heard of an auto-blipper failing?"},
+{t:116.5,cs:"Rozhodně (smích).",en:"Definitely, (laughing)."},
+{t:117.2,cs:"Ano, docela často.",en:"Yeah, quite often."},
+{t:118.1,cs:"Takže i když máte motorku s automatickým připlynutím,",en:"So, even if you have an auto-blip bike,"},
+{t:120.1,cs:"rádi bychom, abyste to cvičili.",en:"we'd like you to practice these things."},
+{t:121.9,cs:"Myslíte, že si někdy někdo koupí dvě motorky?",en:"Do you think anybody ever owns two bikes?"},
+{t:124.7,cs:"Většina lidí, které znám (smích).",en:"Most people I know so (laughing)."},
+{t:126,cs:"Ano, ta druhá motorka často nemá automatické připlynutí.",en:"Yeah, so many times other bike won't have an auto-blipper."},
+{t:129.3,cs:"A to, co vás budeme učit",en:"And what we're gonna teach you"},
+{t:130.9,cs:"vás určitě udělá plynulejšího,",en:"will make you smoother for sure,"},
+{t:132.5,cs:"vaši spolujezdce více pohodlnějšího,",en:"make your passenger more comfortable,"},
+{t:134.2,cs:"a ušetří vaši spojku. Ano.",en:"it'll save your clutch.↵Yeah."},
+{t:135.2,cs:"Takže všichni jsme si zatáhli motorku,",en:"So, we've all downshifted our bike,"},
+{t:136.8,cs:"pojďme si jen udělat podřazování.",en:"let's just do a downshift."},
+{t:137.6,cs:"Jak si podřadíte motorku?",en:"How do you downshift the motorcycle?"},
+{t:139,cs:"Když si jen tak uzavřete plyn,",en:"Well, if you're just kind of going, shut in the throttle,"},
+{t:141.6,cs:"spojka vstoupí, zatáhneme podřazování, spojku vypustíme.",en:"clutch comes in, catch our downshift, let the clutch out."},
+{t:145,cs:"Dobra, přidáme k tomu dvě věci.",en:"Okay, let's add two things to that."},
+{t:146.6,cs:"Takže se málokdy přibližujeme k zatáčce",en:"So, we're rarely approaching a corner"},
+{t:150,cs:"bez použití brzd,",en:"that we don't use our brakes for,"},
+{t:151.1,cs:"a nikdy si neuzavíráme plyn takto, že?",en:"and we're never closing off all throttle like this, right,"},
+{t:153.3,cs:"Studenti, o tom jsme již mluvili,",en:"students, we've talked about that quite a bit,"},
+{t:154.6,cs:"probírali jsme brzdy.",en:"we covered the break."},
+{t:155.5,cs:"Takže přidáme toto,",en:"So let's add this,"},
+{t:156.3,cs:"Chris, vysvětli nám, co bude dělat tvá pravá ruka",en:"so Chris, walk us through what your right hand"},
+{t:157.8,cs:"teď.",en:"is gonna do now."},
+{t:158.6,cs:"Ano, takže my si myslíme,",en:"Yeah, so, we're thinking"},
+{t:160,cs:"že se vždy budeme blížit brzdě.",en:"we're always gonna cover that break."},
+{t:161.2,cs:"Takže když začnu zavírat plyn,",en:"So as I start getting ready to roll off,"},
+{t:163,cs:"mé prsty jsou nahoře, a chci uzavřít",en:"my fingertips are up, and I want to roll off"},
+{t:165.3,cs:"a právě chci sundat špičky prstů",en:"and I just want to get the tips of my fingers"},
+{t:167.6,cs:"dolů na páku brzdy.",en:"coming down onto that brake lever."},
+{t:169.1,cs:"Nechci, aby spadly příliš daleko,",en:"So I don't want to have them come down so far,"},
+{t:171.9,cs:"hledám oblouk mezi palcem",en:"I'm looking to have an arch between kind of my thumb"},
+{t:175.4,cs:"a dlaní a špičkami těch prstů.",en:"and my palm and the tips of those fingers."},
+{t:177.4,cs:"Prvním krokem je tedy uzavření plynu na brzdy",en:"So first step is we're rolling off onto those breaks"},
+{t:180,cs:"protože chceme zpomalit náš motocykl",en:"because we wanna slow our motorcycle"},
+{t:181.9,cs:"před tím, než začneme s podřazováním.",en:"before we start this downshift process."},
+{t:184.4,cs:"Tento oblouk, o kterém mluvíme,",en:"This arch right here, that we're talking about,"},
+{t:186.5,cs:"se stane důležitým",en:"that arch is gonna become pretty big deal here"},
+{t:188.8,cs:"v příštím okamžiku.",en:"in just a second."},
+{t:189.6,cs:"Takže, dobra, brzdy jsou zapnuté",en:"So, okay, the brakes are on"},
+{t:190.8,cs:"a to odpovídá na otázku,",en:"and that will answer the question,"},
+{t:192.2,cs:"co mám dělat, brzdy nejdřív nebo podřazování?",en:"what do I do, brake first or downshift first?"},
+{t:194.1,cs:"Brzdy nejdřív.",en:"Brakes first."},
+{t:195.2,cs:"Nejdřív zpomalit motocykl než podřadíte.",en:"Slow that motorcycle first before we downshift."},
+{t:197.5,cs:"Budou zatáčky ve vašem životě,",en:"There'll be some corners in your life,"},
+{t:198.9,cs:"obzvláště na silnici,",en:"especially street riding"},
+{t:199.7,cs:"kde si jen tak podřadíte,",en:"where you just pop a downshifts,"},
+{t:200.8,cs:"a motocykl se zpomalí.",en:"and it slows the motorcycle."},
+{t:201.9,cs:"Podřazování je forma motoru brzdění,",en:"A downshift is a form of rear brake,"},
+{t:203.6,cs:"takže pomáhá zpomalit motocykl.",en:"so it helps slow the motorcycle."},
+{t:205.2,cs:"Ale jezdci, pokud se přibližujete k zatáčce",en:"But riders, if you're coming into the corner"},
+{t:207.1,cs:"a děláte, boom, boom, boom, a nikdy se nedotýkáte brzd,",en:"and going, boom, boom, boom, and never touching the brakes,"},
+{t:210,cs:"to je opravdu tvrdé na motor.",en:"that is really hard on the engine."},
+{t:211.4,cs:"Takže brzdy nejdřív, se špičkami prstů.",en:"So brakes first, with the tips of our fingers."},
+{t:214.5,cs:"Pojďme teď na páku spojky.",en:"Let's go to the clutch lever now."},
+{t:216,cs:"Co se děje s pákou spojky?",en:"What's happening with the clutch lever?"},
+{t:217.7,cs:"Takže jak jsme sklouzli do brzd,",en:"So as we've rolled on into the brakes,"},
+{t:219.5,cs:"spojka začíná vstupovat a víte,",en:"that clutch is starting to come in and you know,"},
+{t:222,cs:"většina lidí nebude mít plnú ruku na ní,",en:"most people are not gonna be a full hand on it,"},
+{t:224.2,cs:"budete mít určitě",en:"you definitely are gonna get"},
+{t:225.9,cs:"jen špičky prstů znovu,",en:"just tips of the fingers again,"},
+{t:227.5,cs:"a budeme hledat bod tření",en:"and we're gonna find where that friction point is"},
+{t:230,cs:"na motocyklu, kde se spojka vlastně odpojuje",en:"on that motorcycle where the clutch is actually disengaging"},
+{t:232.9,cs:"a znovu zapojují talíře spojky.",en:"and re-engaging those clutch plates."},
+{t:234.5,cs:"Dobra, takže spojka je uvnitř,",en:"Okay, so the clutch is in,"},
+{t:236.1,cs:"přesunete nohu do nižšího převodu,",en:"you move your foot into the lower gear,"},
+{t:239,cs:"a to je to, co vám přidáváme.",en:"and this is what we're adding to you."},
+{t:240.1,cs:"Přidáváme dvě věci.",en:"We're adding two things."},
+{t:240.9,cs:"Za prvé, jdeme na brzdy na podřazování",en:"First of all, we go to the brakes for a downshift"},
+{t:242.9,cs:"skoro vždy, to je první věc, kterou přidáváme",en:"almost always, that's the first thing we're adding"},
+{t:244.5,cs:"k vašemu podřazování, a tohle je ta další.",en:"to your downshift, and this is the next one."},
+{t:246.2,cs:"Takže brzdy jsou zapnuté, spojka je uvnitř,",en:"So the brakes are on, the clutch is in,"},
+{t:247.9,cs:"motorka je v nižším převodu, na čem pracujeme?",en:"the bike's in the lower gear, what are we working on?"},
+{t:250.2,cs:"Dáme plynu krátké zvýšení otáček,",en:"We're gonna give that throttle a short revver,"},
+{t:252.1,cs:"připlynutí, říkáme tomu (ukazující na zvýšení otáček motorky).",en:"a blip, we call it (indicating revving the bike)."},
+{t:254.8,cs:"Dáme motoru malý kilk plynu",en:"We're gonna give that motor a little shot of fuel"},
+{t:257,cs:"aby zadní kolo mělo stejnou rychlost",en:"so the rear wheel is going the same speed"},
+{t:259.1,cs:"jako motor na podřazování a vše se vyrovnalo.",en:"as the motor on that downshift to smooth all that out."},
+{t:261.2,cs:"Takže, to velkého bodu kontaktu je tady",en:"So, what that kind of big touch point is here is"},
+{t:264.8,cs:"na vrcholu otáček (ukazující na zvýšení otáček motorky)",en:"at the top of the rev (indicating revving the bike)"},
+{t:267.2,cs:"spojka vychází",en:"the clutch is coming out"},
+{t:268.5,cs:"a znovu zapojuje talíře spojky.",en:"and re-engaging the clutch plates."},
+{t:270.4,cs:"Pokud si neuvěříte časování té části,",en:"Get the timing of that part off,"},
+{t:271.7,cs:"což je obtížné udělat.",en:"which is it's difficult to do."},
+{t:273.3,cs:"Existuje spousta,",en:"There's a lot of, few things"},
+{t:275.2,cs:"pár věcí, kde musíte použít obě ruce a nohy",en:"where you have to use both hands and feet"},
+{t:276.5,cs:"a vše současně, ale to je spíše",en:"and everything simultaneously, but that's kind of the,"},
+{t:279.6,cs:"kde opravdu dosáhnete plynulosti.",en:"where you really get that smoothness."},
+{t:281.4,cs:"To může být nejtěžší věc,",en:"This might be the toughest thing"},
+{t:282.7,cs:"kterou byste zkusili na motocyklu, jezdci,",en:"you'd try to do on a motorcycle riders,"},
+{t:284.4,cs:"obzvláště lidé, kteří jsou v tom noví,",en:"especially people that are new to it,"},
+{t:285.7,cs:"nebo i veteráni jezdci přicházejí do naší školy",en:"or even veteran riders come to our school"},
+{t:287.6,cs:"a nedostali srovnání otáček, že?",en:"and haven't gotten the rev match, right?"},
+{t:289.1,cs:"Ano. Z pár důvodů.",en:"Yeah.↵For a couple of reasons."},
+{t:290.3,cs:"Za prvé, nemají špičky prstů,",en:"First of all, they don't have the tips of the fingers,"},
+{t:292.3,cs:"takže nemají oblouk na připlynutí.",en:"so they don't have an arch to blip."},
+{t:293.5,cs:"Takže pokaždé, když připlynou, budou mít přední konec.",en:"So every time they blip, they poke with the front end."},
+{t:296,cs:"Za druhé, nedávají to velké pomalé zvýšení otáček,",en:"Number two, they don't give it a big slow rev,"},
+{t:298.1,cs:"aby dostali otáčky nahoru.",en:"to get that R.P.M up."},
+{t:299.2,cs:"Za třetí, pospíchají vypuštěním spojky.",en:"Number three, they rush out the clutch."},
+{t:300.9,cs:"Takže na těch myšlenkách pracujeme.",en:"So we're working on these ideas."},
+{t:302.1,cs:"Pojďme to udělat spolu, Chris.",en:"Let's do it together, Chris."},
+{t:303.3,cs:"Uzavíráme plyn z brzd, kdy?",en:"We roll off out of the brakes, when?"},
+{t:305.9,cs:"Když jsem nervózní.",en:"When I'm nervous."},
+{t:306.8,cs:"Dobra, jdeme na brzdy, když jsme nervózní.",en:"Okay go to the brakes when we're nervous."},
+{t:307.9,cs:"Brzdy jsou zapnuté, spojka vstupuje, noha se pohybuje,",en:"The brakes are on, the clutch comes in, the foot moves,"},
+{t:310.7,cs:"teď jsme v nižším převodu, před tím, než spojka vyjde-",en:"we're in the lower gear now, before the clutch comes out-"},
+{t:312.8,cs:"(Chris ukazující na připlynutí motorky)",en:"(Chris indicating revving the bike)"},
+{t:314.8,cs:"spojka vychází.",en:"clutch comes out."},
+{t:315.6,cs:"Pokud to jsou dvě podřazování, jsou to dvě pohyby spojky.",en:"If it's two downshifts, it's two clutch movements."},
+{t:317.2,cs:"Na druhé podřazování spojka vstupuje, noha,",en:"To go second downshift clutch in, foot,"},
+{t:320.7,cs:"spojka zase vychází, tři.",en:"clutch back out again, three."},
+{t:322.9,cs:"(ukazující na připlynutí) Líbí se vám zvuk.",en:"(indicating revving) You just like the sound."},
+{t:324.7,cs:"Ano, jděte přes kopec,",en:"Yeah, come over the hill,"},
+{t:325.9,cs:"Laguna Seca na vašem prvním tréninkovém dni,",en:"Laguna Seca on your first track day,"},
+{t:327.2,cs:"v Laguna Seca čtyři podřazování pro zatáčku dva.",en:"at Laguna Seca four downshifts for turn two."},
+{t:329,cs:"Takže to jsou čtyři pohyby spojky,",en:"So it's four clutch movements,"},
+{t:330.7,cs:"čtyři samostatné připlynutí, čtyři podřazování.",en:"four separate blips, four downshifts."},
+{t:334.5,cs:"Pokud si nechcete podřazovat na silnici",en:"If you're not downshifting well on the street"},
+{t:336.1,cs:"a máte spolujezdce,",en:"and you have a passenger,"},
+{t:336.9,cs:"váš spolujezdec se tam pohybuje.",en:"your passenger is moving around back there."},
+{t:339.2,cs:"A brzy ten spolujezdec řekne,",en:"And pretty soon that passenger says,"},
+{t:340.5,cs:"\"Já se neopravdu chci zase jezdit,",en:"\"I don't really want to go riding again,"},
+{t:342.2,cs:"\"to není moc (nejasné) zábava\"",en:"\"it's not much (indistinct)fun\""},
+{t:343.5,cs:"Ale když si udělíme ta připlynutí správně, je to velmi plynulé",en:"But we get these blips right, it's super smooth"},
+{t:345.9,cs:"jak jsme viděli všechny přicházející sem.",en:"like we saw everybody coming in here."},
+{t:347.1,cs:"Ano, vezměme si ten příklad Laguna Seca,",en:"Yeah let's take that Laguna Seca example,"},
+{t:350,cs:"mluvme o tom na chvíli.",en:"talk about that for a second."},
+{t:351.4,cs:"Pokud se chystáme jít čtyřmi podřazováními.",en:"If we're gonna go through four downshifts."},
+{t:353.4,cs:"Prvních tři, pohyb spojky",en:"The first three, the clutch movement's"},
+{t:354.8,cs:"bude vlastně poměrně rychlý",en:"gonna be actually fairly quickly"},
+{t:356.2,cs:"protože musíme udělat podřazování.",en:"'cause we got to get the downshifts done."},
+{t:358.4,cs:"Takže to může být (ukazující na připlynutí motorky).",en:"So it might be (indicating revving the bike)."},
+{t:362.1,cs:"Na tom posledním podřazování",en:"On that last downshift"},
+{t:363.7,cs:"když dostaneme velké (ukazující na připlynutí) připlynutí,",en:"when we get the big (indicating revving) blip comes up,"},
+{t:366.2,cs:"budete mít spojku zaostávající, v podstatě.",en:"you're gonna trail clutch, essentially."},
+{t:367.9,cs:"Budeme nechat to poslední podřazování ven, pěkně a pomalu",en:"We're gonna let that last downshift out, nice and slowly"},
+{t:371.2,cs:"a jen plynule sejmeme talíře spojky dohromady.",en:"and just smoothly put those clutch plates back together."},
+{t:374.2,cs:"Ale prvních tři, budou jít poměrně rychle.",en:"But the first three, they're gonna go quite quickly."}];
+var subs2=[{t:5.1,cs:"Pojďme si přizvat Elenu,",en:"Hey, let's bring in Elena,"},
+{t:6.4,cs:"ať nám něco vysvětlí o bodu tření.",en:"let her explain something about friction point."},
+{t:9,cs:"Správně. Elena je na motorce,",en:"All right. So Elena's on the motorcycle,"},
+{t:10.4,cs:"Chrise, ty jsi motor.",en:"Chris, you're the motor."},
+{t:12,cs:"Ano",en:"Yes"},
+{t:12.9,cs:"On je motor.",en:"He's the motor."},
+{t:13.7,cs:"Dělej všechny zvuky.",en:"Make all the sounds."},
+{t:15.1,cs:"A Elena, na pohybu spojky je jedno místo,",en:"And Elena there's one spot on this clutch movement that"},
+{t:17,cs:"na které se skutečně zaměřujeme při podřazování a při jízdě.",en:"we're really focused on in downshifting and in riding."},
+{t:19.5,cs:"O tom budeme mluvit.",en:"We'll talk about that."},
+{t:20.4,cs:"Ano.",en:"Yeah."},
+{t:21.2,cs:"Je to bod tření",en:"It's, it's the friction point"},
+{t:22,cs:"kde se talíře spojky",en:"of where the clutch plates are"},
+{t:22.9,cs:"buď stýkají nebo oddělují.",en:"either meeting together or coming apart."},
+{t:24.6,cs:"Takže když je spojka úplně puštěná, talíře",en:"So when the clutch all the way it released the plates"},
+{t:27.6,cs:"jsou spolu, ale když ji zatáhneš, oddělí se",en:"are together, but when you pull it in, they come apart"},
+{t:29.6,cs:"A jak vidíme, když",en:"And as we can see here, when,"},
+{t:33,cs:"když páku zatáhnu,",en:"when I do pull the lever in"},
+{t:34.6,cs:"není potřeba až tolik pohybu, aby se",en:"it doesn't take a whole lot of movement really to,"},
+{t:36.3,cs:"talíře oddělily.",en:"to get those, those plates to come apart."},
+{t:39.5,cs:"A je to jen tak malý pohyb.",en:"And, and it's just, it's such a small movement."},
+{t:42.5,cs:"Nemusíš dělat tenhle celý, víš, čtyřprstý",en:"There doesn't need to be this whole, you know, four finger,"},
+{t:46.9,cs:"pohyb pákou spojky až k řídítku.",en:"you know, clutch lever to the bar sort of movement."},
+{t:49.6,cs:"Takže velmi malý, velmi hladký a kontrolovaný pohyb.",en:"So, very minor, very smooth and controlled at all times."},
+{t:54.8,cs:"Abys si ten pocit osvojil.",en:"So you get a feel for that."},
+{t:56.2,cs:"Dej motorku do prvního převodu.",en:"You put the bike down in a first gear on your bike."},
+{t:58.3,cs:"Najdi si, kde je ten bod tření.",en:"Find where that friction point is."},
+{t:60.1,cs:"Je to mnohem menší pohyb, než si myslíme.",en:"It's a lot smaller of a movement than we might think."},
+{t:63,cs:"A motorku můžeš jen vozit tam a zpět,",en:"And you can just get the bike rolling back and forth,"},
+{t:65.4,cs:"tam a zpět.",en:"back and forth."},
+{t:66.9,cs:"Dalším dobrým způsobem, jak si osvojit ten pocit,",en:"Another good way to start to get that feel how smoothly we"},
+{t:70.3,cs:"jak hladce můžeš talíře spojky spojit, je",en:"could put those clutch plates together is you could start"},
+{t:73.1,cs:"spustit motor v převodu a pomalu pouštět",en:"the motor in gear and slowly trail off"},
+{t:75.8,cs:"spojku a vyjet bez plynu.",en:"that clutch and take off with no throttle."},
+{t:78.4,cs:"A můžeš si hrát s tím, jak",en:"And you play with how you put those"},
+{t:79.7,cs:"talíře spojky spojuješ příliš rychle.",en:"clutch plates together too quick."},
+{t:81.6,cs:"Motor se zastaví příliš rychle,",en:"The bike will stall too slow,"},
+{t:83.3,cs:"trvá dlouho, než motorka jede.",en:"takes a long time to get rolling."},
+{t:85,cs:"Chris ti právě dal",en:"So Chris has just given you"},
+{t:86,cs:"pár cvičení na podřazování,",en:"a couple of downshift practices,"},
+{t:87.6,cs:"a to je o čem je tento sport, že?",en:"and this is what the sport's about, right?"},
+{t:89.3,cs:"Není to tak, že se nasednete na motorku",en:"It's not, it's not getting on the motorcycle"},
+{t:90.8,cs:"a doufáte, že to bude fungovat.",en:"and hoping it all works out."},
+{t:92.1,cs:"Je to vozit motorku po garáži.",en:"It is pushing a motorcycle around the garage."},
+{t:94.4,cs:"Vozit ji z kopce a zastavit ji, když puštíš",en:"Rolling it down a hill and stopping it as you release that"},
+{t:96.7,cs:"páku spojky a necháš ji",en:"clutch lever and letting it"},
+{t:98,cs:"vozit se znova se zastavným motorem.",en:"roll again with the engine stopped."},
+{t:99.6,cs:"Takže Eleno, pojďme to zkusit.",en:"So Elena, let's try this."},
+{t:100.6,cs:"V prvním případě Elena spustí,",en:"In the first one, Elena's going to start it up,"},
+{t:102.8,cs:"spusť si motorku. Bude na volnoběhu.",en:"start up your bike. It'll be an idle."},
+{t:106,cs:"V prvním případě pusti spojku příliš rychle. Teď.",en:"The first one, let the clutch out too quick. Right now."},
+{t:109.4,cs:"Všichni váš brzdění, vaše brzdění",en:"Everybody your dashes, your dashes"},
+{t:113.1,cs:"nebude moc dobré, že?",en:"are not going to be very good, right?"},
+{t:114.7,cs:"A vaše brzdění nebude dobré, protože",en:"And your dashes are not going to be very good because you're"},
+{t:116.8,cs:"zatrhneš páku spojky a talíře",en:"snapping that clutch lever and you're throwing those plates"},
+{t:118.8,cs:"spojuješ prudce a srovnání otáček není dokonalé.",en:"together and the rev match isn't perfect"},
+{t:120.8,cs:"No proto vaše podřazování není dobré.",en:"Well, that's why your downshifts aren't very good."},
+{t:122.2,cs:"Toto je profesionální sport, všichni.",en:"This is a professional sport, everybody."},
+{t:124.1,cs:"Můžeš být velmi, velmi dobrý v krátkém čase,",en:"You can be very, very good at in very short time,"},
+{t:126.2,cs:"ale musíš si tyhle věci osvojit, víš?",en:"but you got to get these things, right?"},
+{t:127.5,cs:"Takže teď to zase spusť, Eleno,",en:"So now start it up again Elena,"},
+{t:129,cs:"a vyjeli bez toho, aby jsi se dotýkala plynu,",en:"and leave here without touching the throttle,"},
+{t:132.1,cs:"v prvním převodu, pojď.",en:"in first gear, out you go."},
+{t:133.9,cs:"Dej si pozor na ruku.",en:"Watch that hand."},
+{t:139.4,cs:"Krásné. Nicku, jak moc je to podobné poslednímu podřazování",en:"Nice. Nick, how close is that to the last downshift"},
+{t:141.7,cs:"při vjetí do zatáčky?",en:"of, of entering a corner?"},
+{t:144.2,cs:"Každý jezdí do zatáčky z kopce v dešti",en:"Is everybody going downhill into a rain soaked corner with"},
+{t:149.4,cs:"s plným zavazadlům, s cestujícím vzadu",en:"your luggage full, your your passenger on the back"},
+{t:152.5,cs:"A puštíš spojku hladce a pěkně.",en:"And you let that clutch release nice and smooth."},
+{t:155.8,cs:"Je to stejné jako Laguna Seca v druhé zatáčce.",en:"It's just like Laguna Sake at turn two."},
+{t:157.8,cs:"Je to stejné jako stoupání do zatáčky",en:"It's just like downhill tightening"},
+{t:159,cs:"se zmenšujícím se poloměrem v dešti.",en:"radius corner in the rain."},
+{t:160.4,cs:"Je to jako jízda na štěrkové cestě.",en:"It's like riding on a gravel road."},
+{t:162,cs:"Finální puštění spojky.",en:"That final clutch release."},
+{t:163.7,cs:"A Chrise, dal nám šanci si to cvičit,",en:"And Chris you've given us a chance to practice this,"},
+{t:165.6,cs:"vyrážka ze zastavení na volnoběhu.",en:"leaving a stop from an idle."},
+{t:167.7,cs:"Ano. Je to dobrý způsob, jak si začít osvojovat tu ruku,",en:"Yep. It's a good way to just start getting that hand"},
+{t:170,cs:"aby se pohybovala pomalu, a podřazování je stejně divné, jak to zní.",en:"move that slow and downshifting is as goofy as it sounds."},
+{t:173.2,cs:"Je to opravdu tak velká část",en:"It really is such a huge part"},
+{t:174.4,cs:"vjetí do zatáčky.",en:"of corner entry."},
+{t:175.3,cs:"Motorka začne skřípat nebo se pohybovat.",en:"Bike gets chirping or moving."},
+{t:176.6,cs:"Znamená to, že to odebírá spoustu tvé pozornosti",en:"I mean, that takes a lot of your focus off"},
+{t:178.8,cs:"z toho, na co by se mělo zaměřovat, což je",en:"what it should be, which is"},
+{t:180.6,cs:"oči, tělo a brzdění, a vjetí do zatáčky.",en:"eyes, body, and breaks entering in the corner to,"},
+{t:182.9,cs:"A potom: Bože, tato motorka skáče",en:"oh my God, this thing is hopping"},
+{t:184.1,cs:"a cítíš se málo pohodlně.",en:"Lock-in feeling uncomfortable."},
+{t:185.5,cs:"Nebo musíš puštovat spojku tak pomalu, že",en:"Or I have to let the clutch out so slowly that you've"},
+{t:189.1,cs:"už jsi ujel kolem zatáčky, než ji puštíš.",en:"already rolled past the corner by the time you get it out."},
+{t:191.3,cs:"Protože jsme to všichni slyšeli.",en:"Cause we've all heard that."},
+{t:192.3,cs:"Jen pusti spojku opravdu pomalu.",en:"Just let the clutch out really slowly."},
+{t:193.8,cs:"Nemusíš dělat kopnutí plynem.",en:"You don't need to blip."}];
+var subs3=[{t:5.2,cs:"Pozveme si Kyla Wymana.",en:"Let's bring in Kyle Wyman."},
+{t:6.5,cs:"Elaina a Chris nám dali pár věcí, na které se máme zaměřit",en:"So Elaina and Chris gave us a couple of things to work on"},
+{t:8.8,cs:"při podřazování. Pojďme si povídat o načasování.",en:"in the downshifting. Let's talk about the timing."},
+{t:10.8,cs:"Kdy se vlastně podřazování děje?",en:"What's. When, when does downshifting happen?"},
+{t:12.5,cs:"Co se děje s načasováním tohoto procesu?",en:"What's going on with the timing of it all?"},
+{t:14.2,cs:"No, načasování prvního podřazení",en:"Well, the timing of the,"},
+{t:15.6,cs:"se chcete pustit do toho hned.",en:"yeah the first downshift you really want to get going."},
+{t:17.2,cs:"Takže jakmile vypustíte plyn a přejdete na brzdy,",en:"So as soon as you roll off and go to the brakes,"},
+{t:19.2,cs:"hned začnete s tím procesem. A je tam,",en:"you start that process immediately. And there's,"},
+{t:21.3,cs:"vlastně to je skoro ve stejný dobu, první podřazení,",en:"it's almost at the same time, really the first downshift,"},
+{t:25,cs:"ale, to je opravdu, když spustíme proces,",en:"but, that's really, when we start the process,"},
+{t:27.2,cs:"prvních 10 procent brzdné zóny.",en:"first 10% of the brake zone."},
+{t:29.2,cs:"Pokud máte za sebou několik podřazení,",en:"If you have multiple downshifts in a row,"},
+{t:31,cs:"prvních pár může být dost rychlých,",en:"the first couple can be pretty quick,"},
+{t:32.6,cs:"ale chcete je trochu rozestupit,",en:"but you want to space them out a little bit,"},
+{t:34.5,cs:"prostě kvůli tomu, víte, ventily narážejí na písty.",en:"just cause you know, valves hitting pistons."},
+{t:36.8,cs:"Ano",en:"Yeah"},
+{t:37.7,cs:"Není to ideální.",en:"Not the best thing."},
+{t:38.6,cs:"Takže se snažíme rozestoupit poslední pár,",en:"So we try to just space out the last couple,"},
+{t:41,cs:"zvlášť v rychlé, víte,",en:"especially in a fast, you know,"},
+{t:42.5,cs:"brzdné zóně ze šestého na druhý převod,",en:"six to second gear braking zone,"},
+{t:45.1,cs:"ale chcete to začít hned.",en:"but we want to get it going right away."},
+{t:47.6,cs:"To se mi líbí.",en:"I like it."},
+{t:48.4,cs:"Myslím, že jedna z věcí, kterou vidíme u studentů, je",en:"I think that one of the things we see with students is the"},
+{t:50.6,cs:"že podřazování začíná příliš pozdě. Souhlasíte?",en:"downshift begins too late. Fair to say?"},
+{t:52.7,cs:"Ano.",en:"Yep."},
+{t:53.6,cs:"Když se dostanou do zatáčky, měli by už začít",en:"They get down into the corner when they should be starting"},
+{t:54.8,cs:"s pohybem těla a neměli ještě",en:"to move their body and they haven't gotten the thing"},
+{t:56.1,cs:"podřadit převod.",en:"downshifted yet."},
+{t:57.5,cs:"co si můžete říci, je, když jedete ze čtvrtého",en:"what you can think about is if you're going down from fourth"},
+{t:60.9,cs:"na třetí na druhý převod,",en:"to third to second,"},
+{t:62,cs:"to je zatáčka na druhý převod,",en:"that's the second gear corner,"},
+{t:63.2,cs:"možná se dostanete na druhý převod brzy,",en:"you might get into second pretty early,"},
+{t:65.7,cs:"ale můžete si pohrát s zónou spojky",en:"but you can play with that friction zone"},
+{t:67.2,cs:"tak, jak nám to ukázala Elaina. Co?",en:"just like Elaina showed us. Huh?"},
+{t:69,cs:"Ano, ano, rozhodně.",en:"Right, yeah, absolutely."},
+{t:70.1,cs:"Takže to je jedna věc.",en:"So that that's one thing."},
+{t:71.6,cs:"Kyle, měl jste osobní zkušenost s automaty,",en:"Kyle, you've had a personal experience with auto flippers,"},
+{t:74.8,cs:"viďte?",en:"haven't you?"},
+{t:75.7,cs:"Jistě.",en:"Sure."},
+{t:76.5,cs:"to vás dostane zpátky k tomuto způsobu myšlení",en:"that gets you back into this kind of thinking"},
+{t:78.4,cs:"který vám to umožňuje.",en:"of being able to do this."},
+{t:79.2,cs:"Ano. Myslím, že jsou opravdu úžasné,",en:"Yeah. I mean, they're really awesome,"},
+{t:80.3,cs:"dokud nejsou, viďte?",en:"until they're not right?"},
+{t:81.6,cs:"Dokud, dokud se něco nestane a vy, víte",en:"Until they, until something happens and you, you know"},
+{t:84.6,cs:"nevím, třeba se to rozbije ve druhém kole závodu",en:"I don't know, breaks on the second lap of a race"},
+{t:86.6,cs:"například.",en:"for instance."},
+{t:87.6,cs:"Ano, ano",en:"Yeah, yeah"},
+{t:88.4,cs:"Víte, na příkladu.",en:"You know, for an example."},
+{t:89.3,cs:"Takže když máte schopnost srovnávat otáčky při podřazování,",en:"So having the skill to be able to rev match your downshifts,"},
+{t:91.7,cs:"víte, když jste zvyknutí se na to spoléhat",en:"you know, when you, when you are used to counting on it"},
+{t:95.8,cs:"a najednou to není, to je velký problém. Takže ano.",en:"and now all of a sudden it's not there is big deal. So yeah."},
+{t:99.3,cs:"Víte, chcete si to procvičit",en:"You know, you want to, practice this stuff"},
+{t:101.5,cs:"protože, víte, součástky se opotřebí,",en:"because you know, parts wear out,"},
+{t:104,cs:"tyto věci jsou živé, dýchající stroje vlastně",en:"these things, they're living, breathing machines really"},
+{t:106.5,cs:"Jsou, jsou pokaždé jiné, když zase vyjdete,",en:"They're, they're different every time you roll back out,"},
+{t:108.9,cs:"takže, spojky budou jiné.",en:"so, clutches are going to be different."},
+{t:110.6,cs:"jak vypustíme spojku,",en:"we how we release the clutch,"},
+{t:111.9,cs:"chceme na to být hladký, protože by mohlo být jinak",en:"we want to be smooth about it because it could be different"},
+{t:114.6,cs:"než minulé kolo, minulou seanci, včera, cokoliv",en:"than it was last lap, last session yesterday, whatever it is"},
+{t:118.1,cs:"Můžete si to procvičit na ručním autě",en:"Can you practice this in your manual car"},
+{t:119.8,cs:"pokud máte manuální převodovku?",en:"if you have a manual transmission?"},
+{t:121,cs:"Samozřejmě. Ano.",en:"For sure. Yep."},
+{t:122.3,cs:"Zóna spojky v, v spojce, v ručním autě,",en:"Friction point in a, in a clutch, in a manual car,"},
+{t:124.7,cs:"totéž. Vypouštíte tu spojku hladce a jemně.",en:"same thing. You're letting that clutch out nice and smooth."},
+{t:128.1,cs:"Ano. Můžeme si srovnávání otáček v autě procvičit?",en:"Yeah. Can we practice rev matching in a car?"},
+{t:130.9,cs:"Samozřejmě.",en:"Sure can."},
+{t:131.8,cs:"Jak se tomu říká, když přijíždíte do zatáčky",en:"What's it called when you're coming into the corner"},
+{t:134,cs:"s brzdami a srovnáváte otáčky v autě?",en:"with the brakes on and you're rev matching in a car."},
+{t:136.3,cs:"pata-prsty",en:"heel-toe"},
+{t:137.1,cs:"pata-prsty a hodně jste o tom slyšeli.",en:"heel-toe and you've heard a lot about heel-toe."},
+{t:138.8,cs:"Je to větší věc v autě, protože spojka",en:"It's a bigger deal in a car because the clutch"},
+{t:140.4,cs:"se tak těžko dostane a je tak drahá.",en:"is so hard to get to and so expensive."},
+{t:141.8,cs:"ale celý smysl paty-prstů a důvod, proč, když jdete",en:"but the whole idea behind heel-toe and the reason if you go"},
+{t:144.2,cs:"a důvod, proč když jdete do autoškoly,",en:"and the reason if you go to a car school,"},
+{t:145.2,cs:"nemůžete na okruh bez zvládnutí",en:"you won't be able to get on the track without getting"},
+{t:147.3,cs:"paty-prstů na parkovišti, je ten,",en:"getting heel-toe mastered in the parking lot, is because"},
+{t:150.1,cs:"že to silně namáhá spojky, když nesrovnáváte otáčky.",en:"it's hard on the clutches if you're not rev matching."},
+{t:152.3,cs:"Pokud nezvýšíte otáčky plynem,",en:"If you don't bring the RPM up with the throttle,"},
+{t:154.2,cs:"a podřadíte převod.",en:"get the thing downshifted."},
+{t:155.2,cs:"A pata-prsty je velmi přirozený pohyb",en:"And heel-toe's a very unnatural movement"},
+{t:157.2,cs:"pro váš kotník, pro vaši nohu. Totéž zde.",en:"for your ankle, for your foot. Same thing here."},
+{t:159.7,cs:"Je velmi nepřirozené být schopný modulovat brzdný tlak,",en:"It's very unnatural to be able to modulate brake pressure,"},
+{t:162.1,cs:"nebo jej udržovat konstantní, když máte plyn lehce.",en:"or keep it steady while you're lipping the throttle."},
+{t:165.4,cs:"Takže to bude stát čas na budování svalové paměti.",en:"So it's just going to take time to build muscle memory."},
+{t:167.9,cs:"A pojďme si o tom povídat.",en:"And let's talk about that."},
+{t:168.8,cs:"protože jsme měli jezdce a studenty, kteří přišli do naší školy",en:"because we've had riders and students show up at our school"},
+{t:171.6,cs:"a řekli: \"Hej, můj poslední pád,",en:"and said, \"Hey, my last crash,"},
+{t:173,cs:"chytil jsem linii s falešným neutrálem, vypustil jsem se a spadl jsem.\"",en:"I caught a false neutral line, ran off and fell down.\""},
+{t:175.1,cs:"No, zvládnutí průběžného brzdění",en:"Well, obviously trail braking, mastering trailbraking,"},
+{t:177.7,cs:"samozřejmě vyřeší ten problém.",en:"will take care of that issue."},
+{t:178.8,cs:"Ale pokud máte problém s motorkou,",en:"But if you have a motorcycle issue,"},
+{t:181.4,cs:"a převodovka není v pořádku,",en:"and the transmission's not right,"},
+{t:182.9,cs:"pak se mohou stát falešné neutrály.",en:"then false neutrals can happen."},
+{t:184.7,cs:"Ale obecně, co vidíme u falešných neutrálů?",en:"But generally, what are we seeing with false neutrals?"},
+{t:187.4,cs:"Často, víte,",en:"A lot of times, you know,"},
+{t:189.1,cs:"lidé se snaží dostat zpět do převodu, když jsou v falešném",en:"people trying to get back into gear when they're in a false"},
+{t:192.3,cs:"neutrále a snaží se podřadit zpět do převodu.",en:"neutral and trying to downshift back into gear."},
+{t:194.7,cs:"Takže se vždy chcete dostat do vyššího převodu, pokud to jde",en:"So you always want to go into the taller gear if you can"},
+{t:198.1,cs:"protože to bude snazší pro převodovku",en:"because it's just going to be easier on the transmission"},
+{t:200.2,cs:"aby se zubů konečně dostaly na místo.",en:"for the gears to actually finally get into place."},
+{t:202.2,cs:"A pak chcete dát pálku plynem",en:"And then you want to actually give a blip of throttle"},
+{t:206,cs:"předtím, než vypustíte spojku v tom dalším převodu,",en:"before you let the clutch out in that next gear,"},
+{t:208.8,cs:"jen tak, jako byste podřazovali, prostě protože, víte,",en:"just as if you're downshifting, just because, you know,"},
+{t:211.7,cs:"můžete přežít falešný neutrál, zůstat na trati,",en:"you can survive a false neutral, stay on the track,"},
+{t:214.5,cs:"dostat se do převodu a pak uvolnit spojku",en:"get it into gear and then snap the clutch out"},
+{t:217.1,cs:"a stejně spadnete.",en:"and you crash anyway."},
+{t:219.7,cs:"Ano, celý, úplný proces",en:"Yeah, the whole, the complete process"},
+{t:221.6,cs:"na to, abyste se dostali zpátky, víte, do převodu,",en:"of getting back, you know, in gear,"},
+{t:223.4,cs:"a byli schopni pokračovat v závodě nebo jízdě",en:"and being able to continue your race or your ride"},
+{t:226,cs:"s falešným neutrálem,",en:"with a false neutral,"},
+{t:227.6,cs:"určitě zahrnuje pálku a pomalé uvolnění spojky.",en:"definitely includes a blip and a slow clutch release."},
+{t:230.1,cs:"Skvělé. A pojďme dolů k Kylovu pedálu tady.",en:"Great. And let's drop down to Kyle's foot here."},
+{t:232.6,cs:"Kyle přijíždí do zatáčky a má nohu tady",en:"Kyle's coming into the corner, and he's got his foot up here"},
+{t:237.4,cs:"A pak si v poslední možné chvíli uvědomí,",en:"And then he realizes at the last possible moment,"},
+{t:239.2,cs:"sakra, musím podřadit.",en:"oh shoot, I got to downshift."},
+{t:240.7,cs:"Teď vyhazuje nohu k řadařce a chytá ji v půli",en:"Now he throws his foot up the shifter and catches it halfway"},
+{t:243.8,cs:"a chytá falešný neutrál.",en:"and catches a false neutral."},
+{t:245.2,cs:"A pokud chytíte falešný neutrál, jděte na vyšší převod,",en:"And so if you catch a false neutral, go to the taller gear,"},
+{t:250.5,cs:"Ale vraťte se k procesu vaší řadařky.",en:"But look back to the process of your shifter."},
+{t:251.8,cs:"Kyle se chystá na řazení.",en:"Kyle's going to get ready for a shift."},
+{t:253.3,cs:"Připraví si nohu, klikne.",en:"He gets his foot ready, clicks it."},
+{t:254.7,cs:"v řízeném, pevném pohybu",en:"in a controlled, firm movement"},
+{t:258.4,cs:"S více podřazeními také,",en:"With multiple downshifts as well,"},
+{t:260.8,cs:"Chcete se ujistit, že jste uvolnili páku",en:"You want to make sure you've released the lever"},
+{t:263.1,cs:"úplně zpět do neutrálnu.",en:"all the way back to neutral."},
+{t:265.2,cs:"Ne neutrál v převodovce,",en:"Not neutral in the gearbox,"},
+{t:266.4,cs:"ale zpět do neutrální polohy,",en:"but back to a neutral position,"},
+{t:268.4,cs:"předtím, než další řazení.",en:"before the next shift."},
+{t:270,cs:"Jinak budete mít nějaké uvíznutí a podobně.",en:"Otherwise you're going to have some jamming and things."},
+{t:272.4,cs:"Takže pokud se potýkáte s řazením nahoru nebo dolů,",en:"So if you're struggling with up shifting or downshifting,"},
+{t:274.4,cs:"pokud chytáte falešný neutrál,",en:"if you're catching a false neutral,"},
+{t:275.4,cs:"pokud zjistíte, že vaše motorka neřadí.",en:"if you find your motorcycle won't shift."},
+{t:278.1,cs:"Sledujte, jak Kyle řadí, a pak nechá tlak nohy na",en:"Watch when Kyle shifts, and then leaves his foot pressure on"},
+{t:283.3,cs:"teď se snaží řadit znovu, říká",en:"now he tries to shift again, he says"},
+{t:285.2,cs:"moje motorka neřadí, jde do servisu.",en:"my motorcycle won't shift goes to the shop."},
+{t:287.2,cs:"Ne, neuvolňuje tu nohu na řadařce.",en:"Nope, he's not releasing that foot shifter."},
+{t:290,cs:"Takže se dostáváme do těchto procesů, viďte?",en:"So we get into these processes, don't we?"},
+{t:292,cs:"Které se stávají tak procedurálními.",en:"Which become so processional."},
+{t:293.4,cs:"Pokud nesrovnáváte otáčky, vaše podřazování není moc dobré.",en:"If you're not rev matching your downshifts aren't very good."},
+{t:295.5,cs:"Pokud prudce uvolníte spojku, podřazování není moc dobré.",en:"If you snap out the clutch, the downshifts aren't very good."},
+{t:298.8,cs:"Šli jste někdy špatným způsobem s řadařkou?",en:"Have you ever gone the wrong way with the shifter?"},
+{t:302.3,cs:"Šli jste někdy dolů o jeden převod příliš s řadařkou?",en:"Have you ever gone down one too many gears with the shifter?"},
+{t:306.3,cs:"Ó, určitě.",en:"Oh, absolutely."},
+{t:307.2,cs:"A co vás zachrání?",en:"And what saves that?"},
+{t:308,cs:"Omylem jste šli dolů o jeden převod příliš,",en:"You've gone down one too many gears by mistake,"},
+{t:309.7,cs:"Jaké vás to zachrání všechno?",en:"What saves all that drama?"},
+{t:311.3,cs:"Víte, pokud, pokud vždycky prudce uvolníte spojku,",en:"You know, if you, if you always snap the clutch out,"},
+{t:314.9,cs:"můžete říci ó, šel jsem dolů o příliš mnoho převodů.",en:"you can say ah I went down too many gears."},
+{t:316.8,cs:"To je důvod, to je jak jsem spadl.",en:"That's why, that's how I crashed."},
+{t:318.2,cs:"Ale pokud jste vždycky hladký s uvolněním spojky,",en:"But if you're always smooth with your clutch release,"},
+{t:321.3,cs:"slyšíte, jak se otáčky skáčou výš, než by měly,",en:"you'll hear the RPM's jumping up higher than they should,"},
+{t:324.1,cs:"A budete vědět, že jste v příliš nízkém převodu,",en:"And you'll know you're in too low of a gear,"},
+{t:326.8,cs:"a dáte si malý klik zpět do správného převodu",en:"and you give it a little click back up into the correct gear"},
+{t:329.8,cs:"a prostě budete pokračovat.",en:"and you'll just continue on."},
+{t:331.7,cs:"A do další zatáčky si to ani nebudete pamatovat.",en:"And by the next corner, you won't even remember it happened."},
+{t:334.5,cs:"Úžasné",en:"Awesome"},
+{t:335.3,cs:"Takže o tom je to, jak si to chceme představit.",en:"So that's kind of how we want to think about it."},
+{t:336.2,cs:"Dobré. Pojďme to celé uzavřít, tento proces podřazování.",en:"Good. Let's finish this up, this downshifting process."},
+{t:339.1,cs:"Dostat motorku do správného převodu na budoucnost,",en:"Getting the bike the right gear for the future,"},
+{t:341.8,cs:"a udržet nájezdy do zatáček hladké",en:"keeping corner entrances smooth"},
+{t:344.3,cs:"Pojďme to uzavřít tím, že Kyle",en:"Let's finish this up by Kyle,"},
+{t:346.1,cs:"nám ukáže jízdu na volnoběh s uvolněním spojky,",en:"show us idling away with the clutch release,"},
+{t:349.5,cs:"a pojďme to udělat na druhém převodu.",en:"and let's have him do it in second gear."},
+{t:351.7,cs:"Druhém?",en:"Second?"},
+{t:352.6,cs:"Druhý převod.",en:"Second gear."},
+{t:353.4,cs:"Zvýším vám převod.",en:"I'll raise you a gear."},
+{t:354.2,cs:"Dobře.",en:"Okay."},
+{t:355.1,cs:"Jak třetí?",en:"How about third?"},
+{t:355.9,cs:"Třetí převod.",en:"Third gear."},
+{t:357.6,cs:"Jak dlouho vám trvá, abyste vypustili spojku?",en:"How long does it take you to get the clutch out?"},
+{t:358.4,cs:"Bude to trvat poměrně dlouho.",en:"It's going to take quite a long time."},
+{t:359.3,cs:"(motorka motor vrzá)",en:"(motorcycle engine revving)"}];
+var subs4=[{t:0.5,cs:"(dramatické efekty)",en:"(dramatic effects)"},
+{t:6.8,cs:"Toto cvičení podřazování je důležité.",en:"This drill for downshifting is important."},
+{t:9.5,cs:"Podřazování bude nejnáročnější věc, kterou budete na",en:"Downshifting might be the toughest thing you do on a"},
+{t:11.2,cs:"motorce dělat. Načasování je důležité.",en:"motorcycle. The timing is important."},
+{t:13,cs:"A jako v každém sportu si to rozdělíme na jednotlivé kroki.",en:"And like we do with this sport, we break it into processes."},
+{t:16.6,cs:"Podřazování má šest kroků.",en:"Let's say there's six steps to downshifting."},
+{t:18.5,cs:"Krok první, pusťte plyn na úroveň brzdění.",en:"Number one, roll the throttle off to the break level."},
+{t:21,cs:"Takže zavřeme plyn na úroveň páky brzdy.",en:"Let's do that. Close the throttle to the brake lever."},
+{t:22.7,cs:"Paka brzdy se zapne. Brzdíte.",en:"The brake lever comes on. You're on the brakes."},
+{t:24.7,cs:"Krok druhý: musíme vytáhnout spojku,",en:"Number two, we've got to pull the clutch in,"},
+{t:26.9,cs:"spojka se vytáhne.",en:"clutch comes in."},
+{t:28.1,cs:"Krok třetí: posuneme nohu na nižší převod, klik.",en:"Number three, move that foot to the lower gear, click."},
+{t:31.8,cs:"Teď máme nižší převod, než pustíme spojku.",en:"Now we're in the lower gear before you let that clutch out."},
+{t:34.7,cs:"Krok čtvrtý je kopnutí plynem.",en:"Number four is the blip on the throttle."},
+{t:38.2,cs:"Plyn se otevře, to je naše kopnutí, whoom.",en:"That throttle comes open, there's our blip, whoom."},
+{t:41.2,cs:"Krok pátý: spojka se pustí v novém převodu.",en:"Number five, clutch comes out in the new gear."},
+{t:45,cs:"A krok šestý: pokračujeme v postupném brzdění",en:"And number six, we continue to trail break"},
+{t:48,cs:"dokud nejsme spokojeni s naší rychlostí a směrem.",en:"until we're happy with our speed and direction."},
+{t:50.5,cs:"Pokud to cvičíte v garáži,",en:"If you're doing this in your garage,"},
+{t:51.9,cs:"motorka si není opravdu přála stát tam a být podřazena",en:"the bike doesn't really want to sit there and be downshifted"},
+{t:54.1,cs:"když je stojící. Může se podřadit jednou, ale potom",en:"while static. It might downshift once, but after that,"},
+{t:56.2,cs:"opravdu chce",en:"it doesn't really want to,"},
+{t:57,cs:"být zatížena a odlehčena, když se pohybuje.",en:"it wants to be loaded and unloaded when it's moving."},
+{t:59.3,cs:"Takže i když se chcete posunout směrem k páce,",en:"So if you just move the shifter anyway,"},
+{t:61.1,cs:"dejte svou nohu na páku stejně.",en:"just put your foot on the shifter anyway."},
+{t:62.8,cs:"A pamatujte si, když jdete k té páce,",en:"And remember, when you go to that shifter,"},
+{t:64.6,cs:"děláte to rozhodně, ale jemně.",en:"you're doing it firmly, but gently."},
+{t:68.4,cs:"Máme skvělé cvičení, abyste si zvykli na",en:"We have a great drill to get this feel for"},
+{t:70.4,cs:"puštění spojky při posledním podřazení, zvlášť.",en:"clutch release on the final downshift, especially."},
+{t:73.8,cs:"A tady je to, co budete dělat. Nastartujte motorku na chodu,",en:"And here's what we do. Start your bike up at idle,"},
+{t:76.5,cs:"dejte ji do prvního převodu a jezděte od zastávky",en:"put it in first gear and drive it away from a stop using"},
+{t:79.6,cs:"jen pomocí spojky. Jinými slovy nechte motor na chodu,",en:"just the clutch. In other words, leave the engine idling,"},
+{t:82.4,cs:"a zjistíte, jestli jste příliš rychlí se spojkou,",en:"and you'll find out if you're too quick with the clutch,"},
+{t:84.6,cs:"motor vám zhasne,",en:"the bike stalls,"},
+{t:85.5,cs:"a to je důvod, proč se vám podřazování nedaří.",en:"and that's why your downshifts are struggling."},
+{t:87.4,cs:"Pokud jste příliš pomalí se spojkou,",en:"If you're too slow with the clutch,"},
+{t:89.7,cs:"motorka se nepohybuje vpřed.",en:"the bike doesn't move forward."},
+{t:91.4,cs:"Zkuste to v prvním převodu, pak ve druhém,",en:"Do it in first gear, try it in second gear,"},
+{t:93.7,cs:"pak ve třetím.",en:"try in third gear."},
+{t:94.9,cs:"Zjistíte, že je to skvělá cvičení na",en:"What you'll find is this is a great practice to"},
+{t:97.3,cs:"procvičení puštění spojky vaší levou rukou.",en:"educate your left hand on clutch release."},
+{t:106.1,cs:"Tak, pojďme si na chvíli odpočinout.",en:"Hey, let's, let's take a breath here."},
+{t:107.7,cs:"Správné podřazování motocyklu",en:"Downshifting a motorcycle correctly"},
+{t:109.4,cs:"bude asi jednou z nejnáročnějších věcí,",en:"might be one of the toughest things"},
+{t:110.5,cs:"kterou na motorce děláte z hlediska koordinace.",en:"you're doing the coordination of it all."},
+{t:111.8,cs:"Tak pojďme to dělat spolu. Zvedněte si ruce do vzduchu.",en:"So let's do it together. Get your hands up in the air."},
+{t:114.1,cs:"Pojďme to dělat spolu. Je to šestikroková sekvence.",en:"Let's just do this together. It's a six step process."},
+{t:116.6,cs:"První krok je puszczení plynu",en:"The first step is rolling off the throttle"},
+{t:118.7,cs:"na páku brzdy, protože jste nervózní.",en:"onto the brake lever because you're nervous."},
+{t:120.8,cs:"Brzdy zůstanou zapnuté po celou dobu.",en:"The brakes will stay on through the whole process."},
+{t:122.8,cs:"Druhá část: vytáhněte spojku, spojka se vytáhne,",en:"The second part, pull the clutch in, clutch comes in,"},
+{t:126.6,cs:"noha se posune do nižšího převodu.",en:"the foot, moves into the lower gear."},
+{t:128,cs:"Jen stiskněte páku, nemlátejte ji.",en:"Just click that shifter, don't beat on it."},
+{t:130.5,cs:"Teď jsme v nižším převodu.",en:"Now we're in the lower gear."},
+{t:131.7,cs:"Teď si přidáme kopnutí plynem, krátké zvýšení otáček,",en:"What we're adding now is a blip, a short rev,"},
+{t:134.8,cs:"pohyb zápěstím a loktem.",en:"a wrist and an elbow movement."},
+{t:136.5,cs:"Zní to nějak jako whoom whoom.",en:"It just sounds something like whoom whoom."},
+{t:140.3,cs:"Takže brzdy jsou zapnuté, spojka je, motorka byla",en:"So the brakes are on, the clutch is, in the bike has been"},
+{t:143.6,cs:"podřazena, dejte jí whoom.",en:"downshifted, give it a whoom."},
+{t:145.9,cs:"A pak spojka vyletí páté,",en:"And then the clutch comes out fifth,"},
+{t:147.6,cs:"a brzdíme postupně šestou.",en:"and we're trail breaking six."},
+{t:149,cs:"Pojďme to dělat spolu. Na brzdy, jednu.",en:"Let's do it together. On the brakes, one."},
+{t:151.5,cs:"Spojka dovnitř, dvě. Pohyb nohy, tři.",en:"Clutch in, two. Foot movement, three."},
+{t:154.1,cs:"Kopnutí, čtyři. Spojka ven, pět.",en:"Blip, four. Clutch out, five."},
+{t:156.7,cs:"Dvě podřazení, spojka se vrací dovnitř",en:"Two downshifts, clutch comes back in"},
+{t:158.4,cs:"noha, kopnutí, spojka zase ven.",en:"foot, blip, clutch back out."},
+{t:160.8,cs:"A šestá věc: postupné brzdění do zatáčky.",en:"And the sixth thing, trail breaking into the corner."},
+{t:165.2,cs:"Ano, toto celé podřazování",en:"Yeah, this whole downshifting"},
+{t:166.9,cs:"se srovnáním otáček a brzdami zapnutými",en:"with a rev match with the brakes on"},
+{t:168.7,cs:"jezdci: je to otázka načasování.",en:"riders, it's a timing thing."},
+{t:171,cs:"Tato ruka se pohybuje tímhle a tamhle,",en:"This hand is going this and this,"},
+{t:172.9,cs:"tato ruka se pohybuje tímhle a takhle",en:"this hand is going this and that"},
+{t:174.2,cs:"tahle noha jde nahoru nebo dolů.",en:"this foot's going up or down."},
+{t:175.9,cs:"Jde o to všechno dát dohromady.",en:"It's putting it all together."},
+{t:177.9,cs:"Nevzdávejte se toho.",en:"Don't give up on it."},
+{t:178.9,cs:"Možná se s tím budete potýkat týden,",en:"You might struggle with it for a week,"},
+{t:180.8,cs:"na osmý den vám to bude tečka.",en:"on the eighth day you'll get it."},
+{t:183.3,cs:"(dramatické zvuky)",en:"(dramatic sounds)"}];
+var state={};
+for(var s=1;s<=4;s++)state[s]={running:false,baseTime:0,startWall:0,lastIdx:-1,rafId:null,sliderDragging:false};
+var sections={1:{subs:subs1,duration:386},2:{subs:subs2,duration:197},3:{subs:subs3,duration:373},4:{subs:subs4,duration:206}};
+
+function formatTime(s){var m=Math.floor(s/60);var sec=Math.floor(s%60);return m+":"+(sec<10?"0":"")+sec;}
+function getCurrentTime(s){if(!state[s].running)return state[s].baseTime;return state[s].baseTime+(Date.now()-state[s].startWall)/1000;}
+function findSubtitle(s,t){var subs=sections[s].subs;var idx=-1;for(var i=0;i<subs.length;i++){if(subs[i].t<=t)idx=i;else break;}return idx;}
+function updateDisplay(s){var t=getCurrentTime(s);var idx=findSubtitle(s,t);if(idx!==state[s].lastIdx){state[s].lastIdx=idx;if(idx>=0){document.getElementById("cs"+s).textContent=sections[s].subs[idx].cs;document.getElementById("en"+s).textContent=sections[s].subs[idx].en;}else{document.getElementById("cs"+s).textContent="\u2026";document.getElementById("en"+s).textContent="";}}document.getElementById("time"+s).textContent=formatTime(t);if(!state[s].sliderDragging)document.getElementById("slider"+s).value=Math.round(t);}
+function tick(s){updateDisplay(s);if(state[s].running)state[s].rafId=requestAnimationFrame(function(){tick(s);});}
+function toggleSync(s){if(state[s].running){pauseSync(s);}else{startSync(s);}}
+function startSync(s){state[s].running=true;state[s].startWall=Date.now();document.getElementById("btn"+s).textContent="\u23F8 Pauza";document.getElementById("btn"+s).classList.add("active");tick(s);}
+function pauseSync(s){state[s].running=false;state[s].baseTime=getCurrentTime(s);if(state[s].rafId)cancelAnimationFrame(state[s].rafId);document.getElementById("btn"+s).textContent="\u25B6 Start";document.getElementById("btn"+s).classList.remove("active");}
+function resetSync(s){var wasRunning=state[s].running;if(wasRunning)pauseSync(s);state[s].baseTime=0;state[s].lastIdx=-1;document.getElementById("slider"+s).value=0;document.getElementById("time"+s).textContent="0:00";document.getElementById("cs"+s).textContent="\u25B6 Spus\u0165te video a klikn\u011Bte Start";document.getElementById("en"+s).textContent="";}
+function setTime(s,t){var wasRunning=state[s].running;if(wasRunning){state[s].baseTime=t;state[s].startWall=Date.now();}else{state[s].baseTime=t;}state[s].lastIdx=-1;updateDisplay(s);}
+function adjustTime(s,delta){setTime(s,Math.max(0,getCurrentTime(s)+delta));}
+function onSliderInput(s){setTime(s,parseFloat(document.getElementById("slider"+s).value));}
+</script>
+</body>
+</html>

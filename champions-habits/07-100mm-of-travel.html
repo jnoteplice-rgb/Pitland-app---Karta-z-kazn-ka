@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>07 — 100mm zdvihu (100mm of Travel) | Champions Habits CZ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f0eb; color: #333; line-height: 1.7; }
+    .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+    .module-header { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 3px solid #cf3339; }
+    .module-header h1 { color: #1a1a2e; font-size: 2em; margin-bottom: 12px; }
+    .nav-sections { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .nav-sections a { display: inline-block; padding: 8px 16px; background: #2d2d5e; color: #ffd700; text-decoration: none; border-radius: 6px; font-weight: 600; transition: background 0.2s; }
+    .nav-sections a:hover { background: #cf3339; color: white; }
+    .section { margin-bottom: 40px; padding-top: 20px; }
+    .section h2 { margin-bottom: 12px; color: #1a1a2e; font-size: 1.5em; }
+    .video-frame { width: 100%; height: 500px; border: 2px solid #e0e0e0; border-radius: 8px 8px 0 0; display: block; }
+    .subtitle-bar { background: #1a1a2e; color: #fff; padding: 18px 24px; min-height: 70px; font-size: 1.1em; text-align: center; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 4px; }
+    .subtitle-bar .cs { color: #ffd700; font-weight: 600; font-size: 1.2em; }
+    .subtitle-bar .en { color: #999; font-size: 0.8em; }
+    .controls { background: #2d2d5e; padding: 12px 24px 14px; border-radius: 0 0 8px 8px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .controls-row { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .controls button { background: #cf3339; color: white; border: none; padding: 8px 20px; border-radius: 6px; font-size: 0.95em; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+    .controls button:hover { background: #e85d5d; }
+    .controls button.active { background: #43a047; }
+    .controls button.active:hover { background: #66bb6a; }
+    .controls button.reset-btn { background: #555; }
+    .controls button.reset-btn:hover { background: #777; }
+    .controls .timer { color: #ffd700; font-family: monospace; font-size: 1.1em; min-width: 60px; text-align: center; }
+    .controls .adjust { background: #444; padding: 6px 12px; font-size: 0.85em; border-radius: 4px; }
+    .controls .adjust:hover { background: #666; }
+    .slider-row { display: flex; align-items: center; gap: 8px; padding: 0 2px; }
+    .slider-row label { color: #aaa; font-size: 0.75em; font-family: monospace; }
+    .time-slider { flex: 1; -webkit-appearance: none; appearance: none; height: 5px; border-radius: 3px; background: #444; outline: none; cursor: pointer; }
+    .time-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; }
+    .time-slider::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: #ffd700; cursor: grab; border: none; }
+    .info { background: #fff3e0; border-left: 4px solid #ff9800; padding: 12px 16px; margin: 16px 0; border-radius: 0 8px 8px 0; font-size: 0.9em; }
+    .info strong { color: #e65100; }
+    .info ol { margin: 8px 0 0 20px; }
+    .info li { margin-bottom: 4px; }
+    .summary-box { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 16px; margin: 20px 0; border-radius: 0 8px 8px 0; font-size: 0.95em; }
+    .summary-box strong { color: #1565c0; display: block; margin-bottom: 8px; font-size: 1.05em; }
+    .summary-box ul { margin: 0 0 0 20px; list-style: disc; }
+    .summary-box li { margin-bottom: 6px; line-height: 1.5; }
+    .module-nav { margin-top: 40px; padding: 20px; background: #2d2d5e; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .module-nav a { color: #ffd700; text-decoration: none; font-weight: 600; font-size: 1.1em; padding: 10px 24px; background: #cf3339; border-radius: 6px; transition: background 0.2s; }
+    .module-nav a:hover { background: #e85d5d; }
+    @media (max-width: 700px) { .video-frame { height: 350px; } .subtitle-bar { padding: 14px 16px; } .subtitle-bar .cs { font-size: 1em; } .controls { gap: 8px; padding: 10px 16px; } .controls button { padding: 6px 14px; font-size: 0.85em; } .nav-sections { flex-direction: column; } .nav-sections a { width: 100%; text-align: center; } .module-nav { flex-direction: column; text-align: center; } .module-nav a { width: 100%; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="module-header">
+    <h1>07 &#8212; 100mm zdvihu (100mm of Travel) | Champions Habits CZ</h1>
+    <p style="color: #666; margin-top: 8px;">T&#345;i video sekce o &#269;ten&#237; zp&#283;tn&#233; vazby z p&#345;edn&#237; vidlice &#8212; zdvih, stla&#269;en&#237; a propojení s brzd&#283;n&#237;m</p>
+  </div>
+
+  <div class="nav-sections">
+    <a href="#sec1">Sekce 1 &#8212; &#218;vod</a>
+    <a href="#sec2">Sekce 2 &#8212; Uk&#225;zka</a>
+    <a href="#sec3">Sekce 3 &#8212; Cvi&#269;en&#237;</a>
+  </div>
+
+  <div class="info">
+    <strong>Jak pou&#382;&#237;vat &#269;esk&#233; titulky:</strong>
+    <ol>
+      <li>Spus&#357;te video kliknut&#237;m na play p&#345;&#237;mo ve videu</li>
+      <li>Klikn&#283;te na <b>&#9654; Start</b> ve chv&#237;li, kdy video za&#269;ne p&#345;ehr&#225;vat</li>
+      <li>Pomoc&#237; tla&#269;&#237;tek &#177;1s / &#177;3s dola&#271;te synchronizaci</li>
+      <li>Posuvn&#237;kem m&#367;&#382;ete p&#345;esko&#269;it na libovoln&#233; m&#237;sto</li>
+    </ol>
+  </div>
+
+
+  <!-- SECTION 1 -->
+  <div class="section" id="sec1">
+    <h2>Sekce 1 &#8212; Úvod do 100mm zdvihu (6:25)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/100mm-of-travel-section-1/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs1">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en1"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(1)" id="btn1">&#9654; Start</button>
+        <span class="timer" id="time1">0:00</span>
+        <button class="adjust" onclick="adjustTime(1,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(1,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(1,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(1,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(1)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider1" min="0" max="385" value="0" step="1"
+               oninput="onSliderInput(1)" onmousedown="state[1].sliderDragging=true" onmouseup="state[1].sliderDragging=false"
+               ontouchstart="state[1].sliderDragging=true" ontouchend="state[1].sliderDragging=false">
+        <label>6:25</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Úvod do 100mm zdvihu</strong>
+      <ul>
+      <li>100mm zdvihu přední vidlice = klíčový ukazatel toho, co se s motorkou děje</li>
+      <li>Stlačení vidlice při brzdění přenáší váhu na přední kolo — zvyšuje přilnavost</li>
+      <li>Čtení zpětné vazby z vidlice: jak moc se stlačí říká o brzdném tlaku a povrchu</li>
+      <li>Správné brzdění = plynulé stlačení vidlice, ne prudký náraz</li>
+      <li>Přenos váhy dopředu zvětšuje kontaktní plochu předního kola</li>
+      <li>Vidlice je váš nejlepší senzor — učte se ji číst při každé jízdě</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 2 -->
+  <div class="section" id="sec2">
+    <h2>Sekce 2 &#8212; Praktická ukázka zdvihu vidlice (5:34)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/100mm-of-travel-section-2/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs2">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en2"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(2)" id="btn2">&#9654; Start</button>
+        <span class="timer" id="time2">0:00</span>
+        <button class="adjust" onclick="adjustTime(2,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(2,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(2,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(2,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(2)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider2" min="0" max="334" value="0" step="1"
+               oninput="onSliderInput(2)" onmousedown="state[2].sliderDragging=true" onmouseup="state[2].sliderDragging=false"
+               ontouchstart="state[2].sliderDragging=true" ontouchend="state[2].sliderDragging=false">
+        <label>5:34</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Praktická ukázka</strong>
+      <ul>
+      <li>Vizuální demonstrace: jak vypadá správné vs. špatné stlačení vidlice</li>
+      <li>Příliš prudké brzdění = vidlice narazí na dno (bottoming out) — nebezpečné</li>
+      <li>Příliš slabé brzdění = vidlice se nestlačí dostatečně — plýtváte přilnavostí</li>
+      <li>Ideální je využít ~80% zdvihu vidlice při normálním brzdění</li>
+      <li>Závodníci MotoGP používají každý milimetr zdvihu — maximální výkon z podvozku</li>
+      <li>Nastavení odpružení (preload, rebound) ovlivňuje chování vidlice</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SECTION 3 -->
+  <div class="section" id="sec3">
+    <h2>Sekce 3 &#8212; Cvičení a aplikace v praxi (5:30)</h2>
+    <iframe class="video-frame" src="https://ridelikeachampion.com/topic/100mm-of-travel-section-3/" allowfullscreen></iframe>
+    <div class="subtitle-bar">
+      <div class="cs" id="cs3">&#9654; Spus&#357;te video a klikn&#283;te Start</div>
+      <div class="en" id="en3"></div>
+    </div>
+    <div class="controls">
+      <div class="controls-row">
+        <button onclick="toggleSync(3)" id="btn3">&#9654; Start</button>
+        <span class="timer" id="time3">0:00</span>
+        <button class="adjust" onclick="adjustTime(3,-3)">-3s</button>
+        <button class="adjust" onclick="adjustTime(3,-1)">-1s</button>
+        <button class="adjust" onclick="adjustTime(3,1)">+1s</button>
+        <button class="adjust" onclick="adjustTime(3,3)">+3s</button>
+        <button class="reset-btn" onclick="resetSync(3)">Reset</button>
+      </div>
+      <div class="slider-row">
+        <label>0:00</label>
+        <input type="range" class="time-slider" id="slider3" min="0" max="330" value="0" step="1"
+               oninput="onSliderInput(3)" onmousedown="state[3].sliderDragging=true" onmouseup="state[3].sliderDragging=false"
+               ontouchstart="state[3].sliderDragging=true" ontouchend="state[3].sliderDragging=false">
+        <label>5:30</label>
+      </div>
+    </div>
+    <div class="summary-box">
+      <strong>Klíčové body — Cvičení a praxe</strong>
+      <ul>
+      <li>Cvičení se zipovou páskou: připevněte na vidlici a sledujte, kolik zdvihu využíváte</li>
+      <li>Brzdná zóna = místo od začátku brzdění po apex — tady pracuje vidlice nejvíc</li>
+      <li>Na silnici: čtěte vidlici v každé zatáčce — dává vám informaci o přilnavosti</li>
+      <li>V horách a kaňonech: vidlice pomáhá odhadnout stav povrchu</li>
+      <li>Propojení s deštníkem směru: stlačená vidlice pomáhá motorce zatáčet</li>
+      <li>100mm zdvihu je most mezi brzdami a řízením — naučte se ho využívat</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="module-nav">
+    <a href="06-braking-practice.html">&#8592; Modul 06: Brzdn&#225; praxe</a>
+    <a href="08-ergonomics.html">Modul 08: Ergonomie &#8594;</a>
+  </div>
+
+</div>
+
+<script>
+var subs1=[{t:0,cs:"(log se zableskne)",en:"(logo whooshes)"},
+{t:4.1,cs:"Řidiči, vydržte s námi během příští lekce,",en:"Riders, hang in there during this next session,"},
+{t:7.8,cs:"protože budeme mluvit dost technicky.",en:"because we're gonna get pretty technical."},
+{t:10.7,cs:"A důvod, proč zmiňujeme technické detaily, je ten,",en:"And the reason we're getting technical is"},
+{t:12.3,cs:"že musíte vědět, že existují přesná místa",en:"'cause you need to know there are exact places"},
+{t:16.5,cs:"v zdvihu vaší přední vidlice, kde jede motorka nejlépe. Pojďme se na to podívat.",en:"in your fork travel that your bike works best, let's look."},
+{t:22.7,cs:"Budete slyšet poměrně dost",en:"All right, you're gonna hear quite a bit"},
+{t:24,cs:"v Champ University o používání brzd pro geometrii,",en:"in Champ University, use the brakes for geometry,"},
+{t:26.8,cs:"a ptáte se, co to přesně znamená?",en:"and you're like, what does that mean exactly?"},
+{t:30.4,cs:"Rádi dáváme číslům smysl,",en:"We like putting numbers to things,"},
+{t:31.5,cs:"rádi máme data,",en:"we like getting data going,"},
+{t:32.7,cs:"a ať už jste expert na data",en:"and whether you're a data expert"},
+{t:34.5,cs:"nebo ne, na porozumění tomu",en:"or not has nothing to do with the understanding"},
+{t:36.8,cs:"co mi řekl Tom Halverson, to nemá vliv.",en:"of what Tom Halverson told me."},
+{t:38.1,cs:"A Tom Halverson, vedoucí týmu v Yamaze,",en:"And Tom Halverson, crew chief at Yamaha,"},
+{t:40.9,cs:"vyhráli spoustu věcí, stačí říci,",en:"they won a lot of stuff, let's just say that,"},
+{t:42.6,cs:"vyhráli opravdu spoustu věcí,",en:"they've won a lot of stuff,"},
+{t:43.5,cs:"a jednoho dne jsem zavolal Tomu Halversenovi,",en:"and I called up Tom Halverson one day,"},
+{t:45.6,cs:"před pár lety, a řekl jsem mu:",en:"a couple of years ago, and I said,"},
+{t:46.5,cs:"\"Tom, když jezdíme dobře a motorka se otáčí magicky,\"",en:"\"Tom, when we're riding well on the bike turns magically,\""},
+{t:49.1,cs:"a všichni jsme zažili podobné zatáčky,",en:"and we've all had those types of corners,"},
+{t:51.4,cs:"řekl jsem: \"Existuje místo v zdvihu vidlice,",en:"I said, \"Is there a fork travel?"},
+{t:53,cs:"\"kde je vidlice právě",en:"\"Is there a place with a fork is"},
+{t:54.4,cs:"\"v místě, kde přidáváte úhel náklonu, v bodu vjetí do zatáčky?\"",en:"\"at the place you add lean angle, at the turn-in point?\""},
+{t:57.4,cs:"A Tom mi řekl: \"Ano, existuje.\"",en:"And Tom told me, \"Yes, there is.\""},
+{t:59.4,cs:"A my se dostaneme k tomu číslu, co to je,",en:"And we're gonna get to that number, what that number is,"},
+{t:61.8,cs:"a jen abychom si vytvořili nějaké reference,",en:"and to just to kind of set some references,"},
+{t:64.9,cs:"přenos váhy znamená: jděte na brzdy,",en:"weight transfer means, go to the brakes,"},
+{t:67.3,cs:"váha se přesune dopředu, váha se přesune dopředu,",en:"the weight moves forward, weight moves forward,"},
+{t:69,cs:"a když jdete na plyn, váha se přesune dozadu.",en:"as you go to the fall, weight moves backward."},
+{t:70.5,cs:"K-dub, zatáčej motorku k nám",en:"K-dub, roll that bike toward us"},
+{t:72.3,cs:"a jen zatáhni brzdy. Sleduj vidlici.",en:"and just pull the brakes on it. Just watch the fork."},
+{t:74.1,cs:"Sleduj, jak se váha přesunuje dopředu.",en:"Watch the weight come forward."},
+{t:75.2,cs:"Jak zatáhneš brzdy, váha se přesunuje dopředu,",en:"As he pulls the brakes, weight comes forward,"},
+{t:77.6,cs:"pusť brzdy, váha se přesunuje dopředu.",en:"close the brakes, weight comes forward."},
+{t:78.9,cs:"Teď to zatáčej trochu dál, váha se přesunuje dopředu,",en:"Now, roll it in here a little further, weight comes forward,"},
+{t:82.4,cs:"a teď je to během brzdění,",en:"and now that's under the braking,"},
+{t:84.5,cs:"a během plynu,",en:"and under throttle,"},
+{t:86,cs:"pusť plyn, váha se přesunuje dozadu.",en:"pick the throttle up, weight transfers rearward."},
+{t:88.9,cs:"Vidíš zadní sklapnutí a vidlice se natahují.",en:"You can see the rear squat and the forks extend."},
+{t:91.3,cs:"Chtěl jsem ti to ukázat hned",en:"I wanted to just show you that real quick"},
+{t:92.9,cs:"aby jsi nekecal a neříkal si:",en:"so you don't kind of glaze over and say,"},
+{t:94.9,cs:"\"Já tomu nerozumím.",en:"\"I don't know what this means."},
+{t:95.9,cs:"\"Tohle je na mě příliš technické.",en:"\"This is too technical for me."},
+{t:97,cs:"\"Já jsem úplně nový řidič.\"",en:"\"I'm a brand new rider.\""},
+{t:98.3,cs:"Přenos váhy znamená přesun váhy dopředu",en:"Weight transfer means weight going forward"},
+{t:100.2,cs:"během brzdění,",en:"under the brakes,"},
+{t:101,cs:"dozadu během plynu.",en:"rearward under throttle."},
+{t:103.4,cs:"A my se budeme zabývat tím, proč nejlepší řidiči",en:"And we're gonna examine why the best riders"},
+{t:106,cs:"na světě dělají určité věci.",en:"in the world are doing certain things."},
+{t:107.8,cs:"Tak do toho.",en:"So let's jump in."},
+{t:109,cs:"Chris Paris, pokaž",en:"Chris Paris, talk about the first,"},
+{t:111.6,cs:"tomu prvnímu číslu, o kterém Tom mluvil,",en:"the number that Tom talked about"},
+{t:112.9,cs:"a jak se tam dostaneme, nebo nedostaneme.",en:"and how we get there, or don't get there."},
+{t:115.2,cs:"No, v podstatě když jsme mluvili s Tomem,",en:"Yeah, basically when we talked to Tom,"},
+{t:118,cs:"řekl, že číslo zdvihu vidlice je 100 milimetrů.",en:"he said, there's, fork travel number is 100 millimeters."},
+{t:121.4,cs:"Říká, že vidí mezi všemi",en:"He says he sees about between all"},
+{t:123.5,cs:"jeho jezdci na úrovni šampionů",en:"of his champion level riders,"},
+{t:125,cs:"právě tam, kde se cítí motorka opravdu pohodlně,",en:"that's where they think the bike feels really comfortable,"},
+{t:127.5,cs:"tak jsme si tady nakreslili pár vidlic.",en:"so we just kind of drew out some forks here."},
+{t:130.1,cs:"To představuje stříbrnou část",en:"That's representing the silver part"},
+{t:131.9,cs:"vidlice, která se vidí na motorce.",en:"of the fork that is showing on that motorcycle."},
+{t:134.1,cs:"A pojďme se podívat na tuto první vidlici.",en:"And let's take a look at this very first fork."},
+{t:136.5,cs:"To je nula milimetrů zdvihu,",en:"That's at zero millimeters of travel,"},
+{t:138.8,cs:"nula milimetrů zdvihu,",en:"zero millimeters of travel,"},
+{t:140.1,cs:"takže pokud toto je naše zatáčka,",en:"so if this is our corner"},
+{t:141.6,cs:"do které se chystáme vjet,",en:"that we're heading into,"},
+{t:143.1,cs:"řidič, který má nula milimetrů zdvihu,",en:"the rider that is at zero millimeters of travel,"},
+{t:146.5,cs:"jeho mozek vlastně řekl:",en:"his brain has basically said,"},
+{t:148.8,cs:"\"Zpomal, blíží se zatáčka.\"",en:"\"Slow down, corner's coming up.\""},
+{t:150,cs:"Jede na brzdy.",en:"They roll onto the brakes."},
+{t:151.6,cs:"Nevíme, kde v zdvihu vidlice skončí,",en:"We don't know where in the fork travel that they get to,"},
+{t:154.3,cs:"ale když se dostanou k této čáře,",en:"but when they get to this line,"},
+{t:155.7,cs:"tady začínají řídit do zatáčky.",en:"this is where they're starting to steer into the corner."},
+{t:157.9,cs:"Pustili brzdy.",en:"They've released the brakes."},
+{t:159.3,cs:"Přidali plyn,",en:"They've picked the throttle up"},
+{t:160.4,cs:"jak ukázali Nick a Kyle,",en:"like Nick and Kyle showed,"},
+{t:161.8,cs:"a váha se vlastně vrací.",en:"and the weight's actually going back."},
+{t:163.9,cs:"Slyšeli jsme plyn v zatáčce.",en:"We've heard throttle through a corner."},
+{t:165.6,cs:"Toto, nula milimetrů, je to, co tato vidlice představuje,",en:"This is, zero millimeters is what that fork is representing,"},
+{t:168.8,cs:"plyn otevřený, váha se vrátila dozadu.",en:"Throttle's open, weight has gone back."},
+{t:171.1,cs:"Takže když je váha dopředu v vidlicích, stlačují se.",en:"So as weight is forward in the forks, they compress."},
+{t:173.9,cs:"Když je váha vzadu, natahují se,",en:"As weight is back they extend,"},
+{t:175.3,cs:"takže tento řidič se vzdal kontroly geometrie,",en:"so the rider here has given up on the geometry control,"},
+{t:180.1,cs:"bez brzd v bodu převrácení,",en:"off the brakes at the tipping point,"},
+{t:182.2,cs:"v bodu otáčení, který jsme vám ukázali,",en:"the turning point that we've shown here,"},
+{t:184.4,cs:"a pokud je toto jejich brzdění,",en:"and if this is their breaking,"},
+{t:186.1,cs:"mají všechno brzdění hotové",en:"they're getting all this breaking done"},
+{t:188,cs:"v přímce, z větší části,",en:"in a straight line for the most part,"},
+{t:190.2,cs:"a když jsou bez brzd, vidlice se natahují.",en:"and when they're off the brakes, forks extend."},
+{t:193,cs:"Takže motorka je konstruována tak, aby se lépe otáčela",en:"So the bike is designed to turn better"},
+{t:195.8,cs:"se stlačenými vidlicemi,",en:"with the forks compressed,"},
+{t:196.9,cs:"takže tohle není ideální situace.",en:"so this is not an ideal situation."},
+{t:199.6,cs:"Ale možná je to nový řidič,",en:"But maybe they're a new rider,"},
+{t:200.8,cs:"možná není,",en:"maybe they aren't, you know,"},
+{t:203.1,cs:"dost rychlý na to, aby používal brzdy,",en:"up to the pace to use the breaks,"},
+{t:206.1,cs:"a musí se opravdu zpomalit do zatáčky.",en:"and have to really slow into the corner."},
+{t:208.3,cs:"Takže si nechává ujít některé z nejhodnotnějších částí",en:"So they're giving up on some of the most beneficial parts"},
+{t:212.2,cs:"designu motorky,",en:"of a motorcycle's design,"},
+{t:213.5,cs:"tím, jak vidlice absorbují zatížení",en:"which is the way the forks take a load"},
+{t:215.4,cs:"a jak se pneumatika deformuje.",en:"and the way the tire squishes out."},
+{t:216.8,cs:"Takže když myslíme na pneumatiku v takové situaci,",en:"So when we think about a tire in this situation, you know,"},
+{t:220.1,cs:"kde jsme?",en:"where are we at?"},
+{t:220.9,cs:"Ano, pojďme myslet na kontaktní plochu,",en:"Yeah let's think about the contact patch,"},
+{t:222.3,cs:"vidlici bez zatížení,",en:"the fork that has no load in it,"},
+{t:224.3,cs:"pneumatika se deformuje při brzdění,",en:"the tire squished out on the brakes,"},
+{t:225.9,cs:"ale teď si ji řidič nechává ujít.",en:"but now the rider's given up on it."},
+{t:228.1,cs:"Vidlice se vrací, zatížení vychází z pneumatiky.",en:"Forks rebound, that load comes out of the tire."},
+{t:230.6,cs:"Vlastně má velmi, velmi málo gumy",en:"They actually have very, very little rubber"},
+{t:232.6,cs:"na silnici nebo na závodním okruhu",en:"on the road or rubber on the racetrack"},
+{t:234.6,cs:"když začíná vjet do zatáčky, což je,",en:"as they're starting to tip into the corner, which is,"},
+{t:236.9,cs:"všichni jsme to cítili, motorka se chová nervózně",en:"we've all felt that where the bike feels nervous"},
+{t:238.8,cs:"a nepříjemně, protože jsme si nechali ujít",en:"and uncomfortable, it's because we've given up"},
+{t:240.9,cs:"brzdy příliš brzy.",en:"on those brakes too early."},
+{t:242.2,cs:"Přenos váhy se stane příliš brzy,",en:"The weight transfers happen too soon,"},
+{t:244.3,cs:"a teď otáčíme na velmi málo gumy.",en:"and now we're turning it on very little rubber."},
+{t:246.7,cs:"Docela děsivá zkušenost.",en:"Pretty terrifying experience."},
+{t:248.7,cs:"Takže přidáme jednu věc navíc k tomuto prvnímu řidiči.",en:"So let's add one more thing to this first rider."},
+{t:251,cs:"Jede na brzdy,",en:"They go to the brakes,"},
+{t:252.6,cs:"doufejme, když je nervózní,",en:"hopefully when they're nervous,"},
+{t:254,cs:"zvýší nějaký tlak brzdy",en:"they pick up some brake pressure"},
+{t:255.6,cs:"a všechno zpomalení má hotové",en:"and they get all their slowing done"},
+{t:257.6,cs:"před zatáčkou do zatáčky,",en:"before the turn into the corner,"},
+{t:259.8,cs:"ať už to je záměr nebo to je jejich technika,",en:"whether it's by design or that's their technique,"},
+{t:262.5,cs:"jejich způsob jízdy,",en:"how they ride,"},
+{t:263.3,cs:"jejich přístup nebo ne, jsou překompenzované.",en:"how they approach things or not, they're overslowed."},
+{t:265.6,cs:"Jsou bez brzd, brzdy jsou vypnuté,",en:"They're off their brakes, brakes come off,"},
+{t:268.4,cs:"a vjetí, tato přerušovaná čára přes zatáčku je,",en:"and the tip-in, this dotted line across this corner is,"},
+{t:273.5,cs:"víš, poté co brzdy vypustíme.",en:"you know, after the brakes come off."},
+{t:277.6,cs:"Takže brzdy jsou vypnuté, vidlice natažené,",en:"So the brakes are off, forks extended,"},
+{t:280.1,cs:"kontaktní plocha pneumatiky je velmi malá.",en:"tire contact patch is very small."},
+{t:282.4,cs:"Pojďme na další řidiče",en:"Let's move on to the rider"},
+{t:284.2,cs:"který je právě tady v tomto středu.",en:"who's right here in this middle portion."},
+{t:286.8,cs:"Co se tady děje?",en:"What have we got going on here?"},
+{t:288.7,cs:"Člověče, všichni známe tohohle řidiče, ne?",en:"Man, we all know this rider, right?"},
+{t:290.9,cs:"To je řidič, který bude vždycky poslední",en:"This is the rider that is always going to be last"},
+{t:293.3,cs:"na brzdách.",en:"on the brakes."},
+{t:294.2,cs:"Prostě to pošle do zatáčky,",en:"He's just gonna send the thing off into the corner,"},
+{t:296.2,cs:"a vidlice má v podstatě 125 milimetrů",en:"and fork basically has 125 millimeters"},
+{t:299.9,cs:"když je zcela stlačená,",en:"when it's fully collapsed,"},
+{t:301.4,cs:"to využívá všechny zdvihy.",en:"that's using all that stroke."},
+{t:303.2,cs:"A když se dostane k bodu otáčení,",en:"And when he gets to the turning point,"},
+{t:306.3,cs:"vidlice je zcela zapísknutá.",en:"the fork is completely buried."},
+{t:308.3,cs:"Jsme na dně vidlice.",en:"We're on the bottom of the fork."},
+{t:309.5,cs:"Máme ten pocit, jako",en:"We get that feeling of like,"},
+{t:310.7,cs:"\"Běda, tahle motorka se neotáčí,",en:"\"Man, this bike won't steer"},
+{t:312.2,cs:"\"protože se tam dostáváme tak pozdě.\"",en:"\"'cause we're getting in there so late.\""},
+{t:314.1,cs:"A jak vypadá pneumatika?",en:"And what's that tire look like?"},
+{t:316,cs:"Ó, pneumatika je velmi stlačená",en:"Oh, the tire's really smashed out"},
+{t:318.5,cs:"a nezbývá mnoho profilu.",en:"and there's not a whole lot of profile left."},
+{t:321,cs:"Takže máte pneumatiku, která je zcela plochá, opravdu,",en:"So you got this tire that's completely flat, really,"},
+{t:324.4,cs:"při vstupu do zatáčky,",en:"on corner entry,"},
+{t:325.5,cs:"a mluvíme o bodu převrácení,",en:"and we're talking about at the tipping point,"},
+{t:327.9,cs:"v bodě, kde řidič zahajuje otáčení.",en:"at the point where the rider's initiating the turn."},
+{t:331.9,cs:"Motorka je tak zapísknutá dole,",en:"The bike is so buried in the bottom,"},
+{t:333.5,cs:"pneumatika je zcela zploštělá.",en:"the tire's all flattened out."},
+{t:335.7,cs:"Podívejme se na graf brzdění pro tohohle řidiče.",en:"Let's look at this break graph for this rider."},
+{t:338.1,cs:"Dostává se sem velmi pozdě,",en:"They're getting in here super late,"},
+{t:339.6,cs:"poslední brzdy,",en:"last of the brakes,"},
+{t:341,cs:"má v bodu otáčení tolik tlaku brzdy,",en:"have so much break pressure at the turning point"},
+{t:345.7,cs:"že se motorka prostě neotáčí,",en:"that the bike just won't steer in,"},
+{t:346.8,cs:"a všichni jsme ten pocit zažili.",en:"and we've all felt that feeling."},
+{t:349.3,cs:"Takže graf brzdění tohohle řidiče teď",en:"So this rider's breaking graph now"},
+{t:351.7,cs:"pokud mluvíme o datech,",en:"if we're talking about data,"},
+{t:353.7,cs:"budou se dostávat sem dolů,",en:"they're gonna get down in here,"},
+{t:355.9,cs:"a jejich maximální brzdění nebo jejich největší zpomalení bude",en:"and their max breaking or their most slowing is gonna be"},
+{t:359.6,cs:"v bodu otáčení tak významné,",en:"so significant at the turning point"},
+{t:363.1,cs:"že motorka prostě nemůže zatáčet",en:"that they just cannot get the bike turning"},
+{t:366,cs:"do zatáčky.",en:"into the corner."},
+{t:367.1,cs:"Tento řidič nemůže jet rychleji.",en:"This rider cannot go any quicker."},
+{t:369.8,cs:"Tento řidič přetěžuje přední část motorky.",en:"This rider is overloading the front of the motorcycle."},
+{t:373.5,cs:"Ano, jsou na hranici v tomto bodě,",en:"Yeah they're at the limit at this point,"},
+{t:375.3,cs:"opravdu využili všechno odpružení,",en:"really they've used all the suspension,"},
+{t:376.6,cs:"všechno zatížení v pneumatice.",en:"all the load in the tire."},
+{t:378.1,cs:"Opravdu není příliš mnoho místa",en:"There really isn't a lot more room"},
+{t:379.8,cs:"na to, aby se cokoliv přidalo do vstupu do zatáčky.",en:"to add anything into the corner entry."}];
+var subs2=[{t:4.8,cs:"Dobře, pojďme si povídat o",en:"Well, let's talk about"},
+{t:5.9,cs:"dalším jezdci, další situaci.",en:"another rider here, another situation."},
+{t:9.1,cs:"Jezdce, kterého si opravdu chceme vzít,",en:"The rider we really want to be in,"},
+{t:10.8,cs:"a jezdce, na kterého Tom odkazoval",en:"and the rider that Tom was was referencing"},
+{t:13.5,cs:"u všech svých jezdců a všech dat, která analyzoval",en:"in all of his riders and all the data he's looked at"},
+{t:16.2,cs:"po desítky let, kdy pracoval v Yamaha Racing,",en:"over decades, working at Yamaha Racing,"},
+{t:18.4,cs:"jezdci, kteří jsou nejpohodlnější, vidí toto,",en:"the riders that are most comfortable, they see this,"},
+{t:21.2,cs:"toto číslo zdvihu přední vidlice kolem sto milimetrů,",en:"this fork travel number around a hundred millimeters,"},
+{t:24.2,cs:"což je spíše na dolním konci zdvihu přední vidlice.",en:"which is toward that bottom end to travel on the fork."},
+{t:27.3,cs:"Tento jezdec se dostává dolů do této zatáčky",en:"This rider's getting down into this corner"},
+{t:29.3,cs:"a buduje brzdný tlak velmi výrazně.",en:"and they're building brake pressure significantly."},
+{t:33.7,cs:"Musí zpomalit svou motorku. Samozřejmě.",en:"They gotta slow their motorcycle. Absolutely."},
+{t:35.9,cs:"Takže buduje nějaký brzdný tlak",en:"So they're building some brake pressure"},
+{t:37.7,cs:"a může se dostat až na 125 milimetrů.",en:"and they may build to that 125 millimeters."},
+{t:40.8,cs:"Bude se to zpomalovat.",en:"They're gonna get this thing slowing."},
+{t:42.4,cs:"Musíte zpomalit motorku. Mohli byste se pohřbít.",en:"You have to slow the motorcycle. You might get buried."},
+{t:44.6,cs:"Mohli byste mít pneumatiku vypadající ploše na asfaltu,",en:"You might get the tire looking flat against the asphalt,"},
+{t:47.9,cs:"ale než zahájí zatáčení, body brzdění",en:"but before they initiate the turn in, the points of brakes"},
+{t:51.8,cs:"vycházejí, aby se přední vidlice dostala ze spodku,",en:"come out to allow the fork to come out of the bottom,"},
+{t:56.3,cs:"a vyměňují body brzdění za body náklonu.",en:"and trade off break points for lean angle points."},
+{t:59.8,cs:"A myslím, že jsme to slyšeli, jak se o tom hovořilo",en:"And I think we've heard us reference that"},
+{t:62.5,cs:"několikrát v průběhu tohoto kurzu.",en:"a couple of times throughout this."},
+{t:63.9,cs:"Ano, právě tohoto brzdění do zatáčky",en:"Yeah, just getting this trail breaking"},
+{t:65.4,cs:"myšlenka a těch 125 milimetrů.",en:"idea going and that 125 millimeters."},
+{t:68.3,cs:"Pokud nemáme žádné body náklonu,",en:"If we have no lean angle points,"},
+{t:69.5,cs:"máme k dispozici všech sto bodů.",en:"we have all hundred points available."},
+{t:71.2,cs:"Takže uvidíte, že pneumatika se stlačí velmi, velmi, velmi ven,",en:"So, you'll see that tire gets squished way, way, way out,"},
+{t:74.5,cs:"ale musíme uvolňovat brzdný tlak",en:"but we have to be giving away brake pressure"},
+{t:76.8,cs:"okamžik předtím, než se motorka zatáčí.",en:"the moment before that bike steers in."},
+{t:79.3,cs:"Bradley Smith přišel do naší školy.",en:"We had Bradley Smith come to the school."},
+{t:81.2,cs:"Řekl, s tím se nejvíce zabývám",en:"He said, man, the one thing I'm working at the most"},
+{t:83.7,cs:"na své motorce MotoGP, snažím se vrátit profil pneumatiky",en:"on this MotoGP bike is trying to get my tire profile back"},
+{t:87.2,cs:"předtím, než se dostaneme do zatáčky.",en:"before we steer into the corner."},
+{t:88.5,cs:"A to zní zvláštně specificky,",en:"And that, that sounds weirdly specific,"},
+{t:90.7,cs:"ale je to myšlenka, kterou se snažíte dosáhnout",en:"but this is the idea you're trying to get"},
+{t:92.4,cs:"tak pozdě na brzdách, že se dostanete do bodu",en:"so late on the brakes that you gets to the point"},
+{t:94.7,cs:"kde motorka nechce zatáčet.",en:"where the bike doesn't want to steer."},
+{t:96.3,cs:"Takže pracuje na uvolňování nějakého zdvihu přední vidlice",en:"So he's working on giving away some fork travel"},
+{t:99,cs:"aby kontaktní plocha vypadala -",en:"so that contact patch looks-"},
+{t:101.1,cs:"Přesně správně.",en:"Just right."},
+{t:101.9,cs:"Ano, tady to máte.",en:"Yeah, there you go."},
+{t:102.7,cs:"Opět mohou dosáhnout 125 milimetrů.",en:"Again, they may build to 125 millimeters."},
+{t:105.2,cs:"Můžete cítit zarážku na spodku přední vidlice,",en:"You may feel the bump stop in the bottom of the fork,"},
+{t:107.9,cs:"ale vycházíte o několik bodů brzdění",en:"but you come out a few points of brakes"},
+{t:110,cs:"když se skláníte do zatáčky, abyste vyměnili zatížení.",en:"as you're tipping into the corner to trade off the load."},
+{t:113.6,cs:"Nyní, opravdu to, co pronásledujeme v účinnosti",en:"Now, really what we're chasing in efficiency"},
+{t:118.3,cs:"a v jízdě na motorce je zrychlení dostatečné",en:"and riding the motorcycle is accelerating enough"},
+{t:120.8,cs:"aby jsme brzdili dolů do zatáčky",en:"to where we do need the brakes down into the corner"},
+{t:124,cs:"protože motorka je navržena na práci pod tímto zatížením.",en:"because the bike is designed to work under that load."},
+{t:126.7,cs:"Bereme zatížení, které vytváříme brzdami.",en:"We're taking the load that we create with the brakes."},
+{t:129.3,cs:"A když se skláníme do zatáčky",en:"And as we tip into the corner"},
+{t:130.6,cs:"a postupně uvolňujeme brzdy,",en:"and are trailing off the brakes,"},
+{t:131.9,cs:"máme menší brzdné síly.",en:"we have less slowing forces."},
+{t:133.8,cs:"Dostáváme cornering sílu v návratu.",en:"We're getting cornering force in return."},
+{t:136.9,cs:"Takže pneumatika zůstává zatížena s dobrou kontaktní plochou",en:"So the tire is remaining loaded up with a good contact patch"},
+{t:140.1,cs:"po celou dobu vstupu do zatáčky.",en:"all the way throughout corner entry."},
+{t:142.4,cs:"Nejprve s brzdami a pak jeho kontrola",en:"Firstly, with the brakes and then controlling it"},
+{t:145.2,cs:"a jeho výměna za cornering.",en:"and trading it off to the cornering."},
+{t:147.7,cs:"Jezdec, který je mimo brzdy před sklonem",en:"The rider that is off the brakes before tipping"},
+{t:150.4,cs:"nebo nemůže kontrolovat svou rychlost",en:"or cannot control their speed"},
+{t:152,cs:"po celou dobu vstupu do zatáčky,",en:"all the way through corner entry,"},
+{t:153.6,cs:"bude velmi obtížné vrátit to zatížení",en:"it's gonna be very difficult to get that load back"},
+{t:156.6,cs:"když jste v zatáčce.",en:"once you're in the corner."},
+{t:157.6,cs:"Ano, podívejme se na to, jak",en:"Yeah, let's take a look at what"},
+{t:158.6,cs:"ten brzdný graf vypadá, kde se ten jezdec skláníš.",en:"that brake graph looks like, where that rider's tipping in."},
+{t:167.2,cs:"Takže budou zahajovat prvních 5% brzd,",en:"So they're gonna initiate that first 5% of brakes,"},
+{t:170.7,cs:"budovat na ten brzdný tlak, který jim pomáhá zpomalit,",en:"build to that brake pressure that's gonna help them slow,"},
+{t:173.9,cs:"ale právě předtím, než uvolní brzdy",en:"but just before they release the brakes"},
+{t:178.4,cs:"pro prvních počátečních bodů brzdného tlaku,",en:"for the first initial points of brake pressure,"},
+{t:182.1,cs:"budou myslet na skloňování se do zatáčky.",en:"they're gonna be thinking about tipping into the corner."},
+{t:185.3,cs:"Téměř právě, téměř ve stejný čas.",en:"Almost really at, almost at the same time."},
+{t:187.6,cs:"Ale pokud necháme brzdy zapnuté",en:"But if we leave the the brakes on"},
+{t:190.1,cs:"a přední vidlice narazí na dno při zatáčení,",en:"and the fork bottomed at turn in,"},
+{t:191.6,cs:"motorka se nevěhne do zatáčky.",en:"the bike will not turn into the corner."},
+{t:194.1,cs:"Že ano? Mohli bychom si myslet, oh, musím získat data.",en:"Right? We might think, oh, I gotta get data."},
+{t:196.8,cs:"Musím získat telemetrii na své motorce",en:"I gotta get telemetry on my bike"},
+{t:198.2,cs:"aby jsem pochopil celou tuto myšlenku.",en:"to understand this whole idea."},
+{t:199.5,cs:"Ale způsob, jak chceme začít o tom přemýšlet, je",en:"But the way we want to start thinking about this is"},
+{t:202.2,cs:"kde se naše motorka cítí skvělě?",en:"where does our motorcycle feel great?"},
+{t:204.3,cs:"Kde to není tak pohodlné na jízdu?",en:"Where is it maybe not so comfortable to ride?"},
+{t:206.3,cs:"A slyšíme to tak často od studentů",en:"And we hear this so often from students"},
+{t:208.5,cs:"že miluji jízdu nahoru po horské silnici",en:"that I love riding up the mountain road"},
+{t:211.2,cs:"a miluji jízdu do kaňonu,",en:"and I love riding up the canyon,"},
+{t:212.9,cs:"ale opravdu nesnáším jízdu zpět dolů druhým směrem.",en:"but I really dislike going back down the other direction."},
+{t:215.7,cs:"Proč by to mohlo být?",en:"Why might that be?"},
+{t:217,cs:"Dobře, přemýšlíme o kontrole geometrie.",en:"Well, we're thinking about geometry control."},
+{t:219.3,cs:"Automaticky, když jdeme nahoru po silnici kaňonu,",en:"Automatically, as we're going up the canyon road,"},
+{t:222,cs:"máme gravitaci táhnoucí nás zpět,",en:"we've got gravity pulling us back,"},
+{t:223.6,cs:"máme plochu hory tlačící do motorky.",en:"we've got the face of the mountain pushing into the bike."},
+{t:226.1,cs:"Budeme se automaticky přibližovat",en:"We're gonna automatically get closer"},
+{t:228,cs:"k těmto sto milimetrům, když jedeme po silnici kaňonu.",en:"to this hundred millimeters as we're going up a canyon road."},
+{t:231.3,cs:"Pak se vracíme dolů,",en:"Then we are going back down,"},
+{t:232.6,cs:"s cestou padající od nás",en:"with the road falling away from us"},
+{t:234.6,cs:"a gravitací tahající nás rychleji do zatáček",en:"and gravity pulling us faster into corners"},
+{t:237.4,cs:"což vyžaduje stejné množství zpomalení",en:"that require the same amount of slowing"},
+{t:239.1,cs:"jako na cestě nahoru.",en:"as they did on the way up."},
+{t:240.3,cs:"Ano.",en:"Yep."},
+{t:241.1,cs:"Určitě se budeme potýkat.",en:"We're gonna struggle for sure."},
+{t:242.3,cs:"Takže chceme vytvořit toto zatížení našimi brzdami",en:"So, we wanna create this load with our brakes"},
+{t:245.4,cs:"a být palubním inženýrem",en:"and be the onboard engineer"},
+{t:248,cs:"který umisťuje zdvih přední vidlice na správné místo.",en:"that puts that fork travel in the correct spot."},
+{t:251,cs:"Takže Kyle, kolik jezdců znáte",en:"So Kyle, how many riders do we know"},
+{t:252.4,cs:"kteří přijdou do naší školy,",en:"that come to this school,"},
+{t:253.4,cs:"jezdí na FZ-7, jezdí na R-1.",en:"they ride an FZ-7, they ride an R-1."},
+{t:257.4,cs:"Máme velkou rozmanitost motork a někteří jezdci mohou říci,",en:"We got a wide variety of bikes and some riders may go,"},
+{t:261.2,cs:"nejsem si jistý, zda se mi ta motorka opravdu líbí.",en:"I don't know if I really like this motorcycle."},
+{t:263.5,cs:"Je příliš měkká pro mě. Příliš měkká.",en:"It's too soft for me. It's too soft."},
+{t:265.6,cs:"Jaké by bylo řešení, když se dostanete na motorku",en:"What would be the fix when you hop on a bike"},
+{t:267.8,cs:"a možná je nepohodlná",en:"and maybe it's uncomfortable"},
+{t:268.8,cs:"protože se příliš pohybuje?",en:"cause it's moving around too much?"},
+{t:270.6,cs:"Dobře, jako přizpůsobivý jezdec,",en:"Well, as an adjustable rider,"},
+{t:272.8,cs:"můžete vytvořit různé síly.",en:"you can create different forces."},
+{t:274.6,cs:"Takže motorka, která je tužší, můžete budovat větší brzdný tlak.",en:"So a bike that's stiffer, you can build more brake pressure."},
+{t:277.9,cs:"Motorka, která je měkčí, nemůžete být tak agresivní",en:"A bike that softer, you can't be quite as aggressive"},
+{t:280.3,cs:"s brzdami.",en:"with the brakes."},
+{t:281.2,cs:"Takže, myšlíme na tyto tři scénáře jezdce,",en:"So, thinking about these three scenarios of rider,"},
+{t:285,cs:"jelikož ten první jezdec je mimo brzdy při skloňování,",en:"as this first rider is off the brakes at tip in,"},
+{t:287.3,cs:"mohou jít k chlápku na odpružení a říci,",en:"they may go to the suspension guy and say,"},
+{t:288.9,cs:"víš co, motorka je příliš tuhá.",en:"you know what, bike's too stiff."},
+{t:290.8,cs:"Nemůžu to dostat",en:"I can't get the thing"},
+{t:291.9,cs:"aby se dostalo dolů k vrcholu a vstupu do zatáčky,",en:"to get down to the apex and corner entry,"},
+{t:294.6,cs:"ale pouštějí nejúčinnější komponentu",en:"but they're letting go of the most efficient component"},
+{t:297.5,cs:"pro kontrolu geometrie v reálném čase.",en:"to control the geometry in real time."},
+{t:300.6,cs:"Tento jezdec bude říkat, oh, je to příliš měkké.",en:"This rider is gonna say, oh, it's too soft."},
+{t:303.2,cs:"Ano, ano.",en:"Yeah, yeah."},
+{t:304,cs:"Příliš měkké na vstupu do zatáčky, věc je úplně na dně.",en:"Too soft at corner entry, the thing's all bottomed."},
+{t:306.3,cs:"Takže jdou k chlápku na odpružení, ztuží věc.",en:"So they go to suspension guy, they stiffen the thing up."},
+{t:308.6,cs:"A teď je to tak tuhé",en:"And now it's so stiff"},
+{t:309.8,cs:"že používají brzdy stejným způsobem.",en:"that they're using the brakes the same way."},
+{t:312.5,cs:"Jsou na sto teď při skloňování,",en:"They're at a hundred now at tip in,"},
+{t:313.9,cs:"ale jakmile uvolní brzdy,",en:"but as soon as they release the brakes,"},
+{t:314.9,cs:"motorka je tak tuhá, že se stejně rozšiřuje.",en:"the bike is so stiff that it runs wide anyway."},
+{t:318.3,cs:"Takže chceme být přizpůsobivým jezdcem",en:"So we wanna be the adjustable rider"},
+{t:320.1,cs:"který se může umístit co nejblíže k těmto sto milimetrům",en:"that can put ourselves closest to this a hundred millimeters"},
+{t:323.5,cs:"v různých prostředích tratě, různých palivech,",en:"in different trashing environments, different fuel loads,"},
+{t:327,cs:"různých pneumatikách, všechny různé motorky.",en:"different tires, all different motorcycles."},
+{t:330.8,cs:"A to můžeme dělat jako přizpůsobivý jezdec.",en:"And we can do that as an adjustable rider."}];
+var subs3=[{t:0.3,cs:"(logo se vynořuje)",en:"(logo swooshes)"},
+{t:5.3,cs:"Dobře, ahoj Chris, Kyle,",en:"All right, hey Chris, Kyle,"},
+{t:6.3,cs:"děkuji vám moc.",en:"thank you very much."},
+{t:7.5,cs:"Pochopení místa, kde by měl být zdvih přední vidlice",en:"Getting our brain around where the fork travel"},
+{t:10.2,cs:"v bodě zatáčení,",en:"should be at the turning point,"},
+{t:11.5,cs:"a to je to, o čem skutečně mluvíme všichni,",en:"and that's what we're really talking about everybody,"},
+{t:13.5,cs:"v bodě zatáčení",en:"at the turning point"},
+{t:14.3,cs:"v místě, kde přidáváte náklonný úhel,",en:"at the place at which you add lean angle,"},
+{t:15.9,cs:"v kruhu v místě, kde přidáváte náklonný úhel.",en:"that circle the place at which you add lean angle."},
+{t:18.8,cs:"Druhá červená šipka ukazuje na tento druhý kruh.",en:"The second red arrow pointing at this second circle."},
+{t:21.9,cs:"Toto je práv když se brzdná síla začíná snižovat z maxima",en:"This is just as brake pressure starts to come off of maximum"},
+{t:24.8,cs:"ten červený kruh,",en:"that red circle,"},
+{t:25.7,cs:"a tam máme naše číslo náklonu.",en:"and there's our tipping number."},
+{t:27.4,cs:"Nyní, důvod, proč ta modrá čára,",en:"Now, the reason that blue line,"},
+{t:29.4,cs:"ta brzdná čára pokračuje až na nulu",en:"that braking line continues on all the way down to zero"},
+{t:32.8,cs:"je to proto, že tento jezdec stále kontroluje",en:"is because this rider's still controlling"},
+{t:34.5,cs:"svou rychlost a poloměr",en:"their speed and radius"},
+{t:36.1,cs:"aby odpovídal zatáčce.",en:"to match the corner."},
+{t:37.4,cs:"Noví jezdci v naší divácké skupině by mohli být",en:"The new riders in our audience could be"},
+{t:39.4,cs:"zatím s vykuleným pohledem.",en:"eyes glazed over at this point."},
+{t:42.1,cs:"Platí to také pro nové jezdce?",en:"Does this apply to new riders as well?"},
+{t:43.8,cs:"Absolutně.",en:"Absolutely."},
+{t:44.7,cs:"Ano? Ano.",en:"Yeah?↵Yeah."},
+{t:45.5,cs:"Mohou noví jezdci jezdit na stejných motocyklech,",en:"Can can new riders ride on the same exact motorcycles,"},
+{t:47.3,cs:"pneumatikách a silnicích jako my?",en:"and tires and roads as us?"},
+{t:49,cs:"Ano. Ano, mohou.",en:"Yes.↵Yes they can."},
+{t:50.5,cs:"Musíme to tedy pochopit",en:"So we need to understand this"},
+{t:51.5,cs:"a bez ohledu na to, kde jste v kurzu učení,",en:"and no matter where you are on your learning curve,"},
+{t:53.8,cs:"tento jezdec pustil brzdy",en:"this rider, they've let go of the brakes"},
+{t:55.8,cs:"někdy je dokonce na plynu dříve, než zatočí.",en:"they might even gone to the throttle before they steer."},
+{t:57.8,cs:"Takže použil brzdy,",en:"So they've used the brakes,"},
+{t:59.2,cs:"pustil brzdy,",en:"let go of the brakes,"},
+{t:60.1,cs:"plyn, zatočit.",en:"throttle, steer."},
+{t:61.8,cs:"Na to není motorka navržena.",en:"Bike is not designed to do that."},
+{t:63.5,cs:"Nula milimetrů zdvihu,",en:"Zero millimeters of travel,"},
+{t:65.1,cs:"velmi malá kontaktní plocha.",en:"very small contact patch."},
+{t:66.6,cs:"Proto sport nenarůstá.",en:"It's why the sport's not growing."},
+{t:68.5,cs:"Proto se nebaví,",en:"It's why you're not having any fun,"},
+{t:70.2,cs:"protože jste to snad slyšeli.",en:"because you may have heard that somehow."},
+{t:73.1,cs:"Tento jezdec, přehnaně agresivní jezdec,",en:"This rider, overly aggressive rider,"},
+{t:75.9,cs:"narazí tam,",en:"run the thing in there,"},
+{t:76.7,cs:"brzdy v poslední chvíli,",en:"last minute brakes,"},
+{t:77.6,cs:"pneumatiky se stlačily na dno,",en:"tires bottomed out,"},
+{t:78.7,cs:"motorka se neotáčí,",en:"bike doesn't steer,"},
+{t:79.6,cs:"vyjíždí vedle.",en:"they run wide."},
+{t:80.4,cs:"Také se potýkají.",en:"They struggle as well."},
+{t:81.3,cs:"Nemají tolik zábavy.",en:"Not having that much fun."},
+{t:83,cs:"Jak moc se snažíme být tím jezdcem, chlapci?",en:"How hard are we trying to be that rider boys?"},
+{t:85.7,cs:"Docela moc, chci říci,",en:"Pretty hard, I mean,"},
+{t:87.2,cs:"na své silniční motorce je to opravdu jen ta myšlenka",en:"on my street bike that really is just that idea of"},
+{t:89.9,cs:"mít kontrolku brzdy zapnutou po bodu náklonu, že ano.",en:"having the brake light on past tipping, right."},
+{t:92.3,cs:"To bude dávat tu zátěž dopředu,",en:"That's gonna put that load forward,"},
+{t:94.2,cs:"pokud jste úplně nový jezdec,",en:"if you're a brand new rider,"},
+{t:95.5,cs:"je to docela snadný způsob, jak o tom přemýšlet",en:"that's a pretty easy way to think about it is"},
+{t:97.7,cs:"neustoupili jste z páky brzdy",en:"you have not let go of that brake lever"},
+{t:100,cs:"během zatáčení motorky do zatáčky.",en:"as the motorcycle steers off into the corner."},
+{t:102.2,cs:"Takže pokud pustíte páku brzdy před zatáčením,",en:"So if you let go of the brake lever before the turn in,"},
+{t:105.6,cs:"motorka není na to navržena.",en:"bike's not designed to do that."},
+{t:107.1,cs:"Pokud budete brzdit velmi, velmi pozdě",en:"If you're going to the brakes super, super late"},
+{t:108.8,cs:"abych zatočila,",en:"to try to turn in,"},
+{t:109.8,cs:"motorka na to není navržena.",en:"bike's not designed for that."},
+{t:110.8,cs:"Snažíme se najít rovnováhu mezi těmito dvěma.",en:"We're trying to meet in between those two."},
+{t:112.6,cs:"A krásná věc je,",en:"And the beautiful thing is,"},
+{t:114,cs:"můžete jít na parkovací plochu a cítit to.",en:"you can go out in a parking lot and get a feel for it."},
+{t:115.8,cs:"Sledujte, když puštíte plyn,",en:"Watch when you roll off the throttle,"},
+{t:117.1,cs:"dejte váhu dopředu,",en:"put weight forward,"},
+{t:117.9,cs:"motorka se trochu lépe otáčí.",en:"the bike turns a little bit better."},
+{t:119,cs:"Všichni zatlačíme plyn dopředu,",en:"We all throttle put way forward,"},
+{t:120.2,cs:"trochu brzd,",en:"a little bit of brakes,"},
+{t:121,cs:"motorka se otáčí ještě lépe.",en:"the bike turns even better."},
+{t:122.3,cs:"Pak zkuste zatočit na plyn,",en:"Then try to turn in the throttle,"},
+{t:123.7,cs:"zvedněte nohu, motorka přestane zatáčet,",en:"pick up the fall, bike quits turning,"},
+{t:125.2,cs:"tak je na to navržena.",en:"that's how it's designed."},
+{t:127.1,cs:"Toto je sto milimetrů zdvihu.",en:"This is a hundred millimeters of travel."},
+{t:128.7,cs:"Tuto informaci jsme dostali",en:"This is information that we got"},
+{t:130.4,cs:"od vedoucího týmu MotoAmerica v zemi,",en:"from the top MotoAmerica crew chief in the country,"},
+{t:134.4,cs:"a vložili jsme ji do naší školy.",en:"and we put it into our school."},
+{t:136.4,cs:"Chtěli jsme to vložit do vaší mysli,",en:"Wanted to put it into your brain,"},
+{t:137.7,cs:"abyste jeli na motorce",en:"so you ride the bike"},
+{t:138.9,cs:"tak, jak je navržena k jezdění",en:"the way it's designed to be ridden"},
+{t:140.1,cs:"odborníky, kteří ji navrhli.",en:"by the experts who designed it."},
+{t:144.1,cs:"Dobře, tento nácvik je prostá spona",en:"All right, this drill is a simple zip tie"},
+{t:146,cs:"a obvinit jsme sponu kolem nohy přední vidlice,",en:"and we put a zip tie around our fork leg,"},
+{t:148.2,cs:"uříznout ocásek.",en:"cut the pig tail off."},
+{t:149.6,cs:"A to nám dá indikaci",en:"And this will give us an indication"},
+{t:151.3,cs:"kde je náš zdvih přední vidlice",en:"of where our fork travel is"},
+{t:153,cs:"v nejstěžejší brzdné zóně naší jízdy,",en:"in the heaviest brake zone of our ride,"},
+{t:155,cs:"s vaší silniční jízdou.",en:"with your street riding."},
+{t:156.3,cs:"Ale určitě, pokud jste na trati a",en:"But certainly if you're on the track and"},
+{t:157.9,cs:"tady je, jak ji používáme nejlépe.",en:"here's how we use it the best."},
+{t:159.8,cs:"Jděte zahřát si motorku,",en:"Go get your bike warmed up,"},
+{t:160.7,cs:"zahřejte si pneumatiky,",en:"get your tires warmed up,"},
+{t:161.9,cs:"zahřejte si mozek.",en:"get your brain warmed up."},
+{t:162.8,cs:"Jezdíte dobré kola.",en:"You're running good laps."},
+{t:163.7,cs:"Přijeďte do boxů.",en:"Come into the pits."},
+{t:165,cs:"Vy nebo váš tým posunete tuto sponu úplně nahoru",en:"You or your crew slide that zip tie all the way up"},
+{t:167.4,cs:"k vrcholu.",en:"to the top."},
+{t:168.3,cs:"Nyní budete jezdit první část kola",en:"Now, you're gonna cruise the first part of the lap"},
+{t:171.2,cs:"dokud se neblížíte své nejstěžejší brzdné zóně.",en:"until you get towards your heaviest braking zone."},
+{t:173.3,cs:"V tom okamžiku jděte na maximum.",en:"At that point you go full volume."},
+{t:175.8,cs:"Dělej svoje nejlepší",en:"Do your best of your ability"},
+{t:176.9,cs:"do nejstěžejší brzdné zóny,",en:"into the heaviest braking zone,"},
+{t:178.1,cs:"přes nejstěžejší brzdnou zónu zatáčky,",en:"through the heaviest braking zone corner,"},
+{t:180.2,cs:"a pak jezdět zbytek kola",en:"and then cruise the rest of the lap"},
+{t:181.9,cs:"zpět do boxů",en:"back to the pits"},
+{t:182.8,cs:"a podívejte se, kde je spona.",en:"and see where the zip tie is."},
+{t:184.3,cs:"Pokud vaše spona skončí někde (smích) tady",en:"If your zip tie ends up somewhere (laughs) here"},
+{t:188.7,cs:"pod vaší nejstěžejší brzdnou zónou",en:"under your heaviest braking zone"},
+{t:189.9,cs:"když by měla být dole blízko dna,",en:"when it should be down here near the bottom,"},
+{t:192,cs:"budete vědět pár věcí.",en:"you'll know a couple of things."},
+{t:193.7,cs:"Za prvé, můžete brzdit mnohem tvrději,",en:"One, you can use the brakes quite a bit harder,"},
+{t:197.3,cs:"nebo dva, máte špatné jaro přední vidlice,",en:"or two you've got complete wrong fork spring in it,"},
+{t:201.6,cs:"jednoduše se to neposunuje dost.",en:"it's just not traveling enough."},
+{t:203,cs:"Tato spona je skvělým ukazatelem",en:"This zip tie is a great indicator"},
+{t:205.1,cs:"kde se vaše vidlice pohybuje v nejstěžejší brzdné zóně.",en:"of where your fork moves in the heaviest brake zone."},
+{t:209.5,cs:"Takže tento nácvik vám umožní realizovat",en:"So this drill is gonna be for you to realize"},
+{t:211.8,cs:"kolik více brzdné síly potřebujete",en:"how much more brake pressure you need"},
+{t:213.9,cs:"v sekcích se sjezdem,",en:"in downhill sections so,"},
+{t:215.5,cs:"pokud jedete na jízdu",en:"if you're going on a ride"},
+{t:217.1,cs:"a je to nájezd na dálnici,",en:"and it's a freeway on ramp,"},
+{t:219.6,cs:"nebo je to horská průsmyk,",en:"or it's a mountain pass,"},
+{t:221.6,cs:"když se začnete přibližovat situaci",en:"as you start to approach the situation"},
+{t:224,cs:"kde to vypadá, že jde dolů,",en:"where it looks like it's going downhill,"},
+{t:226.1,cs:"ať se vám rozsvítí, že si uvědomujete,",en:"have that light bulb go off that you realize,"},
+{t:228.8,cs:"hej, musím použít mnohem více brzdné síly",en:"hey, I need to use a lot more brake pressure"},
+{t:230.9,cs:"aby se vidlice stlačila",en:"to get this fork to collapse"},
+{t:232.6,cs:"a umístit motorku do pozice",en:"and put the bike in a position"},
+{t:234.1,cs:"kde je spokojenější říditi.",en:"where it's happier steering."},
+{t:239.9,cs:"Hej, počkej, počkej.",en:"Hey, hold on, hold on."},
+{t:241.3,cs:"Nepotřebujete získávání dat.",en:"You don't need a data acquisition."},
+{t:243.8,cs:"Nepotřebujete najmout vedoucího týmu, v zásadě,",en:"You don't need to hire a crew chief, generally speaking,"},
+{t:245.8,cs:"normálně nemáme ty věci.",en:"we normally don't have those things."},
+{t:248.1,cs:"Ale musíte pochopit v tomto průmyslu,",en:"But you need to understand in this industry,"},
+{t:250.7,cs:"nejlepší vedoucí týmů,",en:"the best crew chiefs,"},
+{t:252.6,cs:"nejlepší jezdci na světě",en:"the best riders in the world"},
+{t:253.9,cs:"vědí, že chtějí mít svou motorku kolem 100 milimetrů",en:"know that they want their bike around 100 millimeters"},
+{t:257.4,cs:"zdvihu přední vidlice v bodě zatáčení.",en:"of front fork travel at the turn-in."},
+{t:260.4,cs:"Takže co děláme,",en:"So what we do,"},
+{t:261.5,cs:"berme tuto informaci a realizujeme",en:"we take that information and we realize"},
+{t:263.5,cs:"chceme posunout váhu dopředu zavřením plynu,",en:"we wanna put weight forward by closing our throttle,"},
+{t:266.1,cs:"zvýšením brzdy,",en:"picking up our brakes,"},
+{t:267.6,cs:"kontrolou geometrie řízení",en:"controlling our steering geometry"},
+{t:269.8,cs:"do zatáčky.",en:"into the corner."},
+{t:272,cs:"Takže v reálném světě, ve kterém jezdíme,",en:"So in the real world that we ride in,"},
+{t:275.2,cs:"zejména ti, kteří jezdí nahoru a dolů kaňony,",en:"especially those who ride up and down canyons,"},
+{t:278.1,cs:"nahoru a dolů kopce.",en:"up and down hills."},
+{t:279.4,cs:"Toto sto milimetrů zdvihu.",en:"This hundred millimeters of travel."},
+{t:281.2,cs:"Když zatlačíme plyn nahoru po kaňonu,",en:"When we close the throttle going up the canyon,"},
+{t:284,cs:"vidlice je v těch kouzelných číslech",en:"the fork is in those magical numbers"},
+{t:285.7,cs:"protože nám cesta přichází.",en:"'cause the road is meeting us."},
+{t:287.3,cs:"Jak jezdíme dolů tímtéž kaňonem,",en:"As we ride back down that same canyon,"},
+{t:289.4,cs:"zatlačíme plyn",en:"we close the throttle"},
+{t:290.4,cs:"a vidlice se nestlačila dost",en:"and the fork isn't collapsed enough"},
+{t:291.9,cs:"protože nám cesta uniká.",en:"'cause the road runs away from us."},
+{t:293.8,cs:"Takže, dolů po kaňonu zatlačte plyn,",en:"So, downhill close the throttle,"},
+{t:296.5,cs:"zvýšit brzdy,",en:"pick up your brakes,"},
+{t:297.6,cs:"použijte 100% více brzd dolů po kaňonu",en:"use 100% more brakes going down the canyon"},
+{t:300.9,cs:"pro kontrolu geometrie řízení.",en:"to control your steering geometry."},
+{t:304.3,cs:"Jezdci, musíte vědět pár věcí.",en:"Riders, you need to know a couple things."},
+{t:307.1,cs:"Za prvé, když sjedete z brzd",en:"One, when you jump off the brakes"},
+{t:309,cs:"než zatočíte a vaše vidlice se vysunou,",en:"before you turn and your forks extend,"},
+{t:311,cs:"vaše motorka není určena k tomuto způsobu.",en:"your bike is not designed to work that way."},
+{t:313.3,cs:"Za druhé, když jdete na brzdu velmi pozdě",en:"Two, when you go to the brake super late"},
+{t:315.1,cs:"a vaše vidlice je na dně a motorka se neotáčí,",en:"and your fork is bottomed and the bike won't turn,"},
+{t:317.1,cs:"vaše motorka není určena k zatáčení tímto způsobem.",en:"your bike is not designed to turn that way."},
+{t:320.1,cs:"Vaše motorka je určena k zatáčení",en:"Your bike is designed to turn"},
+{t:321.8,cs:"s tou vidlicí stlačenou,",en:"with that fork collapsed,"},
+{t:324.1,cs:"a to s brzdnou silou,",en:"and that is with brake pressure,"},
+{t:326.1,cs:"za bod zatáčení.",en:"past the turn in."},
+{t:327.8,cs:"Sto milimetrů zdvihu,",en:"Hundred millimeters of travel,"},
+{t:329.7,cs:"pořádný velký problém.",en:"pretty big deal."}];
+
+var state={};
+for(var s=1;s<=3;s++)state[s]={running:false,baseTime:0,startWall:0,lastIdx:-1,rafId:null,sliderDragging:false};
+var sections={1:{subs:subs1,duration:385},2:{subs:subs2,duration:334},3:{subs:subs3,duration:330}};
+
+function formatTime(s){var m=Math.floor(s/60);var sec=Math.floor(s%60);return m+":"+(sec<10?"0":"")+sec;}
+function getCurrentTime(s){if(!state[s].running)return state[s].baseTime;return state[s].baseTime+(Date.now()-state[s].startWall)/1000;}
+function findSubtitle(s,t){var subs=sections[s].subs;var idx=-1;for(var i=0;i<subs.length;i++){if(subs[i].t<=t)idx=i;else break;}return idx;}
+function updateDisplay(s){var t=getCurrentTime(s);var idx=findSubtitle(s,t);if(idx!==state[s].lastIdx){state[s].lastIdx=idx;if(idx>=0){document.getElementById("cs"+s).textContent=sections[s].subs[idx].cs;document.getElementById("en"+s).textContent=sections[s].subs[idx].en;}else{document.getElementById("cs"+s).textContent="\u2026";document.getElementById("en"+s).textContent="";}}document.getElementById("time"+s).textContent=formatTime(t);if(!state[s].sliderDragging)document.getElementById("slider"+s).value=Math.round(t);}
+function tick(s){updateDisplay(s);if(state[s].running)state[s].rafId=requestAnimationFrame(function(){tick(s);});}
+function toggleSync(s){if(state[s].running){pauseSync(s);}else{startSync(s);}}
+function startSync(s){state[s].running=true;state[s].startWall=Date.now();document.getElementById("btn"+s).textContent="\u23F8 Pauza";document.getElementById("btn"+s).classList.add("active");tick(s);}
+function pauseSync(s){state[s].running=false;state[s].baseTime=getCurrentTime(s);if(state[s].rafId)cancelAnimationFrame(state[s].rafId);document.getElementById("btn"+s).textContent="\u25B6 Start";document.getElementById("btn"+s).classList.remove("active");}
+function resetSync(s){var wasRunning=state[s].running;if(wasRunning)pauseSync(s);state[s].baseTime=0;state[s].lastIdx=-1;document.getElementById("slider"+s).value=0;document.getElementById("time"+s).textContent="0:00";document.getElementById("cs"+s).textContent="\u25B6 Spus\u0165te video a klikn\u011Bte Start";document.getElementById("en"+s).textContent="";}
+function setTime(s,t){var wasRunning=state[s].running;if(wasRunning){state[s].baseTime=t;state[s].startWall=Date.now();}else{state[s].baseTime=t;}state[s].lastIdx=-1;updateDisplay(s);}
+function adjustTime(s,delta){setTime(s,Math.max(0,getCurrentTime(s)+delta));}
+function onSliderInput(s){setTime(s,parseFloat(document.getElementById("slider"+s).value));}
+</script>
+</body>
+</html>
