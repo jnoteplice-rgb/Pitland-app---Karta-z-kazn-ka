@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Pitland – Návod: iOS Zkratka</title>
+<style>
+  :root {
+    --pitland-red: #d32f2f;
+    --pitland-red-dark: #9a0007;
+    --bg: #0f0f10;
+    --card: #1b1b1e;
+    --text: #f5f5f5;
+    --muted: #a0a0a8;
+    --border: #2d2d33;
+    --accent-light: #8fc5f5;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg); color: var(--text);
+    min-height: 100vh;
+  }
+  .wrap { max-width: 600px; margin: 0 auto; padding: 24px 20px 80px; }
+  header { text-align: center; margin-bottom: 28px; }
+  header h1 { margin: 0 0 4px; font-size: 26px; color: var(--pitland-red); letter-spacing: 0.5px; }
+  header p { margin: 0; color: var(--muted); font-size: 14px; }
+  h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); margin: 0 0 16px; font-weight: 600; }
+  .section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 16px; }
+  .step { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px; }
+  .step:last-child { margin-bottom: 0; }
+  .step-num { flex-shrink: 0; width: 36px; height: 36px; background: var(--pitland-red); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700; }
+  .step-body { flex: 1; }
+  .step-title { font-size: 17px; font-weight: 600; margin-bottom: 4px; }
+  .step-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .step-desc strong { color: var(--text); }
+  .substeps { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .substep { background: #111114; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 14px; line-height: 1.5; }
+  .substep .tag { display: inline-block; background: #1a2c3a; color: var(--accent-light); border-radius: 6px; padding: 2px 8px; font-size: 12px; font-weight: 600; letter-spacing: 0.3px; margin-bottom: 6px; }
+  .substep code { display: block; margin-top: 6px; background: #222228; color: #e0e0e0; border-radius: 6px; padding: 8px 10px; font-family: "Courier New", monospace; font-size: 12px; word-break: break-all; white-space: pre-wrap; }
+  .tip { background: #1a2a1a; border: 1px solid #2e4d2e; border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #a0d8a0; line-height: 1.5; margin-top: 12px; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.3px; margin-bottom: 12px; }
+  .badge.jednou { background: #1a2c3a; color: var(--accent-light); }
+  .badge.vzdy { background: #2a1a1a; color: #f5a0a0; }
+  .link-btn { display: block; width: 100%; padding: 16px; background: var(--pitland-red); color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: 600; text-align: center; text-decoration: none; margin-top: 8px; }
+  .link-btn:active { background: var(--pitland-red-dark); }
+  footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 24px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>PITLAND</h1>
+    <p>Jak nahrát poradu přes iOS Zkratku</p>
+  </header>
+
+  <div class="section">
+    <h2>Jak to funguje</h2>
+    <p style="font-size:15px;line-height:1.6;margin:0 0 10px;">
+      Vytvoříš jednu Zkratku, která po nahrání v Diktafonu:
+    </p>
+    <ol style="margin:0;padding-left:20px;font-size:15px;line-height:2.2;">
+      <li>Pošle nahrávku na server</li>
+      <li>Otevře webový formulář — <strong>nahrávka je automaticky vložena</strong></li>
+      <li>Ty jen vyplníš jméno a druh a odešleš</li>
+    </ol>
+    <p style="font-size:14px;color:var(--muted);margin:12px 0 0;">
+      Zkratka se <strong>nikdy nemusí upravovat</strong> — formulář se může měnit bez zásahu.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="badge jednou">Jednou – nastavení Zkratky</div>
+    <h2>Vytvoření Zkratky</h2>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Nová zkratka</div>
+        <div class="step-desc">
+          Otevři aplikaci <strong>Zkratky</strong> → klepni <strong>+</strong> → <strong>Nová zkratka</strong>.<br>
+          Pojmenuj ji <strong>„Upload Pitland"</strong>.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Přidej 4 akce</div>
+        <div class="step-desc">Klepni na <strong>Přidat akci</strong> a přidej postupně:</div>
+        <div class="substeps">
+
+          <div class="substep">
+            <span class="tag">Akce 1</span><br>
+            Vyhledej: <strong>Zobrazit v listu sdílení</strong><br>
+            <span style="color:var(--muted);">Tím Zkratka přijme soubor z Diktafonu při sdílení.</span>
+          </div>
+
+          <div class="substep">
+            <span class="tag">Akce 2</span><br>
+            Vyhledej: <strong>Získat obsah URL</strong><br>
+            Nastav:<br>
+            <code>URL: https://script.google.com/macros/s/AKfycbz4pNkjjM0FBKUlCwVR97aiBWczlpL3fjw19Q7z8rDkP2xZVGVWASLmMxvx-6YXAuZb/exec?action=temp&filename=nahravka.m4a&mimeType=audio/m4a
+
+Metoda: POST
+Tělo požadavku: Soubor
+Soubor: Vstup zkratky  ← klepni na {x} → Vstup zkratky</code>
+          </div>
+
+          <div class="substep">
+            <span class="tag">Akce 3</span><br>
+            Vyhledej: <strong>Získat slovník z vstupu</strong><br>
+            <span style="color:var(--muted);">Vstup: výsledek Akce 2 (server vrátí JSON s klíčem „id").</span>
+          </div>
+
+          <div class="substep">
+            <span class="tag">Akce 4</span><br>
+            Vyhledej: <strong>Otevřít URL</strong><br>
+            Do pole URL vlož (kombinace textu + proměnné):
+            <code>https://jnoteplice-rgb.github.io/Pitland-app---Karta-z-kazn-ka/nahravky.html?load=</code>
+            Za <code>?load=</code> přidej proměnnou: klepni na <strong>{x}</strong> → Slovník → <strong>Hodnota pro klíč</strong> → napiš <strong>id</strong>.
+          </div>
+
+        </div>
+        <div class="tip">
+          Výsledek Akce 2 je JSON text. Akce 3 ho převede na Slovník, ze kterého Akce 4 přečte hodnotu klíče <code>id</code> — to je kód nahrávky na serveru.
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Povol Zkratku v listu sdílení</div>
+        <div class="step-desc">
+          V detailu Zkratky klepni na <strong>ⓘ</strong> (vpravo nahoře) →
+          zapni <strong>„Zobrazit v listu sdílení"</strong> →
+          přidej typ souboru <strong>Audio</strong>.<br><br>
+          Teď se Zkratka zobrazí v nabídce sdílení Diktafonu.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="badge vzdy">Každý den – použití</div>
+    <h2>Jak nahrát poradu</h2>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Nahraj v Diktafonu</div>
+        <div class="step-desc">Spusť nahrávání, po skončení zastav.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Sdílej přes zkratku</div>
+        <div class="step-desc">
+          Klepni na nahrávku → ikona sdílení <strong>⎋</strong> →
+          vyber <strong>Upload Pitland</strong>.<br>
+          Počkej 5–20 s (záleží na velikosti souboru).
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Vyplň a odešli</div>
+        <div class="step-desc">
+          Formulář se otevře s <strong>nahrávkou automaticky vloženou</strong>.
+          Vyplň jméno, druh → <strong>Nahrát na Drive</strong>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <a href="nahravky.html" class="link-btn">Otevřít formulář ↗</a>
+
+  <footer>Pitland · v1.2</footer>
+</div>
+</body>
+</html>
