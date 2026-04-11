@@ -171,8 +171,6 @@
       .catch(err => console.warn('[SW] Registrace selhala:', err));
   }
 
-  // Pokud jsme otevřeni přes sdílení z Diktafonu (?shared=1),
-  // načtem soubor z IndexedDB a předvyplníme formulář
   function nactiSdilenySoubor() {
     return new Promise((resolve) => {
       const dbReq = indexedDB.open('pitland-share', 1);
@@ -188,12 +186,9 @@
           req.onsuccess = () => {
             const file = req.result;
             if (file) {
-              // Smažeme záznam hned, aby se neobjevil při dalším otevření
               tx.objectStore('soubory').delete('cekajici');
               resolve(file);
-            } else {
-              resolve(null);
-            }
+            } else { resolve(null); }
           };
           req.onerror = () => resolve(null);
           tx.oncomplete = () => db.close();
@@ -204,7 +199,7 @@
   }
 
   // === KONFIGURACE ===
-  const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbyVYTiTQy664ltkejXrr2JDsj1ftR6hoHNYp1RbdNUTghkNuOgAthbb1mV7cYabJw3j/exec";
+  const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbz4pNkjjM0FBKUlCwVR97aiBWczlpL3fjw19Q7z8rDkP2xZVGVWASLmMxvx-6YXAuZb/exec";
   const MAX_SIZE_MB = 45;
   // ===================
 
@@ -233,13 +228,11 @@
     }
   });
 
-  // Automatická obnova jména z local storage
   try {
     const savedName = localStorage.getItem("pitland_jmeno");
     if (savedName) document.getElementById("jmeno").value = savedName;
   } catch (e) {}
 
-  // Pokud jsme přišli přes Web Share Target (sdílení z Diktafonu)
   if (location.search.includes('shared=1')) {
     nactiSdilenySoubor().then(file => {
       if (!file) return;
@@ -260,10 +253,8 @@
       fileName.textContent = f.name + " (" + sizeMb + " MB)";
       fileArea.classList.add("has-file");
       if (f.size > MAX_SIZE_MB * 1024 * 1024) {
-        showStatus("err", "Soubor je moc velký (" + sizeMb + " MB). Limit je " + MAX_SIZE_MB + " MB. Zkus nahrávku zkrátit nebo zkomprimovat.");
-      } else {
-        hideStatus();
-      }
+        showStatus("err", "Soubor je moc velký (" + sizeMb + " MB). Limit je " + MAX_SIZE_MB + " MB.");
+      } else { hideStatus(); }
     }
   });
 
@@ -271,9 +262,7 @@
     statusEl.className = "status show " + type;
     statusEl.textContent = msg;
   }
-  function hideStatus() {
-    statusEl.className = "status";
-  }
+  function hideStatus() { statusEl.className = "status"; }
 
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
@@ -292,32 +281,15 @@
     e.preventDefault();
     hideStatus();
 
-    if (WEBHOOK_URL.startsWith("ZDE_VLOZ")) {
-      showStatus("err", "Webhook URL není nastavená. Otevři nahravky.html a vlož URL z Apps Script (viz návod).");
-      return;
-    }
-
     const file = fileInput.files[0];
-    if (!file) {
-      showStatus("err", "Nejdřív vyber zvukový soubor.");
-      return;
-    }
-    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-      showStatus("err", "Soubor je moc velký. Limit " + MAX_SIZE_MB + " MB.");
-      return;
-    }
+    if (!file) { showStatus("err", "Nejdřív vyber zvukový soubor."); return; }
+    if (file.size > MAX_SIZE_MB * 1024 * 1024) { showStatus("err", "Soubor je moc velký. Limit " + MAX_SIZE_MB + " MB."); return; }
 
     const jmeno = document.getElementById("jmeno").value.trim();
     const druh = druhSelect.value;
     const skym = skymInput.value.trim();
-    if (!jmeno || !druh) {
-      showStatus("err", "Vyplň jméno a druh nahrávky.");
-      return;
-    }
-    if (DRUHY_S_KYM.includes(druh) && !skym) {
-      showStatus("err", "U tohoto druhu nahrávky vyplň, s kým to bylo.");
-      return;
-    }
+    if (!jmeno || !druh) { showStatus("err", "Vyplň jméno a druh nahrávky."); return; }
+    if (DRUHY_S_KYM.includes(druh) && !skym) { showStatus("err", "Vyplň, s kým to bylo."); return; }
 
     try { localStorage.setItem("pitland_jmeno", jmeno); } catch (e) {}
 
@@ -332,14 +304,7 @@
       progressBar.style.width = "45%";
       showStatus("info", "Odesílám na Drive… (může chvíli trvat)");
 
-      const payload = {
-        jmeno: jmeno,
-        druh: druh,
-        skym: skym,
-        filename: file.name,
-        mimeType: file.type || "audio/m4a",
-        data: base64
-      };
+      const payload = { jmeno, druh, skym, filename: file.name, mimeType: file.type || "audio/m4a", data: base64 };
 
       const res = await fetch(WEBHOOK_URL, {
         method: "POST",
@@ -348,7 +313,6 @@
       });
 
       progressBar.style.width = "90%";
-
       const text = await res.text();
       let result;
       try { result = JSON.parse(text); } catch (e) { result = { ok: false, error: text }; }
