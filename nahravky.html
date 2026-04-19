@@ -34,11 +34,12 @@
   header {
     text-align: center; margin-bottom: 28px;
   }
-  header h1 {
-    margin: 0 0 6px; font-size: 34px; font-weight: 800;
-    color: var(--pitland-green);
-    letter-spacing: 2px;
-    text-shadow: 0 0 24px var(--pitland-green-glow);
+  header .logo {
+    display: block;
+    width: 220px; max-width: 70%;
+    height: auto;
+    margin: 0 auto 10px;
+    filter: drop-shadow(0 0 18px var(--pitland-green-glow));
   }
   header p { margin: 0; color: var(--muted); font-size: 14px; }
   .card {
@@ -157,7 +158,7 @@
 <body>
 <div class="wrap">
   <header>
-    <h1>PITLAND</h1>
+    <img src="pitland_logo.png" alt="Pitland" class="logo">
     <p>Nahrání záznamu porady nebo tréninku</p>
   </header>
 
@@ -202,7 +203,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.3</footer>
+  <footer>Pitland · v1.4</footer>
 </div>
 
 <script>
