@@ -50,6 +50,10 @@
     display: block; font-size: 12px; color: var(--muted);
     margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;
     font-weight: 600;
+    transition: color 0.15s;
+  }
+  label.empty-required {
+    color: #ff4d4d;
   }
   input[type="text"], select {
     width: 100%; padding: 14px 16px;
@@ -164,12 +168,12 @@
 
   <form id="uploadForm" class="card">
     <div class="field">
-      <label for="jmeno">Kdo nahrává? (Jméno)</label>
+      <label for="jmeno" id="jmenoLabel">Kdo nahrává? (Jméno)</label>
       <input type="text" id="jmeno" name="jmeno" placeholder="např. Jiří" required autocomplete="given-name">
     </div>
 
     <div class="field">
-      <label for="druh">Druh nahrávky</label>
+      <label for="druh" id="druhLabel">Druh nahrávky</label>
       <select id="druh" name="druh" required>
         <option value="">— vyber —</option>
         <option value="briefing">Briefing</option>
@@ -182,12 +186,12 @@
     </div>
 
     <div class="field" id="skymField" style="display:none;">
-      <label for="skym">S kým</label>
+      <label for="skym" id="skymLabel">S kým</label>
       <input type="text" id="skym" name="skym" placeholder="např. Petr Novák" autocomplete="off">
     </div>
 
     <div class="field">
-      <label>Zvukový soubor</label>
+      <label id="fileLabel">Zvukový soubor</label>
       <label for="fileInput" class="file-area" id="fileArea">
         <div class="icon">🎙️</div>
         <div class="file-name" id="fileName">Klepni pro výběr nahrávky</div>
@@ -203,7 +207,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.4</footer>
+  <footer>Pitland · v1.5</footer>
 </div>
 
 <script>
@@ -263,12 +267,28 @@
   const druhSelect = document.getElementById("druh");
   const skymField = document.getElementById("skymField");
   const skymInput = document.getElementById("skym");
+  const jmenoInput = document.getElementById("jmeno");
+  const jmenoLabel = document.getElementById("jmenoLabel");
+  const druhLabel = document.getElementById("druhLabel");
+  const skymLabel = document.getElementById("skymLabel");
+  const fileLabel = document.getElementById("fileLabel");
 
-  // Druhy, u kterých se ptáme "s kým"
-  const DRUHY_S_KYM = ["meeting-1-1", "zpetna-vazba"];
+  // Druhy, u kterých se ptáme na další osoby
+  const DRUHY_S_KYM = ["meeting-1-1", "zpetna-vazba", "porada"];
 
-  druhSelect.addEventListener("change", () => {
-    if (DRUHY_S_KYM.includes(druhSelect.value)) {
+  // Popisky pro pole "s kým" podle druhu
+  const SKYM_LABELS = {
+    "meeting-1-1": { label: "S kým", placeholder: "např. Petr Novák" },
+    "zpetna-vazba": { label: "S kým", placeholder: "např. Petr Novák" },
+    "porada": { label: "Účastníci porady", placeholder: "např. Petr, Jana, Tomáš" }
+  };
+
+  function updateSkymField() {
+    const v = druhSelect.value;
+    if (DRUHY_S_KYM.includes(v)) {
+      const cfg = SKYM_LABELS[v] || { label: "S kým", placeholder: "" };
+      skymLabel.textContent = cfg.label;
+      skymInput.placeholder = cfg.placeholder;
       skymField.style.display = "block";
       skymInput.setAttribute("required", "required");
     } else {
@@ -276,13 +296,35 @@
       skymInput.removeAttribute("required");
       skymInput.value = "";
     }
-  });
+    updateRequiredLabels();
+  }
+
+  druhSelect.addEventListener("change", updateSkymField);
+
+  // === Červené popisky pro prázdná povinná pole ===
+  function updateRequiredLabels() {
+    jmenoLabel.classList.toggle("empty-required", !jmenoInput.value.trim());
+    druhLabel.classList.toggle("empty-required", !druhSelect.value);
+    if (skymField.style.display !== "none") {
+      skymLabel.classList.toggle("empty-required", !skymInput.value.trim());
+    } else {
+      skymLabel.classList.remove("empty-required");
+    }
+    const hasFile = fileInput.files && fileInput.files.length > 0;
+    fileLabel.classList.toggle("empty-required", !hasFile);
+  }
+
+  jmenoInput.addEventListener("input", updateRequiredLabels);
+  skymInput.addEventListener("input", updateRequiredLabels);
 
   // Automatická obnova jména z local storage (ať to SAM nepíše pořád dokola)
   try {
     const savedName = localStorage.getItem("pitland_jmeno");
-    if (savedName) document.getElementById("jmeno").value = savedName;
+    if (savedName) jmenoInput.value = savedName;
   } catch (e) {}
+
+  // Nastav počáteční stav červených popisků
+  updateRequiredLabels();
 
   // Pokud jsme přišli přes Web Share Target (sdílení z Diktafonu),
   // automaticky předvyplníme soubor z IndexedDB
@@ -297,6 +339,7 @@
       const sizeMb = (file.size / 1024 / 1024).toFixed(1);
       fileName.textContent = file.name + " (" + sizeMb + " MB)";
       fileArea.classList.add("has-file");
+      updateRequiredLabels();
       showStatus("info", "✔ Nahrávka z Diktafonu načtena. Vyplň zbývající pole a odešli.");
     });
   }
@@ -321,6 +364,7 @@
         const sizeMb = (file.size / 1024 / 1024).toFixed(1);
         fileName.textContent = file.name + ' (' + sizeMb + ' MB)';
         fileArea.classList.add('has-file');
+        updateRequiredLabels();
         showStatus('info', '✔ Nahrávka načtena. Vyplň jméno a druh a odešli.');
         // Odstraníme ?load=ID z URL bez obnovení stránky
         history.replaceState(null, '', location.pathname);
@@ -340,6 +384,7 @@
         hideStatus();
       }
     }
+    updateRequiredLabels();
   });
 
   function showStatus(type, msg) {
@@ -437,6 +482,7 @@
         fileInput.value = "";
         fileName.textContent = "Klepni pro výběr nahrávky";
         fileArea.classList.remove("has-file");
+        updateRequiredLabels();
       } else {
         throw new Error(result.error || ("HTTP " + res.status));
       }
