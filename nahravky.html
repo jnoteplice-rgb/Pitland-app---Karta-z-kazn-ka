@@ -191,6 +191,11 @@
       <input type="text" id="skym" name="skym" placeholder="např. Petr Novák" autocomplete="off">
     </div>
 
+    <div class="field" id="popisField" style="display:none;">
+      <label for="popis" id="popisLabel">Krátký popis</label>
+      <input type="text" id="popis" name="popis" placeholder="např. koučink, stížnost zákazníka…" autocomplete="off">
+    </div>
+
     <div class="field">
       <label id="fileLabel">Zvukový soubor</label>
       <label for="fileInput" class="file-area" id="fileArea">
@@ -209,7 +214,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.11</footer>
+  <footer>Pitland · v1.12</footer>
 </div>
 
 <script>
@@ -263,6 +268,9 @@
   const druhSelect  = document.getElementById("druh");
   const skymField   = document.getElementById("skymField");
   const skymInput   = document.getElementById("skym");
+  const popisField  = document.getElementById("popisField");
+  const popisInput  = document.getElementById("popis");
+  const popisLabel  = document.getElementById("popisLabel");
   const jmenoInput  = document.getElementById("jmeno");
   const jmenoLabel  = document.getElementById("jmenoLabel");
   const druhLabel   = document.getElementById("druhLabel");
@@ -291,6 +299,12 @@
       skymField.style.display = "none";
       skymInput.value = "";
     }
+    if (v === "jine") {
+      popisField.style.display = "block";
+    } else {
+      popisField.style.display = "none";
+      popisInput.value = "";
+    }
     updateRequiredLabels();
   }
   druhSelect.addEventListener("change", updateSkymField);
@@ -303,10 +317,16 @@
     } else {
       skymLabel.classList.remove("empty-required");
     }
+    if (popisField.style.display !== "none") {
+      popisLabel.classList.toggle("empty-required", !popisInput.value.trim());
+    } else {
+      popisLabel.classList.remove("empty-required");
+    }
     fileLabel.classList.toggle("empty-required", !currentFile);
   }
   jmenoInput.addEventListener("input", updateRequiredLabels);
   skymInput.addEventListener("input", updateRequiredLabels);
+  popisInput.addEventListener("input", updateRequiredLabels);
 
   try {
     const savedName = localStorage.getItem("pitland_jmeno");
@@ -515,8 +535,10 @@
     const jmeno = jmenoInput.value.trim();
     const druh  = druhSelect.value;
     const skym  = skymInput.value.trim();
+    const popis = popisInput.value.trim();
     if (!jmeno || !druh) { showStatus("err", "Vyplň jméno a druh nahrávky."); updateRequiredLabels(); return; }
     if (DRUHY_S_KYM.includes(druh) && !skym) { showStatus("err", "Vyplň s kým to bylo."); updateRequiredLabels(); return; }
+    if (druh === "jine" && !popis) { showStatus("err", "Vyplň krátký popis (bude součástí názvu souboru)."); updateRequiredLabels(); return; }
     try { localStorage.setItem("pitland_jmeno", jmeno); } catch (e) {}
     submitBtn.disabled = true;
     submitBtn.textContent = "Nahrávám…";
@@ -527,7 +549,7 @@
       const base64 = await fileToBase64(currentFile);
       progressBar.style.width = "45%";
       showStatus("info", "Odesílám na Drive… (může chvíli trvat)");
-      const payload = { jmeno, druh, skym, filename: currentFile.name, mimeType: currentFile.type || "audio/mp3", data: base64 };
+      const payload = { jmeno, druh, skym, popis, filename: currentFile.name, mimeType: currentFile.type || "audio/mp3", data: base64 };
       const res = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
