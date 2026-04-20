@@ -167,15 +167,15 @@
     <p>Nahrání záznamu porady nebo trénínku</p>
   </header>
 
-  <form id="uploadForm" class="card">
+  <form id="uploadForm" class="card" novalidate>
     <div class="field">
       <label for="jmeno" id="jmenoLabel">Kdo nahrává? (Jméno)</label>
-      <input type="text" id="jmeno" name="jmeno" placeholder="např. Jiří" required autocomplete="given-name">
+      <input type="text" id="jmeno" name="jmeno" placeholder="např. Jiří" autocomplete="given-name">
     </div>
 
     <div class="field">
       <label for="druh" id="druhLabel">Druh nahrávky</label>
-      <select id="druh" name="druh" required>
+      <select id="druh" name="druh">
         <option value="">— vyber —</option>
         <option value="briefing">Briefing</option>
         <option value="debriefing">Debriefing</option>
@@ -199,16 +199,17 @@
         <div class="hint">.m4a, .mp3, .wav, .aac</div>
         <span class="file-btn">Vybrat soubor</span>
       </label>
-      <input type="file" id="fileInput" name="file" accept="audio/*" required>
+      <input type="file" id="fileInput" name="file" accept="audio/*">
     </div>
 
-    <button type="submit" class="submit" id="submitBtn">Nahrát na Drive</button>
+    <!-- type="button" — obchází HTML5 validaci, vše kontrolujeme v JS -->
+    <button type="button" class="submit" id="submitBtn">Nahrát na Drive</button>
 
     <div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div>
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.10</footer>
+  <footer>Pitland · v1.11</footer>
 </div>
 
 <script>
@@ -248,7 +249,7 @@
   // ── Konfigurace ──────────────────────────────────────────────────────────
   const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxBMBHjX2L8yIMlkpSKkfx16gHyj5VE80k0pEaybWHr5G3HT962zlQtvLv6tBk1YyDX/exec";
   const MAX_SIZE_MB = 45;
-  const MP3_KBPS   = 64;  // kvalita MP3 (64 kbps mono = menší než originál, pro hlas ideální)
+  const MP3_KBPS   = 64;  // 64 kbps mono = menší než originál, pro hlas ideální
 
   // ── DOM ─────────────────────────────────────────────────────────────────
   const form        = document.getElementById("uploadForm");
@@ -286,10 +287,8 @@
       skymLabel.textContent = cfg.label;
       skymInput.placeholder = cfg.placeholder;
       skymField.style.display = "block";
-      skymInput.setAttribute("required", "required");
     } else {
       skymField.style.display = "none";
-      skymInput.removeAttribute("required");
       skymInput.value = "";
     }
     updateRequiredLabels();
@@ -329,7 +328,7 @@
       const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
       audioCtx.close();
 
-      // Mixdown na mono (menší soubor, rychlejší kódování, pro hlas ideální)
+      // Mixdown na mono
       const numCh = audioBuffer.numberOfChannels;
       const len   = audioBuffer.length;
       const mono  = new Float32Array(len);
@@ -350,11 +349,10 @@
       const monoI16   = f32ToI16(mono);
       const mp3enc    = new lamejs.Mp3Encoder(1, audioBuffer.sampleRate, MP3_KBPS);
       const BLOCK     = 1152;
-      const CHUNK     = 50;   // bloků za jeden setTimeout tick
+      const CHUNK     = 50;
       const mp3chunks = [];
       const total     = Math.ceil(monoI16.length / BLOCK);
 
-      // Chunked kódování — browser nezamrzne, progress se aktualizuje
       await new Promise((resolve) => {
         let b = 0;
         function tick() {
@@ -509,17 +507,16 @@
     });
   }
 
-  // ── Odeslání ──────────────────────────────────────────────────────────────
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  // ── Odeslání (type="button" → click handler, žádná HTML5 validace) ────────
+  submitBtn.addEventListener("click", async () => {
     hideStatus();
     if (!currentFile) { showStatus("err", "Nejdřív vyber zvukový soubor."); return; }
     if (currentFile.size > MAX_SIZE_MB * 1024 * 1024) { showStatus("err", "Soubor je moc velký. Limit " + MAX_SIZE_MB + " MB."); return; }
     const jmeno = jmenoInput.value.trim();
     const druh  = druhSelect.value;
     const skym  = skymInput.value.trim();
-    if (!jmeno || !druh) { showStatus("err", "Vyplň jméno a druh nahrávky."); return; }
-    if (DRUHY_S_KYM.includes(druh) && !skym) { showStatus("err", "Vyplň s kým to bylo."); return; }
+    if (!jmeno || !druh) { showStatus("err", "Vyplň jméno a druh nahrávky."); updateRequiredLabels(); return; }
+    if (DRUHY_S_KYM.includes(druh) && !skym) { showStatus("err", "Vyplň s kým to bylo."); updateRequiredLabels(); return; }
     try { localStorage.setItem("pitland_jmeno", jmeno); } catch (e) {}
     submitBtn.disabled = true;
     submitBtn.textContent = "Nahrávám…";
