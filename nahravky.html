@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Pitland – Nahrání záznamu</title>
 <link rel="manifest" href="nahravky-manifest.json">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
 <style>
   :root {
     --pitland-green: #c6ff00;
@@ -207,7 +208,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.8</footer>
+  <footer>Pitland · v1.9</footer>
 </div>
 
 <script>
@@ -216,6 +217,7 @@
       .catch(err => console.warn('[SW] Registrace selhala:', err));
   }
 
+  // ── Sdílení přes IndexedDB ───────────────────────────────────────────────
   function nactiSdilenySoubor() {
     return new Promise((resolve) => {
       const dbReq = indexedDB.open('pitland-share', 1);
@@ -243,26 +245,33 @@
     });
   }
 
+  // ── Konfigurace ──────────────────────────────────────────────────────────
   const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxBMBHjX2L8yIMlkpSKkfx16gHyj5VE80k0pEaybWHr5G3HT962zlQtvLv6tBk1YyDX/exec";
   const MAX_SIZE_MB = 45;
+  const MP3_KBPS   = 128; // kvalita MP3 (pro řeč stačí 128)
 
-  const form = document.getElementById("uploadForm");
-  const fileInput = document.getElementById("fileInput");
-  const fileArea = document.getElementById("fileArea");
-  const fileName = document.getElementById("fileName");
-  const submitBtn = document.getElementById("submitBtn");
-  const statusEl = document.getElementById("status");
-  const progress = document.getElementById("progress");
+  // ── DOM ─────────────────────────────────────────────────────────────────
+  const form        = document.getElementById("uploadForm");
+  const fileInput   = document.getElementById("fileInput");
+  const fileArea    = document.getElementById("fileArea");
+  const fileName    = document.getElementById("fileName");
+  const submitBtn   = document.getElementById("submitBtn");
+  const statusEl    = document.getElementById("status");
+  const progress    = document.getElementById("progress");
   const progressBar = document.getElementById("progressBar");
-  const druhSelect = document.getElementById("druh");
-  const skymField = document.getElementById("skymField");
-  const skymInput = document.getElementById("skym");
-  const jmenoInput = document.getElementById("jmeno");
-  const jmenoLabel = document.getElementById("jmenoLabel");
-  const druhLabel = document.getElementById("druhLabel");
-  const skymLabel = document.getElementById("skymLabel");
-  const fileLabel = document.getElementById("fileLabel");
+  const druhSelect  = document.getElementById("druh");
+  const skymField   = document.getElementById("skymField");
+  const skymInput   = document.getElementById("skym");
+  const jmenoInput  = document.getElementById("jmeno");
+  const jmenoLabel  = document.getElementById("jmenoLabel");
+  const druhLabel   = document.getElementById("druhLabel");
+  const skymLabel   = document.getElementById("skymLabel");
+  const fileLabel   = document.getElementById("fileLabel");
 
+  // Aktuálně připravený soubor (po případné konverzi)
+  let currentFile = null;
+
+  // ── Pole „S kým" ─────────────────────────────────────────────────────────
   const DRUHY_S_KYM = ["meeting-1-1", "zpetna-vazba", "porada"];
   const SKYM_LABELS = {
     "meeting-1-1": { label: "S kým", placeholder: "např. Petr Novák" },
@@ -295,8 +304,7 @@
     } else {
       skymLabel.classList.remove("empty-required");
     }
-    const hasFile = fileInput.files && fileInput.files.length > 0;
-    fileLabel.classList.toggle("empty-required", !hasFile);
+    fileLabel.classList.toggle("empty-required", !currentFile);
   }
   jmenoInput.addEventListener("input", updateRequiredLabels);
   skymInput.addEventListener("input", updateRequiredLabels);
@@ -307,20 +315,85 @@
   } catch (e) {}
   updateRequiredLabels();
 
+  // ── Konverze M4A → MP3 (lamejs) ──────────────────────────────────────────
+  async function convertToMp3(file) {
+    // Pokud je soubor již MP3, není co dělat
+    if (/\.mp3$/i.test(file.name)) return file;
+
+    showStatus('info', '🔄 Konvertuji na MP3 (128 kbps)… chvíli strpení.');
+    submitBtn.disabled = true;
+
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      const audioCtx = new AudioCtx();
+      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+      audioCtx.close();
+
+      const channels   = Math.min(audioBuffer.numberOfChannels, 2);
+      const sampleRate = audioBuffer.sampleRate;
+      const mp3enc     = new lamejs.Mp3Encoder(channels, sampleRate, MP3_KBPS);
+      const BLOCK      = 1152;
+      const mp3chunks  = [];
+
+      function f32ToI16(buf) {
+        const out = new Int16Array(buf.length);
+        for (let i = 0; i < buf.length; i++) {
+          const s = Math.max(-1, Math.min(1, buf[i]));
+          out[i] = s < 0 ? s * 32768 : s * 32767;
+        }
+        return out;
+      }
+
+      const left  = f32ToI16(audioBuffer.getChannelData(0));
+      const right = channels > 1 ? f32ToI16(audioBuffer.getChannelData(1)) : left;
+
+      for (let i = 0; i < left.length; i += BLOCK) {
+        const l   = left.subarray(i, i + BLOCK);
+        const r   = right.subarray(i, i + BLOCK);
+        const buf = channels > 1 ? mp3enc.encodeBuffer(l, r) : mp3enc.encodeBuffer(l);
+        if (buf.length > 0) mp3chunks.push(buf);
+      }
+      const flush = mp3enc.flush();
+      if (flush.length > 0) mp3chunks.push(flush);
+
+      const blob    = new Blob(mp3chunks, { type: 'audio/mp3' });
+      const newName = file.name.replace(/\.[^.]+$/, '') + '.mp3';
+      const mp3File = new File([blob], newName, { type: 'audio/mp3' });
+
+      const origMb = (file.size / 1024 / 1024).toFixed(1);
+      const mp3Mb  = (mp3File.size / 1024 / 1024).toFixed(1);
+      showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 128 kbps)');
+      submitBtn.disabled = false;
+      return mp3File;
+
+    } catch (err) {
+      showStatus('err', '❌ Konverze selhala: ' + err.message + ' — nahrávám originál.');
+      submitBtn.disabled = false;
+      return file; // fallback: nahraj originál
+    }
+  }
+
+  // ── Pomocná funkce pro nastavení souboru v UI ─────────────────────────────
+  async function setFile(file) {
+    currentFile = await convertToMp3(file);
+    const sizeMb = (currentFile.size / 1024 / 1024).toFixed(1);
+    fileName.textContent = currentFile.name + " (" + sizeMb + " MB)";
+    fileArea.classList.add("has-file");
+    updateRequiredLabels();
+  }
+
+  // ── Sdílení ?shared=1 ────────────────────────────────────────────────────
   if (location.search.includes('shared=1')) {
-    nactiSdilenySoubor().then(file => {
+    nactiSdilenySoubor().then(async file => {
       if (!file) return;
-      const dt = new DataTransfer();
-      dt.items.add(file);
-      fileInput.files = dt.files;
-      const sizeMb = (file.size / 1024 / 1024).toFixed(1);
-      fileName.textContent = file.name + " (" + sizeMb + " MB)";
-      fileArea.classList.add("has-file");
-      updateRequiredLabels();
-      showStatus("info", "✔ Nahrávka z Diktafonu načtena. Vyplň zbývající pole a odešli.");
+      await setFile(file);
+      if (!statusEl.classList.contains('err'))
+        showStatus("info", "✔ Nahrávka načtena. Vyplň zbývající pole a odešli.");
     });
   }
 
+  // ── ?load=ID (iOS Zkratka) ───────────────────────────────────────────────
   const loadId = new URLSearchParams(location.search).get('load');
   if (loadId) {
     (async function pollTempFile() {
@@ -329,19 +402,14 @@
       showStatus('info', '⏳ Načítám nahrávku ze Zkratky… (1/' + MAX_ATTEMPTS + ')');
       for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
         try {
-          const r = await fetch(WEBHOOK_URL + '?id=' + encodeURIComponent(loadId));
+          const r      = await fetch(WEBHOOK_URL + '?id=' + encodeURIComponent(loadId));
           const result = await r.json();
           if (result.ok && result.data) {
             const bytes = Uint8Array.from(atob(result.data), c => c.charCodeAt(0));
-            const file = new File([bytes], result.filename || 'nahravka.m4a', { type: result.mimeType || 'audio/m4a' });
-            const dt = new DataTransfer();
-            dt.items.add(file);
-            fileInput.files = dt.files;
-            const sizeMb = (file.size / 1024 / 1024).toFixed(1);
-            fileName.textContent = file.name + ' (' + sizeMb + ' MB)';
-            fileArea.classList.add('has-file');
-            updateRequiredLabels();
-            showStatus('info', '✔ Nahrávka načtena. Vyplň jméno a druh a odešli.');
+            const raw   = new File([bytes], result.filename || 'nahravka.m4a', { type: result.mimeType || 'audio/m4a' });
+            await setFile(raw);
+            if (!statusEl.classList.contains('err'))
+              showStatus('info', '✔ Nahrávka načtena. Vyplň jméno a druh a odešli.');
             history.replaceState(null, '', location.pathname);
             return;
           }
@@ -357,7 +425,7 @@
     })();
   }
 
-  // ?paste= — base64 audio je ve schrance
+  // ── ?paste= (base64 ve schránce) ─────────────────────────────────────────
   const _pp = new URLSearchParams(location.search);
   const pasteId = _pp.get('paste') || '';
   if (_pp.has('paste')) {
@@ -377,18 +445,11 @@
       btn.disabled = true;
       btn.textContent = 'Načítám...';
       try {
-        const b64 = await navigator.clipboard.readText();
+        const b64   = await navigator.clipboard.readText();
         if (!b64 || b64.length < 100) throw new Error('Schránka neobsahuje platná data.');
         const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-        const file = new File([bytes], 'nahravka_' + (pasteId || Date.now()) + '.m4a', { type: 'audio/m4a' });
-        const dt = new DataTransfer();
-        dt.items.add(file);
-        fileInput.files = dt.files;
-        const sizeMb = (file.size / 1024 / 1024).toFixed(1);
-        fileName.textContent = file.name + ' (' + sizeMb + ' MB)';
-        fileArea.classList.add('has-file');
-        updateRequiredLabels();
-        showStatus('info', '✔ Nahrávka načtena (' + sizeMb + ' MB). Vyplň jméno a druh a odešli.');
+        const raw   = new File([bytes], 'nahravka_' + (pasteId || Date.now()) + '.m4a', { type: 'audio/m4a' });
+        await setFile(raw);
         history.replaceState(null, '', location.pathname);
         pasteWrap.remove();
       } catch (err) {
@@ -399,19 +460,20 @@
     };
   }
 
-  fileInput.addEventListener("change", () => {
+  // ── Přímý výběr souboru ───────────────────────────────────────────────────
+  fileInput.addEventListener("change", async () => {
     if (fileInput.files && fileInput.files[0]) {
       const f = fileInput.files[0];
-      const sizeMb = (f.size / 1024 / 1024).toFixed(1);
-      fileName.textContent = f.name + " (" + sizeMb + " MB)";
-      fileArea.classList.add("has-file");
       if (f.size > MAX_SIZE_MB * 1024 * 1024) {
-        showStatus("err", "Soubor je moc velký (" + sizeMb + " MB). Limit je " + MAX_SIZE_MB + " MB.");
-      } else { hideStatus(); }
+        showStatus("err", "Soubor je moc velký (" + (f.size/1024/1024).toFixed(1) + " MB). Limit je " + MAX_SIZE_MB + " MB.");
+        return;
+      }
+      await setFile(f);
     }
     updateRequiredLabels();
   });
 
+  // ── Pomocné funkce ────────────────────────────────────────────────────────
   function showStatus(type, msg) {
     statusEl.className = "status show " + type;
     statusEl.textContent = msg;
@@ -430,15 +492,15 @@
     });
   }
 
+  // ── Odeslání ──────────────────────────────────────────────────────────────
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     hideStatus();
-    const file = fileInput.files[0];
-    if (!file) { showStatus("err", "Nejdřív vyber zvukový soubor."); return; }
-    if (file.size > MAX_SIZE_MB * 1024 * 1024) { showStatus("err", "Soubor je moc velký. Limit " + MAX_SIZE_MB + " MB."); return; }
+    if (!currentFile) { showStatus("err", "Nejdřív vyber zvukový soubor."); return; }
+    if (currentFile.size > MAX_SIZE_MB * 1024 * 1024) { showStatus("err", "Soubor je moc velký. Limit " + MAX_SIZE_MB + " MB."); return; }
     const jmeno = jmenoInput.value.trim();
-    const druh = druhSelect.value;
-    const skym = skymInput.value.trim();
+    const druh  = druhSelect.value;
+    const skym  = skymInput.value.trim();
     if (!jmeno || !druh) { showStatus("err", "Vyplň jméno a druh nahrávky."); return; }
     if (DRUHY_S_KYM.includes(druh) && !skym) { showStatus("err", "Vyplň s kým to bylo."); return; }
     try { localStorage.setItem("pitland_jmeno", jmeno); } catch (e) {}
@@ -448,10 +510,10 @@
     progressBar.style.width = "15%";
     showStatus("info", "Připravuji soubor…");
     try {
-      const base64 = await fileToBase64(file);
+      const base64 = await fileToBase64(currentFile);
       progressBar.style.width = "45%";
       showStatus("info", "Odesílám na Drive… (může chvíli trvat)");
-      const payload = { jmeno, druh, skym, filename: file.name, mimeType: file.type || "audio/m4a", data: base64 };
+      const payload = { jmeno, druh, skym, filename: currentFile.name, mimeType: currentFile.type || "audio/mp3", data: base64 };
       const res = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -463,9 +525,10 @@
       try { result = JSON.parse(text); } catch (e) { result = { ok: false, error: text }; }
       if (res.ok && result.ok) {
         progressBar.style.width = "100%";
-        showStatus("ok", "✅ Hotovo! Soubor uložen jako: " + (result.filename || file.name));
+        showStatus("ok", "✅ Hotovo! Soubor uložen jako: " + (result.filename || currentFile.name));
         submitBtn.textContent = "Nahrát další";
         fileInput.value = "";
+        currentFile = null;
         fileName.textContent = "Klepni pro výběr nahrávky";
         fileArea.classList.remove("has-file");
         updateRequiredLabels();
