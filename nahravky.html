@@ -369,8 +369,9 @@
   }
 
   // ?paste=ID — base64 audio je ve schrance, user ho nacte klepnutim
-  const pasteId = new URLSearchParams(location.search).get('paste');
-  if (pasteId) {
+  const _pasteParams = new URLSearchParams(location.search);
+  const pasteId = _pasteParams.get('paste') || '';
+  if (_pasteParams.has('paste')) {
     const pasteWrap = document.createElement('div');
     pasteWrap.style.cssText = 'margin-bottom:16px;';
     pasteWrap.innerHTML =
