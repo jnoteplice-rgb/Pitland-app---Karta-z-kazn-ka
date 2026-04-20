@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Pitland – Nahrání záznamu</title>
+<title>Pitland â NahrÃ¡nÃ­ zÃ¡znamu</title>
 <link rel="manifest" href="nahravky-manifest.json">
 <style>
   :root {
@@ -163,51 +163,51 @@
 <div class="wrap">
   <header>
     <img src="pitland_logo.png" alt="Pitland" class="logo">
-    <p>Nahrání záznamu porady nebo tréninku</p>
+    <p>NahrÃ¡nÃ­ zÃ¡znamu porady nebo trÃ©nÃ­nku</p>
   </header>
 
   <form id="uploadForm" class="card">
     <div class="field">
-      <label for="jmeno" id="jmenoLabel">Kdo nahrává? (Jméno)</label>
-      <input type="text" id="jmeno" name="jmeno" placeholder="např. Jiří" required autocomplete="given-name">
+      <label for="jmeno" id="jmenoLabel">Kdo nahrÃ¡vÃ¡? (JmÃ©no)</label>
+      <input type="text" id="jmeno" name="jmeno" placeholder="napÅ. JiÅÃ­" required autocomplete="given-name">
     </div>
 
     <div class="field">
-      <label for="druh" id="druhLabel">Druh nahrávky</label>
+      <label for="druh" id="druhLabel">Druh nahrÃ¡vky</label>
       <select id="druh" name="druh" required>
-        <option value="">— vyber —</option>
+        <option value="">â vyber â</option>
         <option value="briefing">Briefing</option>
         <option value="debriefing">Debriefing</option>
         <option value="meeting-1-1">Meeting 1:1</option>
-        <option value="zpetna-vazba">Zpětná vazba</option>
+        <option value="zpetna-vazba">ZpÄtnÃ¡ vazba</option>
         <option value="porada">Porada</option>
-        <option value="jine">Jiné</option>
+        <option value="jine">JinÃ©</option>
       </select>
     </div>
 
     <div class="field" id="skymField" style="display:none;">
-      <label for="skym" id="skymLabel">S kým</label>
-      <input type="text" id="skym" name="skym" placeholder="např. Petr Novák" autocomplete="off">
+      <label for="skym" id="skymLabel">S kÃ½m</label>
+      <input type="text" id="skym" name="skym" placeholder="napÅ. Petr NovÃ¡k" autocomplete="off">
     </div>
 
     <div class="field">
-      <label id="fileLabel">Zvukový soubor</label>
+      <label id="fileLabel">ZvukovÃ½ soubor</label>
       <label for="fileInput" class="file-area" id="fileArea">
-        <div class="icon">🎙️</div>
-        <div class="file-name" id="fileName">Klepni pro výběr nahrávky</div>
+        <div class="icon">ðï¸</div>
+        <div class="file-name" id="fileName">Klepni pro vÃ½bÄr nahrÃ¡vky</div>
         <div class="hint">.m4a, .mp3, .wav, .aac</div>
         <span class="file-btn">Vybrat soubor</span>
       </label>
       <input type="file" id="fileInput" name="file" accept="audio/*" required>
     </div>
 
-    <button type="submit" class="submit" id="submitBtn">Nahrát na Drive</button>
+    <button type="submit" class="submit" id="submitBtn">NahrÃ¡t na Drive</button>
 
     <div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div>
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.5</footer>
+  <footer>Pitland Â· v1.5</footer>
 </div>
 
 <script>
@@ -217,8 +217,8 @@
       .catch(err => console.warn('[SW] Registrace selhala:', err));
   }
 
-  // Pokud jsme otevřeni přes sdílení z Diktafonu (?shared=1),
-  // načteme soubor z IndexedDB a předvyplníme formulář
+  // Pokud jsme otevÅeni pÅes sdÃ­lenÃ­ z Diktafonu (?shared=1),
+  // naÄteme soubor z IndexedDB a pÅedvyplnÃ­me formulÃ¡Å
   function nactiSdilenySoubor() {
     return new Promise((resolve) => {
       const dbReq = indexedDB.open('pitland-share', 1);
@@ -234,7 +234,7 @@
           req.onsuccess = () => {
             const file = req.result;
             if (file) {
-              // Smažeme záznam hned, aby se neobjevil při dalším otevření
+              // SmaÅ¾eme zÃ¡znam hned, aby se neobjevil pÅi dalÅ¡Ã­m otevÅenÃ­
               tx.objectStore('soubory').delete('cekajici');
               resolve(file);
             } else {
@@ -250,11 +250,11 @@
   }
 
   // === KONFIGURACE ===
-  // Sem vlož URL nasazeného Google Apps Script webhooku (viz NAVOD-NAHRAVKY.md)
-  const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbz4pNkjjM0FBKUlCwVR97aiBWczlpL3fjw19Q7z8rDkP2xZVGVWASLmMxvx-6YXAuZb/exec";
-  // Max. velikost (Apps Script má limit cca 50 MB na doPost payload)
+  // Sem vloÅ¾ URL nasazenÃ©ho Google Apps Script webhooku (viz NAVOD-NAHRAUDÙ,Íd)
+  const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbwjRZEsl9l7Lqjk0US27Wisu4AfJzOoLixxYdaeuibn1UwErUzdOpgnreMMWjsp1s6k/exec";
+  // Max. velikost (Apps Script mÃ¡ limit cca 50 MB na doPost payload)
   const MAX_SIZE_MB = 45;
-  // ===================
+  // ==================
 
   const form = document.getElementById("uploadForm");
   const fileInput = document.getElementById("fileInput");
@@ -273,20 +273,20 @@
   const skymLabel = document.getElementById("skymLabel");
   const fileLabel = document.getElementById("fileLabel");
 
-  // Druhy, u kterých se ptáme na další osoby
+  // Druhy, u kterÃ½ch se ptÃ¡me na dalÅ¡Ã­ osoby
   const DRUHY_S_KYM = ["meeting-1-1", "zpetna-vazba", "porada"];
 
-  // Popisky pro pole "s kým" podle druhu
+  // Popisky pro pole "s kÃ½m" podle druhu
   const SKYM_LABELS = {
-    "meeting-1-1": { label: "S kým", placeholder: "např. Petr Novák" },
-    "zpetna-vazba": { label: "S kým", placeholder: "např. Petr Novák" },
-    "porada": { label: "Účastníci porady", placeholder: "např. Petr, Jana, Tomáš" }
+    "meeting-1-1": { label: "S kÃ½m", placeholder: "napÅ. Petr NovÃ¡k" },
+    "zpetna-vazba": { label: "S kÃ½m", placeholder: "napÅ. Petr NovÃ¡k" },
+    "porada": { label: "ÃÄastnÃ­ci porady", placeholder: "napÅ. Petr, Jana, TomÃ¡Å¡" }
   };
 
   function updateSkymField() {
     const v = druhSelect.value;
     if (DRUHY_S_KYM.includes(v)) {
-      const cfg = SKYM_LABELS[v] || { label: "S kým", placeholder: "" };
+      const cfg = SKYM_LABELS[v] || { label: "S kÃ½m", placeholder: "" };
       skymLabel.textContent = cfg.label;
       skymInput.placeholder = cfg.placeholder;
       skymField.style.display = "block";
@@ -301,7 +301,7 @@
 
   druhSelect.addEventListener("change", updateSkymField);
 
-  // === Červené popisky pro prázdná povinná pole ===
+  // === ÄervenÃ© popisky pro prÃ¡zdnÃ¡ povinnÃ¡ pole ===
   function updateRequiredLabels() {
     jmenoLabel.classList.toggle("empty-required", !jmenoInput.value.trim());
     druhLabel.classList.toggle("empty-required", !druhSelect.value);
@@ -317,59 +317,76 @@
   jmenoInput.addEventListener("input", updateRequiredLabels);
   skymInput.addEventListener("input", updateRequiredLabels);
 
-  // Automatická obnova jména z local storage (ať to SAM nepíše pořád dokola)
+  // AutomatickÃ¡ obnova jmÃ©na z local storage (aÅ¥ to SAM nepÃ­Å¡e poÅÃ¡d dokola)
   try {
     const savedName = localStorage.getItem("pitland_jmeno");
     if (savedName) jmenoInput.value = savedName;
   } catch (e) {}
 
-  // Nastav počáteční stav červených popisků
+  // Nastav poÄÃ¡teÄnÃ­ stav ÄervenÃ½ch popiskÅ¯
   updateRequiredLabels();
 
-  // Pokud jsme přišli přes Web Share Target (sdílení z Diktafonu),
-  // automaticky předvyplníme soubor z IndexedDB
+  // Pokud jsme pÅiÅ¡li pÅes Web Share Target (sdÃ­lenÃ­ z Diktafonu),
+  // automaticky pÅedvyplnÃ­me soubor z IndexedDB
   if (location.search.includes('shared=1')) {
     nactiSdilenySoubor().then(file => {
       if (!file) return;
-      // Vložíme soubor do file inputu přes DataTransfer
+      // VloÅ¾Ã­me soubor do file inputu pÅes DataTransfer
       const dt = new DataTransfer();
       dt.items.add(file);
       fileInput.files = dt.files;
-      // Zobrazíme název a velikost
+      // ZobrazÃ­me nÃ¡zev a velikost
       const sizeMb = (file.size / 1024 / 1024).toFixed(1);
       fileName.textContent = file.name + " (" + sizeMb + " MB)";
       fileArea.classList.add("has-file");
       updateRequiredLabels();
-      showStatus("info", "✔ Nahrávka z Diktafonu načtena. Vyplň zbývající pole a odešli.");
+      showStatus("info", "â NahrÃ¡vka z Diktafonu naÄtena. VyplÅ zbÃ½vajÃ­cÃ­ pole a odeÅ¡li.");
     });
   }
 
-  // Pokud jsme otevřeni přes iOS Zkratku (?load=ID),
-  // stáhneme soubor z Apps Script temp storage a předvyplníme formulář
+  // Pokud jsme otevÅeni pÅes iOS Zkratku (?load=ID),
+  // stÃ¡hneme soubor z Apps Script temp storage a pÅedvyplnÃ­me formulÃ¡Å.
+  // ProtoÅ¾e iOS otevÅe strÃ¡nku dÅÃ­v, neÅ¾ GAS dokonÄÃ­ uloÅ¾enÃ­, opakujeme
+  // dotaz kaÅ¾dÃ© 2 s, max. 20Ã (= 40 s celkem).
   const loadId = new URLSearchParams(location.search).get('load');
   if (loadId) {
-    showStatus('info', '⏳ Načítám nahrávku ze Zkratky…');
-    fetch(WEBHOOK_URL + '?id=' + encodeURIComponent(loadId))
-      .then(r => r.json())
-      .then(result => {
-        if (!result.ok || !result.data) {
-          showStatus('err', '❌ Nepodařilo se načíst nahrávku: ' + (result.error || 'neznámá chyba'));
-          return;
+    (async function pollTempFile() {
+      const MAX_ATTEMPTS = 20;
+      const DELAY_MS = 2000;
+      showStatus('info', 'â³ NaÄÃ­tÃ¡m nahrÃ¡vku ze Zkratkyâ¦ (1/' + MAX_ATTEMPTS + ')');
+      for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+        try {
+          const r = await fetch(WEBHOOK_URL + '?id=' + encodeURIComponent(loadId));
+          const result = await r.json();
+          if (result.ok && result.data) {
+            // ÃspÄch â soubor je pÅipraven
+            const bytes = Uint8Array.from(atob(result.data), c => c.charCodeAt(0));
+            const file = new File([bytes], result.filename || 'nahravka.m4a', { type: result.mimeType || 'audio/m4a' });
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            fileInput.files = dt.files;
+            const sizeMb = (file.size / 1024 / 1024).toFixed(1);
+            fileName.textContent = file.name + ' (' + sizeMb + ' MB)';
+            fileArea.classList.add('has-file');
+            updateRequiredLabels();
+            showStatus('info', 'â NahrÃ¡vka naÄtena. VyplÅ jmÃ©no a druh a odeÅ¡li.');
+            // OdstranÃ­me ?load=ID z URL bez obnovenÃ­ strÃ¡nky
+            history.replaceState(null, '', location.pathname);
+            return;
+          }
+          // Soubor jeÅ¡tÄ nenÃ­ pÅipraven â ÄekÃ¡me a zkusÃ­me znovu
+          if (attempt < MAX_ATTEMPTS) {
+            showStatus('info', 'â³ NaÄÃ­tÃ¡m nahrÃ¡vku ze Zkratkyâ¦ (' + (attempt + 1) + '/' + MAX_ATTEMPTS + ')');
+            await new Promise(res => setTimeout(res, DELAY_MS));
+          }
+        } catch (err) {
+          if (attempt < MAX_ATTEMPTS) {
+            await new Promise(res => setTimeout(res, DELAY_MS));
+          }
         }
-        const bytes = Uint8Array.from(atob(result.data), c => c.charCodeAt(0));
-        const file = new File([bytes], result.filename || 'nahravka.m4a', { type: result.mimeType || 'audio/m4a' });
-        const dt = new DataTransfer();
-        dt.items.add(file);
-        fileInput.files = dt.files;
-        const sizeMb = (file.size / 1024 / 1024).toFixed(1);
-        fileName.textContent = file.name + ' (' + sizeMb + ' MB)';
-        fileArea.classList.add('has-file');
-        updateRequiredLabels();
-        showStatus('info', '✔ Nahrávka načtena. Vyplň jméno a druh a odešli.');
-        // Odstraníme ?load=ID z URL bez obnovení stránky
-        history.replaceState(null, '', location.pathname);
-      })
-      .catch(() => showStatus('err', '❌ Nepodařilo se načíst nahrávku ze Zkratky. Zkus znovu.'));
+      }
+      showStatus('err', 'â NepodaÅilo se naÄÃ­st nahrÃ¡vku ze Zkratky (vyprÅ¡el ÄasovÃ½ limit). Zkus sdÃ­let nahrÃ¡vku znovu.');
+    })();
   }
 
   fileInput.addEventListener("change", () => {
@@ -379,7 +396,7 @@
       fileName.textContent = f.name + " (" + sizeMb + " MB)";
       fileArea.classList.add("has-file");
       if (f.size > MAX_SIZE_MB * 1024 * 1024) {
-        showStatus("err", "Soubor je moc velký (" + sizeMb + " MB). Limit je " + MAX_SIZE_MB + " MB. Zkus nahrávku zkrátit nebo zkomprimovat.");
+        showStatus("err", "Soubor je moc velkÃ½ (" + sizeMb + " MB). Limit je " + MAX_SIZE_MB + " MB. Zkus nahrÃ¡vku zkrÃ¡tit nebo zkomprimovat.");
       } else {
         hideStatus();
       }
@@ -399,7 +416,7 @@
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => {
-        // odřízneme "data:...;base64," prefix
+        // odÅÃ­zneme "data:...;base64," prefix
         const result = reader.result.toString();
         const comma = result.indexOf(",");
         resolve(result.slice(comma + 1));
@@ -414,17 +431,17 @@
     hideStatus();
 
     if (WEBHOOK_URL.startsWith("ZDE_VLOZ")) {
-      showStatus("err", "Webhook URL není nastavená. Otevři nahravky.html a vlož URL z Apps Script (viz návod).");
+      showStatus("err", "Webhook URL nenÃ­ nastavenÃ¡. OtevÅi nahravky.html a vloÅ¾ URL z Apps Script (viz nÃ¡vod).");
       return;
     }
 
     const file = fileInput.files[0];
     if (!file) {
-      showStatus("err", "Nejdřív vyber zvukový soubor.");
+      showStatus("err", "NejdÅÃ­v vyber zvukovÃ½ soubor.");
       return;
     }
     if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-      showStatus("err", "Soubor je moc velký. Limit " + MAX_SIZE_MB + " MB.");
+      showStatus("err", "Soubor je moc velkÃ½. Limit " + MAX_SIZE_MB + " MB.");
       return;
     }
 
@@ -432,26 +449,26 @@
     const druh = druhSelect.value;
     const skym = skymInput.value.trim();
     if (!jmeno || !druh) {
-      showStatus("err", "Vyplň jméno a druh nahrávky.");
+      showStatus("err", "VyplÅ jmÃ©no a druh nahrÃ¡vky.");
       return;
     }
     if (DRUHY_S_KYM.includes(druh) && !skym) {
-      showStatus("err", "U tohoto druhu nahrávky vyplň, s kým to bylo.");
+      showStatus("err", "U tohoto druhu nahrÃ¡vky vyplÅ, s kÃ½m to bylo.");
       return;
     }
 
     try { localStorage.setItem("pitland_jmeno", jmeno); } catch (e) {}
 
     submitBtn.disabled = true;
-    submitBtn.textContent = "Nahrávám…";
+    submitBtn.textContent = "NahrÃ¡vÃ¡mâ¦";
     progress.classList.add("show");
     progressBar.style.width = "15%";
-    showStatus("info", "Připravuji soubor…");
+    showStatus("info", "PÅipravuji souborâ¦");
 
     try {
       const base64 = await fileToBase64(file);
       progressBar.style.width = "45%";
-      showStatus("info", "Odesílám na Drive… (může chvíli trvat)");
+      showStatus("info", "OdesÃ­lÃ¡m na Driveâ¦ (mÅ¯Å¾e chvÃ­li trvat)");
 
       const payload = {
         jmeno: jmeno,
@@ -462,7 +479,7 @@
         data: base64
       };
 
-      // Apps Script doPost – používáme text/plain, aby se předešlo CORS preflight
+      // Apps Script doPost â pouÅ¾Ã­vÃ¡me text/plain, aby se pÅedeÅ¡lo CORS preflight
       const res = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -477,22 +494,22 @@
 
       if (res.ok && result.ok) {
         progressBar.style.width = "100%";
-        showStatus("ok", "✅ Hotovo! Soubor uložen jako: " + (result.filename || file.name));
-        submitBtn.textContent = "Nahrát další";
+        showStatus("ok", "â Hotovo! Soubor uloÅ¾en jako: " + (result.filename || file.name));
+        submitBtn.textContent = "NahrÃ¡t dalÅ¡Ã­";
         fileInput.value = "";
-        fileName.textContent = "Klepni pro výběr nahrávky";
+        fileName.textContent = "Klepni pro vÃ½bÄr nahrÃ¡vky";
         fileArea.classList.remove("has-file");
         updateRequiredLabels();
       } else {
         throw new Error(result.error || ("HTTP " + res.status));
       }
     } catch (err) {
-      showStatus("err", "❌ Chyba: " + err.message);
+      showStatus("err", "â Chyba: " + err.message);
       progress.classList.remove("show");
       progressBar.style.width = "0%";
     } finally {
       submitBtn.disabled = false;
-      if (submitBtn.textContent === "Nahrávám…") submitBtn.textContent = "Nahrát na Drive";
+      if (submitBtn.textContent === "NahrÃ¡vÃ¡mâ¦") submitBtn.textContent = "NahrÃ¡t na Drive";
     }
   });
 </script>
