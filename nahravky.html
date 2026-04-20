@@ -208,7 +208,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.9</footer>
+  <footer>Pitland · v1.10</footer>
 </div>
 
 <script>
@@ -248,7 +248,7 @@
   // ── Konfigurace ──────────────────────────────────────────────────────────
   const WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbxBMBHjX2L8yIMlkpSKkfx16gHyj5VE80k0pEaybWHr5G3HT962zlQtvLv6tBk1YyDX/exec";
   const MAX_SIZE_MB = 45;
-  const MP3_KBPS   = 128; // kvalita MP3 (pro řeč stačí 128)
+  const MP3_KBPS   = 64;  // kvalita MP3 (64 kbps mono = menší než originál, pro hlas ideální)
 
   // ── DOM ─────────────────────────────────────────────────────────────────
   const form        = document.getElementById("uploadForm");
@@ -315,12 +315,11 @@
   } catch (e) {}
   updateRequiredLabels();
 
-  // ── Konverze M4A → MP3 (lamejs) ──────────────────────────────────────────
+  // ── Konverze M4A → MP3 (lamejs, mono, chunked s progress) ──────────────────
   async function convertToMp3(file) {
-    // Pokud je soubor již MP3, není co dělat
     if (/\.mp3$/i.test(file.name)) return file;
 
-    showStatus('info', '🔄 Konvertuji na MP3 (128 kbps)… chvíli strpení.');
+    showStatus('info', '🔄 Konvertuji na MP3… 0 %');
     submitBtn.disabled = true;
 
     try {
@@ -330,11 +329,14 @@
       const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
       audioCtx.close();
 
-      const channels   = Math.min(audioBuffer.numberOfChannels, 2);
-      const sampleRate = audioBuffer.sampleRate;
-      const mp3enc     = new lamejs.Mp3Encoder(channels, sampleRate, MP3_KBPS);
-      const BLOCK      = 1152;
-      const mp3chunks  = [];
+      // Mixdown na mono (menší soubor, rychlejší kódování, pro hlas ideální)
+      const numCh = audioBuffer.numberOfChannels;
+      const len   = audioBuffer.length;
+      const mono  = new Float32Array(len);
+      for (let c = 0; c < numCh; c++) {
+        const ch = audioBuffer.getChannelData(c);
+        for (let i = 0; i < len; i++) mono[i] += ch[i] / numCh;
+      }
 
       function f32ToI16(buf) {
         const out = new Int16Array(buf.length);
@@ -345,17 +347,32 @@
         return out;
       }
 
-      const left  = f32ToI16(audioBuffer.getChannelData(0));
-      const right = channels > 1 ? f32ToI16(audioBuffer.getChannelData(1)) : left;
+      const monoI16   = f32ToI16(mono);
+      const mp3enc    = new lamejs.Mp3Encoder(1, audioBuffer.sampleRate, MP3_KBPS);
+      const BLOCK     = 1152;
+      const CHUNK     = 50;   // bloků za jeden setTimeout tick
+      const mp3chunks = [];
+      const total     = Math.ceil(monoI16.length / BLOCK);
 
-      for (let i = 0; i < left.length; i += BLOCK) {
-        const l   = left.subarray(i, i + BLOCK);
-        const r   = right.subarray(i, i + BLOCK);
-        const buf = channels > 1 ? mp3enc.encodeBuffer(l, r) : mp3enc.encodeBuffer(l);
-        if (buf.length > 0) mp3chunks.push(buf);
-      }
-      const flush = mp3enc.flush();
-      if (flush.length > 0) mp3chunks.push(flush);
+      // Chunked kódování — browser nezamrzne, progress se aktualizuje
+      await new Promise((resolve) => {
+        let b = 0;
+        function tick() {
+          const end = Math.min(b + CHUNK, total);
+          for (; b < end; b++) {
+            const buf = mp3enc.encodeBuffer(monoI16.subarray(b * BLOCK, (b + 1) * BLOCK));
+            if (buf.length > 0) mp3chunks.push(buf);
+          }
+          const pct = Math.round(b / total * 100);
+          showStatus('info', '🔄 Konvertuji na MP3… ' + pct + ' %');
+          if (b < total) { setTimeout(tick, 0); } else {
+            const flush = mp3enc.flush();
+            if (flush.length > 0) mp3chunks.push(flush);
+            resolve();
+          }
+        }
+        setTimeout(tick, 0);
+      });
 
       const blob    = new Blob(mp3chunks, { type: 'audio/mp3' });
       const newName = file.name.replace(/\.[^.]+$/, '') + '.mp3';
@@ -363,14 +380,14 @@
 
       const origMb = (file.size / 1024 / 1024).toFixed(1);
       const mp3Mb  = (mp3File.size / 1024 / 1024).toFixed(1);
-      showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 128 kbps)');
+      showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 64 kbps mono)');
       submitBtn.disabled = false;
       return mp3File;
 
     } catch (err) {
       showStatus('err', '❌ Konverze selhala: ' + err.message + ' — nahrávám originál.');
       submitBtn.disabled = false;
-      return file; // fallback: nahraj originál
+      return file;
     }
   }
 
