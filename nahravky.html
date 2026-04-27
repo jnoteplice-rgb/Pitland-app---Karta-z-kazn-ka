@@ -29,17 +29,11 @@
     background: var(--bg); color: var(--text);
     min-height: 100vh;
   }
-  .wrap {
-    max-width: 560px; margin: 0 auto; padding: 28px 20px 80px;
-  }
-  header {
-    text-align: center; margin-bottom: 28px;
-  }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 28px 20px 80px; }
+  header { text-align: center; margin-bottom: 28px; }
   header .logo {
-    display: block;
-    width: 220px; max-width: 70%;
-    height: auto;
-    margin: 0 auto 10px;
+    display: block; width: 220px; max-width: 70%;
+    height: auto; margin: 0 auto 10px;
     filter: drop-shadow(0 0 18px var(--pitland-green-glow));
   }
   header p { margin: 0; color: var(--muted); font-size: 14px; }
@@ -48,15 +42,23 @@
     border-radius: 16px; padding: 22px; margin-bottom: 16px;
   }
   label {
-    display: block; font-size: 12px; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--muted);
     margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;
-    font-weight: 600;
-    transition: color 0.15s;
+    font-weight: 600; transition: color 0.15s;
   }
-  label.empty-required {
-    color: #ff4d4d;
+  label.empty-required { color: #ff4d4d; }
+  .info-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--pitland-green); color: #000;
+    font-size: 13px; font-weight: 700;
+    cursor: pointer; user-select: none;
+    flex-shrink: 0;
   }
-  input[type="text"], select {
+  .info-icon:active { transform: scale(0.94); }
+
+  input[type="text"], input[type="number"], select {
     width: 100%; padding: 14px 16px;
     background: var(--card-input); color: var(--text);
     border: 1px solid var(--border); border-radius: 10px;
@@ -64,7 +66,7 @@
     -webkit-appearance: none; appearance: none;
     transition: border-color 0.15s, box-shadow 0.15s;
   }
-  input[type="text"]:focus, select:focus {
+  input[type="text"]:focus, input[type="number"]:focus, select:focus {
     border-color: var(--pitland-green);
     box-shadow: 0 0 0 3px var(--pitland-green-glow);
   }
@@ -75,18 +77,18 @@
   }
   .field { margin-bottom: 18px; }
   .field:last-child { margin-bottom: 0; }
+  .hint-text {
+    font-size: 12px; color: var(--muted); margin-top: 4px;
+  }
 
   .file-area {
     border: 2px dashed var(--border); border-radius: 12px;
     padding: 28px 20px; text-align: center;
-    background: var(--card-input); transition: all 0.2s;
-    cursor: pointer;
+    background: var(--card-input); transition: all 0.2s; cursor: pointer;
   }
   .file-area.has-file {
-    border-color: var(--pitland-green);
-    border-style: solid;
-    background: #0e1400;
-    box-shadow: 0 0 0 3px var(--pitland-green-glow);
+    border-color: var(--pitland-green); border-style: solid;
+    background: #0e1400; box-shadow: 0 0 0 3px var(--pitland-green-glow);
   }
   .file-area .icon { font-size: 42px; margin-bottom: 8px; }
   .file-area .hint { color: var(--muted); font-size: 13px; margin-top: 6px; }
@@ -95,8 +97,7 @@
   .file-btn {
     display: inline-block; padding: 10px 18px; margin-top: 12px;
     background: #222226; color: var(--text);
-    border-radius: 8px; font-size: 14px; font-weight: 500;
-    cursor: pointer;
+    border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer;
   }
   .file-area.has-file .file-btn {
     background: var(--pitland-green); color: #000; font-weight: 600;
@@ -106,42 +107,27 @@
     width: 100%; padding: 17px;
     background: var(--pitland-green); color: #000;
     border: none; border-radius: 12px;
-    font-size: 18px; font-weight: 700;
-    letter-spacing: 0.3px;
+    font-size: 18px; font-weight: 700; letter-spacing: 0.3px;
     cursor: pointer; margin-top: 10px;
     transition: background 0.15s, box-shadow 0.15s, transform 0.05s;
     box-shadow: 0 0 0 0 var(--pitland-green-glow);
   }
-  button.submit:not(:disabled) {
-    box-shadow: 0 4px 24px var(--pitland-green-glow);
-  }
+  button.submit:not(:disabled) { box-shadow: 0 4px 24px var(--pitland-green-glow); }
   button.submit:disabled {
-    background: #3a3a3f; color: #888; cursor: not-allowed;
-    box-shadow: none;
+    background: #3a3a3f; color: #888; cursor: not-allowed; box-shadow: none;
   }
   button.submit:active:not(:disabled) {
-    background: var(--pitland-green-dark);
-    transform: scale(0.99);
+    background: var(--pitland-green-dark); transform: scale(0.99);
   }
 
   .status {
     margin-top: 16px; padding: 14px 16px;
-    border-radius: 10px; font-size: 14px; display: none;
-    line-height: 1.4;
+    border-radius: 10px; font-size: 14px; display: none; line-height: 1.4;
   }
   .status.show { display: block; }
-  .status.info {
-    background: #12160a; color: var(--pitland-green);
-    border: 1px solid #3a4a0a;
-  }
-  .status.ok {
-    background: #152200; color: var(--pitland-green);
-    border: 1px solid var(--pitland-green-dark);
-  }
-  .status.err {
-    background: #2a0e0e; color: #f5a0a0;
-    border: 1px solid #c62828;
-  }
+  .status.info { background: #12160a; color: var(--pitland-green); border: 1px solid #3a4a0a; }
+  .status.ok   { background: #152200; color: var(--pitland-green); border: 1px solid var(--pitland-green-dark); }
+  .status.err  { background: #2a0e0e; color: #f5a0a0; border: 1px solid #c62828; }
 
   .progress {
     height: 8px; background: #1e1e22; border-radius: 4px;
@@ -149,15 +135,48 @@
   }
   .progress.show { display: block; }
   .progress-bar {
-    height: 100%; background: var(--pitland-green);
-    width: 0%; transition: width 0.2s;
-    box-shadow: 0 0 12px var(--pitland-green-glow);
+    height: 100%; background: var(--pitland-green); width: 0%;
+    transition: width 0.2s; box-shadow: 0 0 12px var(--pitland-green-glow);
   }
 
-  footer {
-    text-align: center; color: var(--muted); font-size: 12px;
-    margin-top: 24px;
+  /* Modal — seznam zkratek */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.7); z-index: 1000;
+    align-items: center; justify-content: center; padding: 20px;
   }
+  .modal-overlay.show { display: flex; }
+  .modal-content {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 22px; max-width: 480px; width: 100%;
+    max-height: 80vh; overflow-y: auto;
+  }
+  .modal-content h3 {
+    margin: 0 0 14px; color: var(--pitland-green); font-size: 18px;
+  }
+  .modal-content #peopleSearch {
+    width: 100%; margin-bottom: 14px;
+  }
+  .modal-content ul {
+    list-style: none; padding: 0; margin: 0 0 14px;
+  }
+  .modal-content li {
+    padding: 10px 12px; border-bottom: 1px solid var(--border);
+    font-size: 15px; cursor: pointer;
+  }
+  .modal-content li:hover { background: #1a1a1d; }
+  .modal-content li strong {
+    color: var(--pitland-green); font-family: ui-monospace, monospace;
+    margin-right: 10px; min-width: 50px; display: inline-block;
+  }
+  .modal-close {
+    width: 100%; padding: 12px;
+    background: var(--pitland-green); color: #000;
+    border: none; border-radius: 10px;
+    font-size: 16px; font-weight: 600; cursor: pointer;
+  }
+
+  footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 24px; }
 </style>
 </head>
 <body>
@@ -169,8 +188,12 @@
 
   <form id="uploadForm" class="card" novalidate>
     <div class="field">
-      <label for="jmeno" id="jmenoLabel">Kdo nahrává? (Jméno)</label>
-      <input type="text" id="jmeno" name="jmeno" placeholder="např. Jiří" autocomplete="given-name">
+      <label for="jmeno" id="jmenoLabel">
+        Kdo nahrává? (zkratka)
+        <span class="info-icon" id="jmenoInfo" title="Seznam zkratek">i</span>
+      </label>
+      <input type="text" id="jmeno" name="jmeno" placeholder="např. JNo" autocomplete="off" autocapitalize="none">
+      <div class="hint-text">Tvoje zkratka (např. JNo, TZa, PSe)</div>
     </div>
 
     <div class="field">
@@ -186,9 +209,18 @@
       </select>
     </div>
 
+    <div class="field" id="pocetField" style="display:none;">
+      <label for="pocet" id="pocetLabel">Počet účastníků celkem (vč. tebe)</label>
+      <input type="number" id="pocet" name="pocet" min="1" max="12" placeholder="3" inputmode="numeric">
+    </div>
+
     <div class="field" id="skymField" style="display:none;">
-      <label for="skym" id="skymLabel">S kým</label>
-      <input type="text" id="skym" name="skym" placeholder="např. Petr Novák" autocomplete="off">
+      <label for="skym" id="skymLabel">
+        Ostatní účastníci (zkratky)
+        <span class="info-icon" id="skymInfo" title="Seznam zkratek">i</span>
+      </label>
+      <input type="text" id="skym" name="skym" placeholder="např. TZa, PSe" autocomplete="off" autocapitalize="none">
+      <div class="hint-text" id="skymHint">CSV zkratek kromě tebe (např. TZa, PSe)</div>
     </div>
 
     <div class="field" id="popisField" style="display:none;">
@@ -207,14 +239,25 @@
       <input type="file" id="fileInput" name="file" accept="audio/*">
     </div>
 
-    <!-- type="button" — obchází HTML5 validaci, vše kontrolujeme v JS -->
     <button type="button" class="submit" id="submitBtn">Nahrát na Drive</button>
 
     <div class="progress" id="progress"><div class="progress-bar" id="progressBar"></div></div>
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.13</footer>
+  <footer>Pitland · v1.14</footer>
+</div>
+
+<!-- Modal: seznam zkratek -->
+<div class="modal-overlay" id="peopleModal">
+  <div class="modal-content">
+    <h3>📋 Seznam zkratek</h3>
+    <input type="text" id="peopleSearch" placeholder="Hledat zkratku nebo jméno…" autocomplete="off">
+    <ul id="peopleList">
+      <li>Načítám…</li>
+    </ul>
+    <button class="modal-close" id="peopleModalClose">Zavřít</button>
+  </div>
 </div>
 
 <script>
@@ -252,10 +295,26 @@
   }
 
   // ── Konfigurace ──────────────────────────────────────────────────────────
-        const WEBHOOK_URL      = "https://script.google.com/macros/s/AKfycbzZLOlG9-ezkQ4wmym4ulsEmxt7BkAsrmR_tjFVQLO-_186rARBXwu1hyw14ApjleXI/exec";
-    const TEMP_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbz4pNkjjM0FBKUlCwVR97aiBWczlpL3fjw19Q7z8rDkP2xZVGVWASLmMxvx-6YXAuZb/exec";
+  const WEBHOOK_URL      = "https://script.google.com/macros/s/AKfycbzZLOlG9-ezkQ4wmym4ulsEmxt7BkAsrmR_tjFVQLO-_186rARBXwu1hyw14ApjleXI/exec";
+  const TEMP_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbz4pNkjjM0FBKUlCwVR97aiBWczlpL3fjw19Q7z8rDkP2xZVGVWASLmMxvx-6YXAuZb/exec";
   const MAX_SIZE_MB = 45;
-  const MP3_KBPS   = 64;  // 64 kbps mono = menší než originál, pro hlas ideální
+  const MP3_KBPS    = 64;
+
+  // Default počet účastníků per druh
+  const POCET_DEFAULT = {
+    "briefing": 4, "debriefing": 4,
+    "meeting-1-1": 2, "zpetna-vazba": 2,
+    "porada": 6, "jine": 1
+  };
+  const SKYM_LABELS = {
+    "meeting-1-1":  { label: "S kým (zkratka)",          placeholder: "např. TZa",       hint: "Jedna zkratka" },
+    "zpetna-vazba": { label: "S kým (zkratka)",          placeholder: "např. TZa",       hint: "Jedna zkratka" },
+    "briefing":     { label: "Účastníci kromě tebe",     placeholder: "např. TZa, PSe",  hint: "CSV zkratek" },
+    "debriefing":   { label: "Účastníci kromě tebe",     placeholder: "např. TZa, PSe",  hint: "CSV zkratek" },
+    "porada":       { label: "Ostatní účastníci porady", placeholder: "např. TZa, PSe, MDi", hint: "CSV zkratek" },
+    "jine":         { label: "Ostatní účastníci",        placeholder: "např. TZa (volitelné)", hint: "CSV zkratek (nepovinné)" }
+  };
+  const DRUHY_S_KYM_REQUIRED = ["meeting-1-1", "zpetna-vazba", "briefing", "debriefing", "porada"];
 
   // ── DOM ─────────────────────────────────────────────────────────────────
   const form        = document.getElementById("uploadForm");
@@ -267,37 +326,45 @@
   const progress    = document.getElementById("progress");
   const progressBar = document.getElementById("progressBar");
   const druhSelect  = document.getElementById("druh");
+  const pocetField  = document.getElementById("pocetField");
+  const pocetInput  = document.getElementById("pocet");
   const skymField   = document.getElementById("skymField");
   const skymInput   = document.getElementById("skym");
+  const skymLabel   = document.getElementById("skymLabel");
+  const skymHint    = document.getElementById("skymHint");
   const popisField  = document.getElementById("popisField");
   const popisInput  = document.getElementById("popis");
   const popisLabel  = document.getElementById("popisLabel");
   const jmenoInput  = document.getElementById("jmeno");
   const jmenoLabel  = document.getElementById("jmenoLabel");
   const druhLabel   = document.getElementById("druhLabel");
-  const skymLabel   = document.getElementById("skymLabel");
   const fileLabel   = document.getElementById("fileLabel");
+  const peopleModal = document.getElementById("peopleModal");
+  const peopleList  = document.getElementById("peopleList");
+  const peopleSearch = document.getElementById("peopleSearch");
 
-  // Aktuálně připravený soubor (po případné konverzi)
   let currentFile = null;
+  let peopleCache = null;
 
-  // ── Pole „S kým" ─────────────────────────────────────────────────────────
-  const DRUHY_S_KYM = ["meeting-1-1", "zpetna-vazba", "porada"];
-  const SKYM_LABELS = {
-    "meeting-1-1": { label: "S kým", placeholder: "např. Petr Novák" },
-    "zpetna-vazba": { label: "S kým", placeholder: "např. Petr Novák" },
-    "porada": { label: "Účastníci porady", placeholder: "např. Petr, Jana, Tomáš" }
-  };
-
-  function updateSkymField() {
+  // ── Pole se mění podle druhu ─────────────────────────────────────────────
+  function updateFieldsForDruh() {
     const v = druhSelect.value;
-    if (DRUHY_S_KYM.includes(v)) {
-      const cfg = SKYM_LABELS[v] || { label: "S kým", placeholder: "" };
-      skymLabel.textContent = cfg.label;
+    if (v && SKYM_LABELS[v]) {
+      const cfg = SKYM_LABELS[v];
+      // Aktualizuj label (zachovej info ikonu)
+      skymLabel.innerHTML = cfg.label + ' <span class="info-icon" id="skymInfo" title="Seznam zkratek">i</span>';
+      document.getElementById("skymInfo").addEventListener("click", openPeopleModal);
       skymInput.placeholder = cfg.placeholder;
+      skymHint.textContent = cfg.hint;
       skymField.style.display = "block";
+      pocetField.style.display = "block";
+      // Předvyplnit počet účastníků pokud je prázdné
+      if (!pocetInput.value && POCET_DEFAULT[v]) {
+        pocetInput.value = POCET_DEFAULT[v];
+      }
     } else {
       skymField.style.display = "none";
+      pocetField.style.display = "none";
       skymInput.value = "";
     }
     if (v === "jine") {
@@ -308,13 +375,14 @@
     }
     updateRequiredLabels();
   }
-  druhSelect.addEventListener("change", updateSkymField);
+  druhSelect.addEventListener("change", updateFieldsForDruh);
 
   function updateRequiredLabels() {
     jmenoLabel.classList.toggle("empty-required", !jmenoInput.value.trim());
     druhLabel.classList.toggle("empty-required", !druhSelect.value);
     if (skymField.style.display !== "none") {
-      skymLabel.classList.toggle("empty-required", !skymInput.value.trim());
+      const required = DRUHY_S_KYM_REQUIRED.includes(druhSelect.value);
+      skymLabel.classList.toggle("empty-required", required && !skymInput.value.trim());
     } else {
       skymLabel.classList.remove("empty-required");
     }
@@ -329,27 +397,87 @@
   skymInput.addEventListener("input", updateRequiredLabels);
   popisInput.addEventListener("input", updateRequiredLabels);
 
+  // ── localStorage: zkratka SAM ────────────────────────────────────────────
   try {
-    const savedName = localStorage.getItem("pitland_jmeno");
-    if (savedName) jmenoInput.value = savedName;
+    const savedZk = localStorage.getItem("pitland_zkratka") || localStorage.getItem("pitland_jmeno");
+    if (savedZk) jmenoInput.value = savedZk;
   } catch (e) {}
   updateRequiredLabels();
 
-  // ── Konverze M4A → MP3 (lamejs, mono, chunked s progress) ──────────────────
+  // ── Modal: seznam zkratek (s search) ─────────────────────────────────────
+  async function openPeopleModal() {
+    peopleModal.classList.add("show");
+    peopleSearch.value = "";
+    peopleSearch.focus();
+    if (!peopleCache) {
+      peopleList.innerHTML = "<li>Načítám…</li>";
+      try {
+        const r = await fetch(WEBHOOK_URL + "?action=people");
+        const data = await r.json();
+        if (data.ok && data.people) {
+          peopleCache = data.people;
+          renderPeopleList("");
+        } else {
+          peopleList.innerHTML = "<li>Chyba: " + (data.error || "neznámá") + "</li>";
+        }
+      } catch (err) {
+        peopleList.innerHTML = "<li>Chyba: " + err.message + "</li>";
+      }
+    } else {
+      renderPeopleList("");
+    }
+  }
+  function renderPeopleList(filter) {
+    if (!peopleCache) return;
+    const f = (filter || "").toLowerCase().trim();
+    const sorted = Object.keys(peopleCache).sort();
+    const filtered = sorted.filter(zk => 
+      !f || zk.toLowerCase().includes(f) || peopleCache[zk].toLowerCase().includes(f)
+    );
+    if (filtered.length === 0) {
+      peopleList.innerHTML = "<li>Žádný výsledek</li>";
+      return;
+    }
+    peopleList.innerHTML = filtered.map(zk => 
+      '<li data-zkratka="' + zk + '"><strong>' + zk + '</strong>' + peopleCache[zk] + '</li>'
+    ).join("");
+    // Klik na řádek = vloží zkratku do aktuálně focusnutého inputu
+    Array.from(peopleList.querySelectorAll("li")).forEach(li => {
+      li.addEventListener("click", () => {
+        const zk = li.getAttribute("data-zkratka");
+        if (!zk) return;
+        // Vlož do jmeno pokud je prázdné, jinak do skym (jako CSV)
+        if (!jmenoInput.value.trim()) {
+          jmenoInput.value = zk;
+        } else {
+          const cur = skymInput.value.trim();
+          skymInput.value = cur ? cur + ", " + zk : zk;
+        }
+        updateRequiredLabels();
+        closePeopleModal();
+      });
+    });
+  }
+  peopleSearch.addEventListener("input", () => renderPeopleList(peopleSearch.value));
+  document.getElementById("peopleModalClose").addEventListener("click", closePeopleModal);
+  function closePeopleModal() { peopleModal.classList.remove("show"); }
+  document.getElementById("jmenoInfo").addEventListener("click", openPeopleModal);
+  document.getElementById("skymInfo").addEventListener("click", openPeopleModal);
+  peopleModal.addEventListener("click", (e) => {
+    if (e.target === peopleModal) closePeopleModal();
+  });
+
+  // ── Konverze M4A → MP3 ──────────────────────────────────────────────────
   async function convertToMp3(file) {
     if (/\.mp3$/i.test(file.name)) return file;
-
     showStatus('info', '🔄 Konvertuji na MP3… 0 %');
     submitBtn.disabled = true;
-
     try {
       const arrayBuffer = await file.arrayBuffer();
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       const audioCtx = new AudioCtx();
       const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
       audioCtx.close();
-
-      // Mixdown na mono
       const numCh = audioBuffer.numberOfChannels;
       const len   = audioBuffer.length;
       const mono  = new Float32Array(len);
@@ -357,7 +485,6 @@
         const ch = audioBuffer.getChannelData(c);
         for (let i = 0; i < len; i++) mono[i] += ch[i] / numCh;
       }
-
       function f32ToI16(buf) {
         const out = new Int16Array(buf.length);
         for (let i = 0; i < buf.length; i++) {
@@ -366,14 +493,12 @@
         }
         return out;
       }
-
       const monoI16   = f32ToI16(mono);
       const mp3enc    = new lamejs.Mp3Encoder(1, audioBuffer.sampleRate, MP3_KBPS);
       const BLOCK     = 1152;
       const CHUNK     = 50;
       const mp3chunks = [];
       const total     = Math.ceil(monoI16.length / BLOCK);
-
       await new Promise((resolve) => {
         let b = 0;
         function tick() {
@@ -392,17 +517,14 @@
         }
         setTimeout(tick, 0);
       });
-
       const blob    = new Blob(mp3chunks, { type: 'audio/mp3' });
       const newName = file.name.replace(/\.[^.]+$/, '') + '.mp3';
       const mp3File = new File([blob], newName, { type: 'audio/mp3' });
-
       const origMb = (file.size / 1024 / 1024).toFixed(1);
       const mp3Mb  = (mp3File.size / 1024 / 1024).toFixed(1);
       showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 64 kbps mono)');
       submitBtn.disabled = false;
       return mp3File;
-
     } catch (err) {
       showStatus('err', '❌ Konverze selhala: ' + err.message + ' — nahrávám originál.');
       submitBtn.disabled = false;
@@ -410,7 +532,6 @@
     }
   }
 
-  // ── Pomocná funkce pro nastavení souboru v UI ─────────────────────────────
   async function setFile(file) {
     currentFile = await convertToMp3(file);
     const sizeMb = (currentFile.size / 1024 / 1024).toFixed(1);
@@ -461,41 +582,6 @@
     })();
   }
 
-  // ── ?paste= (base64 ve schránce) ─────────────────────────────────────────
-  const _pp = new URLSearchParams(location.search);
-  const pasteId = _pp.get('paste') || '';
-  if (_pp.has('paste')) {
-    const pasteWrap = document.createElement('div');
-    pasteWrap.style.cssText = 'margin-bottom:16px;';
-    pasteWrap.innerHTML =
-      '<div style="background:#12160a;border:1px solid #3a4a0a;border-radius:12px;' +
-      'padding:16px 18px;margin-bottom:8px;color:var(--pitland-green);font-size:15px;text-align:center;">' +
-      'Nahrávka je ve schránce. Klepni na tlačítko.</div>' +
-      '<button type="button" id="pasteBtn" style="width:100%;padding:17px;' +
-      'background:var(--pitland-green);color:#000;border:none;border-radius:12px;' +
-      'font-size:18px;font-weight:700;cursor:pointer;">Načíst nahrávku ze schránky</button>';
-    const formCard = document.querySelector('.card');
-    formCard.parentNode.insertBefore(pasteWrap, formCard);
-    document.getElementById('pasteBtn').onclick = async function() {
-      const btn = this;
-      btn.disabled = true;
-      btn.textContent = 'Načítám...';
-      try {
-        const b64   = await navigator.clipboard.readText();
-        if (!b64 || b64.length < 100) throw new Error('Schránka neobsahuje platná data.');
-        const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-        const raw   = new File([bytes], 'nahravka_' + (pasteId || Date.now()) + '.m4a', { type: 'audio/m4a' });
-        await setFile(raw);
-        history.replaceState(null, '', location.pathname);
-        pasteWrap.remove();
-      } catch (err) {
-        showStatus('err', '❌ Nepodařilo se přečíst schránku: ' + err.message);
-        btn.disabled = false;
-        btn.textContent = 'Zkusit znovu';
-      }
-    };
-  }
-
   // ── Přímý výběr souboru ───────────────────────────────────────────────────
   fileInput.addEventListener("change", async () => {
     if (fileInput.files && fileInput.files[0]) {
@@ -509,7 +595,6 @@
     updateRequiredLabels();
   });
 
-  // ── Pomocné funkce ────────────────────────────────────────────────────────
   function showStatus(type, msg) {
     statusEl.className = "status show " + type;
     statusEl.textContent = msg;
@@ -528,29 +613,70 @@
     });
   }
 
-  // ── Odeslání (type="button" → click handler, žádná HTML5 validace) ────────
+  // ── Odeslání ─────────────────────────────────────────────────────────────
   submitBtn.addEventListener("click", async () => {
     hideStatus();
     if (!currentFile) { showStatus("err", "Nejdřív vyber zvukový soubor."); return; }
     if (currentFile.size > MAX_SIZE_MB * 1024 * 1024) { showStatus("err", "Soubor je moc velký. Limit " + MAX_SIZE_MB + " MB."); return; }
+
     const jmeno = jmenoInput.value.trim();
     const druh  = druhSelect.value;
-    const skym  = skymInput.value.trim();
+    const skymRaw = skymInput.value.trim();
     const popis = popisInput.value.trim();
-    if (!jmeno || !druh) { showStatus("err", "Vyplň jméno a druh nahrávky."); updateRequiredLabels(); return; }
-    if (DRUHY_S_KYM.includes(druh) && !skym) { showStatus("err", "Vyplň s kým to bylo."); updateRequiredLabels(); return; }
-    if (druh === "jine" && !popis) { showStatus("err", "Vyplň krátký popis (bude součástí názvu souboru)."); updateRequiredLabels(); return; }
-    try { localStorage.setItem("pitland_jmeno", jmeno); } catch (e) {}
+    const pocet = parseInt(pocetInput.value, 10);
+
+    if (!jmeno || !druh) {
+      showStatus("err", "Vyplň zkratku SAMa a druh nahrávky.");
+      updateRequiredLabels();
+      return;
+    }
+    if (DRUHY_S_KYM_REQUIRED.includes(druh) && !skymRaw) {
+      showStatus("err", "Vyplň ostatní účastníky.");
+      updateRequiredLabels();
+      return;
+    }
+    if (druh === "jine" && !popis) {
+      showStatus("err", "Vyplň krátký popis (bude součástí názvu souboru).");
+      updateRequiredLabels();
+      return;
+    }
+
+    // Slož speakers CSV: SAM + ostatní (z skymRaw rozparsuj a vyčisti)
+    const ostatniList = skymRaw
+      ? skymRaw.split(",").map(s => s.trim()).filter(Boolean)
+      : [];
+    const speakersList = [jmeno, ...ostatniList];
+    const speakersCSV = speakersList.join(", ");
+    // num_speakers = max(pocet z PWA, počet zkratek). Pokud user nezadal pocet, použij length.
+    const numSpeakers = pocet && pocet > 0 ? pocet : speakersList.length;
+    // Pro filename: skym = first ostatní zkratka (pro kratší filename) nebo joined dash
+    const skymForFilename = ostatniList.length > 0
+      ? ostatniList.join("-")
+      : "";
+
+    try { localStorage.setItem("pitland_zkratka", jmeno); } catch (e) {}
+
     submitBtn.disabled = true;
     submitBtn.textContent = "Nahrávám…";
     progress.classList.add("show");
     progressBar.style.width = "15%";
     showStatus("info", "Připravuji soubor…");
+
     try {
       const base64 = await fileToBase64(currentFile);
       progressBar.style.width = "45%";
       showStatus("info", "Odesílám na Drive… (může chvíli trvat)");
-      const payload = { jmeno, druh, skym, popis, filename: currentFile.name, mimeType: currentFile.type || "audio/mp3", data: base64 };
+      const payload = {
+        jmeno: jmeno,
+        druh: druh,
+        skym: skymForFilename,
+        popis: popis,
+        speakers: speakersCSV,
+        num_speakers: numSpeakers,
+        filename: currentFile.name,
+        mimeType: currentFile.type || "audio/mp3",
+        data: base64
+      };
       const res = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
