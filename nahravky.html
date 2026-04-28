@@ -81,22 +81,6 @@
     font-size: 12px; color: var(--muted); margin-top: 4px;
   }
 
-  .paste-btn {
-    width: 100%; padding: 16px 20px; margin-bottom: 14px;
-    background: linear-gradient(135deg, #1a2a00, #0e1400);
-    color: var(--pitland-green);
-    border: 2px solid var(--pitland-green); border-radius: 12px;
-    font-size: 16px; font-weight: 700; cursor: pointer;
-    box-shadow: 0 0 0 0 var(--pitland-green-glow);
-    transition: box-shadow 0.15s, transform 0.05s;
-  }
-  .paste-btn:hover, .paste-btn:active {
-    box-shadow: 0 0 24px var(--pitland-green-glow);
-    transform: translateY(-1px);
-  }
-  .paste-btn:active { transform: scale(0.99); }
-  .paste-btn .icon { font-size: 22px; margin-right: 8px; vertical-align: middle; }
-
   .file-area {
     border: 2px dashed var(--border); border-radius: 12px;
     padding: 28px 20px; text-align: center;
@@ -246,7 +230,6 @@
 
     <div class="field">
       <label id="fileLabel">Zvukový soubor</label>
-      <button type="button" class="paste-btn" id="pasteBtn" style="display:none;"><span class="icon">📋</span> Vložit nahrávku ze schránky</button>
       <label for="fileInput" class="file-area" id="fileArea">
         <div class="icon">🎤</div>
         <div class="file-name" id="fileName">Klepni pro výběr nahrávky</div>
@@ -262,7 +245,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.15</footer>
+  <footer>Pitland · v1.16</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -599,54 +582,41 @@
     })();
   }
 
-  // ── ?paste=YYYYMMDD (iOS Zkratka přes schránku) ──────────────────────────
-  // Zkratka zakóduje audio na base64, zkopíruje do schránky, otevře PWA.
-  // Tlačítko je vidět vždy když máme ?paste= v URL — uživatelské gesto je
-  // potřeba, protože iOS clipboard API vyžaduje explicit click.
-  const pasteParam = new URLSearchParams(location.search).get('paste');
-  const pasteBtn = document.getElementById('pasteBtn');
-  if (pasteParam) {
-    pasteBtn.style.display = 'block';
-    pasteBtn.dataset.dateStr = pasteParam;
-  }
-  pasteBtn.addEventListener('click', async () => {
-    try {
-      showStatus('info', '📋 Čtu schránku…');
-      pasteBtn.disabled = true;
-      // Zkus modernější API; pokud spadne, fallback na readText
-      let b64;
+  // ── ?paste=YYYYMMDD (iOS Zkratka přes schránku) — varianta z v1.10 ────────
+  // Banner + tlačítko se vloží NAD formulář, takže je hned vidět po otevření.
+  const _pp = new URLSearchParams(location.search);
+  const pasteId = _pp.get('paste') || '';
+  if (_pp.has('paste')) {
+    const pasteWrap = document.createElement('div');
+    pasteWrap.style.cssText = 'margin-bottom:16px;';
+    pasteWrap.innerHTML =
+      '<div style="background:#12160a;border:1px solid #3a4a0a;border-radius:12px;' +
+      'padding:16px 18px;margin-bottom:8px;color:var(--pitland-green);font-size:15px;text-align:center;">' +
+      '📋 Nahrávka je ve schránce. Klepni na tlačítko.</div>' +
+      '<button type="button" id="pasteBtn" style="width:100%;padding:17px;' +
+      'background:var(--pitland-green);color:#000;border:none;border-radius:12px;' +
+      'font-size:18px;font-weight:700;cursor:pointer;">Načíst nahrávku ze schránky</button>';
+    const formCard = document.querySelector('.card');
+    formCard.parentNode.insertBefore(pasteWrap, formCard);
+    document.getElementById('pasteBtn').onclick = async function() {
+      const btn = this;
+      btn.disabled = true;
+      btn.textContent = 'Načítám...';
       try {
-        if (navigator.clipboard && navigator.clipboard.readText) {
-          b64 = await navigator.clipboard.readText();
-        } else {
-          throw new Error('Clipboard API není dostupné');
-        }
-      } catch (e) {
-        throw new Error('Nelze přečíst schránku: ' + e.message);
+        const b64   = await navigator.clipboard.readText();
+        if (!b64 || b64.length < 100) throw new Error('Schránka neobsahuje platná data.');
+        const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+        const raw   = new File([bytes], 'nahravka_' + (pasteId || Date.now()) + '.m4a', { type: 'audio/m4a' });
+        await setFile(raw);
+        history.replaceState(null, '', location.pathname);
+        pasteWrap.remove();
+      } catch (err) {
+        showStatus('err', '❌ Nepodařilo se přečíst schránku: ' + err.message);
+        btn.disabled = false;
+        btn.textContent = 'Zkusit znovu';
       }
-      if (!b64 || typeof b64 !== 'string' || b64.trim().length < 100) {
-        throw new Error('Schránka je prázdná nebo neobsahuje base64.');
-      }
-      // Vyčisti případný whitespace a `data:` prefix
-      let cleaned = b64.replace(/\s+/g, '');
-      const commaIdx = cleaned.indexOf(',');
-      if (cleaned.startsWith('data:') && commaIdx > 0) {
-        cleaned = cleaned.slice(commaIdx + 1);
-      }
-      const bytes = Uint8Array.from(atob(cleaned), c => c.charCodeAt(0));
-      const dateStr = pasteBtn.dataset.dateStr || 'audio';
-      const filename = 'nahravka_' + dateStr + '.m4a';
-      const file = new File([bytes], filename, { type: 'audio/m4a' });
-      await setFile(file);
-      const sizeMb = (file.size / 1024 / 1024).toFixed(1);
-      showStatus('info', '✔ Nahrávka načtena ze schránky (' + sizeMb + ' MB). Vyplň pole a odešli.');
-      pasteBtn.style.display = 'none';
-      history.replaceState(null, '', location.pathname);
-    } catch (err) {
-      showStatus('err', '❌ Vložení selhalo: ' + err.message);
-      pasteBtn.disabled = false;
-    }
-  });
+    };
+  }
 
   // ── Přímý výběr souboru ───────────────────────────────────────────────────
   fileInput.addEventListener("change", async () => {
