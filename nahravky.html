@@ -128,6 +128,7 @@
   .status.info { background: #12160a; color: var(--pitland-green); border: 1px solid #3a4a0a; }
   .status.ok   { background: #152200; color: var(--pitland-green); border: 1px solid var(--pitland-green-dark); }
   .status.err  { background: #2a0e0e; color: #f5a0a0; border: 1px solid #c62828; }
+  .status.warn { background: #2a2410; color: #f5d97a; border: 1px solid #c69828; }
 
   .progress {
     height: 8px; background: #1e1e22; border-radius: 4px;
@@ -245,7 +246,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.16</footer>
+  <footer>Pitland · v1.17</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -713,6 +714,7 @@
         mimeType: currentFile.type || "audio/mp3",
         data: base64
       };
+      const uploadStartTs = Date.now();
       const res = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -733,7 +735,26 @@
         updateRequiredLabels();
       } else { throw new Error(result.error || ("HTTP " + res.status)); }
     } catch (err) {
-      showStatus("err", "❌ Chyba: " + err.message);
+      const elapsedSec = Math.round((Date.now() - (typeof uploadStartTs !== "undefined" ? uploadStartTs : Date.now())) / 1000);
+      const msg = String(err && err.message || err || "");
+      const isNetworkErr = /load failed|failed to fetch|network|aborted|timeout|abort/i.test(msg);
+      if (isNetworkErr && elapsedSec > 10) {
+        // Upload pravděpodobně proběhl, jen response selhala
+        progressBar.style.width = "100%";
+        showStatus("warn",
+          "⚠️ Spojení se přerušilo po " + elapsedSec + " s — upload se nejspíš dokončil. " +
+          "Pipeline pracuje v pozadí, soubor se objeví v Drive do ~5 min. " +
+          "Než pošleš znovu, zkontroluj Drive nebo se zeptej Jirky."
+        );
+        submitBtn.textContent = "Nahrát další";
+        fileInput.value = "";
+        currentFile = null;
+        fileName.textContent = "Klepni pro výběr nahrávky";
+        fileArea.classList.remove("has-file");
+        updateRequiredLabels();
+      } else {
+        showStatus("err", "❌ Chyba: " + msg);
+      }
       progress.classList.remove("show");
       progressBar.style.width = "0%";
     } finally {
