@@ -210,6 +210,12 @@
       </select>
     </div>
 
+    <div class="field">
+      <label for="datum" id="datumLabel">Datum nahrávky</label>
+      <input type="date" id="datum" name="datum">
+      <div class="hint-text">Defaultně dnes. Změň pokud nahráváš zpětně (čas bude 12:00).</div>
+    </div>
+
     <div class="field" id="pocetField" style="display:none;">
       <label for="pocet" id="pocetLabel">Počet účastníků celkem (vč. tebe)</label>
       <input type="number" id="pocet" name="pocet" min="1" max="12" placeholder="3" inputmode="numeric">
@@ -246,7 +252,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.17</footer>
+  <footer>Pitland · v1.18</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -327,6 +333,7 @@
   const progress    = document.getElementById("progress");
   const progressBar = document.getElementById("progressBar");
   const druhSelect  = document.getElementById("druh");
+  const datumInput  = document.getElementById("datum");
   const pocetField  = document.getElementById("pocetField");
   const pocetInput  = document.getElementById("pocet");
   const skymField   = document.getElementById("skymField");
@@ -397,6 +404,13 @@
   jmenoInput.addEventListener("input", updateRequiredLabels);
   skymInput.addEventListener("input", updateRequiredLabels);
   popisInput.addEventListener("input", updateRequiredLabels);
+
+  // ── Datum nahrávky default: dnes ──────────────────────────────────────────
+  try {
+    const d = new Date();
+    const localISO = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    datumInput.value = localISO;
+  } catch (e) { }
 
   // ── localStorage: zkratka SAM ────────────────────────────────────────────
   try {
@@ -712,6 +726,7 @@
         num_speakers: numSpeakers,
         filename: currentFile.name,
         mimeType: currentFile.type || "audio/mp3",
+        recording_date: datumInput.value || "",
         data: base64
       };
       const uploadStartTs = Date.now();
