@@ -252,7 +252,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.18</footer>
+  <footer>Pitland · v1.19</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -753,20 +753,49 @@
       const elapsedSec = Math.round((Date.now() - (typeof uploadStartTs !== "undefined" ? uploadStartTs : Date.now())) / 1000);
       const msg = String(err && err.message || err || "");
       const isNetworkErr = /load failed|failed to fetch|network|aborted|timeout|abort/i.test(msg);
-      if (isNetworkErr && elapsedSec > 10) {
-        // Upload pravděpodobně proběhl, jen response selhala
-        progressBar.style.width = "100%";
-        showStatus("warn",
-          "⚠️ Spojení se přerušilo po " + elapsedSec + " s — upload se nejspíš dokončil. " +
-          "Pipeline pracuje v pozadí, soubor se objeví v Drive do ~5 min. " +
-          "Než pošleš znovu, zkontroluj Drive nebo se zeptej Jirky."
-        );
-        submitBtn.textContent = "Nahrát další";
-        fileInput.value = "";
-        currentFile = null;
-        fileName.textContent = "Klepni pro výběr nahrávky";
-        fileArea.classList.remove("has-file");
-        updateRequiredLabels();
+
+      let verified = false;
+      if (isNetworkErr) {
+        // v1.19: misto time-based hadani auto-overuj upload pres checkRecent
+        showStatus("info", "⏳ Spojení selhalo po " + elapsedSec + " s — ověřuji upload na serveru…");
+        try {
+          const checkParams = new URLSearchParams({
+            fn: "checkRecent",
+            zkratka: jmeno,
+            druh: druh
+          });
+          const recordingDate = datumInput.value || "";
+          if (recordingDate) checkParams.set("recording_date", recordingDate);
+          const checkR = await fetch(WEBHOOK_URL + "?" + checkParams.toString());
+          const checkData = await checkR.json().catch(() => ({}));
+          if (checkData && checkData.ok && checkData.found && checkData.matches && checkData.matches.length > 0) {
+            const m = checkData.matches[0];
+            verified = true;
+            progressBar.style.width = "100%";
+            showStatus("ok", "✅ Hotovo (ověřeno i přes chybu spojení): " + (m.audio_file_name || ""));
+            submitBtn.textContent = "Nahrát další";
+            fileInput.value = "";
+            currentFile = null;
+            fileName.textContent = "Klepni pro výběr nahrávky";
+            fileArea.classList.remove("has-file");
+            updateRequiredLabels();
+          }
+        } catch (verifyErr) {
+          // verify selhalo — fallback na warn
+        }
+        if (!verified) {
+          progressBar.style.width = "100%";
+          showStatus("warn",
+            "⚠️ Spojení se přerušilo po " + elapsedSec + " s a ověření neuspělo. " +
+            "Upload mohl proběhnout — zkontroluj Drive nebo zkus znovu za chvíli."
+          );
+          submitBtn.textContent = "Nahrát další";
+          fileInput.value = "";
+          currentFile = null;
+          fileName.textContent = "Klepni pro výběr nahrávky";
+          fileArea.classList.remove("has-file");
+          updateRequiredLabels();
+        }
       } else {
         showStatus("err", "❌ Chyba: " + msg);
       }
