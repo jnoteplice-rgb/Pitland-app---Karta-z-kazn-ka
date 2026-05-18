@@ -252,7 +252,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.21</footer>
+  <footer>Pitland · v1.22</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -304,7 +304,7 @@
   // ── Konfigurace ──────────────────────────────────────────────────────────
   const WEBHOOK_URL      = "https://script.google.com/macros/s/AKfycbzZLOlG9-ezkQ4wmym4ulsEmxt7BkAsrmR_tjFVQLO-_186rARBXwu1hyw14ApjleXI/exec";
   const TEMP_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbz4pNkjjM0FBKUlCwVR97aiBWczlpL3fjw19Q7z8rDkP2xZVGVWASLmMxvx-6YXAuZb/exec";
-  const MAX_SIZE_MB = 45;
+  const MAX_SIZE_MB = 250;  // v1.22: input limit zvedly z 45 (po komprimi je vystup ~10 MB / hod)
   const MP3_KBPS    = 24;
   const MP3_SAMPLE_RATE = 16000;  // 16 kHz mono = nativni vstup STT modelu (Scribe, Whisper)
   const MULTIPART_THRESHOLD_SEC = 3600;  // 60 min - nad timto delime
@@ -495,19 +495,27 @@
       const arrayBuffer = await file.arrayBuffer();
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       const audioCtx = new AudioCtx();
-      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+      let audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
       audioCtx.close();
       // v1.20: resample na MP3_SAMPLE_RATE (16 kHz) mono pres OfflineAudioContext
       showStatus('info', 'Resampluji na 16 kHz mono...');
       const OfflineCtx = window.OfflineAudioContext || window.webkitOfflineAudioContext;
       const targetLen  = Math.ceil(audioBuffer.duration * MP3_SAMPLE_RATE);
-      const offlineCtx = new OfflineCtx(1, targetLen, MP3_SAMPLE_RATE);
-      const src        = offlineCtx.createBufferSource();
+      let offlineCtx   = new OfflineCtx(1, targetLen, MP3_SAMPLE_RATE);
+      let src          = offlineCtx.createBufferSource();
       src.buffer       = audioBuffer;
       src.connect(offlineCtx.destination);
       src.start(0);
-      const resampled  = await offlineCtx.startRendering();
-      const mono       = resampled.getChannelData(0);
+      let resampled    = await offlineCtx.startRendering();
+      const mono       = new Float32Array(resampled.getChannelData(0));  // copy out
+      // v1.22: uvolneni reference na velke buffery (Safari iOS memory hygiena)
+      src.disconnect();
+      src = null;
+      audioBuffer = null;
+      offlineCtx = null;
+      resampled = null;
+      // give GC a chance
+      await new Promise(function(r) { setTimeout(r, 50); });
       const durSec     = mono.length / MP3_SAMPLE_RATE;
       function f32ToI16(buf) {
         const out = new Int16Array(buf.length);
@@ -687,6 +695,11 @@
       if (f.size > MAX_SIZE_MB * 1024 * 1024) {
         showStatus("err", "Soubor je moc velký (" + (f.size/1024/1024).toFixed(1) + " MB). Limit je " + MAX_SIZE_MB + " MB.");
         return;
+      }
+      // v1.22: mobile memory warning - decodeAudioData potrebuje ~22x file size v RAM
+      const isMobileSafari = /iPhone|iPad|iPod/.test(navigator.userAgent);
+      if (isMobileSafari && f.size > 35 * 1024 * 1024) {
+        showStatus("warn", "Velký soubor (" + (f.size/1024/1024).toFixed(1) + " MB) na mobilu — Safari muze pri konverzi spadnout (pamet). Doporucuji desktop browser pro nahravky > 30 MB.");
       }
       await setFile(f);
     }
