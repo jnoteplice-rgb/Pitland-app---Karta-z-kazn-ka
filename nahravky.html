@@ -7,11 +7,27 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Pitland – Nahrání záznamu</title>
 <link rel="manifest" href="nahravky-manifest.json">
-<!-- v1.29: coi-serviceworker se POKUSI dat SAB - kdyz funguje (desktop, modern iOS) pak ffmpeg.wasm s velkymi soubory; kdyz ne (stary iOS) pak fallback na Web Audio API max ~30 MB -->
-<script src="coi-serviceworker.js"></script>
+<!-- v1.30: KILL coi-serviceworker (zpusobovala strobing loop na iOS) + pure Web Audio path -->
+<script>
+// Unregister any existing service workers (mainly coi-serviceworker leftover from v1.28/v1.29)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    var killed = 0;
+    for (var i = 0; i < registrations.length; i++) {
+      registrations[i].unregister();
+      killed++;
+    }
+    if (killed > 0) console.log('v1.30: killed ' + killed + ' service workers');
+  });
+  // Also clear caches that might have been populated by SW
+  if (window.caches) {
+    caches.keys().then(function(names) {
+      for (var i = 0; i < names.length; i++) caches.delete(names[i]);
+    });
+  }
+}
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
-<!-- ffmpeg.wasm 0.12 (jen kdyz SAB dostupne) -->
-<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
 <style>
   :root {
     --pitland-green: #c6ff00;
@@ -256,7 +272,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.29</footer>
+  <footer>Pitland · v1.30</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -491,115 +507,7 @@
   });
 
   // ── Konverze M4A → MP3 ──────────────────────────────────────────────────
-  // v1.29: detekce SharedArrayBuffer + volba cesty
-  let _ffmpegInstance = null;
-  let _ffmpegLoadingPromise = null;
-
-  async function getFfmpeg() {
-    if (_ffmpegInstance) return _ffmpegInstance;
-    if (_ffmpegLoadingPromise) return _ffmpegLoadingPromise;
-    _ffmpegLoadingPromise = (async () => {
-      showStatus('info', '🔄 Stahuji ffmpeg.wasm (~30 MB, jen poprve)...');
-      const FFmpeg = (window.FFmpegWASM || window.FFmpeg || {}).FFmpeg;
-      if (!FFmpeg) throw new Error('ffmpeg.wasm 0.12 wrapper neni dostupny');
-      const ffmpeg = new FFmpeg();
-      ffmpeg.on('progress', function(ev) {
-        if (ev && typeof ev.progress === 'number') {
-          const pct = Math.round(ev.progress * 100);
-          showStatus('info', '🔄 ffmpeg konverze... ' + pct + ' %');
-        }
-      });
-      ffmpeg.on('log', function(_ev) {});
-      await ffmpeg.load({
-        coreURL: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.6/dist/umd/ffmpeg-core.js',
-        wasmURL: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.6/dist/umd/ffmpeg-core.wasm',
-        workerURL: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.6/dist/umd/ffmpeg-core.worker.js'
-      });
-      _ffmpegInstance = ffmpeg;
-      return ffmpeg;
-    })();
-    return _ffmpegLoadingPromise;
-  }
-
-  async function probeAudioDurationFfmpeg(ffmpeg, inputName) {
-    let dur = 0;
-    const logHandler = function(ev) {
-      const m = (ev.message || '').match(/Duration:\s*(\d+):(\d+):(\d+\.?\d*)/);
-      if (m) dur = parseInt(m[1], 10) * 3600 + parseInt(m[2], 10) * 60 + parseFloat(m[3]);
-    };
-    ffmpeg.on('log', logHandler);
-    try { await ffmpeg.exec(['-i', inputName, '-f', 'null', '-']); } catch (_) {}
-    ffmpeg.off('log', logHandler);
-    return dur;
-  }
-
-  async function convertToMp3_ffmpeg(file) {
-    showStatus('info', '🔄 Pripravuji ffmpeg...');
-    submitBtn.disabled = true;
-    try {
-      const ffmpeg = await getFfmpeg();
-      const inputBytes = new Uint8Array(await file.arrayBuffer());
-      const extMatch = file.name.match(/\.[^.]+$/);
-      const ext = (extMatch ? extMatch[0] : '.dat').toLowerCase();
-      const inputName = 'input' + ext;
-      const baseName = file.name.replace(/\.[^.]+$/, '');
-      const origMb = (file.size / 1024 / 1024).toFixed(1);
-
-      showStatus('info', '📥 Nacitam soubor (' + origMb + ' MB)...');
-      await ffmpeg.writeFile(inputName, inputBytes);
-
-      showStatus('info', '🔎 Zjistuji delku audio...');
-      const durSec = await probeAudioDurationFfmpeg(ffmpeg, inputName);
-      const minutesTotal = Math.round(durSec / 60);
-      if (!durSec || durSec <= 0) throw new Error('Nepodarilo se zjistit delku audio');
-
-      if (durSec <= MULTIPART_THRESHOLD_SEC) {
-        showStatus('info', '🎵 Komprimuji (' + minutesTotal + ' min) na MP3 24 kbps mono 16 kHz...');
-        await ffmpeg.exec(['-i', inputName, '-ac', '1', '-ar', String(MP3_SAMPLE_RATE), '-b:a', MP3_KBPS + 'k', '-y', 'output.mp3']);
-        const data = await ffmpeg.readFile('output.mp3');
-        const blob = new Blob([data.buffer], { type: 'audio/mp3' });
-        const mp3File = new File([blob], baseName + '.mp3', { type: 'audio/mp3' });
-        const mp3Mb = (mp3File.size / 1024 / 1024).toFixed(1);
-        showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 24 kbps mono 16 kHz, ffmpeg)');
-        try { await ffmpeg.deleteFile(inputName); } catch(_) {}
-        try { await ffmpeg.deleteFile('output.mp3'); } catch(_) {}
-        submitBtn.disabled = false;
-        currentMultipartMeta = null;
-        return mp3File;
-      }
-
-      const N = Math.ceil(durSec / MULTIPART_CHUNK_SEC);
-      showStatus('info', '📂 Velky zaznam (' + minutesTotal + ' min) - splituji + komprimuji na ' + N + ' casti...');
-      await ffmpeg.exec(['-i', inputName, '-ac', '1', '-ar', String(MP3_SAMPLE_RATE), '-b:a', MP3_KBPS + 'k', '-f', 'segment', '-segment_time', String(MULTIPART_CHUNK_SEC), '-reset_timestamps', '1', '-y', 'part%03d.mp3']);
-
-      const parentId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : ('mp_' + Date.now() + '_' + Math.random().toString(36).slice(2));
-      const parts = [], offsets = [], durations = [];
-      let totalMp3Bytes = 0;
-      for (let i = 0; i < N; i++) {
-        const partFsName = 'part' + String(i).padStart(3, '0') + '.mp3';
-        const data = await ffmpeg.readFile(partFsName);
-        const blob = new Blob([data.buffer], { type: 'audio/mp3' });
-        parts.push(new File([blob], baseName + '_part' + (i + 1) + 'of' + N + '.mp3', { type: 'audio/mp3' }));
-        offsets.push(i * MULTIPART_CHUNK_SEC);
-        durations.push((i === N - 1) ? (durSec - i * MULTIPART_CHUNK_SEC) : MULTIPART_CHUNK_SEC);
-        totalMp3Bytes += blob.size;
-        try { await ffmpeg.deleteFile(partFsName); } catch(_) {}
-      }
-      try { await ffmpeg.deleteFile(inputName); } catch(_) {}
-
-      const totalMp3Mb = (totalMp3Bytes / 1024 / 1024).toFixed(1);
-      showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + totalMp3Mb + ' MB v ' + N + ' castech (ffmpeg)');
-      submitBtn.disabled = false;
-      currentMultipartMeta = { parentId: parentId, parts: parts, offsets: offsets, durations: durations, partCount: N };
-      return parts[0];
-    } catch (err) {
-      showStatus('err', '❌ ffmpeg konverze selhala: ' + err.message);
-      submitBtn.disabled = false;
-      throw err;
-    }
-  }
-
-  async function convertToMp3_webaudio(file) {
+  async function convertToMp3(file) {
     if (/\.mp3$/i.test(file.name)) return file;
     showStatus('info', '🔄 Konvertuji na MP3… 0 %');
     submitBtn.disabled = true;
@@ -713,33 +621,6 @@
       return file;
     }
   }
-
-  // v1.29: dispatch - SAB available? -> ffmpeg ; else -> Web Audio API
-  async function convertToMp3(file) {
-    const hasSAB = typeof SharedArrayBuffer !== 'undefined';
-    const isMobile = /iPhone|iPad|iPod|Android/.test(navigator.userAgent);
-    const sizeMb = file.size / 1024 / 1024;
-
-    console.log('convertToMp3: hasSAB=' + hasSAB + ' isMobile=' + isMobile + ' sizeMb=' + sizeMb.toFixed(1));
-
-    if (hasSAB) {
-      // Try ffmpeg path - moderni desktop nebo iOS s funkcnim coi-serviceworker
-      try {
-        return await convertToMp3_ffmpeg(file);
-      } catch (e) {
-        console.log('ffmpeg path failed, falling back to Web Audio:', e.message);
-        showStatus('warn', '⚠️ ffmpeg cesta selhala, zkousim Web Audio fallback...');
-      }
-    }
-    // Web Audio API fallback (works on all browsers, max ~30 MB on iOS Safari memory limit)
-    if (!hasSAB && isMobile && sizeMb > 30) {
-      showStatus('err', '❌ Velky soubor (' + sizeMb.toFixed(1) + ' MB) na mobilu — iOS Safari nema dost pameti. Pouzij Mac desktop browser.');
-      submitBtn.disabled = false;
-      throw new Error('Mobile + no SAB + large file = unsupported. Use desktop.');
-    }
-    return await convertToMp3_webaudio(file);
-  }
-
 
   async function setFile(file) {
     currentFile = await convertToMp3(file);
