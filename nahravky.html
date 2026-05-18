@@ -252,7 +252,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.19</footer>
+  <footer>Pitland · v1.20</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -305,7 +305,8 @@
   const WEBHOOK_URL      = "https://script.google.com/macros/s/AKfycbzZLOlG9-ezkQ4wmym4ulsEmxt7BkAsrmR_tjFVQLO-_186rARBXwu1hyw14ApjleXI/exec";
   const TEMP_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbz4pNkjjM0FBKUlCwVR97aiBWczlpL3fjw19Q7z8rDkP2xZVGVWASLmMxvx-6YXAuZb/exec";
   const MAX_SIZE_MB = 45;
-  const MP3_KBPS    = 64;
+  const MP3_KBPS    = 24;
+  const MP3_SAMPLE_RATE = 16000;  // 16 kHz mono = nativni vstup STT modelu (Scribe, Whisper)
 
   // Default počet účastníků per druh
   const POCET_DEFAULT = {
@@ -493,13 +494,17 @@
       const audioCtx = new AudioCtx();
       const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
       audioCtx.close();
-      const numCh = audioBuffer.numberOfChannels;
-      const len   = audioBuffer.length;
-      const mono  = new Float32Array(len);
-      for (let c = 0; c < numCh; c++) {
-        const ch = audioBuffer.getChannelData(c);
-        for (let i = 0; i < len; i++) mono[i] += ch[i] / numCh;
-      }
+      // v1.20: resample na MP3_SAMPLE_RATE (16 kHz) mono pres OfflineAudioContext
+      showStatus('info', 'Resampluji na 16 kHz mono...');
+      const OfflineCtx = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      const targetLen  = Math.ceil(audioBuffer.duration * MP3_SAMPLE_RATE);
+      const offlineCtx = new OfflineCtx(1, targetLen, MP3_SAMPLE_RATE);
+      const src        = offlineCtx.createBufferSource();
+      src.buffer       = audioBuffer;
+      src.connect(offlineCtx.destination);
+      src.start(0);
+      const resampled  = await offlineCtx.startRendering();
+      const mono       = resampled.getChannelData(0);
       function f32ToI16(buf) {
         const out = new Int16Array(buf.length);
         for (let i = 0; i < buf.length; i++) {
@@ -509,7 +514,7 @@
         return out;
       }
       const monoI16   = f32ToI16(mono);
-      const mp3enc    = new lamejs.Mp3Encoder(1, audioBuffer.sampleRate, MP3_KBPS);
+      const mp3enc    = new lamejs.Mp3Encoder(1, MP3_SAMPLE_RATE, MP3_KBPS);
       const BLOCK     = 1152;
       const CHUNK     = 50;
       const mp3chunks = [];
@@ -537,7 +542,7 @@
       const mp3File = new File([blob], newName, { type: 'audio/mp3' });
       const origMb = (file.size / 1024 / 1024).toFixed(1);
       const mp3Mb  = (mp3File.size / 1024 / 1024).toFixed(1);
-      showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 64 kbps mono)');
+      showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 24 kbps mono 16 kHz)');
       submitBtn.disabled = false;
       return mp3File;
     } catch (err) {
