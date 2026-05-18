@@ -252,7 +252,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.20</footer>
+  <footer>Pitland · v1.21</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -307,6 +307,8 @@
   const MAX_SIZE_MB = 45;
   const MP3_KBPS    = 24;
   const MP3_SAMPLE_RATE = 16000;  // 16 kHz mono = nativni vstup STT modelu (Scribe, Whisper)
+  const MULTIPART_THRESHOLD_SEC = 3600;  // 60 min - nad timto delime
+  const MULTIPART_CHUNK_SEC = 3000;       // 50 min chunky (Scribe ~4 min = bezpecne pod Apps Script 6 min limit)
 
   // Default počet účastníků per druh
   const POCET_DEFAULT = {
@@ -353,6 +355,7 @@
   const peopleSearch = document.getElementById("peopleSearch");
 
   let currentFile = null;
+  let currentMultipartMeta = null;  // v1.21: pro dlouhe nahravky (parent_recording_id, parts[], offsets[], durations[])
   let peopleCache = null;
 
   // ── Pole se mění podle druhu ─────────────────────────────────────────────
@@ -505,6 +508,7 @@
       src.start(0);
       const resampled  = await offlineCtx.startRendering();
       const mono       = resampled.getChannelData(0);
+      const durSec     = mono.length / MP3_SAMPLE_RATE;
       function f32ToI16(buf) {
         const out = new Int16Array(buf.length);
         for (let i = 0; i < buf.length; i++) {
@@ -513,38 +517,76 @@
         }
         return out;
       }
-      const monoI16   = f32ToI16(mono);
-      const mp3enc    = new lamejs.Mp3Encoder(1, MP3_SAMPLE_RATE, MP3_KBPS);
-      const BLOCK     = 1152;
-      const CHUNK     = 50;
-      const mp3chunks = [];
-      const total     = Math.ceil(monoI16.length / BLOCK);
-      await new Promise((resolve) => {
-        let b = 0;
-        function tick() {
-          const end = Math.min(b + CHUNK, total);
-          for (; b < end; b++) {
-            const buf = mp3enc.encodeBuffer(monoI16.subarray(b * BLOCK, (b + 1) * BLOCK));
-            if (buf.length > 0) mp3chunks.push(buf);
+
+      // v1.21: encode helper - PCM Int16 -> MP3 chunks
+      async function encodePartToMp3(monoI16, statusLabel) {
+        const mp3enc    = new lamejs.Mp3Encoder(1, MP3_SAMPLE_RATE, MP3_KBPS);
+        const BLOCK     = 1152;
+        const CHUNK     = 50;
+        const mp3chunks = [];
+        const total     = Math.ceil(monoI16.length / BLOCK);
+        await new Promise((resolve) => {
+          let b = 0;
+          function tick() {
+            const end = Math.min(b + CHUNK, total);
+            for (; b < end; b++) {
+              const buf = mp3enc.encodeBuffer(monoI16.subarray(b * BLOCK, (b + 1) * BLOCK));
+              if (buf.length > 0) mp3chunks.push(buf);
+            }
+            const pct = Math.round(b / total * 100);
+            showStatus('info', '🔄 Konvertuji na MP3 ' + statusLabel + '… ' + pct + ' %');
+            if (b < total) { setTimeout(tick, 0); } else {
+              const flush = mp3enc.flush();
+              if (flush.length > 0) mp3chunks.push(flush);
+              resolve();
+            }
           }
-          const pct = Math.round(b / total * 100);
-          showStatus('info', '🔄 Konvertuji na MP3… ' + pct + ' %');
-          if (b < total) { setTimeout(tick, 0); } else {
-            const flush = mp3enc.flush();
-            if (flush.length > 0) mp3chunks.push(flush);
-            resolve();
-          }
-        }
-        setTimeout(tick, 0);
-      });
-      const blob    = new Blob(mp3chunks, { type: 'audio/mp3' });
-      const newName = file.name.replace(/\.[^.]+$/, '') + '.mp3';
-      const mp3File = new File([blob], newName, { type: 'audio/mp3' });
-      const origMb = (file.size / 1024 / 1024).toFixed(1);
-      const mp3Mb  = (mp3File.size / 1024 / 1024).toFixed(1);
-      showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 24 kbps mono 16 kHz)');
+          setTimeout(tick, 0);
+        });
+        return new Blob(mp3chunks, { type: 'audio/mp3' });
+      }
+
+      const origMb  = (file.size / 1024 / 1024).toFixed(1);
+      const baseName = file.name.replace(/\.[^.]+$/, '');
+
+      if (durSec <= MULTIPART_THRESHOLD_SEC) {
+        // Standardní single-file flow
+        const monoI16 = f32ToI16(mono);
+        const blob    = await encodePartToMp3(monoI16, '');
+        const mp3File = new File([blob], baseName + '.mp3', { type: 'audio/mp3' });
+        const mp3Mb   = (mp3File.size / 1024 / 1024).toFixed(1);
+        showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 24 kbps mono 16 kHz)');
+        submitBtn.disabled = false;
+        currentMultipartMeta = null;
+        return mp3File;
+      }
+
+      // v1.21: MULTIPART — audio > 60 min → split na chunky 50 min
+      const N = Math.ceil(durSec / MULTIPART_CHUNK_SEC);
+      const minutesTotal = Math.round(durSec / 60);
+      showStatus('info', '📂 Velky zaznam (' + minutesTotal + ' min) - rozdeluji na ' + N + ' casti...');
+      const parentId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : ('mp_' + Date.now() + '_' + Math.random().toString(36).slice(2));
+      const parts = [];
+      const offsets = [];
+      const durations = [];
+      let totalMp3Bytes = 0;
+      for (let i = 0; i < N; i++) {
+        const startSample = i * MULTIPART_CHUNK_SEC * MP3_SAMPLE_RATE;
+        const endSample   = Math.min((i + 1) * MULTIPART_CHUNK_SEC * MP3_SAMPLE_RATE, mono.length);
+        const partMono    = mono.subarray(startSample, endSample);
+        const partI16     = f32ToI16(partMono);
+        const partBlob    = await encodePartToMp3(partI16, '(cast ' + (i + 1) + '/' + N + ')');
+        const partName    = baseName + '_part' + (i + 1) + 'of' + N + '.mp3';
+        parts.push(new File([partBlob], partName, { type: 'audio/mp3' }));
+        offsets.push(i * MULTIPART_CHUNK_SEC);
+        durations.push((endSample - startSample) / MP3_SAMPLE_RATE);
+        totalMp3Bytes += partBlob.size;
+      }
+      const totalMp3Mb = (totalMp3Bytes / 1024 / 1024).toFixed(1);
+      showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + totalMp3Mb + ' MB v ' + N + ' castech (MP3 24 kbps mono 16 kHz)');
       submitBtn.disabled = false;
-      return mp3File;
+      currentMultipartMeta = { parentId: parentId, parts: parts, offsets: offsets, durations: durations, partCount: N };
+      return parts[0];
     } catch (err) {
       showStatus('err', '❌ Konverze selhala: ' + err.message + ' — nahrávám originál.');
       submitBtn.disabled = false;
@@ -718,23 +760,73 @@
     progressBar.style.width = "15%";
     showStatus("info", "Připravuji soubor…");
 
+    const uploadStartTs = Date.now();
     try {
-      const base64 = await fileToBase64(currentFile);
-      progressBar.style.width = "45%";
-      showStatus("info", "Odesílám na Drive… (může chvíli trvat)");
-      const payload = {
+      const basePayload = {
         jmeno: jmeno,
         druh: druh,
         skym: skymForFilename,
         popis: popis,
         speakers: speakersCSV,
         num_speakers: numSpeakers,
+        mimeType: "audio/mp3",
+        recording_date: datumInput.value || ""
+      };
+
+      // v1.21: multipart upload path
+      if (currentMultipartMeta && currentMultipartMeta.partCount > 1) {
+        const meta = currentMultipartMeta;
+        showStatus("info", "📤 Multipart upload: " + meta.partCount + " casti");
+        for (let i = 0; i < meta.parts.length; i++) {
+          const part = meta.parts[i];
+          const partBase64 = await fileToBase64(part);
+          const pctStart = 5 + Math.round((i / meta.partCount) * 90);
+          progressBar.style.width = pctStart + "%";
+          showStatus("info", "📤 Upload cast " + (i + 1) + "/" + meta.partCount + " (" + (part.size / 1024 / 1024).toFixed(1) + " MB)...");
+          const partPayload = Object.assign({}, basePayload, {
+            filename: part.name,
+            data: partBase64,
+            parent_recording_id: meta.parentId,
+            part_index: i + 1,
+            part_count: meta.partCount,
+            part_offset_sec: meta.offsets[i],
+            part_duration_sec: meta.durations[i]
+          });
+          const partRes = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(partPayload)
+          });
+          const partText = await partRes.text();
+          let partResult;
+          try { partResult = JSON.parse(partText); } catch (e) { partResult = { ok: false, error: partText }; }
+          if (!(partRes.ok && partResult.ok)) {
+            throw new Error("Cast " + (i + 1) + "/" + meta.partCount + " selhala: " + (partResult.error || partRes.status));
+          }
+          const pctEnd = 5 + Math.round(((i + 1) / meta.partCount) * 90);
+          progressBar.style.width = pctEnd + "%";
+        }
+        progressBar.style.width = "100%";
+        showStatus("ok", "✅ Vsech " + meta.partCount + " casti nahrano. Server zpracuje prepis (~" + (5 + meta.partCount * 4) + " min) a posle email.");
+        submitBtn.textContent = "Nahrát další";
+        fileInput.value = "";
+        currentFile = null;
+        currentMultipartMeta = null;
+        fileName.textContent = "Klepni pro výběr nahrávky";
+        fileArea.classList.remove("has-file");
+        updateRequiredLabels();
+        return;
+      }
+
+      // Single-file path (existing flow)
+      const base64 = await fileToBase64(currentFile);
+      progressBar.style.width = "45%";
+      showStatus("info", "Odesílám na Drive… (může chvíli trvat)");
+      const payload = Object.assign({}, basePayload, {
         filename: currentFile.name,
         mimeType: currentFile.type || "audio/mp3",
-        recording_date: datumInput.value || "",
         data: base64
-      };
-      const uploadStartTs = Date.now();
+      });
       const res = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -750,6 +842,7 @@
         submitBtn.textContent = "Nahrát další";
         fileInput.value = "";
         currentFile = null;
+        currentMultipartMeta = null;
         fileName.textContent = "Klepni pro výběr nahrávky";
         fileArea.classList.remove("has-file");
         updateRequiredLabels();
