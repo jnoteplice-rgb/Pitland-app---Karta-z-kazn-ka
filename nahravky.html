@@ -7,9 +7,11 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Pitland – Nahrání záznamu</title>
 <link rel="manifest" href="nahravky-manifest.json">
+<script src="coi-serviceworker.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
-<!-- v1.27: ffmpeg.wasm 0.10.1 + core 0.10.0 (pre-MT, no proxy_main), NO SharedArrayBuffer (funguje na GitHub Pages bez COOP/COEP) -->
-<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.10.1/dist/ffmpeg.min.js"></script>
+<!-- v1.28: ffmpeg.wasm 0.12.10 + core-mt + coi-serviceworker pro SharedArrayBuffer -->
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/umd/ffmpeg.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/umd/index.js"></script>
 <style>
   :root {
     --pitland-green: #c6ff00;
@@ -254,7 +256,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.27</footer>
+  <footer>Pitland · v1.28</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -488,7 +490,7 @@
     if (e.target === peopleModal) closePeopleModal();
   });
 
-  // ── Konverze M4A → MP3 (v1.27: ffmpeg.wasm 0.10.1 + core 0.10.0 pre-MT, no SAB no proxy_main) ────
+  // ── Konverze M4A → MP3 (v1.28: ffmpeg.wasm 0.12 + core-mt + coi-serviceworker SAB) ────
   let _ffmpegInstance = null;
   let _ffmpegLoadingPromise = null;
 
@@ -496,21 +498,26 @@
     if (_ffmpegInstance) return _ffmpegInstance;
     if (_ffmpegLoadingPromise) return _ffmpegLoadingPromise;
     _ffmpegLoadingPromise = (async () => {
-      showStatus('info', '🔄 Stahuji ffmpeg.wasm (~25 MB, jen poprve)...');
-      // ffmpeg.wasm 0.11.x API
-      const wrapper = window.FFmpeg;
-      if (!wrapper || !wrapper.createFFmpeg) throw new Error('ffmpeg.wasm 0.10 knihovna se nenacetla');
-      const ffmpeg = wrapper.createFFmpeg({
-        log: false,
-        corePath: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js',
-        progress: function(p) {
-          if (p && typeof p.ratio === 'number') {
-            const pct = Math.round(p.ratio * 100);
-            showStatus('info', '🔄 ffmpeg konverze... ' + pct + ' %');
-          }
+      showStatus('info', '🔄 Stahuji ffmpeg.wasm (~30 MB, jen poprve)...');
+      if (typeof SharedArrayBuffer === 'undefined') {
+        throw new Error('SharedArrayBuffer neni dostupne — coi-serviceworker mozna nedobehl, zkus refresh stranky');
+      }
+      // ffmpeg.wasm 0.12.x API
+      const FFmpeg = (window.FFmpegWASM || window.FFmpeg || {}).FFmpeg;
+      if (!FFmpeg) throw new Error('ffmpeg.wasm 0.12 knihovna se nenacetla');
+      const ffmpeg = new FFmpeg();
+      ffmpeg.on('progress', function(ev) {
+        if (ev && typeof ev.progress === 'number') {
+          const pct = Math.round(ev.progress * 100);
+          showStatus('info', '🔄 ffmpeg konverze... ' + pct + ' %');
         }
       });
-      await ffmpeg.load();
+      ffmpeg.on('log', function(_ev) { /* mute */ });
+      await ffmpeg.load({
+        coreURL: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.6/dist/umd/ffmpeg-core.js',
+        wasmURL: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.6/dist/umd/ffmpeg-core.wasm',
+        workerURL: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-mt@0.12.6/dist/umd/ffmpeg-core.worker.js'
+      });
       _ffmpegInstance = ffmpeg;
       return ffmpeg;
     })();
@@ -518,14 +525,14 @@
   }
 
   async function probeAudioDuration(ffmpeg, inputName) {
-    // v0.11: setLogger to capture Duration
     let dur = 0;
-    ffmpeg.setLogger(function(msg) {
-      const m = (msg.message || '').match(/Duration:\s*(\d+):(\d+):(\d+\.?\d*)/);
+    const logHandler = function(ev) {
+      const m = (ev.message || '').match(/Duration:\s*(\d+):(\d+):(\d+\.?\d*)/);
       if (m) dur = parseInt(m[1], 10) * 3600 + parseInt(m[2], 10) * 60 + parseFloat(m[3]);
-    });
-    try { await ffmpeg.run('-i', inputName, '-f', 'null', '-'); } catch (_) {}
-    ffmpeg.setLogger(function() {});  // reset
+    };
+    ffmpeg.on('log', logHandler);
+    try { await ffmpeg.exec(['-i', inputName, '-f', 'null', '-']); } catch (_) {}
+    ffmpeg.off('log', logHandler);
     return dur;
   }
 
@@ -542,7 +549,7 @@
       const origMb = (file.size / 1024 / 1024).toFixed(1);
 
       showStatus('info', '📥 Nacitam soubor (' + origMb + ' MB)...');
-      ffmpeg.FS('writeFile', inputName, inputBytes);
+      await ffmpeg.writeFile(inputName, inputBytes);
 
       showStatus('info', '🔎 Zjistuji delku audio...');
       const durSec = await probeAudioDuration(ffmpeg, inputName);
@@ -552,20 +559,14 @@
       if (durSec <= MULTIPART_THRESHOLD_SEC) {
         // SINGLE
         showStatus('info', '🎵 Komprimuji (' + minutesTotal + ' min) na MP3 24 kbps mono 16 kHz...');
-        await ffmpeg.run(
-          '-i', inputName,
-          '-ac', '1',
-          '-ar', String(MP3_SAMPLE_RATE),
-          '-b:a', MP3_KBPS + 'k',
-          '-y', 'output.mp3'
-        );
-        const data = ffmpeg.FS('readFile', 'output.mp3');
+        await ffmpeg.exec(['-i', inputName, '-ac', '1', '-ar', String(MP3_SAMPLE_RATE), '-b:a', MP3_KBPS + 'k', '-y', 'output.mp3']);
+        const data = await ffmpeg.readFile('output.mp3');
         const blob = new Blob([data.buffer], { type: 'audio/mp3' });
         const mp3File = new File([blob], baseName + '.mp3', { type: 'audio/mp3' });
         const mp3Mb = (mp3File.size / 1024 / 1024).toFixed(1);
         showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 24 kbps mono 16 kHz)');
-        try { ffmpeg.FS('unlink', inputName); } catch(_) {}
-        try { ffmpeg.FS('unlink', 'output.mp3'); } catch(_) {}
+        try { await ffmpeg.deleteFile(inputName); } catch(_) {}
+        try { await ffmpeg.deleteFile('output.mp3'); } catch(_) {}
         submitBtn.disabled = false;
         currentMultipartMeta = null;
         return mp3File;
@@ -574,16 +575,7 @@
       // MULTIPART
       const N = Math.ceil(durSec / MULTIPART_CHUNK_SEC);
       showStatus('info', '📂 Velky zaznam (' + minutesTotal + ' min) - splituji + komprimuji na ' + N + ' casti...');
-      await ffmpeg.run(
-        '-i', inputName,
-        '-ac', '1',
-        '-ar', String(MP3_SAMPLE_RATE),
-        '-b:a', MP3_KBPS + 'k',
-        '-f', 'segment',
-        '-segment_time', String(MULTIPART_CHUNK_SEC),
-        '-reset_timestamps', '1',
-        '-y', 'part%03d.mp3'
-      );
+      await ffmpeg.exec(['-i', inputName, '-ac', '1', '-ar', String(MP3_SAMPLE_RATE), '-b:a', MP3_KBPS + 'k', '-f', 'segment', '-segment_time', String(MULTIPART_CHUNK_SEC), '-reset_timestamps', '1', '-y', 'part%03d.mp3']);
 
       const parentId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : ('mp_' + Date.now() + '_' + Math.random().toString(36).slice(2));
       const parts = [];
@@ -593,16 +585,16 @@
       for (let i = 0; i < N; i++) {
         const num = String(i).padStart(3, '0');
         const partFsName = 'part' + num + '.mp3';
-        const data = ffmpeg.FS('readFile', partFsName);
+        const data = await ffmpeg.readFile(partFsName);
         const blob = new Blob([data.buffer], { type: 'audio/mp3' });
         const partName = baseName + '_part' + (i + 1) + 'of' + N + '.mp3';
         parts.push(new File([blob], partName, { type: 'audio/mp3' }));
         offsets.push(i * MULTIPART_CHUNK_SEC);
         durations.push((i === N - 1) ? (durSec - i * MULTIPART_CHUNK_SEC) : MULTIPART_CHUNK_SEC);
         totalMp3Bytes += blob.size;
-        try { ffmpeg.FS('unlink', partFsName); } catch(_) {}
+        try { await ffmpeg.deleteFile(partFsName); } catch(_) {}
       }
-      try { ffmpeg.FS('unlink', inputName); } catch(_) {}
+      try { await ffmpeg.deleteFile(inputName); } catch(_) {}
 
       const totalMp3Mb = (totalMp3Bytes / 1024 / 1024).toFixed(1);
       showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + totalMp3Mb + ' MB v ' + N + ' castech (MP3 24 kbps mono 16 kHz)');
