@@ -8,8 +8,8 @@
 <title>Pitland – Nahrání záznamu</title>
 <link rel="manifest" href="nahravky-manifest.json">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
-<!-- v1.26: ffmpeg.wasm 0.11.6 + core-st 0.11.1 = TRULY single-threaded, NO SharedArrayBuffer (funguje na GitHub Pages bez COOP/COEP) -->
-<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+<!-- v1.27: ffmpeg.wasm 0.10.1 + core 0.10.0 (pre-MT, no proxy_main), NO SharedArrayBuffer (funguje na GitHub Pages bez COOP/COEP) -->
+<script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.10.1/dist/ffmpeg.min.js"></script>
 <style>
   :root {
     --pitland-green: #c6ff00;
@@ -254,7 +254,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.26</footer>
+  <footer>Pitland · v1.27</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -488,7 +488,7 @@
     if (e.target === peopleModal) closePeopleModal();
   });
 
-  // ── Konverze M4A → MP3 (v1.26: ffmpeg.wasm 0.11.6 + core-st 0.11.1, single-threaded, no SAB) ────
+  // ── Konverze M4A → MP3 (v1.27: ffmpeg.wasm 0.10.1 + core 0.10.0 pre-MT, no SAB no proxy_main) ────
   let _ffmpegInstance = null;
   let _ffmpegLoadingPromise = null;
 
@@ -499,10 +499,10 @@
       showStatus('info', '🔄 Stahuji ffmpeg.wasm (~25 MB, jen poprve)...');
       // ffmpeg.wasm 0.11.x API
       const wrapper = window.FFmpeg;
-      if (!wrapper || !wrapper.createFFmpeg) throw new Error('ffmpeg.wasm 0.11 knihovna se nenacetla');
+      if (!wrapper || !wrapper.createFFmpeg) throw new Error('ffmpeg.wasm 0.10 knihovna se nenacetla');
       const ffmpeg = wrapper.createFFmpeg({
         log: false,
-        corePath: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core-st@0.11.1/dist/ffmpeg-core.js',
+        corePath: 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js',
         progress: function(p) {
           if (p && typeof p.ratio === 'number') {
             const pct = Math.round(p.ratio * 100);
