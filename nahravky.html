@@ -272,7 +272,7 @@ if ('serviceWorker' in navigator) {
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.30</footer>
+  <footer>Pitland · v1.31</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -325,8 +325,8 @@ if ('serviceWorker' in navigator) {
   const WEBHOOK_URL      = "https://script.google.com/macros/s/AKfycbzZLOlG9-ezkQ4wmym4ulsEmxt7BkAsrmR_tjFVQLO-_186rARBXwu1hyw14ApjleXI/exec";
   const TEMP_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbz4pNkjjM0FBKUlCwVR97aiBWczlpL3fjw19Q7z8rDkP2xZVGVWASLmMxvx-6YXAuZb/exec";
   const MAX_SIZE_MB = 250;  // v1.22: input limit zvedly z 45 (po komprimi je vystup ~10 MB / hod)
-  const MP3_KBPS    = 24;
-  const MP3_SAMPLE_RATE = 16000;  // 16 kHz mono = nativni vstup STT modelu (Scribe, Whisper)
+  const MP3_KBPS    = 96;  // v1.31: 24->96 (48kHz potrebuje vyssi bitrate pro kvalitu reci)
+  const MP3_SAMPLE_RATE = 48000;  // v1.31: 16kHz ROZBIJEL ElevenLabs diarizaci! 48kHz = OK (downsampling = spolknuta rec v audio_event)
   const MULTIPART_THRESHOLD_SEC = 3600;  // 60 min - nad timto delime
   const MULTIPART_CHUNK_SEC = 3000;       // 50 min chunky (Scribe ~4 min = bezpecne pod Apps Script 6 min limit)
 
@@ -517,8 +517,8 @@ if ('serviceWorker' in navigator) {
       const audioCtx = new AudioCtx();
       let audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
       audioCtx.close();
-      // v1.20: resample na MP3_SAMPLE_RATE (16 kHz) mono pres OfflineAudioContext
-      showStatus('info', 'Resampluji na 16 kHz mono...');
+      // v1.31: resample na MP3_SAMPLE_RATE (48 kHz) mono - 16kHz rozbijel ElevenLabs diarizaci
+      showStatus('info', 'Resampluji na 48 kHz mono...');
       const OfflineCtx = window.OfflineAudioContext || window.webkitOfflineAudioContext;
       const targetLen  = Math.ceil(audioBuffer.duration * MP3_SAMPLE_RATE);
       let offlineCtx   = new OfflineCtx(1, targetLen, MP3_SAMPLE_RATE);
@@ -583,7 +583,7 @@ if ('serviceWorker' in navigator) {
         const blob    = await encodePartToMp3(monoI16, '');
         const mp3File = new File([blob], baseName + '.mp3', { type: 'audio/mp3' });
         const mp3Mb   = (mp3File.size / 1024 / 1024).toFixed(1);
-        showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 24 kbps mono 16 kHz)');
+        showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 96 kbps mono 48 kHz)');
         submitBtn.disabled = false;
         currentMultipartMeta = null;
         return mp3File;
