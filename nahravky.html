@@ -272,7 +272,7 @@ if ('serviceWorker' in navigator) {
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.31</footer>
+  <footer>Pitland · v1.32</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -375,6 +375,7 @@ if ('serviceWorker' in navigator) {
   const peopleSearch = document.getElementById("peopleSearch");
 
   let currentFile = null;
+  let currentFileHash = null;  // v1.32: SHA-256 originálu pro detekci duplicit
   let currentMultipartMeta = null;  // v1.21: pro dlouhe nahravky (parent_recording_id, parts[], offsets[], durations[])
   let peopleCache = null;
 
@@ -622,7 +623,16 @@ if ('serviceWorker' in navigator) {
     }
   }
 
+  async function sha256Hex(file) {
+    try {
+      const buf = await file.arrayBuffer();
+      const digest = await crypto.subtle.digest('SHA-256', buf);
+      return Array.from(new Uint8Array(digest)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+    } catch (e) { console.warn('sha256 failed', e); return null; }
+  }
   async function setFile(file) {
+    // v1.32: spočítej hash ORIGINÁLU (před konverzí) pro detekci duplicit
+    currentFileHash = await sha256Hex(file);
     currentFile = await convertToMp3(file);
     const sizeMb = (currentFile.size / 1024 / 1024).toFixed(1);
     fileName.textContent = currentFile.name + " (" + sizeMb + " MB)";
@@ -787,6 +797,31 @@ if ('serviceWorker' in navigator) {
 
     try { localStorage.setItem("pitland_zkratka", jmeno); } catch (e) {}
 
+    // v1.32: detekce duplicit — pre-check podle hashe originálu + datum/druh/vedl
+    let forceUpload = false;
+    if (currentFileHash && !(currentMultipartMeta && currentMultipartMeta.partCount > 1)) {
+      try {
+        showStatus("info", "Kontroluji duplicity…");
+        const dpParams = new URLSearchParams({ fn: "checkDuplicate", hash: currentFileHash, date: (datumInput.value || ""), druh: druh, vedl: jmeno });
+        const dpR = await fetch(WEBHOOK_URL + "?" + dpParams.toString());
+        const dp = await dpR.json();
+        if (dp && dp.exact_dup) {
+          if (!confirm("⚠️ Tato nahrávka už v systému JE:\n\n" + (dp.exact_name || "") + "\n\nStejný zvukový soubor byl už nahrán. Přesto nahrát znovu?")) {
+            showStatus("err", "Upload zrušen — duplicita.");
+            submitBtn.disabled = false; submitBtn.textContent = "Nahrát"; progress.classList.remove("show");
+            return;
+          }
+          forceUpload = true;
+        } else if (dp && dp.soft_dup) {
+          if (!confirm("⚠️ Na " + (datumInput.value || "tento den") + " už existuje " + druh + " od " + jmeno + ":\n\n" + (dp.soft_names || []).join("\n") + "\n\nMůže jít o duplicitu. Přesto nahrát?")) {
+            showStatus("err", "Upload zrušen — možná duplicita.");
+            submitBtn.disabled = false; submitBtn.textContent = "Nahrát"; progress.classList.remove("show");
+            return;
+          }
+        }
+      } catch (e) { console.warn("dup check failed (continuing):", e); }
+    }
+
     submitBtn.disabled = true;
     submitBtn.textContent = "Nahrávám…";
     progress.classList.add("show");
@@ -803,7 +838,9 @@ if ('serviceWorker' in navigator) {
         speakers: speakersCSV,
         num_speakers: numSpeakers,
         mimeType: "audio/mp3",
-        recording_date: datumInput.value || ""
+        recording_date: datumInput.value || "",
+        content_hash: currentFileHash || "",
+        force: forceUpload
       };
 
       // v1.21: multipart upload path
