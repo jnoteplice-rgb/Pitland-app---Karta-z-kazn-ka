@@ -272,7 +272,7 @@ if ('serviceWorker' in navigator) {
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.36</footer>
+  <footer>Pitland · v1.37</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -329,6 +329,9 @@ if ('serviceWorker' in navigator) {
   const MP3_SAMPLE_RATE = 48000;  // v1.31: 16kHz ROZBIJEL ElevenLabs diarizaci! 48kHz = OK (downsampling = spolknuta rec v audio_event)
   const MULTIPART_THRESHOLD_SEC = 3600;  // 60 min - nad timto delime
   const MULTIPART_CHUNK_SEC = 3000;       // 50 min chunky (Scribe ~4 min = bezpecne pod Apps Script 6 min limit)
+  // v1.37: BINARY CHUNKED UPLOAD pro mobile (přeskoč MP3 konverzi → originál → 20MB chunky)
+  const RAW_CHUNK_THRESHOLD_MB = 35;  // nad tohle používáme chunked path místo single POST (base64 50MB limit AS)
+  const RAW_CHUNK_BIN_MB = 20;        // 20 MB binary slice = ~27 MB base64 JSON, dobře pod 50 MB AS limit
 
   // Default počet účastníků per druh
   const POCET_DEFAULT = {
@@ -665,12 +668,12 @@ if ('serviceWorker' in navigator) {
     // přímo, takže konverzi přeskakujeme a server soubor zpracuje jak je.
     const mobileLong = isMobile && ((durSec && durSec > 1800) || sizeMbRaw > 30);
     if (mobileLong) {
-      // v1.36: Apps Script doPost má 50MB blob limit. 49 MB = bezpečná rezerva.
-      // (Voice Memos 64 kbps mono = ~28 MB/h, tj. 49 MB pokrývá ~105 min)
-      if (sizeMbRaw > 49) {
+      // v1.37: Chunked upload nahoře (RAW_CHUNK_THRESHOLD_MB) zvedá strop na ~MAX_SIZE_MB.
+      // Hard limit zachováváme jen na 100 MB (přes 4 hodiny voice memo) z bezpečnostních důvodů.
+      if (sizeMbRaw > 100) {
         showStatus("err",
-          "❌ Soubor (" + sizeMbRaw.toFixed(1) + " MB) je nad limitem 49 MB pro mobile upload.\n" +
-          "Nahrávky 105+ min nahraj z desktopu (Mac/PC), kde proběhne komprese."
+          "❌ Soubor (" + sizeMbRaw.toFixed(1) + " MB) je moc velký. Limit 100 MB.\n" +
+          "Pro tak dlouhé nahrávky použij desktop, kde proběhne komprese."
         );
         return;
       }
@@ -951,6 +954,60 @@ if ('serviceWorker' in navigator) {
         }
         progressBar.style.width = "100%";
         showStatus("ok", "✅ Vsech " + meta.partCount + " casti nahrano. Server zpracuje prepis (~" + (5 + meta.partCount * 4) + " min) a posle email.");
+        submitBtn.textContent = "Nahrát další";
+        fileInput.value = "";
+        currentFile = null;
+        currentMultipartMeta = null;
+        fileName.textContent = "Klepni pro výběr nahrávky";
+        fileArea.classList.remove("has-file");
+        updateRequiredLabels();
+        return;
+      }
+
+      // v1.37: BINARY CHUNKED UPLOAD — pro originály >35 MB (mobile bypass MP3 konverze)
+      // base64 v JSON body má 33% overhead, takže 48 MB binary → 64 MB JSON → nad 50 MB limit AS.
+      // Rozsekáme file.slice() na 20 MB binární kousky a posíláme každý jako menší JSON.
+      const fileSizeMb = currentFile.size / 1024 / 1024;
+      if (fileSizeMb > RAW_CHUNK_THRESHOLD_MB) {
+        const parentId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : ("rc_" + Date.now() + "_" + Math.random().toString(36).slice(2));
+        const chunkSize = RAW_CHUNK_BIN_MB * 1024 * 1024;
+        const totalChunks = Math.ceil(currentFile.size / chunkSize);
+        showStatus("info", "📦 Velký soubor (" + fileSizeMb.toFixed(1) + " MB) — chunked upload " + totalChunks + " částí po " + RAW_CHUNK_BIN_MB + " MB...");
+        let lastResult = null;
+        for (let i = 0; i < totalChunks; i++) {
+          const start = i * chunkSize;
+          const end = Math.min(start + chunkSize, currentFile.size);
+          const chunkBlob = currentFile.slice(start, end);
+          const chunkSizeMb = (chunkBlob.size / 1024 / 1024).toFixed(1);
+          showStatus("info", "📤 Část " + (i + 1) + "/" + totalChunks + " (" + chunkSizeMb + " MB)…");
+          progressBar.style.width = (5 + (i / totalChunks) * 90) + "%";
+          const chunkBase64 = await fileToBase64(chunkBlob);
+          const chunkPayload = Object.assign({}, basePayload, {
+            raw_chunk: true,
+            raw_parent_id: parentId,
+            raw_idx: i,
+            raw_total: totalChunks,
+            raw_original_name: currentFile.name,
+            raw_original_size: currentFile.size,
+            filename: currentFile.name,
+            mimeType: currentFile.type || "audio/mp3",
+            data: chunkBase64
+          });
+          const chunkRes = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(chunkPayload)
+          });
+          const chunkText = await chunkRes.text();
+          let chunkResult;
+          try { chunkResult = JSON.parse(chunkText); } catch (e) { chunkResult = { ok: false, error: chunkText }; }
+          if (!chunkResult.ok) {
+            throw new Error("Část " + (i + 1) + "/" + totalChunks + " selhala: " + (chunkResult.error || chunkRes.status));
+          }
+          lastResult = chunkResult;
+        }
+        progressBar.style.width = "100%";
+        showStatus("ok", "✅ Audio nahráno chunkovaně (" + totalChunks + " částí, " + fileSizeMb.toFixed(1) + " MB).\n📝 Přepis se zpracuje na pozadí (~5-10 min). Email dorazí, až bude hotový.");
         submitBtn.textContent = "Nahrát další";
         fileInput.value = "";
         currentFile = null;
