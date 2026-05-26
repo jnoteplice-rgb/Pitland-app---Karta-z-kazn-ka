@@ -272,7 +272,7 @@ if ('serviceWorker' in navigator) {
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.33</footer>
+  <footer>Pitland · v1.34</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -947,7 +947,12 @@ if ('serviceWorker' in navigator) {
       try { result = JSON.parse(text); } catch (e) { result = { ok: false, error: text }; }
       if (res.ok && result.ok) {
         progressBar.style.width = "100%";
-        showStatus("ok", "✅ Hotovo! Soubor uložen jako: " + (result.filename || currentFile.name));
+        if (result.async) {
+          // v1.34: Server uložil audio, přepis poběží na pozadí přes processTranscribeQueue
+          showStatus("ok", "✅ Audio nahráno: " + (result.filename || currentFile.name) + "\n📝 Přepis se zpracuje na pozadí (~5-10 min). Email dorazí, až bude hotový.");
+        } else {
+          showStatus("ok", "✅ Hotovo! Soubor uložen jako: " + (result.filename || currentFile.name));
+        }
         submitBtn.textContent = "Nahrát další";
         fileInput.value = "";
         currentFile = null;
@@ -955,6 +960,11 @@ if ('serviceWorker' in navigator) {
         fileName.textContent = "Klepni pro výběr nahrávky";
         fileArea.classList.remove("has-file");
         updateRequiredLabels();
+      } else if (result && result.duplicate) {
+        // v1.34: server-side duplicate detection (defense in depth)
+        showStatus("err", "⚠️ DUPLICITA: " + (result.existing_name || "Tato nahrávka už v systému je."));
+        submitBtn.disabled = false; submitBtn.textContent = "Nahrát"; progress.classList.remove("show");
+        return;
       } else { throw new Error(result.error || ("HTTP " + res.status)); }
     } catch (err) {
       const elapsedSec = Math.round((Date.now() - (typeof uploadStartTs !== "undefined" ? uploadStartTs : Date.now())) / 1000);
