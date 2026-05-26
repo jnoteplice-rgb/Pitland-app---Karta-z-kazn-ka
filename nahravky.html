@@ -272,7 +272,7 @@ if ('serviceWorker' in navigator) {
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.32</footer>
+  <footer>Pitland · v1.33</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -630,7 +630,46 @@ if ('serviceWorker' in navigator) {
       return Array.from(new Uint8Array(digest)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
     } catch (e) { console.warn('sha256 failed', e); return null; }
   }
+  // v1.33: lightweight duration probe (jen metadata, bez decode/resample)
+  async function probeDuration(file) {
+    return new Promise(function(resolve) {
+      try {
+        const audio = document.createElement('audio');
+        audio.preload = 'metadata';
+        const url = URL.createObjectURL(file);
+        audio.src = url;
+        audio.onloadedmetadata = function() {
+          const d = audio.duration;
+          URL.revokeObjectURL(url);
+          resolve(isFinite(d) ? d : null);
+        };
+        audio.onerror = function() {
+          URL.revokeObjectURL(url);
+          resolve(null);
+        };
+        // Bezpečnostní timeout 5s — pokud metadata nepřijdou, neblokuj
+        setTimeout(function() { try { URL.revokeObjectURL(url); } catch(e){} resolve(null); }, 5000);
+      } catch (e) { resolve(null); }
+    });
+  }
   async function setFile(file) {
+    // v1.33: warning pro dlouhé nahrávky (>60 min) — riziko mobile memory crash
+    const durSec = await probeDuration(file);
+    if (durSec && durSec > 3600) {
+      const minutes = Math.round(durSec / 60);
+      const parts = Math.ceil(durSec / MULTIPART_CHUNK_SEC);
+      const isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent);
+      let msg = "⚠️ Dlouhá nahrávka: " + minutes + " min (~" + parts + " části)\n\n";
+      if (isMobile) {
+        msg += "POZOR: Na mobilu (Safari/Chrome) může konverze SELHAT kvůli paměti.\nNahrávka 1,5h vyžaduje ~1 GB RAM v prohlížeči.\n\nDOPORUČENÍ: Nahraj z desktopu (Mac/PC).\n\nPřesto pokračovat?";
+      } else {
+        msg += "Soubor se rozdělí na " + parts + " částí (~50 min každá) a nahraje postupně.\nMůže to trvat 5-10 min.\n\nPokračovat?";
+      }
+      if (!confirm(msg)) {
+        showStatus("err", "Upload zrušen.");
+        return;
+      }
+    }
     // v1.32: spočítej hash ORIGINÁLU (před konverzí) pro detekci duplicit
     currentFileHash = await sha256Hex(file);
     currentFile = await convertToMp3(file);
