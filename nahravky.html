@@ -272,7 +272,7 @@ if ('serviceWorker' in navigator) {
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.35</footer>
+  <footer>Pitland · v1.36</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -665,11 +665,12 @@ if ('serviceWorker' in navigator) {
     // přímo, takže konverzi přeskakujeme a server soubor zpracuje jak je.
     const mobileLong = isMobile && ((durSec && durSec > 1800) || sizeMbRaw > 30);
     if (mobileLong) {
-      // Hard limit: Apps Script doPost má 50MB blob limit. Async queue pak vezme >25MB do Drive.
-      if (sizeMbRaw > 45) {
+      // v1.36: Apps Script doPost má 50MB blob limit. 49 MB = bezpečná rezerva.
+      // (Voice Memos 64 kbps mono = ~28 MB/h, tj. 49 MB pokrývá ~105 min)
+      if (sizeMbRaw > 49) {
         showStatus("err",
-          "❌ Soubor (" + sizeMbRaw.toFixed(1) + " MB) je moc velký pro upload z mobilu.\n" +
-          "Doporučení: nahraj z desktopu (Mac/PC), kde proběhne komprese před uploadem."
+          "❌ Soubor (" + sizeMbRaw.toFixed(1) + " MB) je nad limitem 49 MB pro mobile upload.\n" +
+          "Nahrávky 105+ min nahraj z desktopu (Mac/PC), kde proběhne komprese."
         );
         return;
       }
