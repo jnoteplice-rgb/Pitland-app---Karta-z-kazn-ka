@@ -1,1 +1,536 @@
 
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Psací dlaždice — adaptiv</title>
+<style>
+  :root{
+    --bg:#06070f; --bg2:#0b0e1d; --panel:#0e1430; --line:#1d2750;
+    --text:#e9f3ff; --muted:#7f8bc4; --cyan:#27f0ff; --magenta:#ff3df0; --gold:#ffd34d; --good:#27e08a;
+    --f-lpinky:#ff5d5d; --f-lring:#ff9d3d; --f-lmid:#ffe14d; --f-lindex:#4be88a;
+    --f-rindex:#23d6c0; --f-rmid:#46a6ff; --f-rring:#9b7bff; --f-rpinky:#ff6fce;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;}
+  body{
+    background:
+      radial-gradient(900px 500px at 50% -8%, #15214f, transparent),
+      linear-gradient(#06070f,#04050b);
+    color:var(--text); font-family:"Segoe UI",system-ui,Arial,sans-serif;
+    display:flex; align-items:center; justify-content:center; min-height:100vh;
+    -webkit-user-select:none; user-select:none; overflow:hidden;
+  }
+  /* jemná mřížka */
+  body::before{content:""; position:fixed; inset:0; pointer-events:none; opacity:.5;
+    background-image:linear-gradient(rgba(39,240,255,.05) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(39,240,255,.05) 1px,transparent 1px);
+    background-size:34px 34px;}
+  #app{width:min(960px,96vw); height:min(700px,96vh); position:relative;
+    background:rgba(11,14,29,.78); border:1px solid var(--line); border-radius:18px;
+    box-shadow:0 0 60px rgba(39,240,255,.08), inset 0 0 0 1px rgba(39,240,255,.04);
+    overflow:hidden; display:flex; flex-direction:column;}
+  .mono{font-family:ui-monospace,"SFMono-Regular",Menlo,monospace;}
+  .neon{color:var(--cyan); text-shadow:0 0 10px rgba(39,240,255,.7);}
+  .neon-m{color:var(--magenta); text-shadow:0 0 10px rgba(255,61,240,.7);}
+
+  /* HUD */
+  #hud{display:flex; align-items:center; gap:16px; padding:11px 18px;
+    border-bottom:1px solid var(--line); background:rgba(14,20,48,.6);}
+  #hud .stat{font-size:11px; color:var(--muted); text-align:center; min-width:58px; letter-spacing:.5px; text-transform:uppercase;}
+  #hud .stat b{display:block; font-size:19px; color:var(--text); letter-spacing:1px;}
+  #hud .spacer{flex:1;}
+  #combo.big b{color:var(--gold); text-shadow:0 0 12px rgba(255,211,77,.7);}
+  #btnMusic,#btnDev{background:var(--bg); border:1px solid var(--line); color:var(--cyan);
+    border-radius:9px; height:32px; padding:0 9px; font-size:13px; cursor:pointer;}
+  #btnDev.on{background:var(--cyan); color:#042; border-color:var(--cyan); box-shadow:0 0 12px var(--cyan);}
+
+  /* textový řádek */
+  #textrow{padding:8px 16px; text-align:center; font:700 22px ui-monospace,monospace;
+    letter-spacing:3px; border-bottom:1px solid var(--line); background:rgba(6,7,15,.6); min-height:22px; white-space:pre-wrap; line-height:1.5;}
+  #textrow .ch{opacity:.4;}
+  #textrow .ch.done{opacity:.16;}
+  #textrow .ch.cur{opacity:1; color:#04060f; border-radius:5px; padding:2px 6px; box-shadow:0 0 14px currentColor;}
+
+  /* hrací plocha */
+  #stage{position:relative; flex:1; overflow:hidden;}
+  #cols{position:absolute; inset:0; display:flex;}
+  .col{flex:1; position:relative; border-right:1px dashed rgba(39,240,255,.06);}
+  .col:last-child{border-right:none;}
+  #band{position:absolute; left:0; right:0; pointer-events:none;
+    background:linear-gradient(rgba(39,240,255,0), rgba(39,240,255,.12));
+    border-bottom:3px solid var(--cyan); box-shadow:0 2px 22px rgba(39,240,255,.55);}
+  .tile{position:absolute; left:8%; width:84%; height:150px; border-radius:12px;
+    display:flex; align-items:flex-end; justify-content:center; padding-bottom:10px;
+    font-size:28px; font-weight:800; color:#05070f; will-change:transform;
+    box-shadow:0 0 18px var(--tc,#27f0ff), inset 0 2px 0 rgba(255,255,255,.45);}
+  .tile.target{outline:3px solid #fff; outline-offset:-3px; filter:brightness(1.15);}
+  .tile.hit{animation:pop .25s ease forwards;}
+  @keyframes pop{to{transform:scale(1.22) translateY(var(--ty,0)); opacity:0;}}
+  .spark{position:absolute; font-weight:800; color:var(--cyan); pointer-events:none;
+    text-shadow:0 0 10px var(--cyan); animation:rise .6s ease forwards;}
+  @keyframes rise{from{opacity:1;transform:translateY(0)} to{opacity:0;transform:translateY(-46px)}}
+
+  /* klávesnice / heatmap dole */
+  #kb{padding:10px; border-top:1px solid var(--line); background:rgba(14,20,48,.6);}
+  .kbrow{display:flex; gap:6px; justify-content:center; margin:3px 0;}
+  .key{width:50px; height:46px; border-radius:9px; background:#0a1024; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; color:var(--muted);
+    position:relative; transition:transform .07s, box-shadow .12s, background .3s, color .3s;}
+  .key.locked{opacity:.25;}
+  .key.lit{transform:translateY(3px); box-shadow:0 0 18px currentColor; color:#04060f;}
+
+  /* obrazovky */
+  .screen{position:absolute; inset:0; background:rgba(5,6,13,.93); z-index:5;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:26px; gap:14px;
+    overflow:auto;}
+  .screen.hide{display:none;}
+  h1{margin:0; font-size:30px; letter-spacing:3px;}
+  h2{margin:0; font-size:23px; letter-spacing:1px;}
+  p.sub{margin:0;color:var(--muted);max-width:560px;line-height:1.5;}
+  .btn{background:linear-gradient(180deg,var(--cyan),#16b9d6); color:#04222a; border:none; border-radius:11px;
+    padding:13px 26px; font-weight:800; font-size:16px; cursor:pointer; letter-spacing:1px;
+    box-shadow:0 0 22px rgba(39,240,255,.5);}
+  .btn.alt{background:transparent; color:var(--cyan); border:1px solid var(--cyan); box-shadow:none;}
+  .row{display:flex; gap:12px; flex-wrap:wrap; justify-content:center;}
+  .stats-line{display:flex; gap:22px; justify-content:center; flex-wrap:wrap;}
+  .stats-line .s{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
+  .stats-line .s b{display:block;font-size:26px;color:var(--text);}
+  .card{background:rgba(14,20,48,.7); border:1px solid var(--line); border-radius:14px; padding:14px 18px; max-width:600px; line-height:1.6; text-align:left;}
+  .card .pin{color:var(--cyan); font-weight:800;}
+  .card .gold{color:var(--gold); font-weight:800;}
+  /* heatmap zahrada na úvodní obrazovce */
+  #garden .kbrow .key{width:54px;height:50px;font-size:17px;}
+  .legend{display:flex;gap:14px;justify-content:center;font-size:11px;color:var(--muted);align-items:center;}
+  .swatch{width:14px;height:14px;border-radius:4px;display:inline-block;vertical-align:middle;margin-right:5px;}
+  .profilebar{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;}
+  .profilebar input{background:#0a1024;border:1px solid var(--line);color:var(--text);
+    border-radius:10px;padding:10px 14px;font-size:15px;outline:none;}
+  .profilebar input:focus{border-color:var(--cyan);box-shadow:0 0 12px rgba(39,240,255,.4);}
+  #profileTag{font-size:12px;color:var(--muted);}
+  #count{font-size:120px;font-weight:900;}
+  #dev{position:absolute; top:54px; left:10px; z-index:9; background:rgba(0,0,0,.72); color:#9ff;
+    font:12px/1.5 ui-monospace,monospace; padding:8px 11px; border-radius:8px; pointer-events:none; max-width:280px; border:1px solid rgba(39,240,255,.3);}
+  small.note{color:var(--muted);font-size:12px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="hud">
+    <div class="stat">Série<b id="hudStreak">0</b></div>
+    <div class="stat">XP<b id="hudXp">0</b></div>
+    <div class="spacer"></div>
+    <div class="stat">Body<b id="hudScore">0</b></div>
+    <div class="stat" id="combo">Combo<b id="hudCombo">×1</b></div>
+    <div class="spacer"></div>
+    <button id="btnMusic" title="Zvuk">🔊</button>
+    <button id="btnDev" title="Dev">🐞</button>
+  </div>
+
+  <div id="textrow"></div>
+  <div id="stage"><div id="cols"></div><div id="band"></div></div>
+  <div id="kb"></div>
+
+  <!-- HOME / ZAHRADA -->
+  <div class="screen" id="screenHome">
+    <h1 class="neon mono">PSACÍ DLAŽDICE</h1>
+    <p class="sub">Tvoje <b>klávesnicová zahrada</b>. Každá klávesa roste, jak ji zvládáš: <span style="color:var(--muted)">šedá</span> → <span class="neon">cyan</span> → <span style="color:var(--gold)">zlatá</span>. Hra ti sama dává víc těch, co ti zatím nejdou — bez kritiky, jen rosteš.</p>
+    <div class="profilebar">
+      <input id="hName" placeholder="tvé jméno" maxlength="20" autocomplete="off">
+      <button class="btn alt" id="btnLoadProfile">Načíst profil</button>
+      <span id="profileTag"></span>
+    </div>
+    <div id="garden"></div>
+    <div class="legend">
+      <span><span class="swatch" style="background:#2a3160"></span>nová</span>
+      <span><span class="swatch" style="background:#27f0ff"></span>jde to</span>
+      <span><span class="swatch" style="background:#ffd34d"></span>zvládnuto</span>
+    </div>
+    <div class="stats-line">
+      <div class="s">Zvládnuté klávesy<b id="hMastered">0</b></div>
+      <div class="s">Klávesy ve hře<b id="hActive">0</b></div>
+      <div class="s">Nejdelší série<b id="hBestStreak">0</b></div>
+    </div>
+    <button class="btn" id="btnPlay">HRÁT ▶</button>
+    <small class="note">Sezení ≈ 45 úhozů. Hraj naslepo — sleduj dlaždice, ne klávesnici.</small>
+  </div>
+
+  <div class="screen hide" id="screenCount"><div id="count" class="neon">3</div></div>
+  <div class="screen hide" id="screenEnd"></div>
+</div>
+
+<script>
+/* ================= klávesy, prsty, barvy ================= */
+const FINGER={
+  a:'lpinky',q:'lpinky',z:'lpinky',
+  s:'lring',w:'lring',x:'lring',
+  d:'lmid',e:'lmid',c:'lmid',
+  f:'lindex',g:'lindex',r:'lindex',t:'lindex',v:'lindex',b:'lindex',
+  j:'rindex',h:'rindex',u:'rindex',n:'rindex',m:'rindex',y:'rindex',
+  k:'rmid',i:'rmid',
+  l:'rring',o:'rring',
+  'ů':'rpinky',p:'rpinky',
+};
+const FCOLOR={lpinky:'#ff5d5d',lring:'#ff9d3d',lmid:'#ffe14d',lindex:'#4be88a',
+  rindex:'#23d6c0',rmid:'#46a6ff',rring:'#9b7bff',rpinky:'#ff6fce'};
+const FNAME={lpinky:'levý malíček',lring:'levý prsteníček',lmid:'levý prostředníček',lindex:'levý ukazováček',
+  rindex:'pravý ukazováček',rmid:'pravý prostředníček',rring:'pravý prsteníček',rpinky:'pravý malíček'};
+function colorOf(k){return FCOLOR[FINGER[k]]||'#27f0ff';}
+function fingerName(k){return FNAME[FINGER[k]]||'';}
+function label(k){return k==='ů'?'Ů':k.toUpperCase();}
+
+// pořadí zavádění kláves: domovská řada → horní → spodní
+const UNLOCK_ORDER=['f','j','d','k','s','l','a','ů','g','h','e','i','r','u','t','o','n','v','c','m','p','w','b','y','z','x','q'];
+// rozložení klávesnice pro heatmap (jen písmena, QWERTZ-ish)
+const KB_LAYOUT=[
+  ['q','w','e','r','t','z','u','i','o','p'],
+  ['a','s','d','f','g','h','j','k','l','ů'],
+  ['y','x','c','v','b','n','m']
+];
+
+/* ================= profily (Supabase + offline cache) ================= */
+const DAY=86400000;
+function todayStr(){return new Date().toISOString().slice(0,10);}
+// vlastní samostatná tabulka, nesahá na Pitland data; publishable klíč je určen k veřejnému použití
+const SUPA_URL='https://jxrgmedujtxukgsllich.supabase.co';
+const SUPA_KEY='sb_publishable_m2nJiLNYO8QPlm6Je5HNAw_7WJZsmi5';
+const SUPA_T=SUPA_URL+'/rest/v1/typing_profiles';
+const SUPA_H={'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'};
+
+function defaultSkill(){ return {f:{s:0.12,seen:Date.now()}, j:{s:0.12,seen:Date.now()}}; }
+function defaultMeta(){ return {streak:0,best:0,xp:0,lastDay:null,sessions:0}; }
+function applyDecay(m){ const now=Date.now();
+  for(const k in m){ const days=(now-(m[k].seen||now))/DAY; if(days>0.5) m[k].s=Math.max(0.05,m[k].s*Math.pow(0.94,days)); }
+  return m; }
+
+let SKILL=defaultSkill(), META=defaultMeta(), currentProfile=null;
+
+function saveLocalCache(){ if(currentProfile) try{localStorage.setItem('pd_'+currentProfile,JSON.stringify({skill:SKILL,meta:META}));}catch(e){} }
+async function loadProfile(name){
+  currentProfile=name; try{localStorage.setItem('pd_profile',name);}catch(e){}
+  let row=null;
+  try{
+    const r=await fetch(SUPA_T+'?name=eq.'+encodeURIComponent(name)+'&select=skill,meta',{headers:SUPA_H});
+    if(r.ok){ const a=await r.json(); if(a&&a[0]) row=a[0]; }
+  }catch(e){}
+  if(!row){ try{ const c=JSON.parse(localStorage.getItem('pd_'+name)||'null'); if(c) row=c; }catch(e){} }
+  if(row && row.skill && Object.keys(row.skill).length){
+    SKILL=applyDecay(row.skill); META=Object.assign(defaultMeta(), row.meta||{});
+  } else { SKILL=defaultSkill(); META=defaultMeta(); }
+  saveLocalCache();
+}
+async function saveProfile(){
+  if(!currentProfile) return; saveLocalCache();
+  try{ await fetch(SUPA_T,{method:'POST',
+    headers:Object.assign({'Prefer':'resolution=merge-duplicates'},SUPA_H),
+    body:JSON.stringify([{name:currentProfile,skill:SKILL,meta:META,updated_at:new Date().toISOString()}])}); }catch(e){}
+}
+function introduced(){ return UNLOCK_ORDER.filter(k=>SKILL[k]!==undefined); }
+function masteredCount(){ return introduced().filter(k=>SKILL[k].s>=0.85).length; }
+function meanSkill(){ const a=introduced(); return a.length?a.reduce((s,k)=>s+SKILL[k].s,0)/a.length:0; }
+
+/* ================= generátor sezení (vážený slabostí + slabiky) ================= */
+const SESSION_LEN=45;
+function weightedPick(keys,last,last2){
+  let tot=0; const w=keys.map(k=>{
+    let x=(1-SKILL[k].s)+0.18;            // slabší = vyšší šance, ale i silné občas
+    if(k===last) x*=0.25;                  // neopakuj hned
+    if(k===last&&k===last2) x=0;           // nikdy 3×
+    tot+=x; return x;
+  });
+  let r=Math.random()*tot;
+  for(let i=0;i<keys.length;i++){ r-=w[i]; if(r<=0) return keys[i]; }
+  return keys[keys.length-1];
+}
+function genSession(){
+  const keys=introduced();
+  const seq=[]; let last=null,last2=null;
+  for(let i=0;i<SESSION_LEN;i++){ const p=weightedPick(keys,last,last2); seq.push(p); last2=last; last=p; }
+  // seskup do slabik 3–5 znaků (mezery jen pro textový řádek)
+  let out='',n=0,grp=3+((Math.random()*3)|0);
+  for(const k of seq){ out+=k; if(++n>=grp){ out+=' '; n=0; grp=3+((Math.random()*3)|0); } }
+  return out.trim();
+}
+
+/* ================= časování / engine ================= */
+const TOP_PAD=-40, TILE_BASE_H=450, SAME_COL_MIN_MS=160, BAND_Y_FRAC=0.80;
+const EMA_START=1700, EMA_ALPHA=0.6;
+const GAP_MIN=120, GAP_MAX=2800, FALL_MIN=1100, FALL_MAX=4200;
+const FAST_CHAIN_MS=650, MAX_CONCURRENT=12;
+function applyTempo(){
+  state.gap=Math.max(GAP_MIN,Math.min(GAP_MAX,state.emaInterval*0.95));
+  state.fallMs=Math.max(FALL_MIN,Math.min(FALL_MAX,state.emaInterval*2.4));
+}
+
+const elCols=document.getElementById('cols'), elBand=document.getElementById('band');
+const elStage=document.getElementById('stage'), elKb=document.getElementById('kb'), elTextrow=document.getElementById('textrow');
+const hud={streak:gid('hudStreak'),xp:gid('hudXp'),score:gid('hudScore'),combo:gid('hudCombo'),comboBox:gid('combo')};
+function gid(i){return document.getElementById(i);}
+
+let state=null;
+
+/* ----- zvuk: melodie z úhozů (Óda na radost) ----- */
+let actx=null, soundOn=(localStorage.getItem('pd_sound')!=='off');
+const NT={C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392.00,A4:440.00,B4:493.88,C5:523.25};
+const MELODY=[NT.E4,NT.E4,NT.F4,NT.G4,NT.G4,NT.F4,NT.E4,NT.D4,NT.C4,NT.C4,NT.D4,NT.E4,NT.E4,NT.D4,NT.D4,
+  NT.E4,NT.E4,NT.F4,NT.G4,NT.G4,NT.F4,NT.E4,NT.D4,NT.C4,NT.C4,NT.D4,NT.E4,NT.D4,NT.C4,NT.C4];
+let melodyIdx=0;
+function ensureAudio(){ try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();actx.resume&&actx.resume();}catch(e){} }
+function tone(f,type,peak,dur){ if(!soundOn||!f)return; try{ensureAudio();const o=actx.createOscillator(),g=actx.createGain(),t=actx.currentTime;o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+0.012);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g).connect(actx.destination);o.start(t);o.stop(t+dur+0.04);}catch(e){} }
+function playHitNote(chain){ const f=MELODY[melodyIdx%MELODY.length];melodyIdx++; tone(f,'triangle',0.16,0.22); if(chain)tone(f*2,'sine',0.05,0.12); }
+function updateSoundBtn(){ const b=gid('btnMusic'); if(b)b.textContent=soundOn?'🔊':'🔇'; }
+gid('btnMusic').onclick=()=>{ soundOn=!soundOn; localStorage.setItem('pd_sound',soundOn?'on':'off'); updateSoundBtn(); if(soundOn)ensureAudio(); };
+updateSoundBtn();
+
+/* ----- DEV: měření hluchých míst ----- */
+let devOn=/dev/.test(location.hash), devEl=null;
+function newDev(){return{measuring:false,dead:false,deadStart:0,deadTotal:0,deadCount:0,deadMax:0,activeStart:0,lastHittableT:0};}
+function trackDead(now,h){ const d=state.dev; if(!d)return;
+  if(!d.measuring){ if(h>0){d.measuring=true;d.activeStart=now;d.lastHittableT=now;} return; }
+  if(h>0){ if(d.dead){const l=now-d.deadStart;d.deadTotal+=l;if(l>d.deadMax)d.deadMax=l;d.dead=false;} d.lastHittableT=now; }
+  else if(!state.finished){ if(!d.dead){d.dead=true;d.deadStart=now;d.deadCount++;} } }
+function ensureDevEl(){ if(!devEl){devEl=document.createElement('div');devEl.id='dev';document.getElementById('app').appendChild(devEl);} }
+function updateDev(now){ if(!devOn){if(devEl)devEl.style.display='none';return;} ensureDevEl();devEl.style.display='block';
+  if(!state||!state.dev){devEl.innerHTML='<b>DEV</b> — hraj';return;}
+  const d=state.dev,active=d.measuring?((d.lastHittableT||now)-d.activeStart):0,live=d.deadTotal+(d.dead?now-d.deadStart:0),pct=active>0?live/active*100:0;
+  devEl.innerHTML=`<b>DEV — hluchá místa</b><br>trefnutelné: ${state._hittable||0} ${d.dead?'<span style=color:#ff7>⛔</span>':'<span style=color:#7f7>OK</span>'}<br>tempo: rozestup ${Math.round(state.gap)} • pád ${Math.round(state.fallMs)} • EMA ${Math.round(state.emaInterval)}<br>hluchý: ${Math.round(live)} ms (${pct.toFixed(1)}%) • ${d.deadCount}×`; }
+function devReport(now){ const d=state.dev; if(!d)return null; if(d.dead)d.dead=false; const a=(d.lastHittableT||now)-d.activeStart,p=a>0?d.deadTotal/a*100:0; const r={pct:+p.toFixed(1),count:d.deadCount,max:Math.round(d.deadMax)}; console.log('[hluchá místa]',r); return r; }
+const btnDev=gid('btnDev');
+function setDev(on){devOn=on;btnDev.classList.toggle('on',devOn);updateDev(performance.now());}
+btnDev.onclick=()=>setDev(!devOn); setDev(devOn);
+
+/* ----- heatmap / klávesnice ----- */
+function skillColor(s){
+  const grey=[42,49,96], cyan=[39,240,255], gold=[255,211,77];
+  let a,b,t; if(s<0.5){a=grey;b=cyan;t=s/0.5;}else{a=cyan;b=gold;t=(s-0.5)/0.5;}
+  const c=i=>Math.round(a[i]+(b[i]-a[i])*t); return `rgb(${c(0)},${c(1)},${c(2)})`;
+}
+function renderKeyboard(container,opts){
+  container.innerHTML='';
+  KB_LAYOUT.forEach(row=>{
+    const r=document.createElement('div'); r.className='kbrow';
+    row.forEach(k=>{
+      const has=SKILL[k]!==undefined;
+      const el=document.createElement('div'); el.className='key'+(has?'':' locked'); el.dataset.key=k; el.textContent=label(k);
+      if(has){ const col=skillColor(SKILL[k].s); el.style.borderColor=col; el.style.color=col;
+        if(opts&&opts.fill){ el.style.background=col; el.style.color='#04060f'; } }
+      r.appendChild(el);
+    });
+    container.appendChild(r);
+  });
+}
+function litKey(k){ const el=elKb.querySelector(`.key[data-key="${k}"]`); if(el){el.style.color='#04060f';el.style.background=colorOf(k);el.classList.add('lit');setTimeout(()=>{el.classList.remove('lit');const has=SKILL[k]!==undefined;const col=has?skillColor(SKILL[k].s):'';el.style.background='';el.style.color=col||'var(--muted)';},120);} }
+
+/* ----- textový řádek ----- */
+function buildTextRow(text){ elTextrow.innerHTML=''; state.letterSpans=[];
+  for(const ch of text){ const sp=document.createElement('span');
+    if(FINGER[ch]!==undefined||/[a-zů]/.test(ch)){ sp.className='ch'; sp.textContent=label(ch); sp.dataset.key=ch; state.letterSpans.push(sp); }
+    else sp.textContent=' '; elTextrow.appendChild(sp); }
+  updateTextRow();
+}
+function updateTextRow(){ const sp=state.letterSpans; if(!sp)return;
+  for(let i=0;i<sp.length;i++){ const el=sp[i]; el.classList.remove('done','cur'); el.style.background='';
+    if(i<state.seqDone) el.classList.add('done');
+    else if(i===state.seqDone){ el.classList.add('cur'); el.style.background=colorOf(el.dataset.key); } } }
+
+/* ----- plocha ----- */
+let colIndex={};
+function setupBoard(activeCols){ colIndex={}; elCols.innerHTML='';
+  activeCols.forEach((k,i)=>{ colIndex[k]=i; const c=document.createElement('div'); c.className='col'; elCols.appendChild(c); });
+  renderKeyboard(elKb); positionBand();
+}
+function positionBand(){ const h=elStage.clientHeight,hitY=h*BAND_Y_FRAC; if(state)state.hitY=hitY; elBand.style.top=(hitY-44)+'px'; elBand.style.height='44px'; }
+window.addEventListener('resize',()=>{if(state)positionBand();});
+
+function show(id){ ['screenHome','screenCount','screenEnd'].forEach(s=>gid(s).classList.toggle('hide',s!==id)); }
+function hideScreens(){ ['screenHome','screenCount','screenEnd'].forEach(s=>gid(s).classList.add('hide')); }
+
+/* ----- HOME / zahrada ----- */
+function renderHome(){
+  renderKeyboard(gid('garden'),{fill:true});
+  gid('hMastered').textContent=masteredCount();
+  gid('hActive').textContent=introduced().length;
+  gid('hBestStreak').textContent=META.best||0;
+  hud.streak.textContent=META.streak||0; hud.xp.textContent=META.xp||0;
+  hud.score.textContent=0; hud.combo.textContent='×1';
+  gid('hName').value=currentProfile||'';
+  gid('profileTag').textContent=currentProfile?('profil: '+currentProfile+' • ukládá se napříč počítači'):'zadej jméno, ať se postup ukládá a sdílí mezi počítači';
+  show('screenHome');
+}
+gid('btnLoadProfile').onclick=async()=>{
+  const n=gid('hName').value.trim(); if(!n){gid('hName').focus();return;}
+  gid('profileTag').textContent='načítám…'; await loadProfile(n); renderHome();
+};
+gid('btnPlay').onclick=async()=>{
+  const n=gid('hName').value.trim();
+  if(!n){ gid('hName').focus(); gid('profileTag').textContent='nejdřív zadej jméno 🙂'; return; }
+  if(n!==currentProfile){ gid('profileTag').textContent='načítám…'; await loadProfile(n); }
+  startCountdown();
+};
+
+/* ----- countdown ----- */
+function startCountdown(){
+  hideScreens(); state=null;
+  // sloupce = aktuálně zavedené klávesy v pořadí klávesnice
+  const order=['a','s','d','f','g','h','j','k','l','ů','q','w','e','r','t','z','u','i','o','p','y','x','c','v','b','n','m'];
+  const cols=order.filter(k=>SKILL[k]!==undefined);
+  setupBoard(cols);
+  show('screenCount'); let n=3; const el=gid('count'); el.textContent=n;
+  const iv=setInterval(()=>{ n--; if(n===0)el.textContent='START'; if(n<0){clearInterval(iv);hideScreens();runGame();} else if(n>0)el.textContent=n; },650);
+}
+
+/* ----- běh sezení ----- */
+function runGame(){
+  const text=genSession();
+  const cols=Object.keys(colIndex);
+  state={ text, queue:[], qi:0, tiles:[], score:0, combo:0, mult:1, maxCombo:0, curStreak:0, shield:true,
+    hitStat:{}, attemptStat:{}, fastStat:{}, lastSpawn:{},
+    emaInterval:EMA_START, gap:EMA_START, fallMs:FALL_MAX, lastHitTime:null,
+    nextSpawn:performance.now()+700, hitY:elStage.clientHeight*BAND_Y_FRAC, tileH:TILE_BASE_H,
+    lastFrame:performance.now(),
+    finished:false, running:true, dev:newDev(), _hittable:0, _readyPx:40, _targetEl:null,
+    seqDone:0, letterSpans:null };
+  for(const ch of text){ if(FINGER[ch]!==undefined||/[a-zů]/.test(ch)) state.queue.push(ch); }
+  cols.forEach(k=>{state.hitStat[k]=0;state.attemptStat[k]=0;state.fastStat[k]=0;});
+  applyTempo(); buildTextRow(text); melodyIdx=0; ensureAudio();
+  hud.score.textContent=0; hud.combo.textContent='×1';
+  requestAnimationFrame(loop);
+}
+
+function spawnTile(key){
+  const ci=colIndex[key], colW=elStage.clientWidth/Object.keys(colIndex).length;
+  const t=document.createElement('div'); t.className='tile'; t.textContent=label(key);
+  const col=colorOf(key); t.style.background=col; t.style.setProperty('--tc',col);
+  t.style.left=(ci*colW+colW*0.08)+'px'; t.style.width=(colW*0.84)+'px'; t.style.height=state.tileH+'px';
+  const startTop=TOP_PAD-state.tileH;
+  t.style.transform=`translateY(${startTop}px)`;
+  elStage.appendChild(t);
+  // poloha se integruje globální rychlostí (viz loop) → všechny dlaždice jedou stejně
+  state.tiles.push({el:t,key,judged:false,topY:startTop,bottomY:TOP_PAD});
+}
+
+function loop(){
+  if(!state||!state.running)return;
+  const now=performance.now();
+  while(!state.finished && now>=state.nextSpawn && state.qi<state.queue.length
+        && state.tiles.filter(t=>!t.judged).length<MAX_CONCURRENT){
+    const key=state.queue[state.qi];
+    const last=state.lastSpawn[key];
+    if(last!=null && (now-last)<SAME_COL_MIN_MS){ state.nextSpawn=last+SAME_COL_MIN_MS; break; }
+    spawnTile(key); state.lastSpawn[key]=now; state.qi++; state.nextSpawn=now+state.gap;
+  }
+  if(state.qi>=state.queue.length) state.finished=true;
+
+  // GLOBÁLNÍ rychlost — stejná pro všechny viditelné dlaždice; změna tempa působí na všechny najednou
+  const speed=(state.hitY-TOP_PAD)/state.fallMs;        // px/ms
+  const dt=Math.min(now-state.lastFrame, 100); state.lastFrame=now;  // clamp proti skoku po přepnutí tabu
+  const step=speed*dt;
+  const readyPx=state.gap*speed+40; state._readyPx=readyPx;
+  elBand.style.top=(state.hitY-readyPx)+'px'; elBand.style.height=readyPx+'px';
+  let hittable=0;
+  for(const tile of state.tiles){ if(tile.judged)continue;
+    tile.bottomY+=step; tile.topY=tile.bottomY-state.tileH;
+    tile.el.style.transform=`translateY(${tile.topY}px)`;
+    if(tile.bottomY>=state.hitY-readyPx && tile.topY<=state.hitY) hittable++;
+    if(tile.topY>state.hitY) judgeMiss(tile);
+  }
+  state._hittable=hittable;
+  let target=null; for(const t of state.tiles){ if(t.judged||t.topY==null)continue; if(!target||t.bottomY>target.bottomY)target=t; }
+  const tEl=target?target.el:null;
+  if(state._targetEl&&state._targetEl!==tEl)state._targetEl.classList.remove('target');
+  if(tEl)tEl.classList.add('target'); state._targetEl=tEl;
+  trackDead(now,hittable); updateDev(now);
+  state.tiles=state.tiles.filter(t=>!t.dead);
+  if(state.finished&&state.tiles.length===0){ state.running=false; endGame(); return; }
+  requestAnimationFrame(loop);
+}
+
+function judgeMiss(tile){ tile.judged=true; tile.dead=true; tile.el.remove();
+  state.attemptStat[tile.key]++;
+  if(state.shield&&state.combo>0){ state.shield=false; } else { state.combo=0; state.mult=1; }
+  state.curStreak=0; state.seqDone++; updateTextRow();
+  state.emaInterval=Math.min(GAP_MAX,state.emaInterval*1.4); applyTempo(); updateHud();
+}
+function judgeHit(tile){ const now=performance.now();
+  tile.judged=true; tile.dead=true; tile.el.style.setProperty('--ty',tile.topY+'px'); tile.el.classList.add('hit'); setTimeout(()=>tile.el.remove(),250);
+  state.attemptStat[tile.key]++; state.hitStat[tile.key]++;
+  state.combo++; state.curStreak++; state.maxCombo=Math.max(state.maxCombo,state.curStreak);
+  state.mult=state.combo>=20?4:state.combo>=10?3:state.combo>=5?2:1;
+  let gain=10*state.mult, chain=false;
+  if(state.lastHitTime!=null&&(now-state.lastHitTime)<FAST_CHAIN_MS){ gain+=5*state.mult; chain=true; state.fastStat[tile.key]++; }
+  if(state.lastHitTime!=null){ const iv=now-state.lastHitTime; state.emaInterval=EMA_ALPHA*iv+(1-EMA_ALPHA)*state.emaInterval; applyTempo(); }
+  state.lastHitTime=now; state.score+=gain; state.seqDone++; updateTextRow();
+  playHitNote(chain); spark(tile,(chain?'⚡+':'+')+gain); litKey(tile.key); updateHud();
+}
+function spark(tile,txt){ const s=document.createElement('div'); s.className='spark'; s.textContent=txt; s.style.left=tile.el.style.left; s.style.top=(state.hitY-30)+'px'; elStage.appendChild(s); setTimeout(()=>s.remove(),600); }
+function updateHud(){ hud.score.textContent=state.score; hud.combo.textContent='×'+state.mult+(state.combo>0?' ('+state.combo+')':''); hud.comboBox.classList.toggle('big',state.mult>1); }
+
+/* ----- vstup ----- */
+function keyFromEvent(e){ const ch=(e.key||'').toLowerCase(); if(FINGER[ch]!==undefined)return ch;
+  for(const k in FINGER){ if(('Key'+k.toUpperCase())===e.code)return k; } return null; }
+document.addEventListener('keydown',e=>{
+  if(e.code==='Backquote'){ setDev(!devOn); e.preventDefault(); return; }
+  if(!state||!state.running)return;
+  const key=keyFromEvent(e); if(!key)return; e.preventDefault();
+  const now=performance.now(), readyPx=state._readyPx||40;
+  let target=null; for(const t of state.tiles){ if(t.judged||t.topY==null)continue; if(!target||t.bottomY>target.bottomY)target=t; }
+  if(!target)return;
+  if(key!==target.key)return;                          // zamčené pořadí, špatná klávesa = nic
+  if(target.bottomY>=state.hitY-readyPx&&target.topY<=state.hitY) judgeHit(target);
+  else { state.emaInterval=Math.max(GAP_MIN,state.emaInterval*0.8); applyTempo(); if(state.nextSpawn>now)state.nextSpawn=now; }
+});
+
+/* ----- konec sezení: aktualizace zahrady + meta ----- */
+function endGame(){
+  const r=devReport(performance.now());
+  // 1) aktualizuj skill per klávesa podle sezení
+  const grew=[];
+  for(const k in state.attemptStat){ const a=state.attemptStat[k]; if(!a)continue;
+    const acc=state.hitStat[k]/a; const before=SKILL[k]?SKILL[k].s:0.1; let s=before;
+    if(acc>=0.8) s+=(1-s)*0.30; else if(acc>=0.5) s+=(1-s)*0.12; else s-=s*0.10;
+    // bonus za rychlost
+    const fastRate=state.fastStat[k]/a; s+=(1-s)*0.10*fastRate;
+    s=Math.max(0.05,Math.min(1,s));
+    SKILL[k]={s, seen:Date.now()};
+    if(s-before>0.02) grew.push({k,before,after:s});
+  }
+  // 2) odemkni další klávesu po prokázané zdatnosti
+  let unlocked=null;
+  if(meanSkill()>=0.6){ const next=UNLOCK_ORDER.find(k=>SKILL[k]===undefined); if(next){ SKILL[next]={s:0.10,seen:Date.now()}; unlocked=next; } }
+  // 3) meta: XP, série
+  const gainedXp=state.hitStat&&Object.values(state.hitStat).reduce((a,b)=>a+b,0)*5||0;
+  META.xp=(META.xp||0)+gainedXp; META.sessions=(META.sessions||0)+1;
+  const t=todayStr();
+  if(META.lastDay!==t){ const y=new Date(Date.now()-DAY).toISOString().slice(0,10);
+    META.streak=(META.lastDay===y)?(META.streak+1):1; META.lastDay=t; if(META.streak>(META.best||0))META.best=META.streak; }
+  saveProfile();   // uloží do Supabase (profil dle jména) + lokální cache
+  // 4) nejlepší / nejslabší klávesa (pozitivně)
+  let bestK=null,bestR=-1,weakK=null,weakR=2;
+  for(const k in state.attemptStat){ const a=state.attemptStat[k]; if(!a)continue; const acc=state.hitStat[k]/a;
+    if(acc>bestR){bestR=acc;bestK=k;} if(acc<weakR){weakR=acc;weakK=k;} }
+  // render konce
+  let h=`<h2 class="neon">⬡ Sezení hotovo</h2>`;
+  h+=`<div class="stats-line"><div class="s">Body<b class="gold">${state.score}</b></div>`+
+     `<div class="s">+XP<b class="neon">${gainedXp}</b></div>`+
+     `<div class="s">Série<b class="gold">${META.streak}🔥</b></div>`+
+     `<div class="s">Nejdelší combo<b>${state.maxCombo}</b></div></div>`;
+  h+=`<div class="card">`;
+  if(bestK!=null) h+=`<div>Nejlíp ti šlo <span class="pin">${label(bestK)}</span> — ${fingerName(bestK)} válí. 🟢</div>`;
+  if(grew.length) h+=`<div>Vyrostly klávesy: ${grew.map(g=>`<span class="pin">${label(g.k)}</span>`).join(' ')} 🌱</div>`;
+  if(unlocked) h+=`<div class="gold">🔓 Nová klávesa ve hře: ${label(unlocked)} (${fingerName(unlocked)})!</div>`;
+  else if(weakK!=null && weakR<0.9) h+=`<div>Příště se víc objeví <span class="pin">${label(weakK)}</span> — ať si ho osaháš. 💪</div>`;
+  h+=`</div>`;
+  if(devOn&&r) h+=`<div class="card" style="border-color:rgba(39,240,255,.4)"><b>DEV — hluchá místa:</b> ${r.pct}% • ${r.count}× • nejdelší ${r.max} ms</div>`;
+  h+=`<div class="row"><button class="btn" id="btnAgain">HRÁT ZNOVU ▶</button><button class="btn alt" id="btnHomeBtn">Zahrada</button></div>`;
+  const end=gid('screenEnd'); end.innerHTML=h; show('screenEnd');
+  hud.streak.textContent=META.streak; hud.xp.textContent=META.xp;
+  gid('btnAgain').onclick=()=>startCountdown();
+  gid('btnHomeBtn').onclick=()=>renderHome();
+}
+
+/* ================= start ================= */
+(async()=>{ const last=localStorage.getItem('pd_profile'); if(last){ await loadProfile(last); } renderHome(); })();
+</script>
+</body>
+</html>
