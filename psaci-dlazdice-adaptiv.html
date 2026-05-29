@@ -78,6 +78,8 @@
     display:flex; align-items:center; justify-content:center; font-weight:800; font-size:16px; color:var(--muted);
     position:relative; transition:transform .07s, box-shadow .12s, background .3s, color .3s;}
   .key.locked{opacity:.25;}
+  .key.ulock{opacity:.3; border-style:dashed !important; background:transparent !important;}
+  .key.ulock::after{content:"🔒"; position:absolute; top:1px; right:2px; font-size:9px;}
   .key.lit{transform:translateY(3px); box-shadow:0 0 18px currentColor; color:#04060f;}
 
   /* obrazovky */
@@ -108,6 +110,10 @@
     border-radius:10px;padding:10px 14px;font-size:15px;outline:none;}
   .profilebar input:focus{border-color:var(--cyan);box-shadow:0 0 12px rgba(39,240,255,.4);}
   #profileTag{font-size:12px;color:var(--muted);}
+  .profilelist{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+  .chip{background:#0a1024;border:1px solid var(--cyan);color:var(--cyan);border-radius:16px;
+    padding:6px 13px;font-size:13px;cursor:pointer;}
+  .chip:hover{background:var(--cyan);color:#04222a;}
   #count{font-size:120px;font-weight:900;}
   #dev{position:absolute; top:54px; left:10px; z-index:9; background:rgba(0,0,0,.72); color:#9ff;
     font:12px/1.5 ui-monospace,monospace; padding:8px 11px; border-radius:8px; pointer-events:none; max-width:280px; border:1px solid rgba(39,240,255,.3);}
@@ -137,9 +143,10 @@
     <p class="sub">Tvoje <b>klávesnicová zahrada</b>. Každá klávesa roste, jak ji zvládáš: <span style="color:var(--muted)">šedá</span> → <span class="neon">cyan</span> → <span style="color:var(--gold)">zlatá</span>. Hra ti sama dává víc těch, co ti zatím nejdou — bez kritiky, jen rosteš.</p>
     <div class="profilebar">
       <input id="hName" placeholder="tvé jméno" maxlength="20" autocomplete="off">
-      <button class="btn alt" id="btnLoadProfile">Načíst profil</button>
+      <button class="btn alt" id="btnLoadProfile">Vybrat profil</button>
       <span id="profileTag"></span>
     </div>
+    <div id="profileList" class="profilelist"></div>
     <div id="garden"></div>
     <div class="legend">
       <span><span class="swatch" style="background:#2a3160"></span>nová</span>
@@ -152,7 +159,7 @@
       <div class="s">Nejdelší série<b id="hBestStreak">0</b></div>
     </div>
     <button class="btn" id="btnPlay">HRÁT ▶</button>
-    <small class="note">Sezení ≈ 45 úhozů. Hraj naslepo — sleduj dlaždice, ne klávesnici.</small>
+    <small class="note">Sezení ≈ 45 úhozů. Hraj naslepo — sleduj dlaždice, ne klávesnici. <b>Klikni na písmeno v&nbsp;mřížce = zamknout/odemknout</b> (zamčené se ve hře neobjeví). 🔒</small>
   </div>
 
   <div class="screen hide" id="screenCount"><div id="count" class="neon">3</div></div>
@@ -170,22 +177,24 @@ const FINGER={
   k:'rmid',i:'rmid',
   l:'rring',o:'rring',
   'ů':'rpinky',p:'rpinky',
+  ' ':'thumb',
 };
 const FCOLOR={lpinky:'#ff5d5d',lring:'#ff9d3d',lmid:'#ffe14d',lindex:'#4be88a',
-  rindex:'#23d6c0',rmid:'#46a6ff',rring:'#9b7bff',rpinky:'#ff6fce'};
+  rindex:'#23d6c0',rmid:'#46a6ff',rring:'#9b7bff',rpinky:'#ff6fce',thumb:'#8fa6d8'};
 const FNAME={lpinky:'levý malíček',lring:'levý prsteníček',lmid:'levý prostředníček',lindex:'levý ukazováček',
-  rindex:'pravý ukazováček',rmid:'pravý prostředníček',rring:'pravý prsteníček',rpinky:'pravý malíček'};
+  rindex:'pravý ukazováček',rmid:'pravý prostředníček',rring:'pravý prsteníček',rpinky:'pravý malíček',thumb:'palec'};
 function colorOf(k){return FCOLOR[FINGER[k]]||'#27f0ff';}
 function fingerName(k){return FNAME[FINGER[k]]||'';}
-function label(k){return k==='ů'?'Ů':k.toUpperCase();}
+function label(k){return k===' '?'␣':k==='ů'?'Ů':k.toUpperCase();}
 
-// pořadí zavádění kláves: domovská řada → horní → spodní
-const UNLOCK_ORDER=['f','j','d','k','s','l','a','ů','g','h','e','i','r','u','t','o','n','v','c','m','p','w','b','y','z','x','q'];
-// rozložení klávesnice pro heatmap (jen písmena, QWERTZ-ish)
+// pořadí zavádění kláves — index+střední prsty a mezerník dřív, malíčky (a, ů, q, p) později
+const UNLOCK_ORDER=['f','j','d','k',' ','h','u','n','m','i','g','t','r','e','v','c','s','l','o','a','ů','w','p','b','y','z','x','q'];
+// rozložení klávesnice pro heatmap
 const KB_LAYOUT=[
   ['q','w','e','r','t','z','u','i','o','p'],
   ['a','s','d','f','g','h','j','k','l','ů'],
-  ['y','x','c','v','b','n','m']
+  ['y','x','c','v','b','n','m'],
+  [' ']
 ];
 
 /* ================= profily (Supabase + offline cache) ================= */
@@ -198,7 +207,7 @@ const SUPA_T=SUPA_URL+'/rest/v1/typing_profiles';
 const SUPA_H={'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json'};
 
 function defaultSkill(){ return {f:{s:0.12,seen:Date.now()}, j:{s:0.12,seen:Date.now()}}; }
-function defaultMeta(){ return {streak:0,best:0,xp:0,lastDay:null,sessions:0}; }
+function defaultMeta(){ return {streak:0,best:0,xp:0,lastDay:null,sessions:0,locked:[]}; }
 function applyDecay(m){ const now=Date.now();
   for(const k in m){ const days=(now-(m[k].seen||now))/DAY; if(days>0.5) m[k].s=Math.max(0.05,m[k].s*Math.pow(0.94,days)); }
   return m; }
@@ -228,28 +237,56 @@ async function saveProfile(){
 function introduced(){ return UNLOCK_ORDER.filter(k=>SKILL[k]!==undefined); }
 function masteredCount(){ return introduced().filter(k=>SKILL[k].s>=0.85).length; }
 function meanSkill(){ const a=introduced(); return a.length?a.reduce((s,k)=>s+SKILL[k].s,0)/a.length:0; }
+// uživatelské zamykání písmen
+function isLocked(k){ return (META.locked||[]).indexOf(k)>=0; }
+function toggleLock(k){ META.locked=META.locked||[]; const i=META.locked.indexOf(k); if(i>=0)META.locked.splice(i,1); else META.locked.push(k); saveProfile(); }
+function activeKeys(){ return introduced().filter(k=>!isLocked(k)); }   // ve hře skutečně použité
 
-/* ================= generátor sezení (vážený slabostí + slabiky) ================= */
+/* ================= generátor sezení (skutečná slova když jdou, jinak slabiky) ================= */
 const SESSION_LEN=45;
+// česká slova BEZ diakritiky (jen znaky, co umíme zavést). Filtr použije jen ta složitelná.
+const WORDS=("ten jen den sen hned kde med ret krev vir rum kmen trn ven hrnec mince mete nese vede "+
+"kost los sto most lov host noc moc rok krok led list metr litr vlk stroj kino limit termit motor "+
+"ano ona ono oni my ty on doma rana kosa lano sako kamen had rak dar les nos vor kov var tma vlak "+
+"voda noha ruka hlava auto kolo oko slon mama tata baba deda kotel sova liga kniha mleko maso syr "+
+"deska lehka klid sila tele jede sklad lada salam vana cval kotva strom kvet ptak kun jelen vlna "+
+"ovce koza husa kachna pavouk metla lopata sekera kladivo motyka").split(/\s+/);
 function weightedPick(keys,last,last2){
   let tot=0; const w=keys.map(k=>{
-    let x=(1-SKILL[k].s)+0.18;            // slabší = vyšší šance, ale i silné občas
-    if(k===last) x*=0.25;                  // neopakuj hned
-    if(k===last&&k===last2) x=0;           // nikdy 3×
+    let x=(1-SKILL[k].s)+0.18;
+    if(k===last) x*=0.25;
+    if(k===last&&k===last2) x=0;
     tot+=x; return x;
   });
   let r=Math.random()*tot;
   for(let i=0;i<keys.length;i++){ r-=w[i]; if(r<=0) return keys[i]; }
   return keys[keys.length-1];
 }
+function syllable(letters){
+  const n=2+((Math.random()*3)|0); let s='',last=null,last2=null;
+  for(let i=0;i<n;i++){ const k=weightedPick(letters,last,last2); s+=k; last2=last; last=k; }
+  return s;
+}
 function genSession(){
-  const keys=introduced();
-  const seq=[]; let last=null,last2=null;
-  for(let i=0;i<SESSION_LEN;i++){ const p=weightedPick(keys,last,last2); seq.push(p); last2=last; last=p; }
-  // seskup do slabik 3–5 znaků (mezery jen pro textový řádek)
-  let out='',n=0,grp=3+((Math.random()*3)|0);
-  for(const k of seq){ out+=k; if(++n>=grp){ out+=' '; n=0; grp=3+((Math.random()*3)|0); } }
-  return out.trim();
+  const letters=activeKeys().filter(k=>k!==' ');
+  const sp = SKILL[' ']!==undefined && !isLocked(' ');   // máme (odemčený) mezerník?
+  const setL=new Set(letters);
+  const weak=letters.slice().sort((a,b)=>SKILL[a].s-SKILL[b].s).slice(0,3);
+  const formable=WORDS.filter(w=>[...w].every(c=>setL.has(c)));
+  const tokens=[]; let count=0;
+  while(count<SESSION_LEN){
+    let tok;
+    // skutečná slova jen když máme mezerník (jinak by slova splývala) a něco jde složit
+    if(sp && formable.length>0 && Math.random()<0.7){
+      let pool=formable.filter(w=>[...w].some(c=>weak.includes(c)));
+      if(!pool.length || Math.random()<0.35) pool=formable;
+      tok=pool[(Math.random()*pool.length)|0];
+    } else {
+      tok=syllable(letters);
+    }
+    tokens.push(tok); count+=tok.length+(sp?1:0);
+  }
+  return sp ? tokens.join(' ') : tokens.join('');
 }
 
 /* ================= časování / engine ================= */
@@ -269,15 +306,22 @@ function gid(i){return document.getElementById(i);}
 
 let state=null;
 
-/* ----- zvuk: melodie z úhozů (Óda na radost) ----- */
+/* ----- zvuk: melodie z úhozů; 5 skladeb střídaných po kolech ----- */
 let actx=null, soundOn=(localStorage.getItem('pd_sound')!=='off');
-const NT={C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392.00,A4:440.00,B4:493.88,C5:523.25};
-const MELODY=[NT.E4,NT.E4,NT.F4,NT.G4,NT.G4,NT.F4,NT.E4,NT.D4,NT.C4,NT.C4,NT.D4,NT.E4,NT.E4,NT.D4,NT.D4,
-  NT.E4,NT.E4,NT.F4,NT.G4,NT.G4,NT.F4,NT.E4,NT.D4,NT.C4,NT.C4,NT.D4,NT.E4,NT.D4,NT.C4,NT.C4];
-let melodyIdx=0;
+const NT={G3:196.00,A3:220.00,B3:246.94,C4:261.63,D4:293.66,E4:329.63,F4:349.23,G4:392.00,A4:440.00,B4:493.88,C5:523.25,D5:587.33,E5:659.25};
+const _n=s=>s.split(' ').map(x=>NT[x]);
+const MELODIES=[
+  {name:'Óda na radost', notes:_n('E4 E4 F4 G4 G4 F4 E4 D4 C4 C4 D4 E4 E4 D4 D4 E4 E4 F4 G4 G4 F4 E4 D4 C4 C4 D4 E4 D4 C4 C4')},
+  {name:'Hvězdičko', notes:_n('C4 C4 G4 G4 A4 A4 G4 F4 F4 E4 E4 D4 D4 C4 G4 G4 F4 F4 E4 E4 D4 G4 G4 F4 F4 E4 E4 D4')},
+  {name:'Bratře Kubo', notes:_n('C4 D4 E4 C4 C4 D4 E4 C4 E4 F4 G4 E4 F4 G4 G4 A4 G4 F4 E4 C4 G4 A4 G4 F4 E4 C4 C4 G3 C4 C4 G3 C4')},
+  {name:'Rolničky', notes:_n('E4 E4 E4 E4 E4 E4 E4 G4 C4 D4 E4 F4 F4 F4 F4 F4 E4 E4 E4 E4 D4 D4 E4 D4 G4')},
+  {name:'Ovčáci', notes:_n('E4 D4 C4 D4 E4 E4 E4 D4 D4 D4 E4 G4 G4 E4 D4 C4 D4 E4 E4 E4 E4 D4 D4 E4 D4 C4')},
+];
+let melodyIdx=0;   // pozice v aktuální skladbě (currentMelody)
 function ensureAudio(){ try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();actx.resume&&actx.resume();}catch(e){} }
 function tone(f,type,peak,dur){ if(!soundOn||!f)return; try{ensureAudio();const o=actx.createOscillator(),g=actx.createGain(),t=actx.currentTime;o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+0.012);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g).connect(actx.destination);o.start(t);o.stop(t+dur+0.04);}catch(e){} }
-function playHitNote(chain){ const f=MELODY[melodyIdx%MELODY.length];melodyIdx++; tone(f,'triangle',0.16,0.22); if(chain)tone(f*2,'sine',0.05,0.12); }
+function playHitNote(chain){ const mel=currentMelody||MELODIES[0].notes; const f=mel[melodyIdx%mel.length]; melodyIdx++;
+  tone(f,'triangle',0.17,0.26); tone(f/2,'sine',0.06,0.30); if(chain)tone(f*2,'sine',0.05,0.12); }
 function updateSoundBtn(){ const b=gid('btnMusic'); if(b)b.textContent=soundOn?'🔊':'🔇'; }
 gid('btnMusic').onclick=()=>{ soundOn=!soundOn; localStorage.setItem('pd_sound',soundOn?'on':'off'); updateSoundBtn(); if(soundOn)ensureAudio(); };
 updateSoundBtn();
@@ -306,14 +350,18 @@ function skillColor(s){
   const c=i=>Math.round(a[i]+(b[i]-a[i])*t); return `rgb(${c(0)},${c(1)},${c(2)})`;
 }
 function renderKeyboard(container,opts){
+  opts=opts||{};
   container.innerHTML='';
   KB_LAYOUT.forEach(row=>{
     const r=document.createElement('div'); r.className='kbrow';
     row.forEach(k=>{
-      const has=SKILL[k]!==undefined;
-      const el=document.createElement('div'); el.className='key'+(has?'':' locked'); el.dataset.key=k; el.textContent=label(k);
+      const has=SKILL[k]!==undefined, ulock=has&&isLocked(k);
+      const el=document.createElement('div');
+      el.className='key'+(has?'':' locked')+(ulock?' ulock':''); el.dataset.key=k; el.textContent=label(k);
       if(has){ const col=skillColor(SKILL[k].s); el.style.borderColor=col; el.style.color=col;
-        if(opts&&opts.fill){ el.style.background=col; el.style.color='#04060f'; } }
+        if(opts.fill && !ulock){ el.style.background=col; el.style.color='#04060f'; } }
+      if(opts.interactive && has){ el.style.cursor='pointer'; el.title=ulock?'klikni = odemknout':'klikni = zamknout';
+        el.onclick=()=>{ toggleLock(k); renderHome(); }; }
       r.appendChild(el);
     });
     container.appendChild(r);
@@ -347,41 +395,65 @@ function hideScreens(){ ['screenHome','screenCount','screenEnd'].forEach(s=>gid(
 
 /* ----- HOME / zahrada ----- */
 function renderHome(){
-  renderKeyboard(gid('garden'),{fill:true});
+  renderKeyboard(gid('garden'),{fill:true, interactive:true});
   gid('hMastered').textContent=masteredCount();
   gid('hActive').textContent=introduced().length;
   gid('hBestStreak').textContent=META.best||0;
   hud.streak.textContent=META.streak||0; hud.xp.textContent=META.xp||0;
   hud.score.textContent=0; hud.combo.textContent='×1';
   gid('hName').value=currentProfile||'';
-  gid('profileTag').textContent=currentProfile?('profil: '+currentProfile+' • ukládá se napříč počítači'):'zadej jméno, ať se postup ukládá a sdílí mezi počítači';
+  gid('profileList').innerHTML='';
+  gid('profileTag').textContent=currentProfile?('profil: '+currentProfile+' • ukládá se napříč počítači'):'zadej jméno (nebo „Vybrat profil"), ať se postup ukládá a sdílí mezi počítači';
   show('screenHome');
 }
+async function listProfiles(){
+  let names=[];
+  try{ const r=await fetch(SUPA_T+'?select=name&order=updated_at.desc&limit=40',{headers:SUPA_H});
+    if(r.ok){ const a=await r.json(); names=a.map(x=>x.name); } }catch(e){}
+  try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i);
+    if(k&&k.indexOf('pd_')===0&&k!=='pd_profile'&&k!=='pd_sound'){ const nm=k.slice(3); if(names.indexOf(nm)<0) names.push(nm);} } }catch(e){}
+  return names;
+}
+function renderProfileList(names){
+  const c=gid('profileList'); c.innerHTML='';
+  names.forEach(nm=>{ const b=document.createElement('button'); b.className='chip'; b.textContent=nm;
+    b.onclick=async()=>{ gid('hName').value=nm; gid('profileTag').textContent='načítám…'; await loadProfile(nm); renderHome(); };
+    c.appendChild(b); });
+}
 gid('btnLoadProfile').onclick=async()=>{
-  const n=gid('hName').value.trim(); if(!n){gid('hName').focus();return;}
-  gid('profileTag').textContent='načítám…'; await loadProfile(n); renderHome();
+  gid('profileTag').textContent='hledám profily…';
+  const names=await listProfiles(); renderProfileList(names);
+  gid('profileTag').textContent = names.length ? 'vyber profil, nebo napiš nové jméno a dej HRÁT' : 'žádné uložené profily — napiš jméno a dej HRÁT';
 };
 gid('btnPlay').onclick=async()=>{
   const n=gid('hName').value.trim();
   if(!n){ gid('hName').focus(); gid('profileTag').textContent='nejdřív zadej jméno 🙂'; return; }
   if(n!==currentProfile){ gid('profileTag').textContent='načítám…'; await loadProfile(n); }
+  if(activeKeys().filter(k=>k!==' ').length===0){ gid('profileTag').textContent='odemkni aspoň jedno písmeno v mřížce 🙂'; return; }
   startCountdown();
 };
 
 /* ----- countdown ----- */
-function startCountdown(){
+function startCountdown(opts){
+  opts=opts||{};
   hideScreens(); state=null;
-  // sloupce = aktuálně zavedené klávesy v pořadí klávesnice
-  const order=['a','s','d','f','g','h','j','k','l','ů','q','w','e','r','t','z','u','i','o','p','y','x','c','v','b','n','m'];
-  const cols=order.filter(k=>SKILL[k]!==undefined);
+  if(opts.nextLevel){ const next=UNLOCK_ORDER.find(k=>SKILL[k]===undefined); if(next){ SKILL[next]={s:0.10,seen:Date.now()}; saveProfile(); } }
+  // sloupce = aktuálně zavedené klávesy (+ mezerník) v pořadí klávesnice
+  const order=['a','s','d','f','g','h','j','k','l','ů','q','w','e','r','t','z','u','i','o','p','y','x','c','v','b','n','m',' '];
+  const cols=order.filter(k=>SKILL[k]!==undefined && (opts.repeat || !isLocked(k)));   // zamčená bez sloupce (kromě přesného opakování)
   setupBoard(cols);
   show('screenCount'); let n=3; const el=gid('count'); el.textContent=n;
-  const iv=setInterval(()=>{ n--; if(n===0)el.textContent='START'; if(n<0){clearInterval(iv);hideScreens();runGame();} else if(n>0)el.textContent=n; },650);
+  const iv=setInterval(()=>{ n--; if(n===0)el.textContent='START'; if(n<0){clearInterval(iv);hideScreens();runGame(opts);} else if(n>0)el.textContent=n; },650);
 }
 
 /* ----- běh sezení ----- */
-function runGame(){
-  const text=genSession();
+let lastExercise=null, lastMelodyIdx=-1, currentMelody=null;
+function runGame(opts){
+  opts=opts||{};
+  let text, mIdx;
+  if(opts.repeat && lastExercise){ text=lastExercise.text; mIdx=lastExercise.melodyIdx; }   // přesně totéž cvičení
+  else { text=genSession(); mIdx=(lastMelodyIdx+1)%MELODIES.length; }
+  lastMelodyIdx=mIdx; lastExercise={text, melodyIdx:mIdx}; currentMelody=MELODIES[mIdx].notes;
   const cols=Object.keys(colIndex);
   state={ text, queue:[], qi:0, tiles:[], score:0, combo:0, mult:1, maxCombo:0, curStreak:0, shield:true,
     hitStat:{}, attemptStat:{}, fastStat:{}, lastSpawn:{},
@@ -494,9 +566,7 @@ function endGame(){
     SKILL[k]={s, seen:Date.now()};
     if(s-before>0.02) grew.push({k,before,after:s});
   }
-  // 2) odemkni další klávesu po prokázané zdatnosti
-  let unlocked=null;
-  if(meanSkill()>=0.6){ const next=UNLOCK_ORDER.find(k=>SKILL[k]===undefined); if(next){ SKILL[next]={s:0.10,seen:Date.now()}; unlocked=next; } }
+  // 2) nové písmeno se přidává JEN ručně přes tlačítko „Další level"
   // 3) meta: XP, série
   const gainedXp=state.hitStat&&Object.values(state.hitStat).reduce((a,b)=>a+b,0)*5||0;
   META.xp=(META.xp||0)+gainedXp; META.sessions=(META.sessions||0)+1;
@@ -517,14 +587,19 @@ function endGame(){
   h+=`<div class="card">`;
   if(bestK!=null) h+=`<div>Nejlíp ti šlo <span class="pin">${label(bestK)}</span> — ${fingerName(bestK)} válí. 🟢</div>`;
   if(grew.length) h+=`<div>Vyrostly klávesy: ${grew.map(g=>`<span class="pin">${label(g.k)}</span>`).join(' ')} 🌱</div>`;
-  if(unlocked) h+=`<div class="gold">🔓 Nová klávesa ve hře: ${label(unlocked)} (${fingerName(unlocked)})!</div>`;
-  else if(weakK!=null && weakR<0.9) h+=`<div>Příště se víc objeví <span class="pin">${label(weakK)}</span> — ať si ho osaháš. 💪</div>`;
+  if(weakK!=null && weakR<0.9) h+=`<div>Příště se víc objeví <span class="pin">${label(weakK)}</span> — ať si ho osaháš. 💪</div>`;
   h+=`</div>`;
   if(devOn&&r) h+=`<div class="card" style="border-color:rgba(39,240,255,.4)"><b>DEV — hluchá místa:</b> ${r.pct}% • ${r.count}× • nejdelší ${r.max} ms</div>`;
-  h+=`<div class="row"><button class="btn" id="btnAgain">HRÁT ZNOVU ▶</button><button class="btn alt" id="btnHomeBtn">Zahrada</button></div>`;
+  const nextLetter=UNLOCK_ORDER.find(k=>SKILL[k]===undefined);
+  h+=`<div class="row">`+
+     `<button class="btn alt" id="btnRepeat">↺ Opakování předešlého cvičení</button>`+
+     (nextLetter?`<button class="btn" id="btnNext">Další level → ${label(nextLetter)}</button>`:'')+
+     `<button class="btn alt" id="btnHomeBtn">Písmena</button>`+
+     `</div>`;
   const end=gid('screenEnd'); end.innerHTML=h; show('screenEnd');
   hud.streak.textContent=META.streak; hud.xp.textContent=META.xp;
-  gid('btnAgain').onclick=()=>startCountdown();
+  gid('btnRepeat').onclick=()=>startCountdown({repeat:true});
+  const bn=gid('btnNext'); if(bn) bn.onclick=()=>startCountdown({nextLevel:true});
   gid('btnHomeBtn').onclick=()=>renderHome();
 }
 
