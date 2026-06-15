@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reserse + CRM - nacitam...</title>
+</head>
+<body style="font-family:-apple-system,Arial,sans-serif;color:#444;padding:40px;font-size:15px">
+Nacitam aplikaci z tabulky...
+<script>
+var H="https://script.google.com/macros/s/AKfycbzk9VgTQMTstAeU_UXsLCW_Auc7Ym53D6X1hmKVdIqMDVnPG5jVigTwA8KvC7A8Gze-/exec";
+window.__boot=function(rows){
+  try{
+    var sh=null; for(var i=0;i<rows.length;i++){ if(String(rows[i].ico)==="__SHELL__"){ sh=rows[i]; break; } }
+    if(!sh||!sh.html){ document.body.innerHTML="Chyba: shell nenalezen v tabulce."; return; }
+    window.__PRELOAD=rows;
+    document.open(); document.write(sh.html); document.close();
+  }catch(e){ document.body.innerHTML="Chyba pri nacitani: "+e; }
+};
+var s=document.createElement("script");
+s.onerror=function(){ document.body.innerHTML="Chyba: tabulku se nepodarilo nacist."; };
+s.src=H+"?data=reserse&callback=__boot&_="+Date.now();
+document.body.appendChild(s);
+</script>
+</body>
+</html>

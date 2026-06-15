@@ -629,6 +629,14 @@ async function submitToSheet() {
   const sam = document.getElementById('sharedSam').value;
   const kurz = document.getElementById('sharedKurz').value;
 
+  // Validace - musí být alespoň 1 zákazník
+  if (customers.length === 0) {
+    showStatus('Není co odeslat – nejdříve vyfoťte kartu zákazníka', 'error');
+    btn.disabled = false;
+    btn.textContent = '✔ Zapsat do tabulky';
+    return;
+  }
+
   // Build payload
   const payload = {
     customers: customers.map(c => ({
@@ -647,25 +655,43 @@ async function submitToSheet() {
   try {
     const response = await fetch(webhookUrl, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      mode: 'no-cors' // Apps Script requires this
+      body: JSON.stringify(payload)
     });
 
-    // With no-cors we can't read the response, but if it didn't throw, it likely worked
-    showStatus(`Odesláno ${customers.length} zákazníků do tabulky!`, 'success');
+    if (!response.ok) {
+      throw new Error('Server odpověděl chybou: ' + response.status);
+    }
 
-    // Reset after 3 seconds
-    setTimeout(() => {
-      retake();
+    let result;
+    try {
+      result = await response.json();
+    } catch (parseErr) {
+      throw new Error('Nepodařilo se přečíst odpověď serveru');
+    }
+
+    if (result.success) {
+      showStatus('✅ Uloženo! ' + (result.message || customers.length + ' zákazníků zapsáno'), 'success');
+      // Reset po 3 sekundách
+      setTimeout(() => {
+        retake();
+        btn.disabled = false;
+        btn.textContent = '✔ Zapsat do tabulky';
+      }, 3000);
+    } else {
+      showStatus('❌ Neuloženo: ' + (result.message || 'Neznámá chyba ze serveru'), 'error');
       btn.disabled = false;
-      btn.textContent = '\u2714 Zapsat do tabulky';
-    }, 3000);
+      btn.textContent = '✔ Zapsat do tabulky';
+    }
 
   } catch (error) {
-    showStatus('Chyba při odesílání: ' + error.message, 'error');
+    // Zobrazení chyby uživateli
+    let errorMsg = error.message || 'Neznámá chyba';
+    if (errorMsg.includes('Failed to fetch') || errorMsg.includes('NetworkError')) {
+      errorMsg = 'Nelze se připojit k serveru. Zkontrolujte připojení k internetu a správnost webhook URL v nastavení.';
+    }
+    showStatus('❌ Chyba: ' + errorMsg, 'error');
     btn.disabled = false;
-    btn.textContent = '\u2714 Zapsat do tabulky';
+    btn.textContent = '✔ Zapsat do tabulky';
   }
 }
 

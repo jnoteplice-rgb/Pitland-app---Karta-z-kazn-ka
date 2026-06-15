@@ -7,6 +7,26 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Pitland – Nahrání záznamu</title>
 <link rel="manifest" href="nahravky-manifest.json">
+<!-- v1.30: KILL coi-serviceworker (zpusobovala strobing loop na iOS) + pure Web Audio path -->
+<script>
+// Unregister any existing service workers (mainly coi-serviceworker leftover from v1.28/v1.29)
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    var killed = 0;
+    for (var i = 0; i < registrations.length; i++) {
+      registrations[i].unregister();
+      killed++;
+    }
+    if (killed > 0) console.log('v1.30: killed ' + killed + ' service workers');
+  });
+  // Also clear caches that might have been populated by SW
+  if (window.caches) {
+    caches.keys().then(function(names) {
+      for (var i = 0; i < names.length; i++) caches.delete(names[i]);
+    });
+  }
+}
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lamejs/1.2.1/lame.min.js"></script>
 <style>
   :root {
@@ -128,6 +148,7 @@
   .status.info { background: #12160a; color: var(--pitland-green); border: 1px solid #3a4a0a; }
   .status.ok   { background: #152200; color: var(--pitland-green); border: 1px solid var(--pitland-green-dark); }
   .status.err  { background: #2a0e0e; color: #f5a0a0; border: 1px solid #c62828; }
+  .status.warn { background: #2a2410; color: #f5d97a; border: 1px solid #c69828; }
 
   .progress {
     height: 8px; background: #1e1e22; border-radius: 4px;
@@ -209,6 +230,12 @@
       </select>
     </div>
 
+    <div class="field">
+      <label for="datum" id="datumLabel">Datum nahrávky</label>
+      <input type="date" id="datum" name="datum">
+      <div class="hint-text">Defaultně dnes. Změň pokud nahráváš zpětně (čas bude 12:00).</div>
+    </div>
+
     <div class="field" id="pocetField" style="display:none;">
       <label for="pocet" id="pocetLabel">Počet účastníků celkem (vč. tebe)</label>
       <input type="number" id="pocet" name="pocet" min="1" max="12" placeholder="3" inputmode="numeric">
@@ -245,7 +272,7 @@
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.14</footer>
+  <footer>Pitland · v1.37</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -297,8 +324,14 @@
   // ── Konfigurace ──────────────────────────────────────────────────────────
   const WEBHOOK_URL      = "https://script.google.com/macros/s/AKfycbzZLOlG9-ezkQ4wmym4ulsEmxt7BkAsrmR_tjFVQLO-_186rARBXwu1hyw14ApjleXI/exec";
   const TEMP_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbz4pNkjjM0FBKUlCwVR97aiBWczlpL3fjw19Q7z8rDkP2xZVGVWASLmMxvx-6YXAuZb/exec";
-  const MAX_SIZE_MB = 45;
-  const MP3_KBPS    = 64;
+  const MAX_SIZE_MB = 250;  // v1.22: input limit zvedly z 45 (po komprimi je vystup ~10 MB / hod)
+  const MP3_KBPS    = 96;  // v1.31: 24->96 (48kHz potrebuje vyssi bitrate pro kvalitu reci)
+  const MP3_SAMPLE_RATE = 48000;  // v1.31: 16kHz ROZBIJEL ElevenLabs diarizaci! 48kHz = OK (downsampling = spolknuta rec v audio_event)
+  const MULTIPART_THRESHOLD_SEC = 3600;  // 60 min - nad timto delime
+  const MULTIPART_CHUNK_SEC = 3000;       // 50 min chunky (Scribe ~4 min = bezpecne pod Apps Script 6 min limit)
+  // v1.37: BINARY CHUNKED UPLOAD pro mobile (přeskoč MP3 konverzi → originál → 20MB chunky)
+  const RAW_CHUNK_THRESHOLD_MB = 35;  // nad tohle používáme chunked path místo single POST (base64 50MB limit AS)
+  const RAW_CHUNK_BIN_MB = 20;        // 20 MB binary slice = ~27 MB base64 JSON, dobře pod 50 MB AS limit
 
   // Default počet účastníků per druh
   const POCET_DEFAULT = {
@@ -326,6 +359,7 @@
   const progress    = document.getElementById("progress");
   const progressBar = document.getElementById("progressBar");
   const druhSelect  = document.getElementById("druh");
+  const datumInput  = document.getElementById("datum");
   const pocetField  = document.getElementById("pocetField");
   const pocetInput  = document.getElementById("pocet");
   const skymField   = document.getElementById("skymField");
@@ -344,6 +378,8 @@
   const peopleSearch = document.getElementById("peopleSearch");
 
   let currentFile = null;
+  let currentFileHash = null;  // v1.32: SHA-256 originálu pro detekci duplicit
+  let currentMultipartMeta = null;  // v1.21: pro dlouhe nahravky (parent_recording_id, parts[], offsets[], durations[])
   let peopleCache = null;
 
   // ── Pole se mění podle druhu ─────────────────────────────────────────────
@@ -396,6 +432,13 @@
   jmenoInput.addEventListener("input", updateRequiredLabels);
   skymInput.addEventListener("input", updateRequiredLabels);
   popisInput.addEventListener("input", updateRequiredLabels);
+
+  // ── Datum nahrávky default: dnes ──────────────────────────────────────────
+  try {
+    const d = new Date();
+    const localISO = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    datumInput.value = localISO;
+  } catch (e) { }
 
   // ── localStorage: zkratka SAM ────────────────────────────────────────────
   try {
@@ -476,15 +519,28 @@
       const arrayBuffer = await file.arrayBuffer();
       const AudioCtx = window.AudioContext || window.webkitAudioContext;
       const audioCtx = new AudioCtx();
-      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+      let audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
       audioCtx.close();
-      const numCh = audioBuffer.numberOfChannels;
-      const len   = audioBuffer.length;
-      const mono  = new Float32Array(len);
-      for (let c = 0; c < numCh; c++) {
-        const ch = audioBuffer.getChannelData(c);
-        for (let i = 0; i < len; i++) mono[i] += ch[i] / numCh;
-      }
+      // v1.31: resample na MP3_SAMPLE_RATE (48 kHz) mono - 16kHz rozbijel ElevenLabs diarizaci
+      showStatus('info', 'Resampluji na 48 kHz mono...');
+      const OfflineCtx = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      const targetLen  = Math.ceil(audioBuffer.duration * MP3_SAMPLE_RATE);
+      let offlineCtx   = new OfflineCtx(1, targetLen, MP3_SAMPLE_RATE);
+      let src          = offlineCtx.createBufferSource();
+      src.buffer       = audioBuffer;
+      src.connect(offlineCtx.destination);
+      src.start(0);
+      let resampled    = await offlineCtx.startRendering();
+      const mono       = new Float32Array(resampled.getChannelData(0));  // copy out
+      // v1.22: uvolneni reference na velke buffery (Safari iOS memory hygiena)
+      src.disconnect();
+      src = null;
+      audioBuffer = null;
+      offlineCtx = null;
+      resampled = null;
+      // give GC a chance
+      await new Promise(function(r) { setTimeout(r, 50); });
+      const durSec     = mono.length / MP3_SAMPLE_RATE;
       function f32ToI16(buf) {
         const out = new Int16Array(buf.length);
         for (let i = 0; i < buf.length; i++) {
@@ -493,38 +549,76 @@
         }
         return out;
       }
-      const monoI16   = f32ToI16(mono);
-      const mp3enc    = new lamejs.Mp3Encoder(1, audioBuffer.sampleRate, MP3_KBPS);
-      const BLOCK     = 1152;
-      const CHUNK     = 50;
-      const mp3chunks = [];
-      const total     = Math.ceil(monoI16.length / BLOCK);
-      await new Promise((resolve) => {
-        let b = 0;
-        function tick() {
-          const end = Math.min(b + CHUNK, total);
-          for (; b < end; b++) {
-            const buf = mp3enc.encodeBuffer(monoI16.subarray(b * BLOCK, (b + 1) * BLOCK));
-            if (buf.length > 0) mp3chunks.push(buf);
+
+      // v1.21: encode helper - PCM Int16 -> MP3 chunks
+      async function encodePartToMp3(monoI16, statusLabel) {
+        const mp3enc    = new lamejs.Mp3Encoder(1, MP3_SAMPLE_RATE, MP3_KBPS);
+        const BLOCK     = 1152;
+        const CHUNK     = 50;
+        const mp3chunks = [];
+        const total     = Math.ceil(monoI16.length / BLOCK);
+        await new Promise((resolve) => {
+          let b = 0;
+          function tick() {
+            const end = Math.min(b + CHUNK, total);
+            for (; b < end; b++) {
+              const buf = mp3enc.encodeBuffer(monoI16.subarray(b * BLOCK, (b + 1) * BLOCK));
+              if (buf.length > 0) mp3chunks.push(buf);
+            }
+            const pct = Math.round(b / total * 100);
+            showStatus('info', '🔄 Konvertuji na MP3 ' + statusLabel + '… ' + pct + ' %');
+            if (b < total) { setTimeout(tick, 0); } else {
+              const flush = mp3enc.flush();
+              if (flush.length > 0) mp3chunks.push(flush);
+              resolve();
+            }
           }
-          const pct = Math.round(b / total * 100);
-          showStatus('info', '🔄 Konvertuji na MP3… ' + pct + ' %');
-          if (b < total) { setTimeout(tick, 0); } else {
-            const flush = mp3enc.flush();
-            if (flush.length > 0) mp3chunks.push(flush);
-            resolve();
-          }
-        }
-        setTimeout(tick, 0);
-      });
-      const blob    = new Blob(mp3chunks, { type: 'audio/mp3' });
-      const newName = file.name.replace(/\.[^.]+$/, '') + '.mp3';
-      const mp3File = new File([blob], newName, { type: 'audio/mp3' });
-      const origMb = (file.size / 1024 / 1024).toFixed(1);
-      const mp3Mb  = (mp3File.size / 1024 / 1024).toFixed(1);
-      showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 64 kbps mono)');
+          setTimeout(tick, 0);
+        });
+        return new Blob(mp3chunks, { type: 'audio/mp3' });
+      }
+
+      const origMb  = (file.size / 1024 / 1024).toFixed(1);
+      const baseName = file.name.replace(/\.[^.]+$/, '');
+
+      if (durSec <= MULTIPART_THRESHOLD_SEC) {
+        // Standardní single-file flow
+        const monoI16 = f32ToI16(mono);
+        const blob    = await encodePartToMp3(monoI16, '');
+        const mp3File = new File([blob], baseName + '.mp3', { type: 'audio/mp3' });
+        const mp3Mb   = (mp3File.size / 1024 / 1024).toFixed(1);
+        showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + mp3Mb + ' MB (MP3 96 kbps mono 48 kHz)');
+        submitBtn.disabled = false;
+        currentMultipartMeta = null;
+        return mp3File;
+      }
+
+      // v1.21: MULTIPART — audio > 60 min → split na chunky 50 min
+      const N = Math.ceil(durSec / MULTIPART_CHUNK_SEC);
+      const minutesTotal = Math.round(durSec / 60);
+      showStatus('info', '📂 Velky zaznam (' + minutesTotal + ' min) - rozdeluji na ' + N + ' casti...');
+      const parentId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : ('mp_' + Date.now() + '_' + Math.random().toString(36).slice(2));
+      const parts = [];
+      const offsets = [];
+      const durations = [];
+      let totalMp3Bytes = 0;
+      for (let i = 0; i < N; i++) {
+        const startSample = i * MULTIPART_CHUNK_SEC * MP3_SAMPLE_RATE;
+        const endSample   = Math.min((i + 1) * MULTIPART_CHUNK_SEC * MP3_SAMPLE_RATE, mono.length);
+        const partMono    = mono.subarray(startSample, endSample);
+        const partI16     = f32ToI16(partMono);
+        const partBlob    = await encodePartToMp3(partI16, '(cast ' + (i + 1) + '/' + N + ')');
+        const partName    = baseName + '_part' + (i + 1) + 'of' + N + '.mp3';
+        parts.push(new File([partBlob], partName, { type: 'audio/mp3' }));
+        offsets.push(i * MULTIPART_CHUNK_SEC);
+        durations.push((endSample - startSample) / MP3_SAMPLE_RATE);
+        totalMp3Bytes += partBlob.size;
+      }
+      const totalMp3Mb = (totalMp3Bytes / 1024 / 1024).toFixed(1);
+      showStatus('info', '✔ Konverze hotova: ' + origMb + ' MB → ' + totalMp3Mb + ' MB v ' + N + ' castech (MP3 24 kbps mono 16 kHz)');
       submitBtn.disabled = false;
-      return mp3File;
+      currentMultipartMeta = { parentId: parentId, parts: parts, offsets: offsets, durations: durations, partCount: N };
+      return parts[0];
     } catch (err) {
       showStatus('err', '❌ Konverze selhala: ' + err.message + ' — nahrávám originál.');
       submitBtn.disabled = false;
@@ -532,7 +626,89 @@
     }
   }
 
+  async function sha256Hex(file) {
+    try {
+      const buf = await file.arrayBuffer();
+      const digest = await crypto.subtle.digest('SHA-256', buf);
+      return Array.from(new Uint8Array(digest)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');
+    } catch (e) { console.warn('sha256 failed', e); return null; }
+  }
+  // v1.33: lightweight duration probe (jen metadata, bez decode/resample)
+  async function probeDuration(file) {
+    return new Promise(function(resolve) {
+      try {
+        const audio = document.createElement('audio');
+        audio.preload = 'metadata';
+        const url = URL.createObjectURL(file);
+        audio.src = url;
+        audio.onloadedmetadata = function() {
+          const d = audio.duration;
+          URL.revokeObjectURL(url);
+          resolve(isFinite(d) ? d : null);
+        };
+        audio.onerror = function() {
+          URL.revokeObjectURL(url);
+          resolve(null);
+        };
+        // Bezpečnostní timeout 5s — pokud metadata nepřijdou, neblokuj
+        setTimeout(function() { try { URL.revokeObjectURL(url); } catch(e){} resolve(null); }, 5000);
+      } catch (e) { resolve(null); }
+    });
+  }
   async function setFile(file) {
+    const durSec = await probeDuration(file);
+    const sizeMbRaw = file.size / 1024 / 1024;
+    const isMobile = /iPhone|iPad|iPod|Android|Mobile/i.test(navigator.userAgent);
+
+    // v1.35: spočítej hash ORIGINÁLU (před konverzí) pro detekci duplicit
+    currentFileHash = await sha256Hex(file);
+
+    // v1.35: MOBILE BYPASS — Safari iOS spadne při decodeAudioData() pro >30 min audio
+    // (1.5h M4A → ~1 GB RAM po dekódu → out of memory). Scribe akceptuje M4A/WAV/AAC
+    // přímo, takže konverzi přeskakujeme a server soubor zpracuje jak je.
+    const mobileLong = isMobile && ((durSec && durSec > 1800) || sizeMbRaw > 30);
+    if (mobileLong) {
+      // v1.37: Chunked upload nahoře (RAW_CHUNK_THRESHOLD_MB) zvedá strop na ~MAX_SIZE_MB.
+      // Hard limit zachováváme jen na 100 MB (přes 4 hodiny voice memo) z bezpečnostních důvodů.
+      if (sizeMbRaw > 100) {
+        showStatus("err",
+          "❌ Soubor (" + sizeMbRaw.toFixed(1) + " MB) je moc velký. Limit 100 MB.\n" +
+          "Pro tak dlouhé nahrávky použij desktop, kde proběhne komprese."
+        );
+        return;
+      }
+      const minutes = durSec ? Math.round(durSec / 60) : null;
+      const minMsg = minutes ? (minutes + " min, ") : "";
+      const ext = (file.name.split('.').pop() || 'audio').toUpperCase();
+      const ok = confirm(
+        "📱 Mobilní upload: " + minMsg + sizeMbRaw.toFixed(1) + " MB\n\n" +
+        "Soubor pošlu BEZ konverze (originál " + ext + ").\n" +
+        "Konverze v prohlížeči by spadla na paměti.\n\n" +
+        "Server přepis zpracuje na pozadí (cca 5-10 min).\n\n" +
+        "Pokračovat?"
+      );
+      if (!ok) { showStatus("err", "Upload zrušen."); return; }
+      currentFile = file;  // SKIP convertToMp3
+      currentMultipartMeta = null;
+      const sizeMb = sizeMbRaw.toFixed(1);
+      fileName.textContent = currentFile.name + " (" + sizeMb + " MB · originál)";
+      fileArea.classList.add("has-file");
+      updateRequiredLabels();
+      showStatus("info", "✔ Připraveno (bez konverze). Vyplň pole a odešli.");
+      return;
+    }
+
+    // Desktop / krátký soubor: standardní MP3 konverze
+    if (durSec && durSec > 3600) {
+      const minutes = Math.round(durSec / 60);
+      const parts = Math.ceil(durSec / MULTIPART_CHUNK_SEC);
+      const msg = "⚠️ Dlouhá nahrávka: " + minutes + " min (~" + parts + " části)\n\n" +
+        "Soubor se rozdělí na " + parts + " částí (~50 min každá) a nahraje postupně.\nMůže to trvat 5-10 min.\n\nPokračovat?";
+      if (!confirm(msg)) {
+        showStatus("err", "Upload zrušen.");
+        return;
+      }
+    }
     currentFile = await convertToMp3(file);
     const sizeMb = (currentFile.size / 1024 / 1024).toFixed(1);
     fileName.textContent = currentFile.name + " (" + sizeMb + " MB)";
@@ -582,6 +758,42 @@
     })();
   }
 
+  // ── ?paste=YYYYMMDD (iOS Zkratka přes schránku) — varianta z v1.10 ────────
+  // Banner + tlačítko se vloží NAD formulář, takže je hned vidět po otevření.
+  const _pp = new URLSearchParams(location.search);
+  const pasteId = _pp.get('paste') || '';
+  if (_pp.has('paste')) {
+    const pasteWrap = document.createElement('div');
+    pasteWrap.style.cssText = 'margin-bottom:16px;';
+    pasteWrap.innerHTML =
+      '<div style="background:#12160a;border:1px solid #3a4a0a;border-radius:12px;' +
+      'padding:16px 18px;margin-bottom:8px;color:var(--pitland-green);font-size:15px;text-align:center;">' +
+      '📋 Nahrávka je ve schránce. Klepni na tlačítko.</div>' +
+      '<button type="button" id="pasteBtn" style="width:100%;padding:17px;' +
+      'background:var(--pitland-green);color:#000;border:none;border-radius:12px;' +
+      'font-size:18px;font-weight:700;cursor:pointer;">Načíst nahrávku ze schránky</button>';
+    const formCard = document.querySelector('.card');
+    formCard.parentNode.insertBefore(pasteWrap, formCard);
+    document.getElementById('pasteBtn').onclick = async function() {
+      const btn = this;
+      btn.disabled = true;
+      btn.textContent = 'Načítám...';
+      try {
+        const b64   = await navigator.clipboard.readText();
+        if (!b64 || b64.length < 100) throw new Error('Schránka neobsahuje platná data.');
+        const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+        const raw   = new File([bytes], 'nahravka_' + (pasteId || Date.now()) + '.m4a', { type: 'audio/m4a' });
+        await setFile(raw);
+        history.replaceState(null, '', location.pathname);
+        pasteWrap.remove();
+      } catch (err) {
+        showStatus('err', '❌ Nepodařilo se přečíst schránku: ' + err.message);
+        btn.disabled = false;
+        btn.textContent = 'Zkusit znovu';
+      }
+    };
+  }
+
   // ── Přímý výběr souboru ───────────────────────────────────────────────────
   fileInput.addEventListener("change", async () => {
     if (fileInput.files && fileInput.files[0]) {
@@ -589,6 +801,11 @@
       if (f.size > MAX_SIZE_MB * 1024 * 1024) {
         showStatus("err", "Soubor je moc velký (" + (f.size/1024/1024).toFixed(1) + " MB). Limit je " + MAX_SIZE_MB + " MB.");
         return;
+      }
+      // v1.22: mobile memory warning - decodeAudioData potrebuje ~22x file size v RAM
+      const isMobileSafari = /iPhone|iPad|iPod/.test(navigator.userAgent);
+      if (isMobileSafari && f.size > 35 * 1024 * 1024) {
+        showStatus("warn", "Velký soubor (" + (f.size/1024/1024).toFixed(1) + " MB) na mobilu — Safari muze pri konverzi spadnout (pamet). Doporucuji desktop browser pro nahravky > 30 MB.");
       }
       await setFile(f);
     }
@@ -656,27 +873,160 @@
 
     try { localStorage.setItem("pitland_zkratka", jmeno); } catch (e) {}
 
+    // v1.32: detekce duplicit — pre-check podle hashe originálu + datum/druh/vedl
+    let forceUpload = false;
+    if (currentFileHash && !(currentMultipartMeta && currentMultipartMeta.partCount > 1)) {
+      try {
+        showStatus("info", "Kontroluji duplicity…");
+        const dpParams = new URLSearchParams({ fn: "checkDuplicate", hash: currentFileHash, date: (datumInput.value || ""), druh: druh, vedl: jmeno });
+        const dpR = await fetch(WEBHOOK_URL + "?" + dpParams.toString());
+        const dp = await dpR.json();
+        if (dp && dp.exact_dup) {
+          if (!confirm("⚠️ Tato nahrávka už v systému JE:\n\n" + (dp.exact_name || "") + "\n\nStejný zvukový soubor byl už nahrán. Přesto nahrát znovu?")) {
+            showStatus("err", "Upload zrušen — duplicita.");
+            submitBtn.disabled = false; submitBtn.textContent = "Nahrát"; progress.classList.remove("show");
+            return;
+          }
+          forceUpload = true;
+        } else if (dp && dp.soft_dup) {
+          if (!confirm("⚠️ Na " + (datumInput.value || "tento den") + " už existuje " + druh + " od " + jmeno + ":\n\n" + (dp.soft_names || []).join("\n") + "\n\nMůže jít o duplicitu. Přesto nahrát?")) {
+            showStatus("err", "Upload zrušen — možná duplicita.");
+            submitBtn.disabled = false; submitBtn.textContent = "Nahrát"; progress.classList.remove("show");
+            return;
+          }
+        }
+      } catch (e) { console.warn("dup check failed (continuing):", e); }
+    }
+
     submitBtn.disabled = true;
     submitBtn.textContent = "Nahrávám…";
     progress.classList.add("show");
     progressBar.style.width = "15%";
     showStatus("info", "Připravuji soubor…");
 
+    const uploadStartTs = Date.now();
     try {
-      const base64 = await fileToBase64(currentFile);
-      progressBar.style.width = "45%";
-      showStatus("info", "Odesílám na Drive… (může chvíli trvat)");
-      const payload = {
+      const basePayload = {
         jmeno: jmeno,
         druh: druh,
         skym: skymForFilename,
         popis: popis,
         speakers: speakersCSV,
         num_speakers: numSpeakers,
+        mimeType: "audio/mp3",
+        recording_date: datumInput.value || "",
+        content_hash: currentFileHash || "",
+        force: forceUpload
+      };
+
+      // v1.21: multipart upload path
+      if (currentMultipartMeta && currentMultipartMeta.partCount > 1) {
+        const meta = currentMultipartMeta;
+        showStatus("info", "📤 Multipart upload: " + meta.partCount + " casti");
+        for (let i = 0; i < meta.parts.length; i++) {
+          const part = meta.parts[i];
+          const partBase64 = await fileToBase64(part);
+          const pctStart = 5 + Math.round((i / meta.partCount) * 90);
+          progressBar.style.width = pctStart + "%";
+          showStatus("info", "📤 Upload cast " + (i + 1) + "/" + meta.partCount + " (" + (part.size / 1024 / 1024).toFixed(1) + " MB)...");
+          const partPayload = Object.assign({}, basePayload, {
+            filename: part.name,
+            data: partBase64,
+            parent_recording_id: meta.parentId,
+            part_index: i + 1,
+            part_count: meta.partCount,
+            part_offset_sec: meta.offsets[i],
+            part_duration_sec: meta.durations[i]
+          });
+          const partRes = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(partPayload)
+          });
+          const partText = await partRes.text();
+          let partResult;
+          try { partResult = JSON.parse(partText); } catch (e) { partResult = { ok: false, error: partText }; }
+          if (!(partRes.ok && partResult.ok)) {
+            throw new Error("Cast " + (i + 1) + "/" + meta.partCount + " selhala: " + (partResult.error || partRes.status));
+          }
+          const pctEnd = 5 + Math.round(((i + 1) / meta.partCount) * 90);
+          progressBar.style.width = pctEnd + "%";
+        }
+        progressBar.style.width = "100%";
+        showStatus("ok", "✅ Vsech " + meta.partCount + " casti nahrano. Server zpracuje prepis (~" + (5 + meta.partCount * 4) + " min) a posle email.");
+        submitBtn.textContent = "Nahrát další";
+        fileInput.value = "";
+        currentFile = null;
+        currentMultipartMeta = null;
+        fileName.textContent = "Klepni pro výběr nahrávky";
+        fileArea.classList.remove("has-file");
+        updateRequiredLabels();
+        return;
+      }
+
+      // v1.37: BINARY CHUNKED UPLOAD — pro originály >35 MB (mobile bypass MP3 konverze)
+      // base64 v JSON body má 33% overhead, takže 48 MB binary → 64 MB JSON → nad 50 MB limit AS.
+      // Rozsekáme file.slice() na 20 MB binární kousky a posíláme každý jako menší JSON.
+      const fileSizeMb = currentFile.size / 1024 / 1024;
+      if (fileSizeMb > RAW_CHUNK_THRESHOLD_MB) {
+        const parentId = (crypto && crypto.randomUUID) ? crypto.randomUUID() : ("rc_" + Date.now() + "_" + Math.random().toString(36).slice(2));
+        const chunkSize = RAW_CHUNK_BIN_MB * 1024 * 1024;
+        const totalChunks = Math.ceil(currentFile.size / chunkSize);
+        showStatus("info", "📦 Velký soubor (" + fileSizeMb.toFixed(1) + " MB) — chunked upload " + totalChunks + " částí po " + RAW_CHUNK_BIN_MB + " MB...");
+        let lastResult = null;
+        for (let i = 0; i < totalChunks; i++) {
+          const start = i * chunkSize;
+          const end = Math.min(start + chunkSize, currentFile.size);
+          const chunkBlob = currentFile.slice(start, end);
+          const chunkSizeMb = (chunkBlob.size / 1024 / 1024).toFixed(1);
+          showStatus("info", "📤 Část " + (i + 1) + "/" + totalChunks + " (" + chunkSizeMb + " MB)…");
+          progressBar.style.width = (5 + (i / totalChunks) * 90) + "%";
+          const chunkBase64 = await fileToBase64(chunkBlob);
+          const chunkPayload = Object.assign({}, basePayload, {
+            raw_chunk: true,
+            raw_parent_id: parentId,
+            raw_idx: i,
+            raw_total: totalChunks,
+            raw_original_name: currentFile.name,
+            raw_original_size: currentFile.size,
+            filename: currentFile.name,
+            mimeType: currentFile.type || "audio/mp3",
+            data: chunkBase64
+          });
+          const chunkRes = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(chunkPayload)
+          });
+          const chunkText = await chunkRes.text();
+          let chunkResult;
+          try { chunkResult = JSON.parse(chunkText); } catch (e) { chunkResult = { ok: false, error: chunkText }; }
+          if (!chunkResult.ok) {
+            throw new Error("Část " + (i + 1) + "/" + totalChunks + " selhala: " + (chunkResult.error || chunkRes.status));
+          }
+          lastResult = chunkResult;
+        }
+        progressBar.style.width = "100%";
+        showStatus("ok", "✅ Audio nahráno chunkovaně (" + totalChunks + " částí, " + fileSizeMb.toFixed(1) + " MB).\n📝 Přepis se zpracuje na pozadí (~5-10 min). Email dorazí, až bude hotový.");
+        submitBtn.textContent = "Nahrát další";
+        fileInput.value = "";
+        currentFile = null;
+        currentMultipartMeta = null;
+        fileName.textContent = "Klepni pro výběr nahrávky";
+        fileArea.classList.remove("has-file");
+        updateRequiredLabels();
+        return;
+      }
+
+      // Single-file path (existing flow)
+      const base64 = await fileToBase64(currentFile);
+      progressBar.style.width = "45%";
+      showStatus("info", "Odesílám na Drive… (může chvíli trvat)");
+      const payload = Object.assign({}, basePayload, {
         filename: currentFile.name,
         mimeType: currentFile.type || "audio/mp3",
         data: base64
-      };
+      });
       const res = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -688,16 +1038,75 @@
       try { result = JSON.parse(text); } catch (e) { result = { ok: false, error: text }; }
       if (res.ok && result.ok) {
         progressBar.style.width = "100%";
-        showStatus("ok", "✅ Hotovo! Soubor uložen jako: " + (result.filename || currentFile.name));
+        if (result.async) {
+          // v1.34: Server uložil audio, přepis poběží na pozadí přes processTranscribeQueue
+          showStatus("ok", "✅ Audio nahráno: " + (result.filename || currentFile.name) + "\n📝 Přepis se zpracuje na pozadí (~5-10 min). Email dorazí, až bude hotový.");
+        } else {
+          showStatus("ok", "✅ Hotovo! Soubor uložen jako: " + (result.filename || currentFile.name));
+        }
         submitBtn.textContent = "Nahrát další";
         fileInput.value = "";
         currentFile = null;
+        currentMultipartMeta = null;
         fileName.textContent = "Klepni pro výběr nahrávky";
         fileArea.classList.remove("has-file");
         updateRequiredLabels();
+      } else if (result && result.duplicate) {
+        // v1.34: server-side duplicate detection (defense in depth)
+        showStatus("err", "⚠️ DUPLICITA: " + (result.existing_name || "Tato nahrávka už v systému je."));
+        submitBtn.disabled = false; submitBtn.textContent = "Nahrát"; progress.classList.remove("show");
+        return;
       } else { throw new Error(result.error || ("HTTP " + res.status)); }
     } catch (err) {
-      showStatus("err", "❌ Chyba: " + err.message);
+      const elapsedSec = Math.round((Date.now() - (typeof uploadStartTs !== "undefined" ? uploadStartTs : Date.now())) / 1000);
+      const msg = String(err && err.message || err || "");
+      const isNetworkErr = /load failed|failed to fetch|network|aborted|timeout|abort/i.test(msg);
+
+      let verified = false;
+      if (isNetworkErr) {
+        // v1.19: misto time-based hadani auto-overuj upload pres checkRecent
+        showStatus("info", "⏳ Spojení selhalo po " + elapsedSec + " s — ověřuji upload na serveru…");
+        try {
+          const checkParams = new URLSearchParams({
+            fn: "checkRecent",
+            zkratka: jmeno,
+            druh: druh
+          });
+          const recordingDate = datumInput.value || "";
+          if (recordingDate) checkParams.set("recording_date", recordingDate);
+          const checkR = await fetch(WEBHOOK_URL + "?" + checkParams.toString());
+          const checkData = await checkR.json().catch(() => ({}));
+          if (checkData && checkData.ok && checkData.found && checkData.matches && checkData.matches.length > 0) {
+            const m = checkData.matches[0];
+            verified = true;
+            progressBar.style.width = "100%";
+            showStatus("ok", "✅ Hotovo (ověřeno i přes chybu spojení): " + (m.audio_file_name || ""));
+            submitBtn.textContent = "Nahrát další";
+            fileInput.value = "";
+            currentFile = null;
+            fileName.textContent = "Klepni pro výběr nahrávky";
+            fileArea.classList.remove("has-file");
+            updateRequiredLabels();
+          }
+        } catch (verifyErr) {
+          // verify selhalo — fallback na warn
+        }
+        if (!verified) {
+          progressBar.style.width = "100%";
+          showStatus("warn",
+            "⚠️ Spojení se přerušilo po " + elapsedSec + " s a ověření neuspělo. " +
+            "Upload mohl proběhnout — zkontroluj Drive nebo zkus znovu za chvíli."
+          );
+          submitBtn.textContent = "Nahrát další";
+          fileInput.value = "";
+          currentFile = null;
+          fileName.textContent = "Klepni pro výběr nahrávky";
+          fileArea.classList.remove("has-file");
+          updateRequiredLabels();
+        }
+      } else {
+        showStatus("err", "❌ Chyba: " + msg);
+      }
       progress.classList.remove("show");
       progressBar.style.width = "0%";
     } finally {
