@@ -63,3 +63,4 @@ function ulozSdilenySoubor(file) {
     dbReq.onerror = reject;
   });
 }
+// v1.38 cache bump 2026-07-13 (lamejs-inline) - vynuti reinstall SW a re-cache nahravky.html
