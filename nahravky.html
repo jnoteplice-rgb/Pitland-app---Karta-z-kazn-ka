@@ -582,7 +582,7 @@ k;t.brate=r;t.mode=ka.STEREO;t.quality=3;t.bWriteVbrTag=!1;t.disable_reservoir=!
     <div class="status" id="status"></div>
   </form>
 
-  <footer>Pitland · v1.38</footer>
+  <footer>Pitland · v1.39</footer>
 </div>
 
 <!-- Modal: seznam zkratek -->
@@ -1366,7 +1366,24 @@ k;t.brate=r;t.mode=ka.STEREO;t.quality=3;t.bWriteVbrTag=!1;t.disable_reservoir=!
         showStatus("err", "⚠️ DUPLICITA: " + (result.existing_name || "Tato nahrávka už v systému je."));
         submitBtn.disabled = false; submitBtn.textContent = "Nahrát"; progress.classList.remove("show");
         return;
-      } else { throw new Error(result.error || ("HTTP " + res.status)); }
+      } else {
+        // v1.39: server hlasi chyby ruzne (result.error / result.scribe.error /
+        // HTML stranka pri vypadku). Slozime citelnou hlasku misto holeho "HTTP 200".
+        var srvErr = result.error
+          || (result.scribe && result.scribe.error)
+          || (result.stage && ("stage: " + result.stage))
+          || "";
+        srvErr = String(srvErr);
+        if (/<!DOCTYPE|<html/i.test(srvErr) || /<!DOCTYPE|<html/i.test(text || "")) {
+          srvErr = "server vratil chybovou stranku (Google Drive/Apps Script nedostupny) - zkus to prosim znovu";
+        }
+        if (/invalid_api_key|authentication_error/i.test(srvErr)) {
+          srvErr = "prepis selhal: neplatny ElevenLabs klic (nahravka je ulozena, staci opravit klic) - dej vedet Jirkovi";
+        }
+        if (!srvErr) srvErr = (text ? String(text).slice(0,200) : ("HTTP " + res.status));
+        if (srvErr.length > 300) srvErr = srvErr.slice(0,300) + "...";
+        throw new Error(srvErr);
+      }
     } catch (err) {
       const elapsedSec = Math.round((Date.now() - (typeof uploadStartTs !== "undefined" ? uploadStartTs : Date.now())) / 1000);
       const msg = String(err && err.message || err || "");
